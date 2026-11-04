@@ -13,6 +13,7 @@ import {
   maxSanity,
   modSum,
   spendableGroupClues,
+  isHidden,
 } from "../queries";
 import {
   activeInvestigator,
@@ -685,13 +686,19 @@ export const HAND_LIMIT = 8;
 
 /** an investigator's maximum hand size: 8, raised by modifiers (Laboratory Assistant) */
 export const handLimit = (game: GameContext, i: InvId) => HAND_LIMIT + modSum(game, i, "handSize");
+/** the cards an investigator's hand counts as: a Hidden card counts for more where a location says so (Backstage) */
+export const handCount = (game: GameContext, i: InvId) =>
+  inv(game, i).hand.length +
+  inv(game, i).hand.filter((h) => isHidden(game, h)).length * modSum(game, i, "hiddenHandWeight");
 
 export const handSizeHandler: Handler<"HandSize"> = (game, step) => {
   const me = inv(game, step.inv);
   if (me.status !== "playing") return;
   const limit = handLimit(game, step.inv);
-  const excess = me.hand.length - limit;
-  if (excess <= 0) return;
+  const excess = handCount(game, step.inv) - limit;
+  // a Hidden card is never discarded to the hand size
+  const discardable = me.hand.filter((h) => !isHidden(game, h));
+  if (excess <= 0 || !discardable.length) return;
   if (!step.stepped && step.choice === undefined) logStep(game, "handSize", step.inv);
   const pick = ask<InstId>(
     game,
@@ -699,7 +706,7 @@ export const handSizeHandler: Handler<"HandSize"> = (game, step) => {
     step.inv,
     CHOICE.Generic,
     `${me.name}: discard down to ${limit} cards (${excess} more)`,
-    me.hand.map((h) => ({ id: h, label: def(game, h).name, card: h, value: h })),
+    discardable.map((h) => ({ id: h, label: def(game, h).name, card: h, value: h })),
     { key: "discardDown", vars: { n: excess } },
   );
   if (pick === undefined) return;

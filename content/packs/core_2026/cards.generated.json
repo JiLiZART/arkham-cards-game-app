@@ -2681,6 +2681,7 @@
   "unique": true,
   "doubleSided": false,
   "keywords": [
+   "elusive",
    "hunter",
    "retaliate"
   ],
@@ -2809,7 +2810,9 @@
   "text": "Elusive. <i>(After this enemy attacks or is attacked while it is ready, it moves to a connecting location with no investigators and exhausts.)</i>\n[action]: <b>Parley.</b> Test [combat] (4). Decrease the difficulty for this test by 1 for each damage on Sgt. Earl Monroe. If you succeed, ([codex] 4).",
   "unique": true,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "elusive"
+  ],
   "slots": [],
   "icons": {},
   "subname": "Dirty Cop",
@@ -3265,6 +3268,7 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
+   "elusive",
    "hunter"
   ],
   "slots": [],

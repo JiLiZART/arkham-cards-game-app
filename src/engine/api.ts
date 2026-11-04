@@ -85,7 +85,7 @@ export {
   shuffleList,
 } from "./context";
 export { createCard, discard, moveCard, putBeneath, putOnTop, shuffleIntoDeck } from "./movement";
-export { spawnTargets } from "./queries";
+export { bondedOf, isHidden, keywordArg, spawnTargets, swarmOf } from "./queries";
 export { addTempMod } from "./queries";
 export {
   addExtraReveal,
@@ -184,6 +184,12 @@ export const leaveVehicle = verb(STEP.LeaveVehicle);
 export const moveVehicle = verb(STEP.MoveVehicle);
 /** the scenario pauses on one of its interludes; the lead answers it */
 export const readInterlude = (id: string): Queued => verb(STEP.ReadInterlude)({ id });
+/** the top `amount` cards of `ctx.you`'s deck beneath the enemy (`ctx.enemy`, else `ctx.source`) as swarm cards */
+export const addSwarm = (amount: number, ctx: EffCtx): Queued =>
+  verb(STEP.Eff)({ effect: { op: "addSwarm", amount }, ctx });
+/** this card leaves the game and its owner's campaign deck */
+export const exile = (card: InstId): Queued =>
+  verb(STEP.Eff)({ effect: { op: "exile" }, ctx: { source: card } });
 /** the top card beneath a card turned faceup */
 export const revealBeneath = (from: BeneathOf, ctx: EffCtx): Queued =>
   verb(STEP.Eff)({ effect: { op: "revealBeneath", from }, ctx });

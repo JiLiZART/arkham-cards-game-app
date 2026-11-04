@@ -15,16 +15,19 @@ import {
   randomInt,
   reveal,
   scenarioIdOf,
+  setController,
   shuffleDeck,
   shuffleList,
 } from "../context";
-import { holderOf, locationByName } from "../queries";
+import { bondedOf, holderOf, locationByName } from "../queries";
 import { STEP } from "../steps/step";
+import { exiled } from "../world/flags";
 import { becomes, moveCard, putBeneath } from "../movement";
 import { EVENT } from "../events/event";
 import { ZONE } from "../world/constants";
 import type { InstId } from "../world/types";
 import type { EffectOf, EffectRun } from "./types";
+import { amt } from "./targets";
 
 /** an act or agenda deck back to its first card: its cards, advanced or not, in the scenario's order */
 function resetDeckEffect(game: GameContext, run: EffectRun<EffectOf<"resetDeck">>) {
@@ -169,7 +172,47 @@ function readInterludeEffect(game: GameContext, run: EffectRun<EffectOf<"readInt
   push(game, { t: STEP.ReadInterlude, id: run.effect.id });
 }
 
+function addSwarmEffect(game: GameContext, run: EffectRun<EffectOf<"addSwarm">>) {
+  const host = run.ctx.enemy ?? run.src?.id;
+  if (host)
+    push(game, { t: STEP.AddSwarm, host, inv: run.you, n: amt(game, run.effect.amount, run.ctx) });
+}
+
+/** Exile: out of the game and its owner's campaign deck (the campaign reads the list at the scenario's end) */
+function exileEffect(game: GameContext, run: EffectRun<EffectOf<"exile">>) {
+  const c = run.src;
+  if (!c?.owner) return;
+  const owner = c.owner;
+  moveCard(game, c.id, ZONE.Removed);
+  exiled.set(game, owner, [...(exiled.get(game, owner) ?? []), c.code]);
+  emit(game, EVENT.Exile, `${def(game, c.id).name} is exiled`, { card: c.id, inv: owner });
+}
+
+/** a bonded card of yours, set aside, into your hand or into play */
+function takeBonded(
+  game: GameContext,
+  run: EffectRun<EffectOf<"putBondedInHand" | "putBondedIntoPlay">>,
+  to: "hand" | "play",
+) {
+  const c = bondedOf(game, run.you, run.effect.code)[0];
+  if (!c) return;
+  moveCard(game, c.id, to === "hand" ? ZONE.Hand : ZONE.Play, { inv: run.you });
+  if (to === "play") setController(game, c.id, run.you);
+  emit(
+    game,
+    EVENT.Draw,
+    `${def(game, c.id).name} comes to ${to === "hand" ? "the hand" : "play"}`,
+    { card: c.id, inv: run.you },
+  );
+}
+
 export const structureEffects = {
+  putBondedInHand: (game: GameContext, run: EffectRun<EffectOf<"putBondedInHand">>) =>
+    takeBonded(game, run, "hand"),
+  putBondedIntoPlay: (game: GameContext, run: EffectRun<EffectOf<"putBondedIntoPlay">>) =>
+    takeBonded(game, run, "play"),
+  exile: exileEffect,
+  addSwarm: addSwarmEffect,
   readInterlude: readInterludeEffect,
   toVoid: toVoidEffect,
   fromVoid: fromVoidEffect,

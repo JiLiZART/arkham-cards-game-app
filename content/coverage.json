@@ -1104,12 +1104,12 @@
   "pnr": {
    "encounter": {
     "total": 39,
-    "works": 0,
+    "works": 1,
     "rest": {
      "act": 4,
      "agenda": 2,
      "enemy": 3,
-     "location": 12,
+     "location": 11,
      "scenario": 1,
      "story": 12,
      "treachery": 5
@@ -1359,12 +1359,12 @@
   "sfk": {
    "encounter": {
     "total": 52,
-    "works": 0,
+    "works": 4,
     "rest": {
      "act": 5,
      "agenda": 2,
      "enemy": 8,
-     "location": 17,
+     "location": 13,
      "scenario": 1,
      "story": 17,
      "treachery": 2
@@ -2711,13 +2711,13 @@
   "the-dream-quest": {
    "cards": {
     "total": 167,
-    "works": 6,
+    "works": 10,
     "rest": {
      "act": 18,
      "agenda": 9,
      "asset": 4,
      "enemy": 29,
-     "location": 50,
+     "location": 46,
      "scenario": 4,
      "story": 20,
      "treachery": 27
@@ -2937,13 +2937,13 @@
   "the-web-of-dreams": {
    "cards": {
     "total": 130,
-    "works": 12,
+    "works": 13,
     "rest": {
      "act": 12,
      "agenda": 10,
      "asset": 4,
      "enemy": 15,
-     "location": 41,
+     "location": 40,
      "scenario": 4,
      "story": 13,
      "treachery": 19
@@ -4211,13 +4211,13 @@
    "campaign": "the-web-of-dreams",
    "cards": {
     "total": 47,
-    "works": 7,
+    "works": 8,
     "rest": {
      "act": 4,
      "agenda": 2,
      "asset": 1,
      "enemy": 3,
-     "location": 12,
+     "location": 11,
      "scenario": 1,
      "story": 12,
      "treachery": 5
@@ -5561,13 +5561,13 @@
    "campaign": "the-dream-quest",
    "cards": {
     "total": 66,
-    "works": 0,
+    "works": 4,
     "rest": {
      "act": 5,
      "agenda": 2,
      "asset": 1,
      "enemy": 13,
-     "location": 17,
+     "location": 13,
      "scenario": 1,
      "story": 17,
      "treachery": 10

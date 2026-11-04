@@ -115,7 +115,7 @@ export function problemText(db: ContentDb, locale: string, p: DeckProblem): stri
   if (!p.reason) return p.message;
   const v = p.reason.vars ?? {};
   const vars: Record<string, string | number> = { ...v };
-  for (const k of ["card", "inv"])
+  for (const k of ["card", "inv", "host"])
     if (typeof v[k] === "string" && db.cards[v[k] as string])
       vars[k] = cardText(db, v[k] as string, locale).name;
   return t(db, locale, p.reason.key, vars);

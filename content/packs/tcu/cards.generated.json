@@ -8175,7 +8175,11 @@
   "text": "Bonded (Hallowed Mirror).\nHeal 2 damage or 2 horror (or any combination thereof) from among investigators and/or [[Ally]] assets at your location. Draw 1 card.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "bonded": "05313"
+   }
+  ],
   "slots": [],
   "icons": {
    "willpower": 1,
@@ -8254,7 +8258,11 @@
   "text": "Bonded (Occult Lexicon).\nDraw 2 cards. Discard up to 2 cards from your hand. For each card thusly discarded, you may either gain 1 resource, or spend 1 resource to deal 1 damage to an enemy at your location. This action does not provoke attacks of opportunity.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "bonded": "05316"
+   }
+  ],
   "slots": [],
   "icons": {
    "willpower": 1,

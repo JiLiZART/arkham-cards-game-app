@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useLayoutMode } from "../../state/layoutMode";
 import { cardText, t } from "../../../content/i18n";
 import type { CardDef, DeckDef } from "../../../content/schema";
-import { whyNot } from "../../../engine/campaign/decks";
+import { whyNot, bondedHost } from "../../../engine/campaign/decks";
 import { CardFace } from "../../components/CardFace";
 import { db, gameStore, useGame } from "../../state/context";
 import {
@@ -110,6 +110,11 @@ export function DeckEditArea({
     ...Object.values(inv?.alternatives ?? {}).flat(),
   ]);
   const nameOf = (c: CardDef) => cardText(db, c.code, locale).name;
+  // the cards bonded to the deck's cards: they come with them, set aside, outside the deck
+  const bonded = Object.values(db.cards).filter((c) => {
+    const host = bondedHost(c);
+    return !!host && !!deck.cards[host];
+  });
   const costNum = (c: CardDef) => (typeof c.cost === "number" ? c.cost : 0);
   const entries = Object.entries(deck.cards)
     .map(([code, n]) => ({ card: db.cards[code], n }))
@@ -337,6 +342,16 @@ export function DeckEditArea({
             </div>
           );
         })}
+        {bonded.length > 0 && (
+          <div className={styles.dkGroup} data-testid="dk-bonded">
+            <h4>{tr("deckEditor.bonded")}</h4>
+            <div className={styles.dkGrid}>
+              {bonded.map((card) => (
+                <GridCard key={card.code} card={card} n={card.quantity} />
+              ))}
+            </div>
+          </div>
+        )}
         {fixed.length > 0 && (
           <div className={styles.dkGroup}>
             <h4>{tr("deckEditor.always")}</h4>

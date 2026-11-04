@@ -46,12 +46,13 @@ import { ZONE, PHASE, INV_STATUS, PILE, SCENARIO_CARD, isOneOf } from "./world/c
 import { STEP } from "./steps/step";
 import { scriptOf } from "./world/scripts";
 
-export const ENGINE_VERSION = 8;
+export const ENGINE_VERSION = 9;
 
 /**
  * Whether a save written by this engine version replays to the same game on this one. Version 8 changed the setup (a
- * card's back face is no longer a card of its own, the scenario card is an instance: engine-scenario-structure), so the
- * choices of an older save may name other cards: its scenario restarts, its campaign kept.
+ * card's back face is no longer a card of its own, the scenario card is an instance: engine-scenario-structure) and
+ * version 9 the enemy phase and bonded cards (engine-generic-keywords), so an older save's choices may name other cards
+ * or steps: its scenario restarts, its campaign kept.
  */
 export const replaysSave = (version: number) => version === ENGINE_VERSION;
 
@@ -393,6 +394,15 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
       const id = createCard(game, code, ZONE.Deck, x.code);
       // a permanent card starts the game in play (Grimoire, Permanent)
       if (db.cards[code].text.startsWith("Permanent.")) moveCard(game, id, ZONE.Play);
+    }
+    // the cards bonded to a card in the deck wait set aside for their owner, outside the deck
+    const hosts = new Set(x.deck);
+    for (const c of Object.values(db.cards)) {
+      const host = c.keywords.find(
+        (k): k is { bonded: string } => typeof k === "object" && "bonded" in k,
+      )?.bonded;
+      if (host && hosts.has(host))
+        for (let k = 0; k < c.quantity; k++) createCard(game, c.code, ZONE.SetAside, x.code);
     }
   });
   // encounter cards, through the campaign's chosen options (a Return-to box's sets in its base campaign)

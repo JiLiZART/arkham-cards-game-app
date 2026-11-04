@@ -1,6 +1,7 @@
 import type { CardDef } from "../../content/schema";
 import type { CampaignState } from "./types";
-import { validateDeck } from "./decks";
+import { researchedEntry, validateDeck } from "./decks";
+import { flatLog } from "./log";
 import type { ContentDb } from "../world/types";
 
 const level = (c: CardDef) => c.xp ?? 0;
@@ -39,6 +40,12 @@ export function deckChangeCost(
     if (diff > 0) push(added, c, diff);
     else if (diff < 0) push(removed, c, -diff);
   }
+  // a deck short of its size (cards exiled) takes level 0 cards for free until it is full again (Grimoire, Exile)
+  let short = Math.max(
+    0,
+    (inv?.deckSize ?? 0) -
+      Object.entries(before).reduce((n, [code, k]) => n + (isFree(db.cards[code]) ? 0 : k), 0),
+  );
   let total = 0;
   for (const [title, adds] of added) {
     const olds = [...(removed.get(title) ?? [])].sort((a, b) => level(b) - level(a));
@@ -50,6 +57,10 @@ export function deckChangeCost(
       if (!old && myriad(c)) {
         if (paidMyriad) continue;
         paidMyriad = true;
+      }
+      if (!old && level(c) === 0 && short > 0) {
+        short--;
+        continue;
       }
       const base = Math.max(1, level(c) - (old ? level(old) : 0));
       total += exceptional(c) ? base * 2 : base;
@@ -80,13 +91,19 @@ export function upgradeDeck(
 ): UpgradeResult {
   const who = campaign.investigators.find((i) => i.code === investigator);
   if (!who) throw new Error(`${investigator} is not in this campaign`);
-  const problems = validateDeck(db, {
-    id: "upgrade",
-    name: "upgrade",
-    investigator,
-    cards,
-    randomBasicWeakness: false,
-  });
+  const problems = validateDeck(
+    db,
+    { id: "upgrade", name: "upgrade", investigator, cards, randomBasicWeakness: false },
+    flatLog(campaign.log),
+  ).filter(
+    // a deck short because cards were exiled may stay short (Grimoire, Exile)
+    (p) =>
+      !(
+        p.reason?.key === "deck.size" &&
+        who.exiled?.length &&
+        Number(p.reason.vars?.n) < Number(p.reason.vars?.size)
+      ),
+  );
   if (problems.length)
     return {
       ok: false,
@@ -95,7 +112,22 @@ export function upgradeDeck(
         vars: { message: problems[0].message },
       },
     };
-  const cost = deckChangeCost(db, investigator, count(who.deck), cards);
+  // a Researched card enters only in place of its lower-level version
+  const before = count(who.deck);
+  for (const [code, n] of Object.entries(cards)) {
+    const c = db.cards[code];
+    if (!researchedEntry(c) || n <= (before[code] ?? 0)) continue;
+    const replaced = Object.keys(before).some(
+      (o) =>
+        o !== code &&
+        db.cards[o]?.name === c.name &&
+        (db.cards[o]?.xp ?? 0) < (c.xp ?? 0) &&
+        (cards[o] ?? 0) < before[o],
+    );
+    if (!replaced)
+      return { ok: false, reason: { key: "upgrade.researched", vars: { card: code } } };
+  }
+  const cost = deckChangeCost(db, investigator, before, cards);
   if (cost > who.xp)
     return { ok: false, reason: { key: "upgrade.cost", vars: { need: cost, have: who.xp } } };
   const deck = Object.entries(cards).flatMap(([code, n]) => Array<string>(n).fill(code));

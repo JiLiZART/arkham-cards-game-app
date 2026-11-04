@@ -16,6 +16,7 @@ import {
   matchesFilter,
   modSum,
   uniqueInPlay,
+  isHidden,
 } from "../queries";
 import {
   activeInvestigator,
@@ -193,7 +194,8 @@ export function activatable(
   const out: AbilityRef[] = [];
   const blanked = blankedCards(game);
   for (const c of allCards(game)) {
-    if (!ABILITY_ZONES.includes(c.zone)) continue;
+    // a Hidden card in a hand works as if in its holder's threat area
+    if (!ABILITY_ZONES.includes(c.zone) && !isHidden(game, c.id)) continue;
     if (c.zone === "location" && !c.revealed) continue;
     if (assetBlocked(game, c.id)) continue;
     abilitiesOf(game, c.id, blanked).forEach((a, index) => {
@@ -256,6 +258,7 @@ export function ctxFor(data: EventData, source: InstId, you: InvId | null): EffC
   return {
     source,
     you,
+    ...(data.via ? { via: data.via } : {}),
     inv: data.inv ?? null,
     enemy: data.enemy ?? null,
     location: data.location ?? null,
@@ -315,7 +318,7 @@ function triggered(game: GameContext, trigger: Trigger, data: EventData): Abilit
     });
   };
   for (const c of allCards(game)) {
-    if (ABILITY_ZONES.includes(c.zone)) {
+    if (ABILITY_ZONES.includes(c.zone) || isHidden(game, c.id)) {
       if (c.zone === "location" && !c.revealed && trigger !== "enterLocation") continue;
       if (c.controller) consider(c.id, c.controller, false);
       else {

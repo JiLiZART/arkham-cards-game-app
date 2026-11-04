@@ -1,4 +1,4 @@
-import type { CardDef } from "../../content/schema";
+import { keywordName, type CardDef } from "../../content/schema";
 
 /**
  * Keywords the details column explains (worded after the rules references, in each locale's ui.json as `kw.<id>` and
@@ -16,6 +16,12 @@ export const KEYWORDS = [
   "patrol",
   "elusive",
   "vehicle",
+  "relentless",
+  "predator",
+  "hidden",
+  "veiled",
+  "exile",
+  "researched",
   "swarming",
   "concealed",
   "exceptional",
@@ -39,7 +45,7 @@ const IN_TEXT = new RegExp(
 export function keywordsOf(
   d: Pick<CardDef, "keywords" | "text"> & Partial<Pick<CardDef, "uses" | "victory">>,
 ): Keyword[] {
-  const found = new Set<string>(d.keywords ?? []);
+  const found = new Set<string>((d.keywords ?? []).map(keywordName));
   for (const m of (d.text ?? "").replace(/<[^>]+>/g, "").matchAll(IN_TEXT))
     found.add(m[1].toLowerCase());
   if (d.uses) found.add("uses");

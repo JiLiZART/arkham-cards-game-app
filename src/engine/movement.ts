@@ -135,7 +135,17 @@ export function moveCard(
     def(game, id).beneathOnLeave !== "stay"
   )
     for (const under of [...pileRead(game.s, `beneath:${id}`)])
-      moveCard(game, under, card(game, under).owner ? ZONE.Discard : ZONE.EncounterDiscard);
+      // an enemy's swarm cards go back to the bottom of their owners' decks
+      moveCard(
+        game,
+        under,
+        card(game, under).owner
+          ? c.zone === ZONE.Enemy
+            ? ZONE.Deck
+            : ZONE.Discard
+          : ZONE.EncounterDiscard,
+        { inv: card(game, under).owner },
+      );
   if (leavingPlay) {
     // discard attachments
     for (const other of allCardRecs(game)) {

@@ -4,7 +4,7 @@ import {
   peril,
   surge as surgeFlag,
 } from "../world/flags";
-import { abilitiesOf, actClueCost, enemies, hasFlag, invsAt } from "../queries";
+import { abilitiesOf, actClueCost, enemies, hasFlag, hasKeyword, invsAt } from "../queries";
 import {
   activeInvs,
   addCounter,
@@ -29,6 +29,7 @@ import {
   placeInvestigator,
   push,
   scenarioIdOf,
+  setController,
   setCounter,
   tapToDraw,
 } from "../context";
@@ -103,6 +104,16 @@ export const revelationHandler: Handler<"Revelation"> = (game, step) => {
     return;
   }
   const d = def(game, step.card);
+  // Hidden: into the drawer's hand, secretly; it works from there as if in their threat area
+  if (hasKeyword(game, step.card, "hidden")) {
+    moveCard(game, step.card, ZONE.Hand, { inv: step.inv });
+    setController(game, step.card, step.inv);
+    emit(game, EVENT.HiddenDrawn, `${invName(game, step.inv)} takes a hidden card`, {
+      inv: step.inv,
+      card: step.card,
+    });
+    return;
+  }
   moveCard(game, step.card, ZONE.Resolving);
   if (d.keywords.includes("peril")) peril.set(game, true);
   const ctx = { source: step.card, you: step.inv, inv: step.inv };

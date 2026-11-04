@@ -19,6 +19,8 @@ import {
   logStep,
   nextKey,
   push,
+  ready,
+  setCounter,
   setCardLocation,
   setEngaged,
   turnOrder,
@@ -28,6 +30,9 @@ import {
   distances,
   enemies,
   abilitiesOf,
+  swarmOf,
+  enemiesAt,
+  keywordArg,
   enemyStat,
   engagedWith,
   hasFlag,
@@ -44,7 +49,7 @@ import {
   skillValue,
   stepsToward,
 } from "../queries";
-import { moveCard } from "../movement";
+import { moveCard, putBeneath } from "../movement";
 import type { InstId, InvId, Step, StepOf } from "../world/types";
 import { win } from "./cards";
 import { EVENT } from "../events/event";
@@ -207,8 +212,19 @@ export const spawnHandler: Handler<"Spawn"> = (game, step) => {
       card: step.enemy,
     });
   }
+  // Swarming X: the top X cards of the drawer's deck (the lead's when no one drew it) beneath it
+  const swarming = keywordArg(game, step.enemy, "swarming");
   push(
     game,
+    ...(swarming !== undefined
+      ? [
+          {
+            t: STEP.Eff,
+            effect: { op: "addSwarm", amount: swarming },
+            ctx: { source: step.enemy, enemy: step.enemy, you: step.inv ?? leadInvestigator(game) },
+          } as Step,
+        ]
+      : []),
     win("enemySpawns", { inv: step.inv, enemy: step.enemy, location: at }),
     win("enemyEntersLocation", { enemy: step.enemy, location: at }),
     win("enterPlay", { card: step.enemy, enemy: step.enemy }),
@@ -347,6 +363,23 @@ export const damageEnemyHandler: Handler<"DamageEnemy"> = (game, step) => {
   let amount = step.amount + (damageBonus.take(game, String(step.key)) ?? 0);
   if (hasFlag(game, step.enemy, "damageCapOne")) amount = Math.min(amount, 1);
   const health = enemyStat(game, step.enemy, "health");
+  // a swarm card takes the damage first, as the enemy with its health; defeated, it returns to the bottom of its owner's
+  // deck, and what is left carries over to the next one, then to the host
+  for (const sc of swarmOf(game, step.enemy)) {
+    if (amount <= 0) break;
+    const take = Math.min(amount, health - card(game, sc).damage);
+    amount -= take;
+    if (card(game, sc).damage + take < health) {
+      addCounter(game, sc, "damage", take);
+      break;
+    }
+    setCounter(game, sc, "damage", 0);
+    moveCard(game, sc, ZONE.Deck, { inv: card(game, sc).owner });
+    emit(game, EVENT.SwarmDefeated, `A swarm card of ${def(game, step.enemy).name} is defeated`, {
+      card: step.enemy,
+    });
+  }
+  if (amount <= 0) return;
   const excess = e.damage + amount - health;
   addCounter(game, e.id, "damage", amount);
   emit(
@@ -363,7 +396,9 @@ export const damageEnemyHandler: Handler<"DamageEnemy"> = (game, step) => {
       ...(excess > 0 && step.by
         ? [win("excessDamage", { inv: step.by, enemy: step.enemy, amount: excess })]
         : []),
-      { t: STEP.DefeatEnemy, enemy: step.enemy, by: step.by },
+      step.via
+        ? { t: STEP.DefeatEnemy, enemy: step.enemy, by: step.by, via: step.via }
+        : { t: STEP.DefeatEnemy, enemy: step.enemy, by: step.by },
     );
   }
 };
@@ -371,6 +406,8 @@ export const damageEnemyHandler: Handler<"DamageEnemy"> = (game, step) => {
 export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (game, step) => {
   const e = cardIf(game, step.enemy);
   if (!e || e.zone !== "enemy") return;
+  // a swarming enemy isn't defeated while its swarm cards remain
+  if (swarmOf(game, step.enemy).length) return;
   // a replacement may take the defeat's place: the scenario's (a hook), or the enemy's own in a window (The Thing That Follows)
   if (!step.checked) {
     if (fireScenarioHook(game, "wouldBeDefeated", step.enemy, "damage") === true) return;
@@ -387,10 +424,18 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (game, step) => {
   if (step.key && isCancelled(game, step.key)) return;
   if (!step.fired) {
     // "when defeated" forced abilities resolve while the enemy is still in play
-    push(game, win("enemyDefeatedSelf", { enemy: step.enemy, inv: null }), {
-      ...step,
-      fired: true,
-    });
+    push(
+      game,
+      win("enemyDefeatedSelf", {
+        enemy: step.enemy,
+        inv: null,
+        ...(step.via ? { via: step.via } : {}),
+      }),
+      {
+        ...step,
+        fired: true,
+      },
+    );
     return;
   }
   const d = def(game, step.enemy);
@@ -403,19 +448,110 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (game, step) => {
     {
       card: step.enemy,
       inv: step.by,
-      data: { by: step.by ?? null },
+      data: { by: step.by ?? null, ...(step.via ? { via: step.via } : {}) },
     },
   );
   if (d.victory !== undefined) moveCard(game, step.enemy, ZONE.Victory);
   else moveCard(game, step.enemy, e.owner ? ZONE.Discard : ZONE.EncounterDiscard);
   defeated.set(game, e.code, true);
-  push(game, win("enemyDefeated", { inv: step.by }), { t: STEP.CheckObjectives });
+  push(game, win("enemyDefeated", { inv: step.by, ...(step.via ? { via: step.via } : {}) }), {
+    t: STEP.CheckObjectives,
+  });
   // Doomed: 1 doom on the current agenda, which can make it advance
   if (d.keywords.includes("doomed"))
     push(game, { t: STEP.PlaceDoom, card: "agenda", n: 1 }, { t: STEP.CheckDoom });
 };
 
 // ---------- enemy phase ----------
+/** where a Patrol enemy patrols toward: the scenario's say, else its keyword's expression from where it is */
+function patrolGoals(game: GameContext, enemy: InstId): InstId[] | null {
+  const hooked = fireScenarioHook(game, "patrolTarget", enemy);
+  if (hooked) return hooked;
+  const expr = keywordArg(game, enemy, "patrol");
+  if (expr === undefined) return null;
+  if (typeof expr === "string")
+    return locations(game)
+      .filter((l) => def(game, l.id).name === expr)
+      .map((l) => l.id);
+  return spawnTargets(game, expr, card(game, enemy).location);
+}
+
+/**
+ * Patrol (Grimoire): at the start of the enemy phase each ready unengaged Patrol enemy moves one location along the
+ * shortest path toward its target; the lead chooses between tied targets and paths; a step it cannot enter, or being
+ * there already, keeps it where it is.
+ */
+export const patrolMovesHandler: Handler<"PatrolMoves"> = (game, step) => {
+  const done = step.done ?? [];
+  const e = enemies(game).find(
+    (x) =>
+      !done.includes(x.id) &&
+      !x.exhausted &&
+      !x.engagedWith &&
+      !!x.location &&
+      patrolGoals(game, x.id) !== null,
+  );
+  if (!e) return;
+  const next: Step = { t: STEP.PatrolMoves, done: [...done, e.id] };
+  const goals = patrolGoals(game, e.id) ?? [];
+  const dist = distances(game, e.location!);
+  const nearest = Math.min(...goals.map((g) => dist.get(g) ?? Infinity));
+  if (!goals.length || nearest === 0 || nearest === Infinity) {
+    push(game, next);
+    return;
+  }
+  let goal = step.toward;
+  if (!goal) {
+    const tied = goals.filter((g) => dist.get(g) === nearest);
+    if (tied.length > 1) {
+      const pick = ask<InstId>(
+        game,
+        step,
+        leadInvestigator(game),
+        CHOICE.Target,
+        `Where does ${def(game, e.id).name} patrol toward?`,
+        tied.map((l) => ({ id: l, label: def(game, l).name, card: l, value: l })),
+        { key: "patrolToward", vars: { card: e.id } },
+      );
+      if (pick !== undefined) push(game, { ...step, choice: undefined, toward: pick });
+      return;
+    }
+    goal = tied[0];
+  }
+  const options = stepsToward(game, e.location!, [goal]).filter((l) =>
+    canEnemyEnter(game, e.id, l),
+  );
+  if (!options.length) {
+    push(game, next);
+    return;
+  }
+  const to = ask<InstId>(
+    game,
+    step,
+    leadInvestigator(game),
+    CHOICE.Target,
+    `Where does ${def(game, e.id).name} move?`,
+    options.map((l) => ({ id: l, label: def(game, l).name, card: l, value: l })),
+    { auto: true, key: "enemyMoveWhere", vars: { card: e.id } },
+  );
+  if (to === undefined) return;
+  const from = e.location;
+  setCardLocation(game, e.id, to);
+  emit(game, EVENT.EnemyMove, `${def(game, e.id).name} patrols to ${def(game, to).name}`, {
+    card: e.id,
+    data: { from, to },
+  });
+  const p = preyCandidates(game, e.id, invsAt(game, to))[0];
+  if (p && !hasKeyword(game, e.id, "aloof") && !isMassive(game, e.id)) {
+    setEngaged(game, e.id, p);
+    emit(game, EVENT.Engage, `${def(game, e.id).name} engages ${invName(game, p)}`, {
+      inv: p,
+      card: e.id,
+    });
+  }
+  push(game, next);
+};
+
 export const hunterMovesHandler: Handler<"HunterMoves"> = (game, step) => {
   const done = step.done ?? [];
   const hunters = enemies(game).filter(
@@ -505,6 +641,18 @@ export const enemyAttacksHandler: Handler<"EnemyAttacks"> = (game, step) => {
       push(
         game,
         { t: STEP.EnemyAttack, enemy: e.id, inv: i, aoo: false, key: attackKey(game) },
+        // a swarm card attacks as the enemy, each its own attack
+        ...swarmOf(game, e.id).map((): Step => ({
+          t: STEP.EnemyAttack,
+          enemy: e.id,
+          inv: i,
+          aoo: false,
+          key: attackKey(game),
+        })),
+        // Relentless: it readies and attacks again, once, before it exhausts
+        ...(hasKeyword(game, e.id, "relentless")
+          ? [{ t: STEP.RelentlessAttack, enemy: e.id, inv: i } as Step]
+          : []),
         ...exhaust,
         ...(more ? [] : [win("playerWindow", { phase: "enemy", inv: i })]),
         { ...step, choice: undefined, done: [...done, key] },
@@ -517,6 +665,79 @@ export const enemyAttacksHandler: Handler<"EnemyAttacks"> = (game, step) => {
     const id = key.split("|")[1];
     if (cardIf(game, id)?.zone === "enemy") exhaust(game, id);
   }
+};
+
+/** the second attack of a Relentless enemy, if it is still there to make it */
+export const relentlessAttackHandler: Handler<"RelentlessAttack"> = (game, step) => {
+  const e = cardIf(game, step.enemy);
+  if (e?.zone !== "enemy" || e.engagedWith !== step.inv || inv(game, step.inv).status !== "playing")
+    return;
+  ready(game, e.id);
+  emit(game, EVENT.Ready, `${def(game, e.id).name} readies and attacks again`, { card: e.id });
+  push(game, { t: STEP.EnemyAttack, enemy: e.id, inv: step.inv, aoo: false, key: attackKey(game) });
+};
+
+/**
+ * Predator (Children of Blood): after the enemies attack, each ready unengaged predator attacks a non-Elite enemy at its
+ * location (of its trait, when its keyword names one; the lead chooses among several), dealing its damage; a prey
+ * defeated so is defeated "via the predator keyword". The predator exhausts after its attack.
+ */
+export const predatorAttacksHandler: Handler<"PredatorAttacks"> = (game, step) => {
+  const done = step.done ?? [];
+  const preyOf = (p: InstId) => {
+    const trait = keywordArg(game, p, "predator");
+    return enemiesAt(game, card(game, p).location).filter(
+      (x) =>
+        x.id !== p && !isElite(game, x.id) && (!trait || def(game, x.id).traits.includes(trait)),
+    );
+  };
+  const p = enemies(game).find(
+    (x) =>
+      !done.includes(x.id) &&
+      !x.exhausted &&
+      !x.engagedWith &&
+      (hasKeyword(game, x.id, "predator") || keywordArg(game, x.id, "predator") !== undefined) &&
+      preyOf(x.id).length > 0,
+  );
+  if (!p) return;
+  const prey = ask<InstId>(
+    game,
+    step,
+    leadInvestigator(game),
+    CHOICE.Target,
+    `Which enemy does ${def(game, p.id).name} attack?`,
+    preyOf(p.id).map((x) => ({ id: x.id, label: def(game, x.id).name, card: x.id, value: x.id })),
+    { auto: true, key: "predatorPrey", vars: { card: p.id } },
+  );
+  if (prey === undefined) return;
+  emit(game, EVENT.Attack, `${def(game, p.id).name} attacks ${def(game, prey).name}`, {
+    card: p.id,
+    data: { prey },
+  });
+  push(
+    game,
+    {
+      t: STEP.DamageEnemy,
+      enemy: prey,
+      amount: enemyStat(game, p.id, "damage"),
+      by: null,
+      source: p.id,
+      via: "predator",
+    },
+    { t: STEP.ExhaustEnemy, enemy: p.id },
+    { t: STEP.PredatorAttacks, done: [...done, p.id] },
+  );
+};
+
+export const addSwarmHandler: Handler<"AddSwarm"> = (game, step) => {
+  if (cardIf(game, step.host)?.zone !== "enemy") return;
+  const top = inv(game, step.inv).deck.slice(0, step.n);
+  for (const id of top) putBeneath(game, id, step.host);
+  if (top.length)
+    emit(game, EVENT.Swarm, `${top.length} swarm card(s) beneath ${def(game, step.host).name}`, {
+      card: step.host,
+      inv: step.inv,
+    });
 };
 
 export function exhaustEnemy(game: GameContext, id: InstId) {
@@ -543,8 +764,12 @@ export const handlers = {
   ResolveAttack: resolveAttackHandler,
   DamageEnemy: damageEnemyHandler,
   DefeatEnemy: defeatEnemyHandler,
+  PatrolMoves: patrolMovesHandler,
   HunterMoves: hunterMovesHandler,
   EnemyAttacks: enemyAttacksHandler,
+  RelentlessAttack: relentlessAttackHandler,
+  PredatorAttacks: predatorAttacksHandler,
+  AddSwarm: addSwarmHandler,
   EnemyEngage: enemyEngageHandler,
 };
 

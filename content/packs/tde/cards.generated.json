@@ -386,7 +386,11 @@
   "text": "Bonded (Gate Box).\nDream-Gate is connected to each other revealed location, and vice versa. Enemies and investigators other than Luke Robinson cannot enter Dream-Gate.\n<b>Forced</b> - At the end of the investigation phase: Set Dream-Gate aside, out of play. (If Luke Robinson is here, move him to any revealed location.)",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "bonded": "06013"
+   }
+  ],
   "slots": [],
   "icons": {},
   "subname": "Wondrous Journey",
@@ -408,7 +412,11 @@
   "text": "Bonded (Detached from Reality).\nEnemies and investigators other than Luke Robinson cannot enter Dream-Gate.\n[reaction] After you successfully investigate Dream-Gate: Flip it.\n<b>Forced</b> - At the end of the investigation phase: Set Dream-Gate aside, out of play. (If Luke Robinson is here, move him to any revealed location, and he takes 2 horror.)",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "bonded": "06014"
+   }
+  ],
   "slots": [],
   "icons": {},
   "subname": "Pointless Reality",
@@ -460,6 +468,7 @@
   "doubleSided": false,
   "keywords": [
    "peril",
+   "hidden",
    "hunter"
   ],
   "slots": [],
@@ -517,7 +526,11 @@
   "text": "Bonded (The Hungering Blade).\n<b>Revelation</b> - Remove 2 offerings from The Hungering Blade to attach Bloodlust to it. If you cannot, take 1 horror and shuffle Bloodlust back into your deck.\n[fast] While attacking with The Hungering Blade, shuffle Bloodlust into your deck: You deal +1 damage for this attack. (Max once per attack.)",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "bonded": "06018"
+   }
+  ],
   "slots": [],
   "icons": {},
   "subtype": "weakness",
@@ -583,7 +596,11 @@
   "text": "Bonded (Segment of Onyx). Uses (3 charges). If this card has no charges, set it aside, out of play, and shuffle 3 set-aside copies of Segment of Onyx into your deck.\n[fast] Exhaust Pendant of the Queen and spend 1 charge: Choose a revealed location and select one - move to that location, discover 1 clue at that location, or automatically evade an enemy at that location.",
   "unique": true,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "bonded": "06021"
+   }
+  ],
   "slots": [
    "accessory"
   ],
@@ -657,7 +674,10 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "hunter"
+   "hunter",
+   {
+    "bonded": "06024"
+   }
   ],
   "slots": [],
   "icons": {},
@@ -731,7 +751,11 @@
   "text": "Bonded (Stargazing).\n<b>Revelation</b> - Remove The Stars Are Right from the game. Choose an investigator. That investigator draws 1 card, gains 1 resource, and may take an immediate action as if it were their turn (this action does not count toward the number of actions that investigator can take each turn).",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "bonded": "06027"
+   }
+  ],
   "slots": [],
   "icons": {},
   "deckLimit": 0,
@@ -804,7 +828,11 @@
   "text": "Bonded (Miss Doyle). Fast.\n<b>Forced</b> - After Hope enters play: Discard Zeal and Augur.\n[action] If Hope is ready, exhaust or discard him: <b>Evade.</b> Attempt to evade with a base [agility] value of 5. (If you discarded Hope, this test is automatically successful. Then, you may shuffle Hope into your deck to put Zeal or Augur into play from your discard pile.)",
   "unique": true,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "bonded": "06030"
+   }
+  ],
   "slots": [],
   "icons": {
    "intellect": 1,
@@ -828,7 +856,11 @@
   "text": "Bonded (Miss Doyle). Fast.\n<b>Forced</b> - After Zeal enters play: Discard Hope and Augur.\n[action] If Zeal is ready, exhaust or discard her: <b>Fight.</b> Fight with a base [combat] value of 5. (If you discarded Zeal, this test is automatically successful. Then, you may shuffle Zeal into your deck to put Hope or Augur into play from your discard pile.)",
   "unique": true,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "bonded": "06030"
+   }
+  ],
   "slots": [],
   "icons": {
    "intellect": 1,
@@ -852,7 +884,11 @@
   "text": "Bonded (Miss Doyle). Fast.\n<b>Forced</b> - After Augur enters play: Discard Hope and Zeal.\n[action] If Augur is ready, exhaust or discard her: <b>Investigate.</b> Investigate with a base [intellect] value of 5. (If you discarded Augur, this test is automatically successful. Then, you may shuffle Augur into your deck to put Hope or Zeal into play from your discard pile.)",
   "unique": true,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "bonded": "06030"
+   }
+  ],
   "slots": [],
   "icons": {
    "combat": 1,
@@ -2148,7 +2184,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -2169,7 +2206,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -2190,7 +2228,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -2460,7 +2499,11 @@
   "text": "Swarming 2.\nX equals the number of Swarm of Spiders enemies at this location <i>(including swarm cards)</i>.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "swarming": 2
+   }
+  ],
   "slots": [],
   "icons": {},
   "encounterSet": "spiders",
@@ -2554,7 +2597,10 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "retaliate"
+   "retaliate",
+   {
+    "swarming": 1
+   }
   ],
   "slots": [],
   "icons": {},
@@ -2585,7 +2631,10 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "alert"
+   "alert",
+   {
+    "swarming": 1
+   }
   ],
   "slots": [],
   "icons": {},
@@ -2616,7 +2665,10 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "hunter"
+   "hunter",
+   {
+    "swarming": 2
+   }
   ],
   "slots": [],
   "icons": {},
@@ -2737,7 +2789,11 @@
   "text": "Bonded (Dream Diary).\nWhen Essence of the Dream would enter your discard pile or be shuffled into your deck, instead set Essence of the Dream aside, out of play (with your bonded cards).",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "bonded": "06238"
+   }
+  ],
   "slots": [],
   "icons": {
    "wild": 2
@@ -3051,7 +3107,9 @@
   "text": "Veiled.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "\"Very pleasant were the suburbs of Ulthar, with their little green cottages and neatly fenced farms; and still pleasanter was the quaint town itself...\"\n - H. P. Lovecraft, <u>The Dream-Quest of Unknown Kadath</u>",
@@ -3132,7 +3190,9 @@
   "text": "Veiled.\n[action] Spend 1 resource: Search the top 6 cards of your deck for an [[Item]] asset and draw it. Shuffle your deck.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "\"Dylath-Leen with its thin angular towers looks in the distance like a bit of the Giants' Causeway, and its streets are dark and uninviting.\"\n - H. P. Lovecraft, <u>The Dream-Quest of Unknown Kadath</u>",
@@ -3174,7 +3234,9 @@
   "text": "Veiled.\n[action][action][action]: Draw 5 cards.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "It is said that the history of this land is written upon the famed cylinders of this ancient city: great brick pillars that rise into the sky, studied by sages, sorcerers, and scholars alike. Perhaps here you can find answers.",
@@ -3215,7 +3277,9 @@
   "text": "Veiled. Sarnath cannot be flipped over unless the investigators \"know what happened to Ib.\"\n<b>Forced</b> - After you successfully investigate Sarnath by 1 or less: Take 1 horror.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "\"Not even the mines of precious metal remained. DOOM had come to Sarnath.\"\n - H. P. Lovecraft, \"The Doom That Came to Sarnath\"",
@@ -3257,7 +3321,9 @@
   "text": "Veiled.\n<b>Forced</b> - After you reveal a [skull] or [cultist] token while investigating Ruins of Ib: Discard an asset you control.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "\"Not far from the gray city of Ib did the wandering tribes lay the first stones of Sarnath...\"\n - H. P. Lovecraft, \"The Doom That Came to Sarnath\"",
@@ -3299,7 +3365,9 @@
   "text": "Veiled.\nWhile you are at Ilek-Vad, reduce the cost of the first [[Spell]], [[Ritual]], or [[Relic]] card you play each round by 1.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "Beyond the Forbidden Lands, perched atop hollow cliffs of glass, is the rich and powerful city-state of Ilek-Vad.",
@@ -3379,7 +3447,9 @@
   "text": "Veiled.\n<b>Forced</b> - At the end of the round: Add 1 swarm card to Horde of Night for each investigator in Zulan-Thek.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "It is said that Zulan-Thek, once a mighty city, feared their dead and the Night alike. It was both which rose up to destroy the city in the end.",
@@ -3420,7 +3490,9 @@
   "text": "Veiled.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "\"The wharves of Baharna are of porphyry, and the city rises in great stone terraces behind them...\"\n - H. P. Lovecraft, <u>The Dream-Quest of Unknown Kadath</u>",
@@ -3461,7 +3533,9 @@
   "text": "Veiled.\n<b>Forced</b> - After you enter Mt. Ngranek or discover 1 or more clues at Mt. Ngranek, if the investigators have not \"obtained supplies from Baharna\": Test [combat] (3) or [agility] (3). If you fail, lose your remaining actions and immediately end your turn.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "encounterSet": "the_search_for_kadath",
@@ -3502,7 +3576,9 @@
   "text": "Veiled.\n<b>Forced</b> - After you end your turn at Nameless Ruins: Deal 1 direct damage to an [[Ally]] asset you control.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "\"By evening he was near the nameless ancient ruins on Yath's farther shore...\"\n - H. P. Lovecraft, <u>The Dream-Quest of Unknown Kadath</u>",
@@ -3544,7 +3620,9 @@
   "text": "Veiled.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "\"...Carter knew that they were come to the land of Ooth-Nargai and the marvellous city of Celephaïs. Swiftly there came into sight the glittering minarets of that fabulous town, and the untarnished marble walls with their bronze statues, and the great stone bridge where Naraxa joins the sea.\"\n - H. P. Lovecraft, <u>The Dream-Quest of Unknown Kadath</u>",
@@ -3586,7 +3664,9 @@
   "text": "Veiled.\nAs an additional cost for you to enter or leave Serannian, you must choose and discard a card from your hand.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "\"...the marble cloud-city of Serannian, that lies in ethereal space beyond where the sea meets the sky...\"\n - H. P. Lovecraft, <u>The Dream-Quest of Unknown Kadath</u>",
@@ -3627,7 +3707,9 @@
   "text": "Veiled.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "In stark contrast to the rest of the Timeless Realm, Hazuth-Kleg is a decaying city of dingy, twisting streets and basalt towers that lies outside the reach of the king of Celephaïs. Even simple rules of architecture do not seem to apply here, and though there are gods venerated within the city's many temples, none of them are the reputable sort that you seek.",
@@ -3667,7 +3749,9 @@
   "text": "Veiled.\nThe way into the temple is barred shut. You cannot enter the Temple of Unattainable Desires unless an investigator has \"beseeched the king.\"",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "The interior of the temple is even darker and more twisted than the city in which it dwells. Hooded lanterns bathe its halls in dim crimson light, and no friendly faces greet you within.",
@@ -3708,7 +3792,9 @@
   "text": "Veiled.\nFor each Priest of a Thousand Masks at the City-Which-Appears-On-No-Map, reduce its shroud by 1.\n<b>Forced</b> - After you fail a skill test while investigating the City-Which-Appears-On-No-Map: Search the encounter deck and discard pile for a Priest of a Thousand Masks and spawn it here. Shuffle the encounter deck.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "encounterSet": "the_search_for_kadath",
@@ -3771,7 +3857,11 @@
   "text": "Swarming 2.\nWhen you reveal chaos tokens while attempting to evade this enemy, reveal an additional token. (Limit once per test.)\n<b>Forced</b> - The first time an investigator defeats Cats of Ulthar <i>(or one of its swarm cards)</i>: Add 3 swarm cards to the host and record in your Campaign Log <i>(your investigator name) has broken the law of Ulthar</i>.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "swarming": 2
+   }
+  ],
   "slots": [],
   "icons": {},
   "encounterSet": "the_search_for_kadath",
@@ -3945,7 +4035,11 @@
   "text": "Swarming 1.\nWhile the host Pack of Vooniths has no attached swarm cards, it gets +2 fight and +2 evade.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "swarming": 1
+   }
+  ],
   "slots": [],
   "icons": {},
   "encounterSet": "the_search_for_kadath",
@@ -3972,7 +4066,11 @@
   "text": "Swarming 1.\nWhile the host Nightriders has no attached swarm cards, it gets -3 evade.\n<b>Forced</b> - After you evade Nightriders: Discard it.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "swarming": 1
+   }
+  ],
   "slots": [],
   "icons": {},
   "encounterSet": "the_search_for_kadath",
@@ -6325,7 +6423,9 @@
   "text": "Veiled.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "\"...for this is the mouth of the vaults of Zin, and the vindictive ghasts are always on watch there murderously for those denizens of the upper abyss who hunt and prey on them.\"\n- H. P. Lovecraft, <u>The Dream-Quest of Unknown Kadath</u>",
@@ -6440,7 +6540,9 @@
   "text": "Veiled.\n[[Gug]] enemies cannot enter the Plain of the Ghouls. If a [[Gug]] enemy would spawn at the Plain of the Ghouls, spawn it at the City of Gugs instead.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "\"The ghouls were in general respectful, even if one did attempt to pinch him while several others eyed his leanness speculatively.\"\n- H. P. Lovecraft, <u>The Dream-Quest of Unknown Kadath</u>",
@@ -6479,7 +6581,9 @@
   "text": "Veiled.\nThe first treachery drawn during the mythos phase by an investigator at this location gains surge.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "\"At last he discerned above him the projecting edge of the great crag of the ghouls, whose vertical side he could not glimpse...\"\n- H. P. Lovecraft, <u>The Dream-Quest of Unknown Kadath</u>",
@@ -6598,7 +6702,9 @@
   "text": "Veiled.\nWhile there are clues remaining on Vale of Pnath, investigators at Vale of Pnath cannot play cards or commit cards to skill tests.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "encounterSet": "point_of_no_return",
@@ -6636,7 +6742,9 @@
   "text": "Veiled.\nX is the number of damage tokens on the scenario reference card.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "Deep in the vacuous expanse lies another dimension.\nWill you take the plunge?",
@@ -6675,7 +6783,9 @@
   "text": "Veiled.\nX is the number of damage tokens on the scenario reference card.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "Deep in the vacuous expanse lies another dimension.\nWill you take the plunge?",
@@ -6714,7 +6824,9 @@
   "text": "Veiled.\nX is the number of damage tokens on the scenario reference card.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "Deep in the vacuous expanse lies another dimension.\nWill you take the plunge?",
@@ -6753,7 +6865,9 @@
   "text": "Veiled.\nX is the number of damage tokens on the scenario reference card.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "veiled"
+  ],
   "slots": [],
   "icons": {},
   "flavor": "Deep in the vacuous expanse lies another dimension.\nWill you take the plunge?",
@@ -7050,7 +7164,11 @@
   "text": "Bonded (Empty Vessel).\n[reaction] When you reveal a [skull], [cultist], [tablet], or [elder_thing] chaos token during a skill test, spend 1 charge: Cancel that token. Heal 1 damage and 1 horror.\n<b>Forced</b> - If Wish Eater has no charges: Search your bonded cards for Empty Vessel and swap it with Wish Eater.",
   "unique": true,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "bonded": "06276"
+   }
+  ],
   "slots": [
    "accessory"
   ],
@@ -7215,7 +7333,10 @@
   "doubleSided": false,
   "keywords": [
    "hunter",
-   "retaliate"
+   "retaliate",
+   {
+    "bonded": "06282"
+   }
   ],
   "slots": [],
   "icons": {},
@@ -7727,6 +7848,7 @@
   "doubleSided": false,
   "keywords": [
    "peril",
+   "hidden",
    "hunter"
   ],
   "slots": [],
@@ -7759,6 +7881,7 @@
   "doubleSided": false,
   "keywords": [
    "peril",
+   "hidden",
    "retaliate"
   ],
   "slots": [],
@@ -7791,6 +7914,7 @@
   "doubleSided": false,
   "keywords": [
    "peril",
+   "hidden",
    "alert"
   ],
   "slots": [],
@@ -7823,6 +7947,7 @@
   "doubleSided": false,
   "keywords": [
    "peril",
+   "hidden",
    "hunter"
   ],
   "slots": [],
@@ -7855,6 +7980,7 @@
   "doubleSided": false,
   "keywords": [
    "peril",
+   "hidden",
    "massive"
   ],
   "slots": [],
@@ -7981,7 +8107,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -8002,7 +8129,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -8023,7 +8151,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -8044,7 +8173,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -8083,7 +8213,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -8104,7 +8235,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -8125,7 +8257,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -8391,7 +8524,11 @@
   "text": "Bonded (Nightmare Bauble).\nWhile Dream Parasite is in your hand, you must commit it to the next skill test you perform, if able.\nThis skill's icons subtract from your skill value instead of adding to it.\nIf this skill test fails, take 1 damage and 1 horror.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "bonded": "06330"
+   }
+  ],
   "slots": [],
   "icons": {
    "wild": 2

@@ -246,6 +246,8 @@ export interface SkillTestState {
 
 export interface EffCtx {
   source?: InstId | null;
+  /** the keyword an enemy was defeated through (a predator's attack) */
+  via?: "predator";
   /** card from the triggering event (e.g. the treachery drawn, the card played) */
   card?: InstId | null;
   /** "you": controller of the source / investigator resolving the effect */
@@ -309,6 +311,8 @@ export type TurnAction =
   /** a vehicle at your location: getting in, getting out (fast, once each per round) */
   | { kind: "enterVehicle"; vehicle: InstId }
   | { kind: "leaveVehicle" }
+  /** a Veiled location with no clues: turned to its story side and resolved */
+  | { kind: "flipVeiled"; location: InstId }
   | { kind: "endTurn" };
 
 /** engine steps; resolved LIFO from state.queue */
@@ -408,6 +412,8 @@ export type Step = { choice?: any } & (
       /** the card dealing it */ source?: InstId | null;
       key?: string;
       windowed?: boolean;
+      /** dealt through a keyword (a predator's attack): its defeat says so */
+      via?: "predator";
     }
   | {
       t: "DefeatEnemy";
@@ -416,6 +422,7 @@ export type Step = { choice?: any } & (
       fired?: boolean;
       checked?: boolean;
       key?: string;
+      via?: "predator";
     }
   | { t: "Move"; inv: InvId; to: InstId; key?: string }
   | { t: "Arrive"; inv: InvId; to: InstId; key?: string }
@@ -449,6 +456,14 @@ export type Step = { choice?: any } & (
   | { t: "LeaveVehicle"; inv: InvId }
   /** a vehicle moves, the investigators in it with it (arriving, without a move action) */
   | { t: "MoveVehicle"; vehicle: InstId; to: InstId }
+  /** each ready unengaged Patrol enemy moves one step toward its target (`toward`: the target the lead chose) */
+  | { t: "PatrolMoves"; done?: InstId[]; toward?: InstId }
+  /** Relentless: after its enemy-phase attack the enemy readies and attacks again */
+  | { t: "RelentlessAttack"; enemy: InstId; inv: InvId }
+  /** after the enemy attacks: each ready unengaged Predator attacks a non-Elite enemy at its location */
+  | { t: "PredatorAttacks"; done?: InstId[] }
+  /** the top `n` cards of an investigator's deck facedown beneath a swarming enemy */
+  | { t: "AddSwarm"; host: InstId; inv: InvId; n: number }
   /** the scenario pauses on one of its interludes; the lead answers its choice */
   | { t: "ReadInterlude"; id: string }
 );
@@ -459,6 +474,8 @@ export interface EventData {
   inv?: InvId | null;
   /** the card whose effect caused the event (horrorHealed) */
   by?: InstId | null;
+  /** the keyword an enemy was defeated through (a predator's attack) */
+  via?: "predator";
   /** what would defeat an investigator or enemy (a wouldBeDefeated window) */
   cause?: "damage" | "horror" | "both" | "effect";
   enemy?: InstId | null;
@@ -637,6 +654,8 @@ export interface ScriptHooks {
     who: InvId | InstId,
     by: "damage" | "horror" | "both" | "effect",
   ): boolean;
+  /** scenario: where a Patrol enemy patrols toward, when its expression can't say (Fortune and Folly's ring) */
+  patrolTarget(game: GameContext, enemy: InstId): InstId[] | undefined;
 }
 
 /** engine context passed to every rule: the state (mutated in place, one deep copy per choice) + static content */

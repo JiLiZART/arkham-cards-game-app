@@ -14,7 +14,7 @@ A keyword with an argument SHALL be structured data on the card: `{ patrol: <spa
 #### Scenario: A patrol target as data
 
 - **WHEN** Factory Worker (13063, "Patrol (nearest location with no Elite enemies)") is imported
-- **THEN** its keywords hold `{ patrol: { at: "nearest", to: "you", filter: { noElite: true } } }` and the coverage counts the line as working
+- **THEN** its keywords hold `{ patrol: { nearest: true, noElite: true } }` and the coverage counts the line as working
 
 #### Scenario: A bonded card
 

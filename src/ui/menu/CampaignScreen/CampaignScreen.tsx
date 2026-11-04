@@ -8,6 +8,7 @@ import {
   t,
 } from "../../../content/i18n";
 import { currentScenarioId } from "../../../engine/campaign/campaign";
+import { flatLog } from "../../../engine/campaign/log";
 import { db, gameStore, useGame } from "../../state/context";
 import { createRoom, useOnline } from "../../state/online";
 import { guideHtml } from "../../game/guideText";
@@ -53,6 +54,8 @@ export function CampaignScreen() {
               randomBasicWeakness: false,
             }}
             xp={who.xp}
+            log={flatLog(campaign.log)}
+            exiled={who.exiled}
             onSave={(cards) => {
               const r = gameStore.getState().upgradeDeck(who.code, cards);
               if (r.ok) {

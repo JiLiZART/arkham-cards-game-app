@@ -86,4 +86,8 @@ export const STEP = {
   LeaveVehicle: "LeaveVehicle",
   MoveVehicle: "MoveVehicle",
   ReadInterlude: "ReadInterlude",
+  PatrolMoves: "PatrolMoves",
+  RelentlessAttack: "RelentlessAttack",
+  PredatorAttacks: "PredatorAttacks",
+  AddSwarm: "AddSwarm",
 } as const satisfies { [K in StepKind]: K };

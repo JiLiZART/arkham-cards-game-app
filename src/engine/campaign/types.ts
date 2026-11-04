@@ -51,6 +51,8 @@ export interface ScenarioFacts {
   defeated?: string[];
   /** the resolution is a checkpoint between two parts: no experience, no upgrade */
   checkpoint?: boolean;
+  /** the codes each investigator exiled during the scenario */
+  exiled?: Record<string, string[]>;
 }
 
 export type Shown = { story: string } | { recorded: { id: string; section: string } };
@@ -89,6 +91,8 @@ export interface CampaignInvestigator {
   physicalTrauma: number;
   mentalTrauma: number;
   status: "active" | "killed" | "insane";
+  /** cards exiled from the deck in play, which an upgrade can buy back */
+  exiled?: string[];
 }
 
 export interface ScenarioRecord {

@@ -1,4 +1,4 @@
-import { campaignNotes, xp } from "../world/flags";
+import { campaignNotes, exiled as exiledFlag, xp } from "../world/flags";
 import { addCards, emptyLog, flatLog, migrateLog, NOTES, record, setCount } from "./log";
 import { flowOf } from "../../content/flow";
 import { expandDeck, validateDeck } from "./decks";
@@ -189,6 +189,7 @@ export function scenarioFacts(
     ...(db.scenarios[s.scenarioId].resolutions[s.resolution!]?.checkpoint
       ? { checkpoint: true }
       : {}),
+    ...exiledIn(s),
   };
 }
 
@@ -230,6 +231,16 @@ function recordCheckpoint(c: CampaignState, s: GameState) {
   if (under.length) c.log = addCards(c.log, "checkpoint:beneathScenario", under, false, CHECKPOINT);
 }
 
+/** what each investigator exiled during the scenario, when anyone did */
+function exiledIn(s: GameState): { exiled?: Record<string, string[]> } {
+  const out = Object.fromEntries(
+    invsOf(s)
+      .map((i) => [i.id, exiledFlag.get({ s }, i.id) ?? []] as const)
+      .filter(([, codes]) => codes.length),
+  );
+  return Object.keys(out).length ? { exiled: out } : {};
+}
+
 export function applyScenarioEnd(db: ContentDb, c0: CampaignState, s: GameState): CampaignState {
   if (s.phase !== "ended" || !s.resolution) throw new Error("scenario has not ended");
   const c = structuredClone(c0);
@@ -240,6 +251,12 @@ export function applyScenarioEnd(db: ContentDb, c0: CampaignState, s: GameState)
     ci.physicalTrauma += i.physicalTrauma;
     ci.mentalTrauma += i.mentalTrauma;
     ci.xp += xp.get({ s }, i.id) ?? 0;
+    // an exiled card leaves the campaign deck: one copy for each exile
+    for (const code of exiledFlag.get({ s }, i.id) ?? []) {
+      const at = ci.deck.indexOf(code);
+      if (at >= 0) ci.deck.splice(at, 1);
+      ci.exiled = [...(ci.exiled ?? []), code];
+    }
   }
   // what the scenario's script found out and the guide asks the players (`log:<section>:<id>`, `count:<section>:<id>`)
   for (const n of campaignNotes(s)) {

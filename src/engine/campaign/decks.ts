@@ -19,7 +19,9 @@ export interface DeckReason {
     | "deck.choice.class"
     | "deck.choice.option"
     | "deck.choice.size"
-    | "deck.choice.role";
+    | "deck.choice.role"
+    | "deck.researched"
+    | "deck.bonded";
   vars?: Record<string, string | number>;
 }
 
@@ -151,7 +153,24 @@ function grantedOptions(db: ContentDb, d: DeckDef): DeckOption[] {
 }
 
 /** validate a deck against its investigator's deckbuilding rules */
-export function validateDeck(db: ContentDb, d: DeckDef): DeckProblem[] {
+/** the log entry a Researched card needs (`{ researched: { log } }`), when it is one */
+export const researchedEntry = (c: CardDef | undefined): string | undefined =>
+  c?.keywords.find(
+    (k): k is { researched: { log: string } } => typeof k === "object" && "researched" in k,
+  )?.researched.log;
+/** the card a bonded card belongs to (`{ bonded: code }`), when it is one */
+export const bondedHost = (c: CardDef | undefined): string | undefined =>
+  c?.keywords.find((k): k is { bonded: string } => typeof k === "object" && "bonded" in k)?.bonded;
+
+/**
+ * Check a deck against its investigator's deckbuilding rules. `log`: the campaign log (flat), which a Researched card's
+ * entry must be in; without it (a standalone game) no Researched card is allowed.
+ */
+export function validateDeck(
+  db: ContentDb,
+  d: DeckDef,
+  log?: Record<string, unknown>,
+): DeckProblem[] {
   const problems: DeckProblem[] = [];
   const inv = db.investigators[d.investigator];
   if (!inv)
@@ -184,6 +203,31 @@ export function validateDeck(db: ContentDb, d: DeckDef): DeckProblem[] {
         reason: { key: "deck.unknown", vars: { card: code } },
       });
       continue;
+    }
+    // a bonded card comes with its host, never as a deck entry
+    const host = bondedHost(c);
+    if (host) {
+      problems.push({
+        code,
+        message: `${c.name} is bonded to ${db.cards[host]?.name ?? host}: not a deck card`,
+        reason: { key: "deck.bonded", vars: { card: code, host } },
+      });
+      continue;
+    }
+    // Researched: only with the log's entry, and only in place of its lower-level version
+    const entry = researchedEntry(c);
+    if (entry) {
+      const lower = Object.keys(d.cards).some(
+        (o) => o !== code && db.cards[o]?.name === c.name && (db.cards[o]?.xp ?? 0) < (c.xp ?? 0),
+      );
+      if (!log?.[entry] || lower)
+        problems.push({
+          code,
+          message: lower
+            ? `${c.name} replaces its lower-level version, which is still in the deck`
+            : `${c.name} needs the campaign log to record ${entry}`,
+          reason: { key: "deck.researched", vars: { card: code, entry } },
+        });
     }
     if (c.type === "investigator" || c.faction === "mythos") {
       problems.push({
@@ -338,17 +382,21 @@ export function whyNotReplace(
 }
 
 /** convert an ArkhamDB deck export ({investigator_code, slots, name}) into our deck format */
-export function fromArkhamDb(json: {
-  name?: string;
-  investigator_code: string;
-  slots: Record<string, number>;
-  id?: number | string;
-}): DeckDef {
+export function fromArkhamDb(
+  json: {
+    name?: string;
+    investigator_code: string;
+    slots: Record<string, number>;
+    id?: number | string;
+  },
+  db?: ContentDb,
+): DeckDef {
   const cards: Record<string, number> = {};
   let random = false;
   for (const [code, n] of Object.entries(json.slots)) {
     if (code === "01000") random = true; // ArkhamDB's "random basic weakness" placeholder
-    else cards[code] = n;
+    // ArkhamDB lists bonded cards with the deck; here they come with their host at setup
+    else if (!(db && bondedHost(db.cards[code]))) cards[code] = n;
   }
   return {
     id: `arkhamdb-${json.id ?? json.investigator_code}`,

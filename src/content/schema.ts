@@ -146,6 +146,8 @@ export const ModStat = z.enum([
   "attackDamage",
   "clueBonus",
   "testValue",
+  /** what each Hidden card in hand counts for beyond itself, toward hand size (Backstage: 2, three each) */
+  "hiddenHandWeight",
   /** maximum hand size at the end of upkeep (Laboratory Assistant) */
   "handSize",
 ]);
@@ -202,6 +204,8 @@ export const Modifier = z
     filter: CardFilter.optional(),
     /** use another skill instead (Mind over Matter style) */
     useSkill: Skill.optional(),
+    /** the targets gain this keyword (an agenda's "each enemy gains Patrol (…)") */
+    keyword: z.lazy(() => Keyword).optional(),
   })
   .strict();
 export type Modifier = z.infer<typeof Modifier>;
@@ -269,6 +273,8 @@ export type Condition =
   | { eventEnemyExhausted: true }
   | { eventEnemyAttackedYouThisRound: true }
   | { eventCardIsSelf: true }
+  /** the enemy was defeated through a keyword (Under a Blood Moon: via the predator keyword) */
+  | { defeatedVia: "predator" }
   | { canPay: Cost }
   /** how many cards lie beneath a card */
   | { beneath: { of: BeneathOf; min?: number; max?: number } }
@@ -327,6 +333,7 @@ export const Condition: z.ZodType<Condition> = z.lazy(() =>
     z.object({ eventEnemyExhausted: z.literal(true) }).strict(),
     z.object({ eventEnemyAttackedYouThisRound: z.literal(true) }).strict(),
     z.object({ eventCardIsSelf: z.literal(true) }).strict(),
+    z.object({ defeatedVia: z.literal("predator") }).strict(),
     z.object({ canPay: Cost }).strict(),
     z
       .object({
@@ -556,6 +563,19 @@ export type Effect =
   | { op: "healSelf"; damage?: number; horror?: number }
   /** the event enemy does not ready during the next upkeep phase (Slippery) */
   | { op: "skipNextReady" }
+  | /** one of your bonded cards (of this code) from where it waits set aside into play */ {
+      op: "putBondedIntoPlay";
+      code?: string;
+    }
+  | /** one of your bonded cards (of this code) from where it waits set aside into your hand */ {
+      op: "putBondedInHand";
+      code?: string;
+    }
+  | /** this card leaves the game and its owner's campaign deck */ { op: "exile" }
+  | /** the top cards of your deck facedown beneath this enemy (or the enemy of the event) as swarm cards */ {
+      op: "addSwarm";
+      amount: Amount;
+    }
   | /** the scenario pauses on one of its interludes: its text and choices, the answer recorded for the campaign log */ {
       op: "readInterlude";
       id: string;
@@ -921,6 +941,10 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
       })
       .strict(),
     z.object({ op: z.literal("skipNextReady") }).strict(),
+    z.object({ op: z.literal("putBondedIntoPlay"), code: z.string().optional() }).strict(),
+    z.object({ op: z.literal("putBondedInHand"), code: z.string().optional() }).strict(),
+    z.object({ op: z.literal("exile") }).strict(),
+    z.object({ op: z.literal("addSwarm"), amount: Amount }).strict(),
     z.object({ op: z.literal("readInterlude"), id: z.string() }).strict(),
     z
       .object({
@@ -1033,6 +1057,10 @@ export const EFFECT_OPS = [
   "shuffleSelfIntoDeck",
   "healSelf",
   "skipNextReady",
+  "putBondedIntoPlay",
+  "putBondedInHand",
+  "exile",
+  "addSwarm",
   "readInterlude",
   "moveTokens",
   "removeTokens",
@@ -1194,6 +1222,12 @@ export type Spawn =
       name?: string;
       trait?: string;
       empty?: boolean;
+      /** with no Elite enemy there */
+      noElite?: boolean;
+      /** with clues on it */
+      clues?: boolean;
+      /** with an enemy of this trait there (Patrol (nearest [[Civilian]] enemy)) */
+      enemyTrait?: string;
       connected?: boolean;
       nearest?: boolean;
       farthest?: boolean;
@@ -1209,6 +1243,9 @@ export const Spawn: z.ZodType<Spawn> = z.lazy(() =>
         name: z.string().optional(),
         trait: z.string().optional(),
         empty: z.boolean().optional(),
+        noElite: z.boolean().optional(),
+        clues: z.boolean().optional(),
+        enemyTrait: z.string().optional(),
         connected: z.boolean().optional(),
         nearest: z.boolean().optional(),
         farthest: z.boolean().optional(),
@@ -1225,6 +1262,49 @@ export const Spawn: z.ZodType<Spawn> = z.lazy(() =>
       .strict(),
   ]),
 );
+
+/** the keywords the engine acts on by themselves */
+export const PLAIN_KEYWORDS = [
+  "hunter",
+  EVENT.Retaliate,
+  "aloof",
+  EVENT.Alert,
+  "massive",
+  "surge",
+  "peril",
+  "fast",
+  "exceptional",
+  "doomed",
+  EVENT.Elusive,
+  /** an asset at a location the investigators get in and out of (Fishing Vessel, the Rocket Ship) */
+  "vehicle",
+  /** a treachery that goes into the drawer's hand (Whispers in Your Head) */
+  "hidden",
+  /** after its enemy-phase attack it readies and attacks again */
+  "relentless",
+  /** a location an investigator may flip to its story side when it has no clues */
+  "veiled",
+  /** a player card that leaves the campaign deck when its effect exiles it */
+  "exile",
+  /** after enemies attack, it attacks a non-Elite enemy at its location (Children of Blood) */
+  "predator",
+] as const;
+/**
+ * A keyword: a plain one, or one with its argument as data (ADR-0013): Patrol's target as a spawn expression, Swarming's
+ * number, the code a bonded card belongs to, the trait a predator hunts, the log entry a researched card needs.
+ */
+export const Keyword = z.union([
+  z.enum(PLAIN_KEYWORDS),
+  z.object({ patrol: Spawn }).strict(),
+  z.object({ swarming: Amount }).strict(),
+  z.object({ bonded: z.string() }).strict(),
+  /** a predator that hunts only enemies of this trait */
+  z.object({ predator: z.string() }).strict(),
+  z.object({ researched: z.object({ log: z.string() }).strict() }).strict(),
+]);
+export type Keyword = z.infer<typeof Keyword>;
+/** a keyword's name: the plain keyword, or the key of one with an argument */
+export const keywordName = (k: Keyword): string => (typeof k === "string" ? k : Object.keys(k)[0]);
 
 export const CardDef = z
   .object({
@@ -1345,25 +1425,7 @@ export const CardDef = z
     victory: z.number().optional(),
     /** Vengeance X: the vengeance points it adds to the campaign while in the victory display (The Forgotten Age) */
     vengeance: z.number().optional(),
-    keywords: z
-      .array(
-        z.enum([
-          "hunter",
-          EVENT.Retaliate,
-          "aloof",
-          EVENT.Alert,
-          "massive",
-          "surge",
-          "peril",
-          "fast",
-          "exceptional",
-          "doomed",
-          EVENT.Elusive,
-          /** an asset at a location the investigators get in and out of (Fishing Vessel, the Rocket Ship) */
-          "vehicle",
-        ]),
-      )
-      .default([]),
+    keywords: z.array(Keyword).default([]),
     /** wild/limits */
     maxCommitted: z.number().optional(),
     /** discard the asset when its last use is spent (First Aid, Forbidden Knowledge) */

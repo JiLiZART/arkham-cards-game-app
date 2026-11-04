@@ -523,7 +523,16 @@
   "text": "Elusive. Patrol (nearest [[Civilian]] enemy). Predator.\nJulia Stern gets +1 [per_investigator] health.\n<b>Forced</b> - When damage would be dealt to Julia Stern: Remove 1 snare from her. If you cannot, reduce that damage to 0.",
   "unique": true,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "elusive",
+   {
+    "patrol": {
+     "nearest": true,
+     "enemyTrait": "Civilian"
+    }
+   },
+   "predator"
+  ],
   "slots": [],
   "icons": {},
   "subname": "On the Run",
@@ -554,6 +563,14 @@
   "unique": true,
   "doubleSided": false,
   "keywords": [
+   "elusive",
+   {
+    "patrol": {
+     "nearest": true,
+     "enemyTrait": "Civilian"
+    }
+   },
+   "predator",
    "retaliate"
   ],
   "slots": [],
@@ -586,6 +603,14 @@
   "unique": true,
   "doubleSided": false,
   "keywords": [
+   "elusive",
+   {
+    "patrol": {
+     "nearest": true,
+     "enemyTrait": "Civilian"
+    }
+   },
+   "predator",
    "retaliate"
   ],
   "slots": [],
@@ -1335,6 +1360,7 @@
   "doubleSided": false,
   "keywords": [
    "massive",
+   "predator",
    "retaliate"
   ],
   "slots": [],
@@ -1369,6 +1395,7 @@
   "keywords": [
    "alert",
    "massive",
+   "predator",
    "retaliate"
   ],
   "slots": [],
@@ -1403,6 +1430,7 @@
   "keywords": [
    "alert",
    "massive",
+   "predator",
    "retaliate"
   ],
   "slots": [],
@@ -1468,6 +1496,7 @@
   "doubleSided": false,
   "keywords": [
    "hunter",
+   "predator",
    "retaliate"
   ],
   "slots": [],
@@ -1498,7 +1527,14 @@
   "text": "Doomed. Patrol (nearest location with no [[Elite]] enemies).\nFactory Worker's location gets +1 shroud.\n[action]: <b>Parley.</b> Test [intellect] (2). If you succeed, discard this enemy.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "patrol": {
+     "nearest": true,
+     "noElite": true
+    }
+   }
+  ],
   "slots": [],
   "icons": {},
   "encounterSet": "new_horizons",
@@ -1936,7 +1972,8 @@
   "unique": true,
   "doubleSided": false,
   "keywords": [
-   "aloof"
+   "aloof",
+   "elusive"
   ],
   "slots": [],
   "icons": {},
@@ -1968,7 +2005,8 @@
   "unique": true,
   "doubleSided": false,
   "keywords": [
-   "hunter"
+   "hunter",
+   "predator"
   ],
   "slots": [],
   "icons": {},
@@ -2001,6 +2039,7 @@
   "doubleSided": false,
   "keywords": [
    "hunter",
+   "predator",
    "retaliate"
   ],
   "slots": [],
@@ -2034,6 +2073,7 @@
   "doubleSided": false,
   "keywords": [
    "hunter",
+   "predator",
    "retaliate"
   ],
   "slots": [],
@@ -2066,6 +2106,7 @@
   "unique": true,
   "doubleSided": false,
   "keywords": [
+   "elusive",
    "hunter"
   ],
   "slots": [],
@@ -2099,6 +2140,7 @@
   "doubleSided": false,
   "keywords": [
    "alert",
+   "elusive",
    "hunter"
   ],
   "slots": [],
@@ -2132,7 +2174,9 @@
   "doubleSided": false,
   "keywords": [
    "alert",
-   "hunter"
+   "elusive",
+   "hunter",
+   "predator"
   ],
   "slots": [],
   "icons": {},
@@ -2341,7 +2385,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "hunter"
+   "hunter",
+   "predator"
   ],
   "slots": [],
   "icons": {},
@@ -2627,6 +2672,7 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
+   "elusive",
    "hunter"
   ],
   "slots": [],

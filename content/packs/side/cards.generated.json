@@ -4076,6 +4076,7 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
+   "elusive",
    "retaliate"
   ],
   "slots": [],
@@ -4417,6 +4418,7 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
+   "elusive",
    "hunter"
   ],
   "slots": [],
@@ -4641,7 +4643,9 @@
   "text": "Elusive. <b>Prey</b> - Most remaining health.\n<b>Forced</b> - After you evade The Contessa: Ready her. She cannot attack you for the rest of the round.\n<b>Forced</b> - When The Contessa moves via her elusive keyword: Move her to the Throne of Blood instead.",
   "unique": true,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "elusive"
+  ],
   "slots": [],
   "icons": {},
   "subname": "Needlessly Smug",
@@ -4671,7 +4675,9 @@
   "text": "Elusive.\nWhile the Accursed Cape is attached to The Contessa, she gets +1 damage and gains hunter and retaliate.",
   "unique": true,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   "elusive"
+  ],
   "slots": [],
   "icons": {},
   "subname": "Enraged",
@@ -4701,6 +4707,7 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
+   "elusive",
    "hunter"
   ],
   "slots": [],
@@ -4732,6 +4739,7 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
+   "elusive",
    "hunter",
    "retaliate"
   ],
@@ -8344,7 +8352,13 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "aloof"
+   "aloof",
+   {
+    "patrol": {
+     "nearest": true,
+     "clues": true
+    }
+   }
   ],
   "slots": [],
   "icons": {},
@@ -8656,7 +8670,13 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "aloof"
+   "aloof",
+   {
+    "patrol": {
+     "nearest": true,
+     "trait": "Crime Scene"
+    }
+   }
   ],
   "slots": [],
   "icons": {},
@@ -9105,6 +9125,11 @@
   "unique": true,
   "doubleSided": false,
   "keywords": [
+   {
+    "patrol": {
+     "name": "Room 245"
+    }
+   },
    "retaliate"
   ],
   "slots": [],
@@ -11706,7 +11731,10 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "hunter"
+   "hunter",
+   {
+    "swarming": 6
+   }
   ],
   "slots": [],
   "icons": {},
@@ -11735,7 +11763,11 @@
   "text": "Swarming 2. Warring.\n<b>Spawn</b> - Burning Pit.\n<b>Forced</b> - When Trylogog attacks: It deals either its damage or its horror, instead of both.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "swarming": 2
+   }
+  ],
   "slots": [],
   "icons": {},
   "flavor": "The irritating, incessant buzzing of the swarm can be heard from miles away.",
@@ -11764,7 +11796,11 @@
   "text": "Swarming 2. Warring.\n<b>Spawn</b> - Burning Pit.\n<b>Forced</b> - When Trylogog attacks: It deals either its damage or its horror, instead of both.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "swarming": 2
+   }
+  ],
   "slots": [],
   "icons": {},
   "flavor": "The irritating, incessant buzzing of the swarm can be heard from miles away.",

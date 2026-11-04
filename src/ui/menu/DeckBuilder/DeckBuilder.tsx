@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { loadAllPacks } from "../../../content";
-import { t } from "../../../content/i18n";
+import { cardText, t } from "../../../content/i18n";
 import type { DeckDef } from "../../../content/schema";
 import { needsChoice, validateDeck } from "../../../engine/campaign/decks";
 import { deckChangeCost } from "../../../engine/campaign/upgrade";
@@ -21,12 +21,18 @@ export function DeckBuilder({
   investigator,
   initial,
   xp,
+  log,
+  exiled = [],
   onSave,
   onCancel,
 }: {
   investigator: string;
   initial: DeckDef;
   xp: number;
+  /** the campaign log (flat): the entries Researched cards need */
+  log?: Record<string, unknown>;
+  /** cards exiled from the deck, which can be bought back */
+  exiled?: string[];
   onSave: (cards: Record<string, number>) => string | null;
   onCancel: () => void;
 }) {
@@ -45,7 +51,7 @@ export function DeckBuilder({
       live = false;
     };
   }, []);
-  const problems = useMemo(() => (ready ? validateDeck(db, deck) : []), [ready, deck]);
+  const problems = useMemo(() => (ready ? validateDeck(db, deck, log) : []), [ready, deck, log]);
   const choice = needsChoice(db.investigators[investigator]);
   const cost = deckChangeCost(db, investigator, initial.cards, deck.cards);
   const poor = cost > xp;
@@ -73,6 +79,13 @@ export function DeckBuilder({
           </div>
         )}
         {poor && <div className="problems">{tr("upgrade.cost", { need: cost, have: xp })}</div>}
+        {exiled.length > 0 && (
+          <div data-testid="deck-exiled">
+            {tr("upgrade.exiled", {
+              cards: exiled.map((c) => cardText(db, c, locale).name).join(", "),
+            })}
+          </div>
+        )}
         {ready &&
           (problems.length === 0 ? (
             <div className={styles.deValid}>{tr("deckEditor.valid")}</div>

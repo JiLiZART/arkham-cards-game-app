@@ -5239,7 +5239,8 @@
   "unique": true,
   "doubleSided": false,
   "keywords": [
-   "massive"
+   "massive",
+   "relentless"
   ],
   "slots": [],
   "icons": {},
@@ -7503,7 +7504,15 @@
   "text": "Patrol (nearest empty [[Summit]] location).\nCannot make attacks of opportunity.\nWhile engaged with this enemy, you may enter open sky as if it were a location. If you defeat or disengage from this enemy while at open sky, you are defeated and suffer 1 physical trauma.",
   "unique": false,
   "doubleSided": false,
-  "keywords": [],
+  "keywords": [
+   {
+    "patrol": {
+     "nearest": true,
+     "empty": true,
+     "trait": "Summit"
+    }
+   }
+  ],
   "slots": [],
   "icons": {},
   "encounterSet": "obsidian_canyons",
@@ -7531,7 +7540,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "hunter"
+   "hunter",
+   "relentless"
   ],
   "slots": [],
   "icons": {},
@@ -7640,7 +7650,8 @@
   "doubleSided": false,
   "keywords": [
    "hunter",
-   "massive"
+   "massive",
+   "relentless"
   ],
   "slots": [],
   "icons": {},
@@ -7913,6 +7924,7 @@
   "unique": true,
   "doubleSided": false,
   "keywords": [
+   "relentless",
    "retaliate"
   ],
   "slots": [],
@@ -8892,7 +8904,8 @@
   "doubleSided": false,
   "keywords": [
    "hunter",
-   "massive"
+   "massive",
+   "relentless"
   ],
   "slots": [],
   "icons": {},
@@ -8923,7 +8936,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "hunter"
+   "hunter",
+   "relentless"
   ],
   "slots": [],
   "icons": {},
@@ -8954,7 +8968,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "hunter"
+   "hunter",
+   "relentless"
   ],
   "slots": [],
   "icons": {},
@@ -9307,7 +9322,8 @@
   "unique": true,
   "doubleSided": false,
   "keywords": [
-   "hunter"
+   "hunter",
+   "relentless"
   ],
   "slots": [],
   "icons": {},

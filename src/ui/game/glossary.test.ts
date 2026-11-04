@@ -26,6 +26,23 @@ describe("keywordsOf", () => {
     ]);
   });
 
+  it("reads the keywords of this change, plain and with an argument", () => {
+    const card = (text: string, keywords: unknown[] = []) => ({ keywords, text }) as never;
+    expect(keywordsOf(card("Hunter. Relentless. Predator."))).toEqual([
+      "hunter",
+      "relentless",
+      "predator",
+    ]);
+    expect(
+      keywordsOf(card("Hidden.\nRevelation - Put Whispers in Your Head into your hand.")),
+    ).toEqual(["hidden"]);
+    expect(keywordsOf(card("Veiled.", [{ patrol: { nearest: true } }]))).toEqual([
+      "patrol",
+      "veiled",
+    ]);
+    expect(keywordsOf(card("Researched.\nExile."))).toEqual(["exile", "researched"]);
+  });
+
   it("a keyword word inside a sentence is not a keyword", () => {
     expect(
       keywordsOf({

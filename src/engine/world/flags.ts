@@ -128,6 +128,8 @@ export const atTurnEnd = global<{ inv: InvId; effects: Effect[]; ctx: EffCtx }[]
 export const connections = global<[string, string][]>("connections");
 /** how many cards each investigator discards at random from the opening hand */
 export const discardFromOpeningHands = global<number>("discardFromOpeningHands");
+/** the codes an investigator exiled this scenario: out of their campaign deck */
+export const exiled = family<string[]>("exiled");
 /** no vehicle may be entered: anywhere (true), or at these locations */
 export const noVehicles = global<true | InstId[]>("noVehicles");
 /** the round an investigator last entered (`<inv>:enter`) or left (`<inv>:leave`) a vehicle */

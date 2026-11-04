@@ -63,6 +63,18 @@ Keywords the engine acts on are a closed list in two places: `CardDef.keywords` 
 
 11. **Enemy phase order** after this change: `PatrolMoves`, `HunterMoves`, the player window, `EnemyAttacks` (with Relentless re-attacks), `PredatorAttacks`. `rulesAlign.test.ts` gets the order as a test.
 
+## Implementation notes
+
+- **Keyword data (1).** Plain keywords are `PLAIN_KEYWORDS` (with `predator`); the argued ones are objects. A Patrol target uses the spawn-expression shape of `engine-scenario-structure` (no `at`), which gains `noElite`, `clues` and `enemyTrait`; the importer reads names, "nearest", "empty", "[[Trait]] location", "with no Elite enemies", "with clues" and "[[Trait]] enemy" and leaves the rest (the FoF ring, floods, Key Locus, memories, asset traits: 33 cards) to `cards.json` or `patrolTarget`. `Bonded (Name)` resolves by name within the pack.
+- **Granted keywords (2).** A modifier carries `keyword`, so an agenda's constant "each enemy gains Patrol" (`scope: "allEnemies"`) and a temporary grant through the existing `modify` op are both data; `keywordArg` reads them. There is no separate `grantKeyword` op.
+- **Predator (5).** The user chose: a bare `Predator` attacks a non-Elite enemy at its location (the lead choosing among several); `{ predator: trait }` narrows it. It deals the predator's damage, the prey's defeat carries `via: "predator"` (condition `defeatedVia`), and the predator exhausts after its attack.
+- **Relentless (3).** A `RelentlessAttack` step after the enemy-phase attack readies the enemy and attacks again if it is still engaged; no flag is needed, the attack loop queues it once.
+- **Swarm cards (4).** The player cards beneath an enemy are its swarm (`swarmOf`); no field on the card. A host leaving play by another way sends them to the bottom of their owners' decks.
+- **Hidden (6).** A Hidden card is an encounter card in a hand (no owner): `isHidden`, no field. Backstage's multiplier is the stat `hiddenHandWeight`. The hand fan already draws a hand facedown for a seat this device doesn't hold.
+- **Exile (7).** The scenario keeps `exiled` per investigator as a flag; the campaign removes one copy per exile and keeps `CampaignInvestigator.exiled`. A deck short of its size takes level 0 cards for free; an upgrade may leave an exiled deck short.
+- **Bonded (9).** Ops `putBondedInHand` and `putBondedIntoPlay` (a code, optional) over `bondedOf`; no `searchBonded` op. The deck area lists the bonded cards of the deck's hosts; the catalog page lists a host's bonded cards and a bonded card's host.
+- **Saves.** `ENGINE_VERSION` 9 refuses version 8 saves' scenarios; the replay corpus replays unchanged (no recorded game holds these keywords).
+
 ## Risks / Trade-offs
 
 - [Patrol targets the importer cannot parse] → the card is not working until `cards.json` gives the expression or the scenario's `patrolTarget` hook does; the inspection reports' lists (TSK 6, FHV 14, CoB 2, TDC 5, sides 9) are the acceptance list.

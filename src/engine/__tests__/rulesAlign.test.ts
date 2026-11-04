@@ -16,7 +16,18 @@ import {
   enemyIn,
   nathaniel,
 } from "../kits/natkit";
-import { enemyHere, game, hand, inPlay, neutral, offered, toTurn } from "../kits/driver";
+import {
+  addLocation,
+  enemyHere,
+  game,
+  hand,
+  inject,
+  inPlay,
+  neutral,
+  offered,
+  toTurn,
+} from "../kits/driver";
+import { STEP } from "../steps/step";
 
 const N = NATHANIEL;
 
@@ -296,6 +307,54 @@ describe("unique cards, limits and victory", () => {
 });
 
 describe("the enemy phase, upkeep and round end follow the chart", () => {
+  it("patrols move, then hunters, then enemies attack, then predators", () => {
+    const RATS = "01159"; // Swarm of Rats: Hunter; prey for the predator
+    const saved = {
+      minion: db.cards[MINION].keywords,
+      acolyte: db.cards[ACOLYTE].keywords,
+      rats: db.cards[RATS].keywords,
+    };
+    db.cards[MINION].keywords = [{ patrol: { name: "Southside" } }];
+    db.cards[ACOLYTE].keywords = ["predator"];
+    try {
+      let patroller = "";
+      let predator = "";
+      let rats = "";
+      const r0 = game({
+        investigators: [ROLAND],
+        prep: (game) => {
+          const study = invStateIn(game.s, ROLAND).location!;
+          const hall = addLocation(game, "01128", [["01111", "01128"]]);
+          const south = addLocation(game, "01126", [["01128", "01126"]]);
+          const at = (code: string, loc: string) => {
+            const id = createCard(game, code, ZONE.Enemy);
+            moveCard(game, id, ZONE.Enemy, { location: loc });
+            return id;
+          };
+          patroller = at(MINION, hall);
+          rats = at(RATS, hall); // hunts Roland in the Study
+          enemyHere(game, ROLAND, "01160");
+          predator = at(ACOLYTE, south);
+          at("01159", south); // the predator's prey
+          void study;
+        },
+      });
+      const r = inject(r0, () => {}, { t: STEP.EnemyPhase });
+      const log = r.state.log.slice(r0.state.log.length);
+      const first = (pred: (e: (typeof log)[number]) => boolean) => log.findIndex(pred);
+      const patrol = first((e) => e.type === "enemyMove" && e.card === patroller);
+      const hunt = first((e) => e.type === "enemyMove" && e.card === rats);
+      const attack = first((e) => e.type === "attack" && e.card !== predator);
+      const prey = first((e) => e.type === "attack" && e.card === predator);
+      expect([patrol, hunt, attack, prey].every((k) => k >= 0)).toBe(true);
+      expect(patrol < hunt && hunt < attack && attack < prey).toBe(true);
+    } finally {
+      db.cards[MINION].keywords = saved.minion;
+      db.cards[ACOLYTE].keywords = saved.acolyte;
+      db.cards[RATS].keywords = saved.rats;
+    }
+  });
+
   it("an enemy exhausts after its own attack, before the next enemy attacks", () => {
     let r = game({
       investigators: [ROLAND],

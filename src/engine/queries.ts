@@ -1,5 +1,7 @@
 import { attacked, connections as connectionsAdded, named } from "./world/flags";
+import { keywordName, type Keyword } from "../content/schema";
 import type {
+  Amount,
   Ability,
   BeneathOf,
   Spawn,
@@ -79,8 +81,39 @@ export const locationByName = (game: GameContext, nm: string) =>
 export const hasTrait = (game: GameContext, id: InstId, trait: string) =>
   def(game, id).traits.includes(trait);
 export const isElite = (game: GameContext, id: InstId) => hasTrait(game, id, "Elite");
-export const hasKeyword = (game: GameContext, id: InstId, kw: CardDef["keywords"][number]) =>
-  def(game, id).keywords.includes(kw);
+/** whether the card's own keywords hold this one (a plain keyword, or the name of one with an argument) */
+export const hasKeyword = (game: GameContext, id: InstId, kw: string) =>
+  def(game, id).keywords.some((k) => keywordName(k) === kw);
+/** the arguments of the keywords that carry one */
+export interface KeywordArgs {
+  patrol: Spawn;
+  swarming: Amount;
+  bonded: string;
+  predator: string;
+  researched: { log: string };
+}
+/**
+ * A keyword's argument: the card's own, else one a constant ability grants it (an agenda's "each enemy gains Patrol");
+ * undefined when it has none.
+ */
+export function keywordArg<K extends keyof KeywordArgs>(
+  game: GameContext,
+  id: InstId,
+  name: K,
+): KeywordArgs[K] | undefined {
+  const own = (k: Keyword) =>
+    typeof k === "object" && name in k ? (k as Record<K, KeywordArgs[K]>)[name] : undefined;
+  for (const k of def(game, id).keywords) {
+    const v = own(k);
+    if (v !== undefined) return v;
+  }
+  for (const m of allMods(game))
+    if (m.target === id && m.mod.keyword) {
+      const v = own(m.mod.keyword);
+      if (v !== undefined) return v;
+    }
+  return undefined;
+}
 /** an aloof enemy can only be attacked while it is engaged with an investigator */
 export const attackable = (game: GameContext, id: InstId) =>
   !hasKeyword(game, id, "aloof") || !!cardRecIf(game, id)?.engagedWith;
@@ -250,11 +283,19 @@ export function abilitiesOf(
   return [...def(game, id).abilities, ...(scriptOf(game.db, c.code)?.abilities ?? [])];
 }
 
+/** a Hidden card in a hand: an encounter card held there, working as if in its holder's threat area */
+export const isHidden = (game: GameContext, id: InstId) => {
+  const c = card(game, id);
+  return c.zone === ZONE.Hand && !c.owner;
+};
+/** the Hidden cards in hands: encounter cards held there */
+export const hiddenCards = (game: GameContext) => cardsIn(game, ZONE.Hand).filter((c) => !c.owner);
+
 /** all modifiers currently in effect */
 export function allMods(game: GameContext): AppliedMod[] {
   const out: AppliedMod[] = [];
   const blanked = blankedCards(game);
-  for (const c of cardsInAny(game, MOD_ZONES)) {
+  for (const c of [...cardsInAny(game, MOD_ZONES), ...hiddenCards(game)]) {
     const abilities = c.zone === "location" && !c.revealed ? [] : abilitiesOf(game, c.id, blanked);
     for (const a of abilities) {
       if (a.kind !== "constant" || !a.modifiers) continue;
@@ -515,6 +556,7 @@ export function checkCondition(game: GameContext, c: Condition, ctx: EffCtx): bo
   if ("eventEnemyExhausted" in c) return !!ctx.enemy && !!cardRecIf(game, ctx.enemy)?.exhausted;
   if ("eventEnemyAttackedYouThisRound" in c)
     return !!ctx.enemy && !!you && attacked.get(game, [ctx.enemy, you]) === game.s.round;
+  if ("defeatedVia" in c) return ctx.via === c.defeatedVia;
   if ("eventCardIsSelf" in c) return !!ctx.card && ctx.card === ctx.source;
   if ("canPay" in c) return !!you && !!ctx.source && canPay(game, you, ctx.source, c.canPay);
   if ("tokens" in c) {
@@ -588,6 +630,10 @@ export function spawnTargets(
       (!expr.name || def(game, l.id).name === expr.name) &&
       (!expr.trait || def(game, l.id).traits.includes(expr.trait)) &&
       (!expr.empty || (invsAt(game, l.id).length === 0 && !enemiesAt(game, l.id).length)) &&
+      (!expr.noElite || !enemiesAt(game, l.id).some((e) => isElite(game, e.id))) &&
+      (!expr.clues || l.clues > 0) &&
+      (!expr.enemyTrait ||
+        enemiesAt(game, l.id).some((e) => def(game, e.id).traits.includes(expr.enemyTrait!))) &&
       (!expr.connected || (!!from && connections(game, from).includes(l.id))),
   );
   if (expr.unrevealed === "ifAble" && out.some((l) => !l.revealed))
@@ -635,3 +681,16 @@ export function nearestTo(game: GameContext, filter: CardFilter, candidates: Inv
 }
 const isInPlayZone = (z: string) =>
   z === ZONE.Enemy || z === ZONE.Location || z === ZONE.Play || z === ZONE.Attached;
+
+/** the swarm cards of a swarming enemy: the player cards facedown beneath it, top first */
+export const swarmOf = (game: GameContext, host: InstId): InstId[] =>
+  cardsBeneath(game, host).filter((id) => !!card(game, id).owner);
+
+/** an investigator's bonded cards waiting set aside (of this code, when given) */
+export const bondedOf = (game: GameContext, i: InvId, code?: string) =>
+  cardsIn(game, ZONE.SetAside).filter(
+    (c) =>
+      c.owner === i &&
+      (!code || c.code === code) &&
+      def(game, c.id).keywords.some((k) => typeof k === "object" && "bonded" in k),
+  );

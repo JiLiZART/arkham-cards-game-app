@@ -2238,7 +2238,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -2259,7 +2260,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -2280,7 +2282,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -2301,7 +2304,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -4719,7 +4723,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -4740,7 +4745,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -8712,7 +8718,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -8734,7 +8741,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},
@@ -8756,7 +8764,8 @@
   "unique": false,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [],
   "icons": {},

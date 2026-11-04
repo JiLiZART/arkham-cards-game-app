@@ -1,10 +1,10 @@
 import type { ContentDb } from "../engine/world/types";
-import type { CardDef, Spawn } from "./schema";
+import { keywordName, type CardDef, type Spawn } from "./schema";
 import { hasScript } from "../engine/world/scripts";
 
 /** the keywords the engine acts on by themselves (CardDef.keywords) */
 const KEYWORD =
-  /^(hunter|retaliate|aloof|alert|massive|surge|peril|fast|exceptional|doomed|elusive|vehicle)(\s*\(\d+\))?$/i;
+  /^(hunter|retaliate|aloof|alert|massive|surge|peril|fast|exceptional|doomed|elusive|vehicle|hidden|relentless|veiled|exile|predator)(\s*\(\d+\))?$/i;
 
 /** the spawn values the engine resolves (rules/enemies.ts): the two keywords, or the name of a location in the content */
 function spawnResolves(db: ContentDb, spawn: Spawn | undefined): boolean {
@@ -44,13 +44,30 @@ const LINE_RULES: [RegExp, (c: CardDef, db: ContentDb) => boolean][] = [
   ],
 ];
 
+/** a keyword with an argument, accounted for when the card's keywords hold it as data */
+const ARGUED: [RegExp, string][] = [
+  [/^Patrol \(/i, "patrol"],
+  [/^Swarming \d+$/i, "swarming"],
+  [/^Swarming X$/i, "swarming"],
+  [/^Bonded \(/i, "bonded"],
+  [/^Predator \(/i, "predator"],
+  [/^Researched$/i, "researched"],
+];
+const holds = (c: CardDef, name: string) =>
+  (c.keywords ?? []).some((k) => typeof k === "object" && keywordName(k) === name);
+
 /** a line of keywords, with a "Prey (…)" among them when the card's prey is set */
 const keywordsOnly = (line: string, c: CardDef) =>
   line
-    .split(".")
+    .split(/\.(?![^(]*\))/)
     .map((p) => p.trim())
     .filter(Boolean)
-    .every((p) => KEYWORD.test(p) || (p.startsWith("Prey (") && !!c.prey));
+    .every(
+      (p) =>
+        KEYWORD.test(p) ||
+        (p.startsWith("Prey (") && !!c.prey) ||
+        ARGUED.some(([re, name]) => re.test(p) && holds(c, name)),
+    );
 
 const DIFFICULTIES = { front: ["easy", "standard"], back: ["hard", "expert"] } as const;
 const SYMBOLS: Record<string, string> = {

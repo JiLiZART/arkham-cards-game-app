@@ -264,6 +264,8 @@ export function actionCost(game: GameContext, i: InvId, a: TurnAction): number {
     case "enterVehicle":
     case "leaveVehicle":
       return 0;
+    case "flipVeiled":
+      return 1;
     case "play":
       return def(game, a.card).keywords.includes("fast") ? 0 : 1 + extraCost(game, i, "play");
     case "ability": {
@@ -325,6 +327,14 @@ export function legalTurnActions(game: GameContext, i: InvId): ChoiceOption[] {
   for (const e of engagedWith(game, i))
     if (def(game, e.id).enemy?.evade !== null)
       add({ kind: EVENT.Evade, enemy: e.id }, `Evade ${def(game, e.id).name}`, e.id);
+  // Veiled: with no clues on it, its other side may be turned up and resolved
+  if (loc && hasKeyword(game, loc, "veiled") && card(game, loc).clues === 0 && def(game, loc).back)
+    add(
+      { kind: "flipVeiled", location: loc },
+      `Flip ${def(game, loc).name}`,
+      loc,
+      "option.flipVeiled",
+    );
   // a vehicle here: in (unless forbidden) or out, once each per round
   const blocked = noVehicles.get(game);
   if (me.vehicle) {
@@ -487,6 +497,12 @@ export const performActionHandler: Handler<"PerformAction"> = (game, step) => {
     case "leaveVehicle":
       steps.push({ t: STEP.LeaveVehicle, inv: i });
       break;
+    case "flipVeiled":
+      steps.push(
+        { t: STEP.Flip, card: a.location },
+        { t: STEP.ResolveStory, card: a.location, you: i },
+      );
+      break;
   }
   steps.push({ t: STEP.CheckObjectives });
   push(game, ...steps);
@@ -534,9 +550,11 @@ export const enemyPhaseHandler: Handler<"EnemyPhase"> = (game) => {
   push(
     game,
     win("phaseBegins", { phase: "enemy" }),
+    { t: STEP.PatrolMoves },
     { t: STEP.HunterMoves },
     win("playerWindow", { phase: "enemy" }),
     { t: STEP.EnemyAttacks },
+    { t: STEP.PredatorAttacks },
     win("enemyPhaseEnds", {}),
   );
 };

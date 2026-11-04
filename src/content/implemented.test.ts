@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import type { ContentDb } from "../engine/world/types";
 import { implemented, tokensReal } from "./implemented";
+import { Keyword } from "./schema";
 import { loadContentFromDisk } from "./node";
 
 /** a one-card content: the card's text and whatever behaviour fields the test sets */
@@ -51,6 +52,47 @@ describe("a card works when every printed line is accounted for", () => {
     expect(implemented(db("<b>Forced</b> - Do a thing.", { abilities: [{}] }), "c")).toBe(true);
     expect(implemented(db(""), "c")).toBe(true);
     expect(implemented(db("Hunter. Retaliate."), "c")).toBe(true);
+  });
+
+  it("a keyword with an argument is accounted for when the card's keywords hold it as data", () => {
+    const patrol = "Patrol (nearest location with no [[Elite]] enemies).";
+    expect(
+      implemented(db(patrol, { keywords: [{ patrol: { nearest: true, noElite: true } }] }), "c"),
+    ).toBe(true);
+    expect(implemented(db(patrol, { keywords: ["patrol"] }), "c")).toBe(false);
+    expect(implemented(db(patrol), "c")).toBe(false);
+    expect(
+      implemented(db("Swarming 2. Hunter.", { keywords: [{ swarming: 2 }, "hunter"] }), "c"),
+    ).toBe(true);
+    expect(
+      implemented(db("Predator (Civilian).", { keywords: [{ predator: "Civilian" }] }), "c"),
+    ).toBe(true);
+    for (const k of ["Hidden", "Relentless", "Veiled", "Exile"])
+      expect(implemented(db(`${k}.`), "c"), k).toBe(true);
+    // Researched needs the log entry it is gated by
+    expect(implemented(db("Researched."), "c")).toBe(false);
+    expect(
+      implemented(
+        db("Researched.", { keywords: [{ researched: { log: "identifiedTheSolution" } }] }),
+        "c",
+      ),
+    ).toBe(true);
+  });
+
+  it("the schema accepts every keyword, plain and with its argument", () => {
+    const keywords = [
+      "hidden",
+      "relentless",
+      "veiled",
+      "exile",
+      { patrol: { nearest: true, noElite: true } },
+      { bonded: "05313" },
+      { swarming: 2 },
+      { predator: "Civilian" },
+      { researched: { log: "identifiedTheSolution" } },
+    ];
+    expect(Keyword.array().safeParse(keywords).success).toBe(true);
+    expect(Keyword.safeParse({ patrol: 3 }).success).toBe(false);
   });
 
   it("a Spawn line is accounted for by a spawn expression (Waterfront Civilian: any empty Arkham location)", () => {

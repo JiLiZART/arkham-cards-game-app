@@ -3,7 +3,13 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { CardDef } from "../src/content/schema";
-import { mapCard, mapSnapshotPack, readSnapshot, snapshotTarget } from "./import-cards";
+import {
+  mapCard,
+  mapSnapshotPack,
+  parseKeywords,
+  readSnapshot,
+  snapshotTarget,
+} from "./import-cards";
 
 const roland = {
   code: "01001",
@@ -278,5 +284,57 @@ describe("the vengeance field (The Forgotten Age)", () => {
     const harbinger = mapCard(tfa.find((r) => r.code === "04062")!);
     expect(harbinger.vengeance).toBe(5);
     expect(CardDef.safeParse(harbinger).success).toBe(true);
+  });
+});
+
+describe("keywords as data", () => {
+  it("reads the plain keywords, Patrol's target, Swarming's number", () => {
+    expect(
+      parseKeywords("Elusive. Patrol (nearest [[Civilian]] enemy). Predator.", "enemy"),
+    ).toEqual(["elusive", { patrol: { nearest: true, enemyTrait: "Civilian" } }, "predator"]);
+    expect(parseKeywords("Hunter. Relentless.", "enemy")).toEqual(["hunter", "relentless"]);
+    expect(parseKeywords("Hidden.\nRevelation - …", "treachery")).toEqual(["hidden"]);
+    expect(parseKeywords("Veiled.", "location")).toEqual(["veiled"]);
+    expect(parseKeywords("Swarming 2. Hunter.", "enemy")).toEqual([{ swarming: 2 }, "hunter"]);
+    expect(parseKeywords("Patrol (nearest location with no [[Elite]] enemies).", "enemy")).toEqual([
+      { patrol: { nearest: true, noElite: true } },
+    ]);
+    expect(parseKeywords("Patrol (nearest empty [[Summit]] location).", "enemy")).toEqual([
+      { patrol: { nearest: true, empty: true, trait: "Summit" } },
+    ]);
+    expect(parseKeywords("Patrol ([[Cave]] location with clues).", "enemy")).toEqual([
+      { patrol: { trait: "Cave", clues: true } },
+    ]);
+    expect(parseKeywords("Patrol (Room 245).", "enemy")).toEqual([
+      { patrol: { name: "Room 245" } },
+    ]);
+  });
+
+  it("leaves a Patrol target it can't read, and Swarming X, to cards.json", () => {
+    expect(parseKeywords("Patrol (clockwise). Hunter.", "enemy")).toEqual(["hunter"]);
+    expect(parseKeywords("Swarming X.", "enemy")).toEqual([]);
+  });
+
+  it("names a bonded card's host by its name in the pack", () => {
+    const raw = [
+      {
+        code: "05313",
+        name: "Hallowed Mirror",
+        type_code: "asset",
+        faction_code: "mystic",
+        pack_code: "tcu",
+        text: "",
+      },
+      {
+        code: "05314",
+        name: "Soothing Melody",
+        type_code: "event",
+        faction_code: "mystic",
+        pack_code: "tcu",
+        text: "Bonded (Hallowed Mirror).\nHeal 2 damage.",
+      },
+    ];
+    const { cards } = mapSnapshotPack(raw);
+    expect(cards.find((c) => c.code === "05314")?.keywords).toEqual([{ bonded: "05313" }]);
   });
 });

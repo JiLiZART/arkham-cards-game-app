@@ -1,4 +1,5 @@
 import { cardText, encounterSetName, t } from "../../../content/i18n";
+import { bondedHost } from "../../../engine/campaign/decks";
 import { db, useGame } from "../../state/context";
 import { CardFace } from "../../components/CardFace";
 import { cardDetails } from "../../game/details";
@@ -105,6 +106,9 @@ export function CardPage({ code }: { code: string }) {
   const d = db.cards[code];
   if (!d) return null;
   const tx = cardText(db, code, locale);
+  // a bonded card belongs under its host; a host lists the cards bonded to it
+  const host = bondedHost(db.cards[code]);
+  const bonded = Object.values(db.cards).filter((c) => bondedHost(c) === code);
   const inv = db.investigators[code];
   const starters = Object.values(db.decks).filter((x) => x.investigator === code);
   const set = d.encounterSet
@@ -148,6 +152,19 @@ export function CardPage({ code }: { code: string }) {
             })}
           </div>
           {set && <div className="hd-traits">{set}</div>}
+          {bonded.length > 0 && (
+            <div className={styles.catSec} data-testid="cat-bonded">
+              <h3>{t(db, locale, "catalog.bonded")}</h3>
+              {bonded.map((c) => (
+                <CardLink key={c.code} code={c.code} n={c.quantity} />
+              ))}
+            </div>
+          )}
+          {host && (
+            <div className="hd-traits" data-testid="cat-bonded-to">
+              {t(db, locale, "catalog.bondedTo")} <CardLink code={host} />
+            </div>
+          )}
           {d.type === "investigator" && tx.backText && (
             <div className={cx(styles.catSec, "cat-back")}>
               <h3>{t(db, locale, "catalog.deckbuilding")}</h3>

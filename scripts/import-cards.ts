@@ -30,7 +30,50 @@ const KEYWORDS: [RegExp, CardDefInput["keywords"] extends (infer K)[] | undefine
   [/\bMassive\b/, "massive"],
   [/\bSurge\b/, "surge"],
   [/\bPeril\b/, "peril"],
+  [/^Elusive$/, "elusive"],
+  [/^Relentless$/, "relentless"],
+  [/^Hidden$/, "hidden"],
+  [/^Veiled$/, "veiled"],
+  [/^Predator$/, "predator"],
 ];
+
+type Kw = NonNullable<CardDefInput["keywords"]>[number];
+type SpawnExpr = Exclude<Extract<Kw, { patrol: unknown }>["patrol"], string>;
+
+/**
+ * A Patrol target in the words the spawn expressions know: a location's name; or "nearest", "empty", "[[Trait]]",
+ * "with no [[Elite]] enemies", "with clues", "[[Trait]] enemy". Anything else is left to cards.json (null).
+ */
+export function patrolTarget(words: string): SpawnExpr | null {
+  let w = words.trim();
+  const out: SpawnExpr = {};
+  if (/^nearest /i.test(w)) {
+    out.nearest = true;
+    w = w.replace(/^nearest /i, "");
+  }
+  // the location of the nearest enemy of a trait
+  let m = /^\[\[([^\]]+)\]\] enemy$/.exec(w);
+  if (m) return { ...out, enemyTrait: m[1] };
+  if (/^empty /.test(w)) {
+    out.empty = true;
+    w = w.replace(/^empty /, "");
+  }
+  m = /^\[\[([^\]]+)\]\] location(.*)$/.exec(w) ?? /^location(.*)$/.exec(w);
+  if (m) {
+    const rest = (m.length === 3 ? m[2] : m[1]).trim();
+    if (m.length === 3) out.trait = m[1];
+    if (!rest) return out;
+    if (rest === "with no [[Elite]] enemies") return { ...out, noElite: true };
+    if (rest === "with clues") return { ...out, clues: true };
+    const e = /^with an? \[\[([^\]]+)\]\] enemy$/.exec(rest);
+    if (e) return { ...out, enemyTrait: e[1] };
+    return null;
+  }
+  // a location by name: capitalised words, no brackets
+  if (!out.nearest && /^[A-Z][\w' ]+$/.test(w) && !/^(clockwise|counterclockwise)$/i.test(w))
+    return { name: w };
+  return null;
+}
 
 const strip = (s: string) => s.replace(/<\/?[a-z]+>/g, "");
 
@@ -41,11 +84,17 @@ export function parseKeywords(text: string, type: string): CardDefInput["keyword
     const kwLine = line.replace(/^[^.]*?Prey[^.]*\.\s*/, "");
     // keyword lines are short sentences made only of keywords
     const parts = kwLine
-      .split(".")
+      .split(/\.(?![^(]*\))/)
       .map((p) => p.trim())
       .filter(Boolean);
-    for (const p of parts)
+    for (const p of parts) {
       for (const [re, kw] of KEYWORDS) if (re.test(p) && p.split(" ").length <= 2) out.add(kw);
+      const patrol = /^Patrol \((.*)\)$/.exec(p);
+      const target = patrol && patrolTarget(patrol[1]);
+      if (target) out.add({ patrol: target });
+      const swarming = /^Swarming (\d+)$/.exec(p);
+      if (swarming) out.add({ swarming: Number(swarming[1]) });
+    }
     if (line.trim().startsWith("Fast.") && (type === "event" || type === "asset")) out.add("fast");
   }
   return [...out];
@@ -234,8 +283,13 @@ export function mapSnapshotPack(raw: Raw[]): {
 } {
   const cards: CardDefInput[] = [];
   const problems: { code: string; message: string }[] = [];
+  const byName = new Map(raw.map((r) => [r.name as string, r.code as string]));
   for (const r of raw) {
     const card = mapCard(r);
+    // "Bonded (Hallowed Mirror)": the host by its name in the pack
+    const host = /^Bonded \(([^)]+)\)\./m.exec(strip(r.text ?? ""))?.[1];
+    if (host && byName.get(host))
+      card.keywords = [...(card.keywords ?? []), { bonded: byName.get(host)! }];
     const parsed = CardDef.safeParse(card);
     if (parsed.success) cards.push(card);
     else

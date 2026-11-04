@@ -2337,7 +2337,8 @@
   "unique": true,
   "doubleSided": false,
   "keywords": [
-   "peril"
+   "peril",
+   "hidden"
   ],
   "slots": [
    "ally"
@@ -2424,6 +2425,7 @@
   "keywords": [
    "alert",
    "aloof",
+   "elusive",
    "hunter"
   ],
   "slots": [],

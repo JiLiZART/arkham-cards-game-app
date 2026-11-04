@@ -22,6 +22,7 @@ import {
   enemiesAt,
   locations,
   matchesFilter,
+  isHidden,
 } from "../queries";
 import { discard, moveCard, shuffleIntoDeck } from "../movement";
 import type { InstId } from "../world/types";
@@ -122,14 +123,16 @@ function discardFromHandEffect(game: GameContext, run: EffectRun<EffectOf<"disca
   const ts = invTargets(game, step, e.target, ctx);
   if (!ts) return;
   const i = ts[0];
+  // a Hidden card leaves a hand only by its own text
+  const discardable = (who: string) =>
+    inv(game, who).hand.filter((h) => !isHidden(game, h) || h === ctx.source);
+  let n = Math.min(amt(game, e.amount, ctx), discardable(i).length);
   const me = inv(game, i);
-  let n = Math.min(amt(game, e.amount, ctx), me.hand.length);
   if (e.random) {
     for (const t of ts) {
-      const m = inv(game, t);
-      for (let k = 0; k < n && m.hand.length; k++) {
-        const id = m.hand[randomInt(game, m.hand.length)];
-        discard(game, id);
+      for (let k = 0; k < n && discardable(t).length; k++) {
+        const pool = discardable(t);
+        discard(game, pool[randomInt(game, pool.length)]);
       }
     }
     return;
@@ -141,7 +144,7 @@ function discardFromHandEffect(game: GameContext, run: EffectRun<EffectOf<"disca
     i,
     CHOICE.Generic,
     `${me.name}: choose a card to discard (${n})`,
-    me.hand.map((h) => opt(game, h)),
+    discardable(i).map((h) => opt(game, h)),
     { key: "discardN", vars: { n } },
   );
   if (pick === undefined) return;
@@ -188,19 +191,20 @@ function discardAllButOneFromHandEffect(
 ) {
   const { step, you } = run;
 
-  const me = inv(game, you);
-  if (me.hand.length <= 1) return;
+  // a Hidden card stays in the hand whatever is kept
+  const cards = inv(game, you).hand.filter((h) => !isHidden(game, h));
+  if (cards.length <= 1) return;
   const keep = ask<InstId>(
     game,
     step,
     you,
     CHOICE.Generic,
     "Choose 1 card to keep",
-    me.hand.map((h) => opt(game, h)),
+    cards.map((h) => opt(game, h)),
     { key: "keepOne" },
   );
   if (keep === undefined) return;
-  for (const h of me.hand.filter((x) => x !== keep)) discard(game, h);
+  for (const h of cards.filter((x) => x !== keep)) discard(game, h);
   return;
 }
 
