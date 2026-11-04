@@ -32,12 +32,16 @@
     "seed": 4
   },
   {
-    "template": "the-devourer-below-01002-01004-mixed",
-    "seed": 30
+    "template": "the-devourer-below-01002-01004",
+    "seed": 6
   },
   {
-    "template": "the-devourer-below-01005-01001-01003",
-    "seed": 7
+    "template": "the-devourer-below-01002-01004-mixed",
+    "seed": 13
+  },
+  {
+    "template": "the-devourer-below-01002-01004-mixed",
+    "seed": 30
   },
   {
     "template": "the-devourer-below-01005-01001-01003-mixed",
@@ -97,11 +101,11 @@
   },
   {
     "template": "the-devourer-below-05001-05002-mixed",
-    "seed": 18
+    "seed": 30
   },
   {
-    "template": "the-devourer-below-05001-05002-mixed",
-    "seed": 30
+    "template": "spreading-flames-05001-05002-mixed",
+    "seed": 24
   },
   {
     "template": "the-gathering-12001-12004",

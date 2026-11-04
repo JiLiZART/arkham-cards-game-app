@@ -13,6 +13,7 @@
     { "do": "putRandomIntoPlay", "from": ["01150", "01151", "01152", "01153", "01154", "01155"], "count": 4 },
     { "do": "setAside", "codes": ["01156", "01157"] },
     { "do": "startAt", "code": "01149" },
+    { "do": "addChaosToken", "token": "elderThing" },
     { "do": "placeDoomOnAgenda", "amount": 1, "when": { "logCount": { "key": "cultistsGotAway", "min": 1, "max": 2 } } },
     { "do": "placeDoomOnAgenda", "amount": 2, "when": { "logCount": { "key": "cultistsGotAway", "min": 3, "max": 4 } } },
     { "do": "placeDoomOnAgenda", "amount": 3, "when": { "logCount": { "key": "cultistsGotAway", "min": 5 } } },

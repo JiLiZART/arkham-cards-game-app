@@ -104,8 +104,9 @@ export function PileColumn() {
   const me = viewer ? invOfIf(game, viewer) : null;
   // a tap on a lit deck answers the pending choice, while the decider's table is on screen
   const offered = useChoicesOffered();
+  const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const decks = offered
-    ? deckOptions(game, viewer)
+    ? deckOptions(game, viewer, busy)
     : { player: null, encounter: null, waiting: false };
   const victory = cardsOf(game).filter((c) => c.zone === "victory");
   const encounterDeck = pileOf(game, PILE.EncounterDeck);

@@ -155,6 +155,19 @@ describe("The Midnight Masks", () => {
 });
 
 describe("The Devourer Below", () => {
+  it("its setup adds an elder thing token to the bag for the rest of the campaign", () => {
+    const c0 = startCampaign(db, {
+      campaignId: "night-of-the-zealot",
+      difficulty: "standard",
+      seed: 1,
+      investigators: [{ code: ROLAND, deckId: "roland-starter" }],
+    });
+    const before = c0.chaosBag.filter((t) => t === "elderThing").length;
+    const setup = scenarioSetup(db, { ...c0, flow: { ...c0.flow, play: "the-devourer-below" } }, 1);
+    const r = skipMulligans(createGame(db, { ...setup, scenarioId: "the-devourer-below" }));
+    expect(r.state.chaosBag.filter((t) => t === "elderThing")).toHaveLength(before + 1);
+  });
+
   const escaped = ["01137", "01139"];
 
   it("acts 1–3 lead to Resolution 1", () => {
@@ -212,6 +225,8 @@ describe("The Devourer Below", () => {
       invStateIn(game.s, ROLAND).location = u.location;
       cardRecIn(game.s, u.id).damage = enemyStat(game, u.id, "health") - 1;
       invStateIn(game.s, ROLAND).actionsLeft = 3;
+      // the setup added its elder thing token: the test's bag is +1 alone
+      game.s.chaosBag = ["+1"];
     });
     // Umôrdhoth (fight 5): Roland 4 + 1 = 5
     r = pick(r, /^Fight Umôrdhoth/);

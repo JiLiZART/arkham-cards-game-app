@@ -219,10 +219,11 @@ export interface DeckOptions {
  * encounter deck for a waiting encounter draw. Only the deciding investigator's table gets them (the pile column shows
  * the viewer's decks). `waiting` is for the highlights that would otherwise glow all turn (the phone drawer's handle).
  */
-export function deckOptions(game: GameState, viewer: InvId | null): DeckOptions {
+export function deckOptions(game: GameState, viewer: InvId | null, busy = false): DeckOptions {
   const none: DeckOptions = { player: null, encounter: null, waiting: false };
   const p = game.pending;
-  if (!p || !viewer || p.inv !== viewer) return none;
+  // while events still play, nothing can be answered (the store refuses it): no deck lights up
+  if (!p || !viewer || p.inv !== viewer || busy) return none;
   if (p.kind === "draw") {
     const o = p.options[0] ?? null;
     return p.promptVars?.deck === "encounter"

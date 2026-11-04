@@ -568,6 +568,15 @@ describe("deckOptions", () => {
     expect(d.waiting).toBe(true);
   });
 
+  it("nothing lights while events are still playing (the hand fan waits the same way)", () => {
+    const state = untilDraw("encounter");
+    expect(deckOptions(state, state.pending!.inv, true)).toEqual({
+      player: null,
+      encounter: null,
+      waiting: false,
+    });
+  });
+
   it("nothing is offered to someone else's table, or when nothing waits", () => {
     const state = untilDraw("encounter");
     const other = state.order.find((i) => i !== state.pending!.inv)!;
