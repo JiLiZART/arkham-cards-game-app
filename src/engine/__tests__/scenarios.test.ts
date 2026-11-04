@@ -34,6 +34,10 @@ describe("The Gathering", () => {
     });
     r = pick(r, /^Advance act/);
     expect(act(r)).toBe("The Barrier");
+    // the house as the scenario lays it out: the Hallway in the middle where the Study was, the others around it
+    const layout = db.scenarios["the-gathering"].layout;
+    for (const l of allCardRecsIn(r.state).filter((c) => c.zone === "location"))
+      expect([l.code, r.state.world.tables.cell[l.id]]).toEqual([l.code, layout[l.code]]);
     r = mutate(r, (game) => {
       invStateIn(game.s, ROLAND).clues = 3;
     });

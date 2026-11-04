@@ -363,7 +363,19 @@ export const setCell = (game: GameContext, id: InstId, cell: [number, number]) =
 /** a location leaving the map: its cell is free again and its links are gone, at both ends */
 export function forgetPlace(game: GameContext, id: InstId) {
   const t = game.s.world.tables;
+  const freed = t.cell[id];
   delete t.cell[id];
+  // a location pushed aside because this one held its layout cell takes that cell now (The Gathering: the Hallway
+  // enters play before the Study leaves [0,0])
+  const layout = game.db.scenarios[game.s.scenarioId]?.layout ?? {};
+  if (freed)
+    for (const [other, cell] of Object.entries(t.cell)) {
+      const printed = layout[card(game, other).code];
+      if (printed && sameCell(printed, freed) && !sameCell(cell, printed)) {
+        t.cell[other] = [freed[0], freed[1]];
+        break;
+      }
+    }
   for (const table of [t.links, t.oneWay]) {
     delete table[id];
     for (const [k, v] of Object.entries(table)) {

@@ -81,6 +81,23 @@ describe("connections per location instance", () => {
     expect(connections(gOf(again), ids.h1)).not.toContain(ids.study);
   });
 
+  it("a location pushed aside because its layout cell was held takes that cell once it is free (The Gathering's act 1)", () => {
+    let hall = "";
+    let study = "";
+    let r = game({
+      investigators: [ROLAND],
+      prep: (g) => {
+        study = inv(g, ROLAND).location!;
+        // the act puts the Hallway into play while the Study still holds [0,0], then removes the Study
+        hall = createCard(g, HALLWAY, ZONE.Limbo);
+        moveCard(g, hall, ZONE.Location);
+      },
+    });
+    expect(cellOf(gOf(r), hall)).not.toEqual([0, 0]);
+    r = inject(r, (g) => moveCard(g, study, ZONE.Removed));
+    expect(cellOf(gOf(r), hall)).toEqual(db.scenarios["the-gathering"].layout[HALLWAY]);
+  });
+
   it("the starting locations keep their layout cells (The Gathering's Study at [0,0])", () => {
     const r = game({ investigators: [ROLAND] });
     expect(cellOf(gOf(r), inv(gOf(r), ROLAND).location!)).toEqual(
