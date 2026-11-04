@@ -17,7 +17,7 @@ import { matchesFilter, uniqueInPlay } from "../queries";
 import { moveCard, putOnTop, shuffleThenTop } from "../movement";
 import { playCost } from "../rules/cards";
 import type { InstId, InvId } from "../world/types";
-import { invTargets, opt } from "./targets";
+import { amt, invTargets, opt } from "./targets";
 import type { EffectOf, EffectRun } from "./types";
 import { EVENT } from "../events/event";
 import { ZONE, CHOICE } from "../world/constants";
@@ -45,7 +45,8 @@ function searchDeckEffect(game: GameContext, run: EffectRun<EffectOf<"searchDeck
   if (!ts) return;
   const who = ts[0];
   const me = inv(game, who);
-  const top = e.top ? me.deck.slice(0, e.top) : null;
+  const n = e.top === undefined ? 0 : amt(game, e.top, ctx);
+  const top = e.top !== undefined ? me.deck.slice(0, n) : null;
   if (step.choice === undefined && searchBlocked(game, who, top ?? me.deck)) return;
   const pool = (top ?? me.deck).filter((id) => matchesFilter(game, card(game, id).code, e.filter));
   // the top cards that don't match are shown too: the searcher sees what they looked at
@@ -54,11 +55,11 @@ function searchDeckEffect(game: GameContext, run: EffectRun<EffectOf<"searchDeck
     step,
     who,
     CHOICE.Generic,
-    `Search your deck${e.top ? ` (top ${e.top})` : ""}`,
+    `Search your deck${top ? ` (top ${n})` : ""}`,
     [...pool.map((id) => opt(game, id)), { id: "none", label: "Take nothing", value: "none" }],
     {
-      key: e.top ? "searchTop" : "searchDeck",
-      vars: { n: e.top ?? 0 },
+      key: top ? "searchTop" : "searchDeck",
+      vars: { n },
       shown: top?.filter((id) => !pool.includes(id)),
     },
   );

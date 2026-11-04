@@ -12,9 +12,9 @@ Every player card of the rtnotz pack SHALL have its behaviour, in `content/packs
 
 #### Scenario: Mind Wipe (3) dulls an enemy
 
-- **GIVEN** a Ghoul Priest (2 damage, 2 horror, Retaliate) at an investigator's location at the start of the enemy phase
+- **GIVEN** a Flesh-Eater (non-Elite, 1 damage, 2 horror) at an investigator's location as a phase begins
 - **WHEN** they play Mind Wipe (3) on it and it attacks
-- **THEN** it deals 1 damage and 1 horror, and its Retaliate is ignored until the phase ends
+- **THEN** it deals 0 damage and 1 horror, its text box blank until the phase ends
 
 #### Scenario: Barricade (3) redirects a spawn
 

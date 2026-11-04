@@ -1033,6 +1033,7 @@
   "mod.flag.cannotSpendClues": "can't spend clues",
   "mod.flag.cannotMoveInto": "can't be moved into",
   "mod.flag.nonEliteCannotMoveInto": "can't be entered by non-Elite enemies",
+  "mod.flag.cannotSpawnAt": "can't be spawned at by non-Elite enemies (they spawn next door)",
   "mod.flag.nonEliteCannotAttack": "can't be attacked by non-Elite enemies",
   "mod.flag.doubleNegativeTokens": "doubles negative chaos token modifiers",
   "mod.flag.blankText": "loses its text box",
@@ -1046,5 +1047,16 @@
   "mod.flag.cannotPlayOrCommit": "can't play or commit some cards",
   "mod.flag.noAttacksOfOpportunity": "provokes no attacks of opportunity",
   "mod.flag.cannotBeDamaged": "can't be damaged",
-  "ability.03041.2": "Discard Drawing the Sign"
+  "ability.03041.2": "Discard Drawing the Sign",
+  "ability.50001.0": "+1 willpower",
+  "ability.50001.1": "+1 combat",
+  "ability.50003.0": "+1 intellect",
+  "ability.50003.1": "+1 agility",
+  "ability.50005.0": "+1 combat",
+  "ability.50005.1": "+1 agility",
+  "ability.50007.0": "+1 willpower",
+  "ability.50007.1": "+1 intellect",
+  "ability.50009.0": "+1 willpower",
+  "ability.50009.1": "+1 agility",
+  "ability.50010.0": "search the top X cards (X: what you failed by)"
 }

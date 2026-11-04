@@ -384,7 +384,8 @@ export type Step = { choice?: any } & (
   /** `card`: that card is drawn as the encounter card (from beneath a card), not the deck's top */
   | { t: "DrawEncounter"; inv: InvId; card?: InstId }
   | { t: "Revelation"; inv: InvId; card: InstId }
-  | { t: "Spawn"; enemy: InstId; inv: InvId | null; at?: InstId | null }
+  /** `redirect`: the spawn was turned away from `at` (Barricade (3)) and the player chooses where instead */
+  | { t: "Spawn"; enemy: InstId; inv: InvId | null; at?: InstId | null; redirect?: boolean }
   | { t: "EnemyAttack"; enemy: InstId; inv: InvId; aoo: boolean; key: string }
   | { t: "ResolveAttack"; enemy: InstId; inv: InvId; key: string }
   | {

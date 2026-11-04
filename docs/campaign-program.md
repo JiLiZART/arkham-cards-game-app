@@ -36,9 +36,9 @@ Status comes from `openspec/changes/` (and `archive/`): *not written*, *being wr
 | --- | --- | --- |
 | `scenario-import-fixes` | implemented (16/16) | generated scenarios: set-aside and removed cards, setup cards, chaos bags per difficulty, Return-to options |
 | `campaign-flow-compiler-fixes` | implemented (11/11) | generated flows: the guide's order, interludes, resolutions with their links, shared steps |
-| `engine-scenario-structure` | ready (0/38) | scenario structure: several act and agenda decks, cards beneath locations and the other state one act and one agenda can't hold |
-| `engine-generic-keywords` | ready (0/24) | the keywords that recur across cycles (Patrol and the others no single campaign owns) |
-| `engine-location-instances-grid` | ready (0/11) | locations told apart by instance, not code, and grid placement |
+| `engine-scenario-structure` | implemented (38/38) | scenario structure: several act and agenda decks, cards beneath locations and the other state one act and one agenda can't hold |
+| `engine-generic-keywords` | implemented (24/24) | the keywords that recur across cycles (Patrol and the others no single campaign owns) |
+| `engine-location-instances-grid` | implemented (11/11) | locations told apart by instance, not code, and grid placement |
 | `engine-bless-curse` | ready (0/13) | bless and curse tokens (needed from The Innsmouth Conspiracy on) |
 
 ### Cycle mechanics
@@ -106,7 +106,7 @@ Status comes from `openspec/changes/` (and `archive/`): *not written*, *being wr
 
 | Change | Status | Completes |
 | --- | --- | --- |
-| `player-cards-notz-return` | ready (0/8) | player cards: rtnotz |
+| `player-cards-notz-return` | implemented (8/8) | player cards: rtnotz |
 | `player-cards-dwl` | ready (0/28) | player cards: The Dunwich Legacy packs and rtdwl |
 | `player-cards-ptc` | ready (0/28) | player cards: The Path to Carcosa packs and rtptc |
 | `player-cards-tfa` | ready (0/29) | player cards: The Forgotten Age packs and rttfa |
@@ -128,7 +128,7 @@ Status comes from `openspec/changes/` (and `archive/`): *not written*, *being wr
 | Done | Pack | Campaign | Encounter cards left | Player cards left | Change |
 | --- | --- | --- | --- | --- | --- |
 | [x] | `core` | shared by every campaign | 0 of 79 | 0 of 99 | — |
-| [ ] | `rtnotz` | return-to-the-night-of-the-zealot, side-by-the-book | 33 of 38 | 10 of 10 | `campaign-return-to-the-night-of-the-zealot`, `player-cards-notz-return` |
+| [ ] | `rtnotz` | return-to-the-night-of-the-zealot, side-by-the-book | 33 of 38 | 0 of 10 | `campaign-return-to-the-night-of-the-zealot`, `player-cards-notz-return` |
 
 ### The cycles: each deluxe box, its mythos packs, its Return-to box
 
@@ -167,10 +167,10 @@ Status comes from `openspec/changes/` (and `archive/`): *not written*, *being wr
 | [ ] | `bbt` | return-to-the-circle-undone, the-circle-undone | 22 of 22 | 12 of 12 | `campaign-the-circle-undone`, `player-cards-tcu` |
 | [ ] | `rttcu` | return-to-the-circle-undone | 54 of 61 | 17 of 17 | `campaign-return-to-the-circle-undone`, `player-cards-tcu` |
 | [ ] | `tde` | the-dream-quest, the-web-of-dreams | 70 of 70 | 37 of 37 | `campaign-the-dream-quest`, `campaign-the-web-of-dreams`, `player-cards-tde` |
-| [ ] | `sfk` | the-dream-quest | 52 of 52 | 10 of 10 | `campaign-the-dream-quest`, `player-cards-tde` |
+| [ ] | `sfk` | the-dream-quest | 48 of 52 | 10 of 10 | `campaign-the-dream-quest`, `player-cards-tde` |
 | [ ] | `tsh` | the-web-of-dreams | 26 of 27 | 13 of 14 | `campaign-the-web-of-dreams`, `player-cards-tde` |
 | [ ] | `dsm` | the-dream-quest | 26 of 26 | 14 of 14 | `campaign-the-dream-quest`, `player-cards-tde` |
-| [ ] | `pnr` | the-web-of-dreams | 39 of 39 | 15 of 15 | `campaign-the-web-of-dreams`, `player-cards-tde` |
+| [ ] | `pnr` | the-web-of-dreams | 38 of 39 | 15 of 15 | `campaign-the-web-of-dreams`, `player-cards-tde` |
 | [ ] | `wgd` | the-dream-quest | 37 of 37 | 10 of 10 | `campaign-the-dream-quest`, `player-cards-tde` |
 | [ ] | `woc` | the-web-of-dreams | 22 of 22 | 10 of 10 | `campaign-the-web-of-dreams`, `player-cards-tde` |
 | [ ] | `tic` | side-red-tide-rising, the-innsmouth-conspiracy | 66 of 66 | 37 of 37 | `campaign-the-innsmouth-conspiracy`, `player-cards-tic` |

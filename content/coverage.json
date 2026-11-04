@@ -1262,11 +1262,8 @@
    },
    "player": {
     "total": 10,
-    "works": 0,
-    "rest": {
-     "asset": 6,
-     "event": 4
-    }
+    "works": 10,
+    "rest": {}
    }
   },
   "rtptc": {

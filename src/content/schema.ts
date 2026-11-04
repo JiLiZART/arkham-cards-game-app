@@ -178,6 +178,8 @@ export const ModFlag = z.enum([
   "cannotSpendClues",
   "cannotMoveInto",
   "nonEliteCannotMoveInto",
+  /** non-Elite enemies cannot spawn here: they spawn at a connecting location instead, if able (Barricade (3)) */
+  "cannotSpawnAt",
   "nonEliteCannotAttack",
   "doubleNegativeTokens",
   "blankText",
@@ -265,7 +267,7 @@ export type Condition =
   | { eventInvestigatorIsYou: true }
   | { eventAtYourLocation: true }
   | { testKind: "investigate" | "fight" | "evade" }
-  | { failedBy: { max: number } }
+  | { failedBy: { min?: number; max?: number } }
   | { succeededBy: { min: number } }
   | { tokenIs: ChaosToken[] }
   | { tokenNegative: true }
@@ -321,7 +323,9 @@ export const Condition: z.ZodType<Condition> = z.lazy(() =>
     z.object({ eventInvestigatorIsYou: z.literal(true) }).strict(),
     z.object({ eventAtYourLocation: z.literal(true) }).strict(),
     z.object({ testKind: z.enum(["investigate", "fight", EVENT.Evade]) }).strict(),
-    z.object({ failedBy: z.object({ max: z.number() }) }).strict(),
+    z
+      .object({ failedBy: z.object({ min: z.number().optional(), max: z.number().optional() }) })
+      .strict(),
     z.object({ succeededBy: z.object({ min: z.number() }) }).strict(),
     z.object({ tokenIs: z.array(ChaosToken) }).strict(),
     z.object({ tokenNegative: z.literal(true) }).strict(),
@@ -519,7 +523,8 @@ export type Effect =
   /** `draw`: the card found is drawn (a weakness resolves), not just added to the hand */
   | {
       op: "searchDeck";
-      top?: number;
+      /** only the top cards: a number, or an amount ("failBy": as many as the test was failed by) */
+      top?: Amount;
       filter: CardFilter;
       amount?: number;
       target?: InvTarget;
@@ -877,7 +882,7 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
     z
       .object({
         op: z.literal("searchDeck"),
-        top: z.number().optional(),
+        top: Amount.optional(),
         filter: CardFilter,
         amount: z.number().optional(),
         target: InvTarget.optional(),

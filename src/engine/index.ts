@@ -53,14 +53,14 @@ import { ZONE, PHASE, INV_STATUS, PILE, SCENARIO_CARD, isOneOf } from "./world/c
 import { STEP } from "./steps/step";
 import { scriptOf } from "./world/scripts";
 
-export const ENGINE_VERSION = 10;
+export const ENGINE_VERSION = 11;
 
 /**
  * Whether a save written by this engine version replays to the same game on this one. Version 8 changed the setup (a
  * card's back face is no longer a card of its own, the scenario card is an instance: engine-scenario-structure) and
  * version 9 the enemy phase and bonded cards (engine-generic-keywords), version 10 the map's connections by location
- * instance (engine-location-instances-grid), so an older save's choices may name other cards or steps: its scenario
- * restarts, its campaign kept.
+ * instance (engine-location-instances-grid), version 11 spawns turned away by Barricade (3) (player-cards-notz-return),
+ * so an older save's choices may name other cards or steps: its scenario restarts, its campaign kept.
  */
 export const replaysSave = (version: number) => version === ENGINE_VERSION;
 

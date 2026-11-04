@@ -190,6 +190,28 @@ export const spawnHandler: Handler<"Spawn"> = (game, step) => {
     moveCard(game, step.enemy, c.owner ? ZONE.Discard : ZONE.EncounterDiscard);
     return;
   }
+  // a location non-Elite enemies cannot spawn at sends them to a connecting location, if able (Barricade (3))
+  if (!isElite(game, step.enemy) && hasFlag(game, at, "cannotSpawnAt")) {
+    const away = connections(game, at);
+    if (away.length === 1) at = away[0];
+    else if (away.length > 1) {
+      if (!step.redirect) {
+        push(game, { ...step, at, redirect: true, choice: undefined });
+        return;
+      }
+      const pick = ask<InstId>(
+        game,
+        step,
+        leadInvestigator(game),
+        CHOICE.Target,
+        `Choose where ${d.name} spawns instead`,
+        away.map((l) => ({ id: l, label: def(game, l).name, card: l, value: l })),
+        { key: "spawnAt", vars: { card: step.enemy } },
+      );
+      if (pick === undefined) return;
+      at = pick;
+    }
+  }
   moveCard(game, step.enemy, ZONE.Enemy, { location: at });
   // a unique encounter card entering play discards the player card with its title (Grimoire, Unique)
   if (d.unique)

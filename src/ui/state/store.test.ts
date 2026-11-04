@@ -841,11 +841,11 @@ describe("the scenario structure (engine version 8)", () => {
     expect(s.getState().notice).toMatch(/restart/);
   });
 
-  it("a game saved under version 7 restarts its scenario too: its choices may name other cards", () => {
+  it("a game saved under the previous version restarts its scenario too: its choices may name other cards", () => {
     const storage = mem();
     start(storage);
     const save = JSON.parse(storage.data.get(SAVE_KEY)!);
-    save.version = 7;
+    save.version = ENGINE_VERSION - 1;
     storage.setItem(SAVE_KEY, JSON.stringify(save));
     const s = createGameStore(db, storage);
     s.getState().resume();

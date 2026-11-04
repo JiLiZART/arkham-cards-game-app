@@ -570,7 +570,12 @@ export function checkCondition(game: GameContext, c: Condition, ctx: EffCtx): bo
     return !!evLoc && evLoc === yourLoc;
   }
   if ("testKind" in c) return game.s.skillTest?.kind === c.testKind;
-  if ("failedBy" in c) return ctx.failBy !== undefined && ctx.failBy <= c.failedBy.max;
+  if ("failedBy" in c)
+    return (
+      ctx.failBy !== undefined &&
+      ctx.failBy >= (c.failedBy.min ?? 0) &&
+      ctx.failBy <= (c.failedBy.max ?? Infinity)
+    );
   if ("succeededBy" in c) return ctx.succeedBy !== undefined && ctx.succeedBy >= c.succeededBy.min;
   if ("tokenIs" in c) return !!ctx.token && c.tokenIs.includes(ctx.token);
   if ("tokenNegative" in c) return !!ctx.token && ctx.token.startsWith("-");

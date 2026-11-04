@@ -13,4 +13,6 @@ export const UNRUN_SCRIPTS: string[] = [
   "12177",
   "12179",
   "12179b",
+  // return (Return to the Night of the Zealot): no team plays it; src/engine/__tests__/rtnotzPlayerCards.test.ts
+  "50008",
 ];

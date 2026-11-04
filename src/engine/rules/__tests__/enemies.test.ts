@@ -1,6 +1,10 @@
 import type { ChaosToken } from "../../../content/schema";
 import { describe, expect, it } from "vitest";
-import { card, def, inv } from "../../context";
+import { card, def, inv, reveal, type GameContext } from "../../context";
+import { game as drive, inject } from "../../kits/driver";
+import { createCard, moveCard } from "../../movement";
+import { STEP } from "../../steps/step";
+import { ZONE } from "../../world/constants";
 import { enemyStat } from "../../queries";
 import { dispatch } from "../../index";
 import {
@@ -123,5 +127,56 @@ describe("basic actions & enemies", () => {
     const game = gOf(r);
     const priest = allCardRecsIn(game.s).find((x) => x.code === "01116")!;
     expect(enemyStat(game, priest.id, "health")).toBe(10);
+  });
+});
+
+describe("a location non-Elite enemies cannot spawn at (Barricade (3))", () => {
+  const HALLWAY = "01112"; // printed: connects to the Attic (01113), the Cellar (01114) and the Parlor (01115)
+  const MINION = "01160";
+  const PRIEST = "01116"; // Ghoul Priest: Elite
+  const saved = db.cards[HALLWAY].abilities;
+  const barred = () =>
+    (db.cards[HALLWAY].abilities = [
+      { kind: "constant", modifiers: [{ flag: "cannotSpawnAt", scope: "self" }] },
+    ]);
+  const put = (game: GameContext, code: string) => {
+    const id = createCard(game, code, ZONE.Limbo);
+    moveCard(game, id, ZONE.Location);
+    reveal(game, id);
+    return id;
+  };
+  const spawnAtHallway = (code: string, others: string[]) => {
+    barred();
+    let hall = "";
+    let enemy = "";
+    let r = drive({
+      investigators: ["01001"],
+      prep: (g) => {
+        hall = put(g, HALLWAY);
+        for (const o of others) put(g, o);
+        enemy = createCard(g, code, ZONE.Limbo);
+      },
+    });
+    r = inject(r, () => {}, { t: STEP.Spawn, enemy, inv: null, at: hall });
+    db.cards[HALLWAY].abilities = saved;
+    return { r, hall, enemy };
+  };
+
+  it("a non-Elite enemy spawns at a connecting location the player chooses instead", () => {
+    const { r } = spawnAtHallway(MINION, ["01113", "01114"]);
+    expect(r.state.pending?.promptKey).toBe("spawnAt");
+    expect(r.state.pending?.options.map((o) => o.label).sort()).toEqual(["Attic", "Cellar"]);
+  });
+
+  it("with one connecting location it spawns there without asking; with none, at the location after all", () => {
+    const one = spawnAtHallway(MINION, ["01113"]);
+    expect(def(gOf(one.r), card(gOf(one.r), one.enemy).location!).name).toBe("Attic");
+    const none = spawnAtHallway(MINION, []);
+    expect(card(gOf(none.r), none.enemy).location).toBe(none.hall);
+  });
+
+  it("an Elite enemy spawns there", () => {
+    const { r, hall, enemy } = spawnAtHallway(PRIEST, ["01113", "01114"]);
+    expect(card(gOf(r), enemy).location).toBe(hall);
   });
 });

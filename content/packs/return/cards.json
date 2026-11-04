@@ -21,5 +21,323 @@
         ]
       }
     ]
+  },
+  "50001": {
+    "abilities": [
+      {
+        "kind": "fast",
+        "label": "Physical Training: +1 willpower",
+        "cost": {
+          "resources": 1
+        },
+        "condition": {
+          "yourSkillTest": true
+        },
+        "effects": [
+          {
+            "op": "modify",
+            "mod": {
+              "stat": "willpower",
+              "value": 1
+            },
+            "until": "test"
+          }
+        ]
+      },
+      {
+        "kind": "fast",
+        "label": "Physical Training: +1 combat",
+        "cost": {
+          "resources": 1
+        },
+        "condition": {
+          "yourSkillTest": true
+        },
+        "effects": [
+          {
+            "op": "modify",
+            "mod": {
+              "stat": "combat",
+              "value": 1
+            },
+            "until": "test"
+          }
+        ]
+      }
+    ]
+  },
+  "50003": {
+    "abilities": [
+      {
+        "kind": "fast",
+        "label": "Hyperawareness: +1 intellect",
+        "cost": {
+          "resources": 1
+        },
+        "condition": {
+          "yourSkillTest": true
+        },
+        "effects": [
+          {
+            "op": "modify",
+            "mod": {
+              "stat": "intellect",
+              "value": 1
+            },
+            "until": "test"
+          }
+        ]
+      },
+      {
+        "kind": "fast",
+        "label": "Hyperawareness: +1 agility",
+        "cost": {
+          "resources": 1
+        },
+        "condition": {
+          "yourSkillTest": true
+        },
+        "effects": [
+          {
+            "op": "modify",
+            "mod": {
+              "stat": "agility",
+              "value": 1
+            },
+            "until": "test"
+          }
+        ]
+      }
+    ]
+  },
+  "50005": {
+    "abilities": [
+      {
+        "kind": "fast",
+        "label": "Hard Knocks: +1 combat",
+        "cost": {
+          "resources": 1
+        },
+        "condition": {
+          "yourSkillTest": true
+        },
+        "effects": [
+          {
+            "op": "modify",
+            "mod": {
+              "stat": "combat",
+              "value": 1
+            },
+            "until": "test"
+          }
+        ]
+      },
+      {
+        "kind": "fast",
+        "label": "Hard Knocks: +1 agility",
+        "cost": {
+          "resources": 1
+        },
+        "condition": {
+          "yourSkillTest": true
+        },
+        "effects": [
+          {
+            "op": "modify",
+            "mod": {
+              "stat": "agility",
+              "value": 1
+            },
+            "until": "test"
+          }
+        ]
+      }
+    ]
+  },
+  "50007": {
+    "abilities": [
+      {
+        "kind": "fast",
+        "label": "Arcane Studies: +1 willpower",
+        "cost": {
+          "resources": 1
+        },
+        "condition": {
+          "yourSkillTest": true
+        },
+        "effects": [
+          {
+            "op": "modify",
+            "mod": {
+              "stat": "willpower",
+              "value": 1
+            },
+            "until": "test"
+          }
+        ]
+      },
+      {
+        "kind": "fast",
+        "label": "Arcane Studies: +1 intellect",
+        "cost": {
+          "resources": 1
+        },
+        "condition": {
+          "yourSkillTest": true
+        },
+        "effects": [
+          {
+            "op": "modify",
+            "mod": {
+              "stat": "intellect",
+              "value": 1
+            },
+            "until": "test"
+          }
+        ]
+      }
+    ]
+  },
+  "50009": {
+    "abilities": [
+      {
+        "kind": "fast",
+        "label": "Dig Deep: +1 willpower",
+        "cost": {
+          "resources": 1
+        },
+        "condition": {
+          "yourSkillTest": true
+        },
+        "effects": [
+          {
+            "op": "modify",
+            "mod": {
+              "stat": "willpower",
+              "value": 1
+            },
+            "until": "test"
+          }
+        ]
+      },
+      {
+        "kind": "fast",
+        "label": "Dig Deep: +1 agility",
+        "cost": {
+          "resources": 1
+        },
+        "condition": {
+          "yourSkillTest": true
+        },
+        "effects": [
+          {
+            "op": "modify",
+            "mod": {
+              "stat": "agility",
+              "value": 1
+            },
+            "until": "test"
+          }
+        ]
+      }
+    ]
+  },
+  "50006": {
+    "abilities": [
+      {
+        "kind": "onPlay",
+        "effects": [
+          {
+            "op": "gainResources",
+            "amount": 10
+          }
+        ]
+      }
+    ]
+  },
+  "50004": {
+    "abilities": [
+      {
+        "kind": "onPlay",
+        "effects": [
+          {
+            "op": "attachToLocation",
+            "where": "yours"
+          }
+        ]
+      },
+      {
+        "kind": "constant",
+        "modifiers": [
+          {
+            "flag": "nonEliteCannotMoveInto",
+            "scope": "attachedLocation"
+          },
+          {
+            "flag": "cannotSpawnAt",
+            "scope": "attachedLocation"
+          }
+        ]
+      },
+      {
+        "kind": "forced",
+        "trigger": "leaveLocation",
+        "usableBy": "anyone",
+        "effects": [
+          {
+            "op": "discardSelf"
+          }
+        ]
+      }
+    ]
+  },
+  "50010": {
+    "abilities": [
+      {
+        "kind": "reaction",
+        "trigger": "skillTestFailed",
+        "label": "Rabbit's Foot: search the top X cards",
+        "cost": {
+          "exhaust": true
+        },
+        "condition": {
+          "failedBy": {
+            "min": 1
+          }
+        },
+        "effects": [
+          {
+            "op": "searchDeck",
+            "top": "failBy",
+            "filter": {},
+            "draw": true
+          }
+        ]
+      }
+    ]
+  },
+  "50002": {
+    "script": true
+  },
+  "50008": {
+    "script": true,
+    "abilities": [
+      {
+        "kind": "reaction",
+        "fromHand": true,
+        "trigger": "phaseBegins",
+        "condition": {
+          "enemyAtYourLocation": {
+            "elite": false
+          }
+        },
+        "effects": [
+          {
+            "op": "script",
+            "fn": "wipe"
+          }
+        ]
+      }
+    ]
   }
 }
