@@ -1,5 +1,16 @@
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { campaignLoaded, content, contentErrors, loadCampaign, loadPack, packsOf } from "./";
+import { basicWeaknessPool } from "../engine/campaign/decks";
+import type { ContentDb } from "../engine/world/types";
+import {
+  campaignLoaded,
+  content,
+  contentErrors,
+  loadAllPacks,
+  loadCampaign,
+  loadPack,
+  packsOf,
+} from "./";
 import { cardText } from "./i18n";
 import { addCardText, addPack, buildContent, cardsOf, packLoaded, packOfCode } from "./loader";
 import { loadContentFromDisk } from "./node";
@@ -180,5 +191,40 @@ describe("packs in the content database", () => {
     expect(Object.keys(db.cards).length).toBeGreaterThan(5800);
     expect(db.cards["02001"].name).toBe("Zoey Samaras");
     expect(db.i18n.ru.cards["02001"].name).toBe("Зои Самарас");
+  });
+});
+
+describe("the random basic weakness pool", () => {
+  const PACT = ["04038", "09126", "10138"]; // Dark Pact, Pay Your Due, Vow of Drzytelech: later cycles
+  const TRAITS = ["Madness", "Injury", "Pact"];
+  const fromDisk = (packs: string[]) => {
+    const db = buildContent({}, {}, []).db;
+    for (const p of packs) {
+      const dir = `content/packs/${p}`;
+      const read = (f: string) =>
+        existsSync(`${dir}/${f}`) ? JSON.parse(readFileSync(`${dir}/${f}`, "utf8")) : {};
+      addPack(db, p, read("cards.generated.json"), read("cards.json"));
+    }
+    return db;
+  };
+  const codes = (db: ContentDb, trait?: string[]) =>
+    basicWeaknessPool(db, trait).map((c) => c.code);
+
+  it("is the same cards in the same order whatever order the packs came in, so a seed draws the same one", () => {
+    const packs = readdirSync("content/packs").filter((p) =>
+      existsSync(`content/packs/${p}/cards.generated.json`),
+    );
+    const forward = fromDisk(packs);
+    const backward = fromDisk([...packs].reverse());
+    expect(codes(backward)).toEqual(codes(forward));
+    expect(codes(backward, TRAITS)).toEqual(codes(forward, TRAITS));
+    expect(codes(forward, TRAITS)).toEqual(expect.arrayContaining(PACT));
+  });
+
+  it("in the browser, once every pack is in (as before a campaign starts), it is the whole content's", async () => {
+    expect(await loadAllPacks()).toEqual([]);
+    const all = (await loadContentFromDisk()).db;
+    expect(codes(content, TRAITS)).toEqual(codes(all, TRAITS));
+    expect(codes(content, TRAITS)).toEqual(expect.arrayContaining(PACT));
   });
 });

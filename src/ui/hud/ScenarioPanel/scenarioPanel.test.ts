@@ -1,11 +1,14 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
+import { loadAllPacks } from "../../../content";
 import { gameStore } from "../../state/context";
 import { ScenarioPanel } from "./";
 
 describe("the scenario panel", () => {
-  it("the act and the agenda do not enlarge on hover (a tap opens the viewer); the reference card is a plain button", () => {
+  it("the act and the agenda do not enlarge on hover (a tap opens the viewer); the reference card is a plain button", async () => {
+    // a campaign starts once every pack is in (the random basic weakness draws from all of them)
+    await loadAllPacks();
     gameStore.getState().newCampaign({
       campaignId: "night-of-the-zealot",
       difficulty: "standard",

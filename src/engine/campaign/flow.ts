@@ -21,6 +21,7 @@ import {
   setInvestigatorCount,
 } from "./log";
 import { randInt } from "../world/rng";
+import { basicWeaknessPool } from "./decks";
 import type { ContentDb, InvId } from "../world/types";
 import { EVENT } from "../events/event";
 import { ZONE } from "../world/constants";
@@ -69,17 +70,6 @@ interface Input {
   n?: number;
   code?: string;
 }
-
-/** the basic weaknesses of the content, with any one of the traits (all of them with none) */
-const basicWeaknesses = (db: ContentDb, trait: string | string[]) => {
-  const traits = [trait].flat().filter(Boolean);
-  return Object.values(db.cards).filter(
-    (c) =>
-      c.subtype === "basicweakness" &&
-      c.type !== "investigator" &&
-      (!traits.length || traits.some((t) => c.traits.includes(t))),
-  );
-};
 
 // ---------- conditions ----------
 
@@ -280,7 +270,7 @@ function apply(
       for (const i of who(e.who)) i.deck = i.deck.map((x) => (x === e.old ? e.new : x));
       return;
     case "addWeakness": {
-      const pool = basicWeaknesses(db, e.trait);
+      const pool = basicWeaknessPool(db, e.trait);
       for (const i of who(e.who))
         if (pool.length) i.deck.push(pool[randInt(rng, pool.length)].code);
       return;

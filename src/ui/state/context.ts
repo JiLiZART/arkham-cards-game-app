@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 import type { StoreApi } from "zustand";
 import { useStore } from "zustand";
-import { campaignLoaded, content, loadCampaign, loadPack, packsOf } from "../../content";
+import { campaignLoaded, content, loadCampaign, loadPack } from "../../content";
 import { packLoaded } from "../../content/loader";
 import { campaignSpriteLoaded, loadCampaignSprite } from "../assets/icons";
 import { trackArrivals } from "../game/arrivals";
@@ -11,15 +11,16 @@ import { createGameStore, type UiState } from "./store";
 
 export const db = content;
 /**
- * A campaign's scenarios, card packs and icons (generated campaigns) before it starts or restores, and the packs of the
- * investigators and of the cards in their decks (`codes`); nothing when all are in
+ * A campaign's scenarios, every card pack and the icons (generated campaigns) before it starts or restores; nothing when
+ * all are in
  */
-const prepare = (campaignId: string, codes: string[] = []) => {
+const prepare = (campaignId: string) => {
   const c = content.campaigns[campaignId];
   if (!c) return;
-  const packs = [...new Set([...c.packs, ...packsOf(codes)])].filter(
-    (p) => content.packs[p] && !packLoaded(content, p),
-  );
+  // every pack, not only the campaign's and the decks': a random basic weakness (a deck's, or a campaign step's like
+  // Undimensioned and Unseen's) is drawn from all of them, and a missing pack would change what a seed draws
+  // ponytail: loads every pack on start/restore; narrow to the packs holding basic weaknesses if that load is felt
+  const packs = Object.keys(content.packs).filter((p) => !packLoaded(content, p));
   const icons = c.generated && !campaignSpriteLoaded();
   const scenarios = !campaignLoaded(campaignId);
   if (!packs.length && !icons && !scenarios) return;

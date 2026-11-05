@@ -8,7 +8,7 @@ import {
 } from "../world/flags";
 import { addCards, emptyLog, flatLog, migrateLog, NOTES, record, setCount } from "./log";
 import { flowOf } from "../../content/flow";
-import { expandDeck, validateDeck } from "./decks";
+import { basicWeaknessPool, expandDeck, validateDeck } from "./decks";
 import { ENGINE_VERSION } from "../index";
 import { advance, initFlow, settle, startResolution } from "./flow";
 import { randInt } from "../world/rng";
@@ -18,14 +18,6 @@ import type { CampaignState, NewCampaign, ScenarioFacts } from "./types";
 import { EVENT } from "../events/event";
 import { isOneOf, SCENARIO_CARD, ZONE } from "../world/constants";
 
-const basicWeaknesses = (db: ContentDb, trait?: string) =>
-  Object.values(db.cards).filter(
-    (c) =>
-      c.subtype === "basicweakness" &&
-      c.type !== "investigator" &&
-      (!trait || c.traits.includes(trait)),
-  );
-
 export function startCampaign(db: ContentDb, opts: NewCampaign): CampaignState {
   const c = db.campaigns[opts.campaignId];
   if (!c) throw new Error(`unknown campaign ${opts.campaignId}`);
@@ -34,7 +26,6 @@ export function startCampaign(db: ContentDb, opts: NewCampaign): CampaignState {
   if (opts.investigators.length < 1 || opts.investigators.length > 4)
     throw new Error("1–4 investigators");
   const rng = { rng: opts.seed >>> 0 };
-  const pool = basicWeaknesses(db);
   const investigators = opts.investigators.map(({ code, deckId, deck: custom }) => {
     const d = custom ?? db.decks[deckId];
     if (!d || d.investigator !== code) throw new Error(`deck ${deckId} is not a ${code} deck`);
@@ -45,7 +36,10 @@ export function startCampaign(db: ContentDb, opts: NewCampaign): CampaignState {
     }
     const deck = expandDeck(d);
     // the random basic weakness is chosen once, at campaign start
-    if (d.randomBasicWeakness) deck.push(pool[randInt(rng, pool.length)].code);
+    if (d.randomBasicWeakness) {
+      const pool = basicWeaknessPool(db);
+      deck.push(pool[randInt(rng, pool.length)].code);
+    }
     return {
       code,
       deckId,

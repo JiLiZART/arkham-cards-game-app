@@ -1,6 +1,23 @@
 import type { CardDef, DeckDef, DeckOption, InvestigatorDef } from "../../content/schema";
 import type { ContentDb } from "../world/types";
 
+/**
+ * The basic weaknesses a random draw picks from, with any one of the traits (all of them with none), by code: the pool
+ * is in code order, never the order the packs came in, so a seed draws the same card every time. The browser loads every
+ * pack before a campaign starts or restores (`prepare` in src/ui/state/context.ts), so the pool is the whole content's.
+ */
+export function basicWeaknessPool(db: ContentDb, trait?: string | string[]): CardDef[] {
+  const traits = [trait ?? []].flat().filter(Boolean);
+  return Object.values(db.cards)
+    .filter(
+      (c) =>
+        c.subtype === "basicweakness" &&
+        c.type !== "investigator" &&
+        (!traits.length || traits.some((t) => c.traits.includes(t))),
+    )
+    .sort((a, b) => (a.code < b.code ? -1 : a.code > b.code ? 1 : 0));
+}
+
 /** what is wrong, as a string key with its values, so the UI can say it in the player's language */
 export interface DeckReason {
   key:
