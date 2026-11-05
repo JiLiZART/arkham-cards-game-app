@@ -12,7 +12,10 @@ const read = (id: string, file: string) =>
   JSON.parse(
     readFileSync(id === "the-dunwich-legacy" ? `${HAND}/${file}` : `${DIR}/${id}/${file}`, "utf8"),
   );
-const ids = readdirSync(DIR);
+// folders only: a stray file there (a Finder .DS_Store) is not a campaign
+const ids = readdirSync(DIR, { withFileTypes: true })
+  .filter((d) => d.isDirectory())
+  .map((d) => d.name);
 const flows = ids.map((id) => ({ id, flow: CampaignFlow.parse(read(id, "flow.json")) }));
 const dunwich = {
   id: "the-dunwich-legacy",
