@@ -108,6 +108,8 @@ export const killed = family<true, InvId>("killed");
 export const insane = family<true, InvId>("insane");
 /** "remember that you have …": a fact a scenario keeps about an investigator, by what it is ("had a drink") */
 export const remembered = family<true, readonly [string, InvId]>("remembered");
+/** "remember that you …" about the whole group: a fact the scenario keeps (The Unspeakable Oath's six), by its key */
+export const rememberedFact = family<true>("fact");
 
 // ---------- about an enemy and an investigator ----------
 /** the round the enemy last attacked the investigator */
@@ -160,6 +162,10 @@ export const servantBeneath = global<true>("servantBeneath");
 export const devourer = global<true>("devourer");
 /** chaos tokens added "for the remainder of the campaign": the campaign's bag gains them as the scenario ends */
 export const campaignTokens = global<ChaosToken[]>("campaignTokens");
+/** the location the investigators started the scenario at, for `distanceFromStart` (The Pallid Mask's setup sets it) */
+export const startLocation = global<InstId>("startLocation");
+/** The Pallid Mask's Catacombs deck, top card first: set-aside locations put into play from the top as Catacombs reveal */
+export const catacombs = global<InstId[]>("catacombs");
 /** per card in play: the base skills its controller has raised to a value while it stays (The Red-Gloved Man) */
 export const baseRaised = global<Record<InstId, { skills: Skill[]; to: number }>>("baseRaised");
 /** the cards put into play to be discarded at the end of the round, if still in play (A Chance Encounter) */

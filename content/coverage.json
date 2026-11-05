@@ -55,23 +55,15 @@
   "apot": {
    "encounter": {
     "total": 28,
-    "works": 0,
-    "rest": {
-     "act": 4,
-     "agenda": 3,
-     "enemy": 3,
-     "location": 13,
-     "scenario": 1,
-     "treachery": 4
-    }
+    "works": 28,
+    "rest": {}
    },
    "player": {
     "total": 12,
-    "works": 0,
+    "works": 1,
     "rest": {
      "asset": 5,
-     "event": 6,
-     "treachery": 1
+     "event": 6
     }
    }
   },
@@ -191,15 +183,8 @@
   "bsr": {
    "encounter": {
     "total": 32,
-    "works": 0,
-    "rest": {
-     "act": 2,
-     "agenda": 8,
-     "enemy": 2,
-     "location": 17,
-     "scenario": 1,
-     "treachery": 2
-    }
+    "works": 32,
+    "rest": {}
    },
    "player": {
     "total": 11,
@@ -341,22 +326,14 @@
   "dca": {
    "encounter": {
     "total": 46,
-    "works": 2,
-    "rest": {
-     "act": 5,
-     "agenda": 3,
-     "enemy": 5,
-     "location": 11,
-     "scenario": 1,
-     "story": 13,
-     "treachery": 6
-    }
+    "works": 46,
+    "rest": {}
    },
    "player": {
     "total": 13,
-    "works": 0,
+    "works": 1,
     "rest": {
-     "asset": 6,
+     "asset": 5,
      "event": 6,
      "skill": 1
     }
@@ -501,21 +478,14 @@
   "eotp": {
    "encounter": {
     "total": 24,
-    "works": 0,
-    "rest": {
-     "act": 3,
-     "agenda": 3,
-     "enemy": 2,
-     "location": 13,
-     "scenario": 1,
-     "treachery": 2
-    }
+    "works": 24,
+    "rest": {}
    },
    "player": {
     "total": 17,
-    "works": 1,
+    "works": 4,
     "rest": {
-     "asset": 10,
+     "asset": 7,
      "event": 2,
      "skill": 4
     }
@@ -1110,26 +1080,17 @@
   "ptc": {
    "encounter": {
     "total": 68,
-    "works": 1,
-    "rest": {
-     "act": 6,
-     "agenda": 4,
-     "enemy": 16,
-     "location": 15,
-     "scenario": 2,
-     "story": 6,
-     "treachery": 18
-    }
+    "works": 68,
+    "rest": {}
    },
    "player": {
     "total": 47,
-    "works": 2,
+    "works": 12,
     "rest": {
-     "asset": 21,
-     "enemy": 3,
+     "asset": 16,
+     "enemy": 2,
      "event": 11,
      "skill": 2,
-     "story": 4,
      "treachery": 4
     }
    }
@@ -1717,15 +1678,8 @@
   "tpm": {
    "encounter": {
     "total": 24,
-    "works": 0,
-    "rest": {
-     "act": 4,
-     "agenda": 2,
-     "enemy": 3,
-     "location": 11,
-     "scenario": 1,
-     "treachery": 3
-    }
+    "works": 24,
+    "rest": {}
    },
    "player": {
     "total": 12,
@@ -1828,21 +1782,14 @@
   "tuo": {
    "encounter": {
     "total": 30,
-    "works": 0,
-    "rest": {
-     "act": 5,
-     "agenda": 3,
-     "enemy": 3,
-     "location": 14,
-     "scenario": 1,
-     "treachery": 4
-    }
+    "works": 30,
+    "rest": {}
    },
    "player": {
     "total": 13,
-    "works": 0,
+    "works": 1,
     "rest": {
-     "asset": 5,
+     "asset": 4,
      "event": 8
     }
    }
@@ -2203,16 +2150,15 @@
   "return-to-the-path-to-carcosa": {
    "cards": {
     "total": 344,
-    "works": 24,
+    "works": 281,
     "rest": {
-     "act": 34,
-     "agenda": 27,
-     "asset": 12,
-     "enemy": 43,
-     "location": 116,
-     "scenario": 8,
-     "story": 29,
-     "treachery": 51
+     "act": 5,
+     "agenda": 1,
+     "asset": 2,
+     "enemy": 9,
+     "location": 22,
+     "story": 6,
+     "treachery": 18
     }
    },
    "unscripted": [
@@ -2357,14 +2303,12 @@
   "side-enthralling-encore": {
    "cards": {
     "total": 41,
-    "works": 8,
+    "works": 37,
     "rest": {
-     "act": 6,
-     "agenda": 3,
-     "enemy": 5,
-     "location": 9,
-     "scenario": 2,
-     "treachery": 8
+     "act": 1,
+     "agenda": 1,
+     "enemy": 1,
+     "scenario": 1
     }
    },
    "unscripted": [
@@ -2747,29 +2691,11 @@
   "the-path-to-carcosa": {
    "cards": {
     "total": 287,
-    "works": 22,
-    "rest": {
-     "act": 29,
-     "agenda": 26,
-     "asset": 10,
-     "enemy": 35,
-     "location": 94,
-     "scenario": 8,
-     "story": 23,
-     "treachery": 40
-    }
+    "works": 287,
+    "rest": {}
    },
-   "unscripted": [
-    "curtain-call",
-    "the-last-king",
-    "a-phantom-of-truth",
-    "black-stars-rise",
-    "dim-carcosa",
-    "echoes-of-the-past",
-    "the-pallid-mask",
-    "the-unspeakable-oath"
-   ],
-   "complete": false
+   "unscripted": [],
+   "complete": true
   },
   "the-scarlet-keys": {
    "cards": {
@@ -2849,19 +2775,12 @@
    "campaign": "the-path-to-carcosa",
    "cards": {
     "total": 41,
-    "works": 5,
-    "rest": {
-     "act": 4,
-     "agenda": 3,
-     "enemy": 4,
-     "location": 13,
-     "scenario": 1,
-     "treachery": 11
-    }
+    "works": 41,
+    "rest": {}
    },
-   "tokens": false,
-   "scripted": false,
-   "complete": false
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "a-thousand-shapes-of-horror": {
    "campaign": "the-web-of-dreams",
@@ -3038,19 +2957,12 @@
    "campaign": "the-path-to-carcosa",
    "cards": {
     "total": 45,
-    "works": 4,
-    "rest": {
-     "act": 2,
-     "agenda": 8,
-     "enemy": 5,
-     "location": 17,
-     "scenario": 1,
-     "treachery": 8
-    }
+    "works": 45,
+    "rest": {}
    },
-   "tokens": false,
-   "scripted": false,
-   "complete": false
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "blob-that-ate-everything": {
    "campaign": "side-blob-that-ate-everything",
@@ -3234,19 +3146,12 @@
    "campaign": "the-path-to-carcosa",
    "cards": {
     "total": 37,
-    "works": 5,
-    "rest": {
-     "act": 5,
-     "agenda": 2,
-     "enemy": 5,
-     "location": 9,
-     "scenario": 1,
-     "treachery": 10
-    }
+    "works": 37,
+    "rest": {}
    },
-   "tokens": false,
-   "scripted": false,
-   "complete": false
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "dark-side-of-the-moon": {
    "campaign": "the-dream-quest",
@@ -3332,21 +3237,12 @@
    "campaign": "the-path-to-carcosa",
    "cards": {
     "total": 62,
-    "works": 7,
-    "rest": {
-     "act": 5,
-     "agenda": 3,
-     "asset": 1,
-     "enemy": 9,
-     "location": 11,
-     "scenario": 1,
-     "story": 13,
-     "treachery": 12
-    }
+    "works": 62,
+    "rest": {}
    },
-   "tokens": false,
-   "scripted": false,
-   "complete": false
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "disappearance-at-the-twilight-estate": {
    "campaign": "return-to-the-circle-undone",
@@ -3371,33 +3267,23 @@
    "campaign": "the-path-to-carcosa",
    "cards": {
     "total": 42,
-    "works": 7,
-    "rest": {
-     "act": 3,
-     "agenda": 3,
-     "asset": 3,
-     "enemy": 4,
-     "location": 13,
-     "scenario": 1,
-     "treachery": 8
-    }
+    "works": 42,
+    "rest": {}
    },
-   "tokens": false,
-   "scripted": false,
-   "complete": false
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "enthralling-encore": {
    "campaign": "side-enthralling-encore",
    "cards": {
     "total": 41,
-    "works": 8,
+    "works": 37,
     "rest": {
-     "act": 6,
-     "agenda": 3,
-     "enemy": 5,
-     "location": 9,
-     "scenario": 2,
-     "treachery": 8
+     "act": 1,
+     "agenda": 1,
+     "enemy": 1,
+     "scenario": 1
     }
    },
    "tokens": false,
@@ -4130,17 +4016,14 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 49,
-    "works": 4,
+    "works": 40,
     "rest": {
-     "act": 4,
-     "agenda": 3,
-     "enemy": 5,
-     "location": 19,
-     "scenario": 1,
-     "treachery": 13
+     "enemy": 1,
+     "location": 6,
+     "treachery": 2
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4186,17 +4069,13 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 50,
-    "works": 4,
+    "works": 45,
     "rest": {
-     "act": 2,
-     "agenda": 8,
-     "enemy": 5,
-     "location": 19,
-     "scenario": 1,
-     "treachery": 11
+     "location": 2,
+     "treachery": 3
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4215,17 +4094,15 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 44,
-    "works": 3,
+    "works": 30,
     "rest": {
-     "act": 8,
-     "agenda": 2,
-     "enemy": 6,
-     "location": 11,
-     "scenario": 1,
-     "treachery": 13
+     "act": 3,
+     "enemy": 1,
+     "location": 2,
+     "treachery": 8
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4233,19 +4110,15 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 72,
-    "works": 3,
+    "works": 53,
     "rest": {
-     "act": 5,
-     "agenda": 3,
-     "asset": 1,
-     "enemy": 11,
-     "location": 15,
-     "scenario": 1,
-     "story": 17,
-     "treachery": 16
+     "enemy": 2,
+     "location": 4,
+     "story": 4,
+     "treachery": 9
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4253,18 +4126,14 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 48,
-    "works": 8,
+    "works": 38,
     "rest": {
-     "act": 3,
-     "agenda": 3,
-     "asset": 3,
-     "enemy": 5,
-     "location": 17,
-     "scenario": 1,
-     "treachery": 8
+     "enemy": 1,
+     "location": 4,
+     "treachery": 5
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4516,19 +4385,16 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 51,
-    "works": 1,
+    "works": 39,
     "rest": {
-     "act": 1,
-     "agenda": 3,
-     "asset": 7,
-     "enemy": 11,
-     "location": 6,
-     "scenario": 1,
-     "story": 12,
-     "treachery": 9
+     "agenda": 1,
+     "asset": 2,
+     "enemy": 3,
+     "story": 2,
+     "treachery": 4
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4563,17 +4429,13 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 37,
-    "works": 6,
+    "works": 32,
     "rest": {
-     "act": 4,
-     "agenda": 2,
-     "enemy": 5,
-     "location": 15,
-     "scenario": 1,
-     "treachery": 4
+     "enemy": 1,
+     "location": 4
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4600,18 +4462,14 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 52,
-    "works": 1,
+    "works": 37,
     "rest": {
-     "act": 7,
-     "agenda": 3,
-     "asset": 1,
-     "enemy": 10,
-     "location": 14,
-     "scenario": 1,
-     "treachery": 15
+     "act": 2,
+     "enemy": 3,
+     "treachery": 10
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -5155,21 +5013,12 @@
    "campaign": "the-path-to-carcosa",
    "cards": {
     "total": 42,
-    "works": 1,
-    "rest": {
-     "act": 1,
-     "agenda": 2,
-     "asset": 5,
-     "enemy": 9,
-     "location": 6,
-     "scenario": 1,
-     "story": 10,
-     "treachery": 7
-    }
+    "works": 42,
+    "rest": {}
    },
-   "tokens": false,
-   "scripted": false,
-   "complete": false
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "the-longest-night": {
    "campaign": "the-feast-of-hemlock-vale",
@@ -5276,19 +5125,12 @@
    "campaign": "the-path-to-carcosa",
    "cards": {
     "total": 31,
-    "works": 5,
-    "rest": {
-     "act": 4,
-     "agenda": 2,
-     "enemy": 4,
-     "location": 11,
-     "scenario": 1,
-     "treachery": 4
-    }
+    "works": 31,
+    "rest": {}
    },
-   "tokens": false,
-   "scripted": false,
-   "complete": false
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "the-pit-of-despair": {
    "campaign": "the-innsmouth-conspiracy",
@@ -5409,20 +5251,12 @@
    "campaign": "the-path-to-carcosa",
    "cards": {
     "total": 46,
-    "works": 2,
-    "rest": {
-     "act": 5,
-     "agenda": 3,
-     "asset": 1,
-     "enemy": 8,
-     "location": 14,
-     "scenario": 1,
-     "treachery": 12
-    }
+    "works": 46,
+    "rest": {}
    },
-   "tokens": false,
-   "scripted": false,
-   "complete": false
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "the-vanishing-of-elina-harper": {
    "campaign": "the-innsmouth-conspiracy",

@@ -55,7 +55,7 @@ import { ZONE, PHASE, INV_STATUS, PILE, SCENARIO_CARD, isOneOf } from "./world/c
 import { STEP } from "./steps/step";
 import { scriptOf } from "./world/scripts";
 
-export const ENGINE_VERSION = 15;
+export const ENGINE_VERSION = 16;
 
 /**
  * Whether a save written by this engine version replays to the same game on this one. Version 8 changed the setup (a
@@ -80,8 +80,14 @@ export function checkLog(
   if ("playersAtLeast" in c) return players >= c.playersAtLeast;
   if ("logCount" in c) {
     const v = log[c.logCount.key];
-    const n = Array.isArray(v) ? v.length : 0;
+    // a card list's length, or a count of tallies (Dim Carcosa's "Chasing the Stranger")
+    const n = Array.isArray(v) ? v.length : typeof v === "number" ? v : 0;
     return n >= (c.logCount.min ?? 0) && n <= (c.logCount.max ?? Infinity);
+  }
+  if ("logCompare" in c) {
+    const count = (k: string) => (typeof log[k] === "number" ? (log[k] as number) : 0);
+    const [a, b] = [count(c.logCompare.a), count(c.logCompare.b)];
+    return { gt: a > b, gte: a >= b, lt: a < b, lte: a <= b, eq: a === b }[c.logCompare.op];
   }
   return false;
 }

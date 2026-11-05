@@ -27,5 +27,463 @@
     { "kind": "revelation", "effects": [{ "op": "putInThreatArea" }] },
     { "kind": "constant", "modifiers": [{ "stat": "handSize", "value": -5 }] },
     { "kind": "action", "actionCost": 2, "label": "Discard Drawing the Sign", "effects": [{ "op": "discardSelf" }] }
-  ] }
+  ] },
+
+  "03044": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "spawnSetAside", "code": "03060", "at": "Theatre", "orVictory": true }] }
+  ] },
+  "03045": { "abilities": [
+    { "kind": "forced", "trigger": "enemyDefeated", "condition": { "eventEnemy": { "code": "03060" } }, "effects": [
+      { "op": "removeDoom", "amount": "all", "on": "allInPlay" },
+      { "op": "resetDeck", "kind": "agenda" },
+      { "op": "placeDoom", "amount": 3, "on": "agenda" }
+    ] },
+    { "kind": "revelation", "effects": [{ "op": "takeHorror", "amount": 100, "direct": true, "target": "each" }] }
+  ] },
+  "03046": { "script": true },
+  "03047a": { "script": true },
+  "03047b": { "script": true },
+  "03047c": { "script": true },
+  "03048": { "script": true },
+  "03050": { "script": true },
+  "03051": { "script": true },
+  "03052": { "script": true },
+  "03053": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "cost", "value": 2, "scope": "investigatorsAtLocation" }] }
+  ] },
+  "03054": { "abilities": [
+    { "kind": "action", "label": "Box Office: gain 5 resources (you stole from the box office)", "limit": { "per": "game", "count": 1, "group": true }, "effects": [
+      { "op": "gainResources", "amount": 5 },
+      { "op": "remember", "key": "stoleFromBoxOffice" }
+    ] }
+  ] },
+  "03055": { "script": true },
+  "03056": { "abilities": [
+    { "kind": "action", "actionCost": 3, "label": "Dressing Room: heal 3 horror", "effects": [{ "op": "heal", "horror": 3 }] }
+  ] },
+  "03057": { "script": true },
+  "03058": { "script": true },
+  "03059": { "script": true, "spawn": { "farthest": true, "to": "investigators" } },
+  "03060": { "script": true, "prey": { "lowest": "willpower" } },
+
+  "03062": { "script": true },
+  "03063": { "script": true },
+  "03064": { "script": true, "actAdvance": "script" },
+  "03065": { "script": true },
+  "03066": { "script": true },
+  "03067": { "script": true },
+  "03068": { "script": true },
+  "03069": { "script": true },
+  "03065b": { "abilities": [
+    { "kind": "constant", "condition": { "exhausted": true }, "modifiers": [{ "stat": "fight", "value": 3, "scope": "self" }] }
+  ] },
+  "03066b": { "abilities": [
+    { "kind": "forced", "trigger": "phaseBegins", "condition": { "phase": "enemy" }, "effects": [{ "op": "healEnemy", "amount": 1 }] }
+  ] },
+  "03067b": { "script": true },
+  "03068b": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "attacksCannotBeCancelled", "scope": "self" }] }
+  ] },
+  "03069b": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "noUpkeepDraw", "scope": "investigatorsAtLocation" }] }
+  ] },
+  "03070": { "abilities": [
+    { "kind": "action", "designator": "resign", "label": "Foyer: resign", "effects": [{ "op": "resign" }] }
+  ] },
+  "03071": { "abilities": [
+    { "kind": "reaction", "trigger": "parleyed", "label": "Ballroom: gain 2 resources", "condition": { "eventInvestigatorIsYou": true }, "limit": { "per": "phase", "count": 1, "group": true }, "effects": [{ "op": "gainResources", "amount": 2 }] }
+  ] },
+  "03072": { "abilities": [
+    { "kind": "reaction", "trigger": "parleyed", "label": "Living Room: draw 1 card", "condition": { "eventInvestigatorIsYou": true }, "limit": { "per": "phase", "count": 1, "group": true }, "effects": [{ "op": "drawCards", "amount": 1 }] }
+  ] },
+  "03073": { "script": true },
+  "03074": { "script": true },
+  "03075": { "abilities": [
+    { "kind": "action", "label": "Dining Room: heal 1 horror, then reveal a chaos token", "effects": [
+      { "op": "heal", "horror": 1 },
+      { "op": "revealToken", "on": [{ "tokens": ["skull", "autoFail"], "effects": [
+        { "op": "takeHorror", "amount": 1 },
+        { "op": "placeDoom", "amount": 1, "on": "self" }
+      ] }] }
+    ] }
+  ] },
+  "03076a": { "abilities": [
+    { "kind": "action", "designator": "parley", "usableBy": "atLocation", "label": "Constance Dumaine: parley (intellect 3)", "condition": { "selfHasClues": true }, "effects": [
+      { "op": "skillTest", "skill": "intellect", "difficulty": 3, "onSuccess": [{ "op": "takeControlOfClues", "amount": 1 }, { "op": "script", "fn": "interviewed" }] }
+    ] }
+  ] },
+  "03077": { "abilities": [
+    { "kind": "action", "designator": "parley", "usableBy": "atLocation", "label": "Jordan Perry: parley (intellect 2)", "condition": { "all": [{ "resources": { "min": 10 } }, { "selfHasClues": true }] }, "effects": [
+      { "op": "skillTest", "skill": "intellect", "difficulty": 2, "onSuccess": [{ "op": "takeControlOfClues", "amount": 1 }, { "op": "script", "fn": "interviewed" }] }
+    ] }
+  ] },
+  "03078": { "abilities": [
+    { "kind": "action", "designator": "parley", "usableBy": "atLocation", "label": "Ishimaru Haruko: parley (willpower 2)", "condition": { "all": [{ "cardsInHand": { "min": 6 } }, { "selfHasClues": true }] }, "effects": [
+      { "op": "skillTest", "skill": "willpower", "difficulty": 2, "onSuccess": [{ "op": "takeControlOfClues", "amount": 1 }, { "op": "script", "fn": "interviewed" }] }
+    ] }
+  ] },
+  "03079": { "abilities": [
+    { "kind": "action", "designator": "parley", "usableBy": "atLocation", "label": "Sebastien Moreau: parley (willpower 3)", "condition": { "selfHasClues": true }, "effects": [
+      { "op": "skillTest", "skill": "willpower", "difficulty": 3, "onSuccess": [{ "op": "takeControlOfClues", "amount": 1 }, { "op": "script", "fn": "interviewed" }] }
+    ] }
+  ] },
+  "03080": { "abilities": [
+    { "kind": "action", "designator": "parley", "usableBy": "atLocation", "actionCost": 2, "label": "Ashleigh Clarke: parley (take 1 clue)", "condition": { "selfHasClues": true }, "effects": [
+      { "op": "takeControlOfClues", "amount": 1 }, { "op": "script", "fn": "interviewed" }
+    ] }
+  ] },
+  "03076b": { "story": { "after": "flipBack" }, "abilities": [{ "kind": "revelation", "effects": [{ "op": "remember", "key": "interviewedConstance" }] }] },
+  "03077b": { "story": { "after": "flipBack" }, "abilities": [{ "kind": "revelation", "effects": [{ "op": "remember", "key": "interviewedJordan" }] }] },
+  "03078b": { "story": { "after": "flipBack" }, "abilities": [{ "kind": "revelation", "effects": [{ "op": "remember", "key": "interviewedHaruko" }] }] },
+  "03079b": { "story": { "after": "flipBack" }, "abilities": [{ "kind": "revelation", "effects": [{ "op": "remember", "key": "interviewedSebastien" }] }] },
+  "03080b": { "story": { "after": "flipBack" }, "abilities": [{ "kind": "revelation", "effects": [{ "op": "remember", "key": "interviewedAshleigh" }] }] },
+  "03081": { "script": true },
+  "03082": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "chooseOne", "options": [
+      { "label": "Place 1 of your clues on a Bystander asset", "condition": { "youHaveClues": "some" }, "effects": [{ "op": "moveClues", "amount": 1, "from": "you", "to": "chooseAsset", "filter": { "trait": "Bystander" } }] },
+      { "label": "Take 1 horror and 1 damage", "effects": [{ "op": "takeHorror", "amount": 1 }, { "op": "takeDamage", "amount": 1 }] }
+    ] }] }
+  ] },
+  "03083": { "script": true },
+
+  "03084a": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "cannotPlayOrCommit", "filter": { "type": "skill" } }] },
+    { "kind": "action", "actionCost": 2, "label": "Whispers in Your Head (Dismay): discard it", "effects": [{ "op": "discardSelf" }] }
+  ] },
+  "03084b": { "script": true },
+  "03084c": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "cannotTriggerFast" }] },
+    { "kind": "action", "actionCost": 2, "label": "Whispers in Your Head (Anxiety): discard it", "effects": [{ "op": "discardSelf" }] }
+  ] },
+  "03084d": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "cannotPlayEvents" }] },
+    { "kind": "action", "actionCost": 2, "label": "Whispers in Your Head (Doubt): discard it", "effects": [{ "op": "discardSelf" }] }
+  ] },
+  "03085": { "script": true },
+  "03090": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "skillTest", "skill": "intellect", "difficulty": 4, "onFail": [{ "op": "chooseOne", "options": [
+      { "label": "Place 1 doom on the current agenda", "effects": [{ "op": "placeDoom", "amount": 1, "on": "agenda" }, { "op": "checkDoom" }] },
+      { "label": "Take 1 horror for each point you failed by", "effects": [{ "op": "takeHorror", "amount": "failBy" }] }
+    ] }] }] }
+  ] },
+  "03091": { "script": true },
+  "03092": { "script": true },
+  "03093": { "damageOnlyFrom": { "traits": ["Spell", "Relic"], "encounter": true }, "abilities": [
+    { "kind": "action", "designator": "parley", "usableBy": "atLocation", "label": "Poltergeist: parley to banish it (intellect 3)", "effects": [
+      { "op": "skillTest", "skill": "intellect", "difficulty": 3, "onSuccess": [{ "op": "dealDamage", "amount": 1, "to": "self" }] }
+    ] }
+  ] },
+  "03094": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "attachToLocation", "where": "yours" }] },
+    { "kind": "forced", "trigger": "leftLocation", "effects": [{ "op": "chooseOne", "options": [
+      { "label": "Take 1 horror", "effects": [{ "op": "takeHorror", "amount": 1 }] },
+      { "label": "Lose 1 action", "effects": [{ "op": "loseActions", "amount": 1 }] }
+    ] }] },
+    { "kind": "action", "label": "Spirit's Torment: place 1 of your clues on the location to discard it", "condition": { "youHaveClues": "some" }, "effects": [
+      { "op": "moveClues", "amount": 1, "from": "you", "to": "yourLocation" },
+      { "op": "discardSelf" }
+    ] }
+  ] },
+  "03095": { "abilities": [
+    { "kind": "forced", "trigger": "enemyEngages", "effects": [{ "op": "takeDamage", "amount": 1 }, { "op": "dealDamage", "amount": 1, "to": "self" }] }
+  ] },
+  "03096": { "script": true },
+  "03097": { "script": true },
+  "03098": { "spawn": { "mostClues": true }, "abilities": [
+    { "kind": "forced", "trigger": "enterPlay", "effects": [{ "op": "moveClues", "amount": 1, "from": "selfLocation", "to": "self" }] },
+    { "kind": "forced", "trigger": "enemyDefeatedSelf", "effects": [{ "op": "takeControlOfClues", "amount": "all", "target": "eventInvestigator" }] }
+  ] },
+  "03099": { "prey": { "highest": "clues" }, "abilities": [
+    { "kind": "forced", "trigger": "enemyAttacked", "effects": [{ "op": "moveClues", "amount": 1, "from": "you", "to": "self" }] },
+    { "kind": "forced", "trigger": "enemyDefeatedSelf", "effects": [{ "op": "takeControlOfClues", "amount": "all", "target": "eventInvestigator" }] }
+  ] },
+  "03100": { "script": true },
+  "03101": { "script": true },
+  "03102": { "script": true },
+  "03103": { "script": true, "enemy": { "fight": 0, "health": 2, "healthPerInvestigator": false, "evade": 3, "damage": 1, "horror": 0 } },
+  "03104": { "script": true },
+  "03105": { "script": true },
+  "03120": { "script": true },
+  "03121": { "script": true, "noMythosDoom": true },
+  "03122": { "script": true, "noMythosDoom": true },
+  "03123": { "script": true, "noMythosDoom": true },
+  "03124": { "script": true },
+  "03125": { "script": true },
+  "03126": { "script": true, "actSpendAt": "Hidden Library" },
+  "03127": { "abilities": [
+    { "kind": "action", "designator": "resign", "label": "Entry Hall: resign", "effects": [{ "op": "resign" }] }
+  ] },
+  "03128": { "script": true },
+  "03129": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "fight", "value": 1, "scope": "enemiesAtLocation" }, { "stat": "evade", "value": 1, "scope": "enemiesAtLocation" }] }
+  ] },
+  "03130": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "skillCannotIncrease", "stat": "intellect", "when": "investigating", "scope": "investigatorsAtLocation" }] }
+  ] },
+  "03131": { "abilities": [
+    { "kind": "action", "label": "Quiet Halls: place 1 clue per investigator here", "condition": { "script": "allRevealedNoClues" }, "effects": [{ "op": "placeTokens", "on": "self", "clues": { "perInvestigator": 1 } }] }
+  ] },
+  "03132": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "skillCannotIncrease", "stat": "intellect", "when": "investigating", "scope": "investigatorsAtLocation" }] }
+  ] },
+  "03133": { "abilities": [
+    { "kind": "reaction", "trigger": "successfulInvestigate", "label": "Historical Library: take 2 horror to discover 1 clue", "cost": { "takeHorror": 2 }, "condition": { "cluesOnYourLocation": "some" }, "limit": { "per": "round", "count": 1 }, "effects": [{ "op": "discoverClues", "amount": 1 }] }
+  ] },
+  "03134": { "script": true },
+  "03135": { "abilities": [
+    { "kind": "action", "label": "Quiet Halls: place 1 clue per investigator here", "condition": { "script": "allRevealedNoClues" }, "effects": [{ "op": "placeTokens", "on": "self", "clues": { "perInvestigator": 1 } }] }
+  ] },
+  "03136": { "abilities": [
+    { "kind": "reaction", "trigger": "successfulInvestigate", "label": "Historical Library: take 2 horror to discover 1 clue", "cost": { "takeHorror": 2 }, "condition": { "cluesOnYourLocation": "some" }, "limit": { "per": "round", "count": 1 }, "effects": [{ "op": "discoverClues", "amount": 1 }] }
+  ] },
+  "03137": { "script": true },
+  "03138": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "fight", "value": 1, "scope": "enemiesAtLocation" }, { "stat": "evade", "value": 1, "scope": "enemiesAtLocation" }] }
+  ] },
+  "03139": { "script": true },
+  "03140": { "script": true },
+  "03141": { "script": true },
+  "03142": { "script": true },
+  "03143": { "script": true },
+  "03144": { "spawn": { "name": "Historical Society", "empty": true }, "script": true },
+  "03145": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "chooseOne", "options": [
+      { "label": "Place 1 of your clues on a Cultist enemy", "condition": { "all": [{ "youHaveClues": "some" }, { "enemyInPlay": { "trait": "Cultist" } }] }, "effects": [{ "op": "moveClues", "amount": 1, "from": "you", "to": "chooseEnemy", "filter": { "trait": "Cultist" } }] },
+      { "label": "Place 1 doom on the current agenda", "effects": [{ "op": "placeDoom", "amount": 1, "on": "agenda" }, { "op": "checkDoom" }] }
+    ] }] }
+  ] },
+  "03146": { "script": true },
+  "03088": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "assignToSingleCard", "scope": "self" }] }
+  ] },
+  "03089": { "prey": { "highest": "horror" }, "abilities": [
+    { "kind": "forced", "trigger": "successfulEvade", "condition": { "not": { "succeededBy": { "min": 3 } } }, "effects": [{ "op": "takeHorror", "amount": 1 }] }
+  ] },
+  "03159": { "script": true },
+  "03160": { "script": true },
+  "03161": { "script": true },
+  "03162": { "script": true },
+  "03163": { "script": true },
+  "03164": { "script": true, "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "ignoreUnrevealedText", "scope": "self", "filter": { "trait": "Arkham Asylum" } }] }
+  ] },
+  "03165": { "script": true, "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "ignoreUnrevealedText", "scope": "self", "filter": { "trait": "Arkham Asylum" } }] }
+  ] },
+  "03166": { "script": true, "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "ignoreUnrevealedText", "scope": "self", "filter": { "trait": "Arkham Asylum" } }] }
+  ] },
+  "03167": { "script": true, "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "ignoreUnrevealedText", "scope": "self", "filter": { "trait": "Arkham Asylum" } }] }
+  ] },
+  "03168": { "abilities": [
+    { "kind": "reaction", "trigger": "enemyDefeated", "label": "Asylum Halls: draw 1 card", "condition": { "all": [{ "eventEnemy": { "trait": "Possessed" } }, { "eventAtThisLocation": true }] }, "effects": [{ "op": "drawCards", "amount": 1 }] }
+  ] },
+  "03169": { "script": true },
+  "03170": { "abilities": [
+    { "kind": "action", "designator": "evade", "usableBy": "atLocation", "label": "Asylum Halls: take 1 horror to evade a Possessed enemy", "cost": { "takeHorror": 1 }, "condition": { "enemyAtYourLocation": { "trait": "Possessed" } }, "effects": [{ "op": "evade", "auto": true, "filter": { "trait": "Possessed" } }] }
+  ] },
+  "03171": { "abilities": [
+    { "kind": "forced", "trigger": "turnEnds", "condition": { "eventAtThisLocation": true }, "effects": [{ "op": "takeHorror", "amount": 1 }, { "op": "gainResources", "amount": 2 }] }
+  ] },
+  "03172": { "cannotEnterUnrevealed": true, "abilities": [
+    { "kind": "action", "usableBy": "atLocation", "label": "Kitchen: set a fire (willpower 2)", "condition": { "cluesOnYourLocation": "none" }, "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": 2, "onSuccess": [{ "op": "remember", "key": "setAFireInTheKitchen" }] }] }
+  ] },
+  "03173": { "abilities": [
+    { "kind": "forced", "trigger": "successfulInvestigate", "effects": [{ "op": "discardFromHand", "amount": 1 }] }
+  ] },
+  "03174": { "abilities": [
+    { "kind": "action", "usableBy": "atLocation", "label": "Infirmary: heal and take", "limit": { "per": "round", "count": 1 }, "effects": [{ "op": "chooseOne", "options": [
+      { "label": "Heal 1 damage and take 1 direct horror", "effects": [{ "op": "heal", "damage": 1 }, { "op": "takeHorror", "amount": 1, "direct": true }] },
+      { "label": "Heal 1 horror and take 1 direct damage", "effects": [{ "op": "heal", "horror": 1 }, { "op": "takeDamage", "amount": 1, "direct": true }] }
+    ] }] }
+  ] },
+  "03175": { "script": true },
+  "03176": { "cannotEnterUnrevealed": true, "abilities": [
+    { "kind": "action", "usableBy": "atLocation", "label": "Garden: distract the guards (agility 2)", "condition": { "cluesOnYourLocation": "none" }, "effects": [{ "op": "skillTest", "skill": "agility", "difficulty": 2, "onSuccess": [{ "op": "remember", "key": "distractedTheGuards" }] }] },
+    { "kind": "action", "designator": "resign", "usableBy": "atLocation", "label": "Garden: resign", "condition": { "script": "gardenOpen" }, "effects": [{ "op": "resign" }] }
+  ] },
+  "03177": { "cannotEnterUnrevealed": true, "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "putSetAsideIntoPlay", "code": "03178" }, { "op": "putSetAsideIntoPlay", "code": "03179" }, { "op": "putSetAsideIntoPlay", "code": "03180" }, { "op": "putSetAsideIntoPlay", "code": "03181" }] }
+  ] },
+  "03178": { "enterClues": 1, "script": true },
+  "03179": { "enterClues": 1, "abilities": [
+    { "kind": "action", "usableBy": "atLocation", "label": "Patient Confinement: release the patient (combat 2)", "effects": [{ "op": "skillTest", "skill": "combat", "difficulty": 2, "onSuccess": [{ "op": "remember", "key": "releasedADangerousPatient" }] }] }
+  ] },
+  "03180": { "enterClues": 1, "abilities": [
+    { "kind": "action", "usableBy": "atLocation", "label": "Patient Confinement: speak to the patient (intellect 2)", "effects": [{ "op": "skillTest", "skill": "intellect", "difficulty": 2, "onSuccess": [{ "op": "remember", "key": "knowTheGuardsPatrols" }] }] }
+  ] },
+  "03181": { "enterClues": 1, "abilities": [
+    { "kind": "action", "usableBy": "atLocation", "label": "Patient Confinement: recognize the room (willpower X)", "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": { "onYou": "horror" }, "onSuccess": [{ "op": "remember", "key": "recalledTheWayOut" }] }] }
+  ] },
+  "03182a": { "script": true, "leavesPlay": { "to": "removed" } },
+  "03182b": { "prey": { "highest": "combat" }, "abilities": [
+    { "kind": "action", "designator": "parley", "usableBy": "atLocation", "label": "Daniel Chesterfield: parley (show him the clasp)", "condition": { "controlsCard": "03142" }, "effects": [{ "op": "addSelfToVictory" }] }
+  ] },
+  "03183": { "spawn": "Basement Hall", "script": true },
+  "03184": { "spawn": { "name": "Asylum Halls", "nearest": true }, "prey": { "highest": "remainingSanity" }, "abilities": [
+    { "kind": "forced", "trigger": "enemyFought", "effects": [{ "op": "takeHorror", "amount": 1 }] }
+  ] },
+  "03185": { "script": true },
+  "03186": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "cannotAttack", "filter": { "trait": "Possessed" } }] },
+    { "kind": "action", "label": "Gift of Madness (Pity): place a set-aside Monster beneath the act deck, then discard it", "effects": [{ "op": "script", "fn": "monsterBeneath" }, { "op": "discardSelf" }] }
+  ] },
+  "03187": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "cannotUseLocationActions" }] },
+    { "kind": "action", "label": "Gift of Madness (Misery): place a set-aside Monster beneath the act deck, then discard it", "effects": [{ "op": "script", "fn": "monsterBeneath" }, { "op": "discardSelf" }] }
+  ] },
+  "03188": { "script": true },
+  "03086": { "prey": { "lowest": "remainingSanity" }, "script": true },
+  "03087": { "script": true },
+  "03201": { "script": true },
+  "03202": { "script": true },
+  "03203": { "script": true },
+  "03204": { "script": true },
+  "03205": { "script": true },
+  "03206": { "script": true },
+  "03207": { "script": true },
+  "03208": { "script": true },
+  "03209": { "script": true },
+  "03210": { "script": true },
+  "03211": { "script": true },
+  "03212": { "script": true },
+  "03213": { "script": true },
+  "03214": { "script": true },
+  "03215": { "abilities": [
+    { "kind": "forced", "trigger": "successfulInvestigate", "effects": [{ "op": "modify", "mod": { "flag": "cannotMove" }, "until": "round" }] }
+  ] },
+  "03216": { "abilities": [
+    { "kind": "reaction", "trigger": "enemyEvaded", "label": "Canal Saint-Martin: move the evaded enemy to a connecting location", "condition": { "all": [{ "eventInvestigatorIsYou": true }, { "eventAtThisLocation": true }] }, "limit": { "per": "round", "count": 1 }, "effects": [{ "op": "moveEnemy", "to": "connecting" }] }
+  ] },
+  "03217": { "abilities": [
+    { "kind": "reaction", "trigger": "turnBegins", "label": "Le Marais: draw 1 card", "condition": { "all": [{ "eventInvestigatorIsYou": true }, { "eventAtThisLocation": true }] }, "limit": { "per": "round", "count": 1, "group": true }, "effects": [{ "op": "drawCards", "amount": 1 }] }
+  ] },
+  "03218": { "abilities": [
+    { "kind": "forced", "trigger": "enterLocation", "effects": [{ "op": "modify", "mod": { "flag": "cannotMove" }, "until": "round" }] }
+  ] },
+  "03219": { "script": true },
+  "03220": { "script": true },
+  "03221": { "script": true },
+  "03221b": { "script": true },
+  "03222": { "abilities": [
+    { "kind": "constant", "condition": { "exhausted": true }, "modifiers": [{ "stat": "fight", "value": -3, "scope": "self" }] }
+  ] },
+  "03223": { "script": true },
+  "03224": { "script": true },
+  "03225": { "script": true },
+  "03226": { "script": true, "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "putInThreatArea" }] },
+    { "kind": "forced", "trigger": "turnEnds", "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": 3, "onSuccess": [{ "op": "discardSelf" }] }] }
+  ] },
+  "03227": { "script": true },
+  "03240": { "script": true },
+  "03241": { "script": true },
+  "03241b": { "script": true },
+  "03242": { "script": true },
+  "03243": { "script": true },
+  "03244": { "actSpendAt": "Tomb of Shadows", "script": true },
+  "03245": { "script": true },
+  "03246": { "script": true },
+  "03247": { "enterCluesPerInvestigator": 1, "script": true },
+  "03248": { "enterCluesPerInvestigator": 1, "script": true },
+  "03249": { "enterCluesPerInvestigator": 1, "investigateSkill": "willpower", "script": true },
+  "03250": { "enterCluesPerInvestigator": 1, "script": true },
+  "03251": { "enterCluesPerInvestigator": 1, "script": true },
+  "03252": { "enterCluesPerInvestigator": 1, "script": true },
+  "03253": { "enterCluesPerInvestigator": 1, "script": true },
+  "03254": { "enterCluesPerInvestigator": 1, "script": true },
+  "03255": { "enterCluesPerInvestigator": 1, "script": true },
+  "03256": { "enterCluesPerInvestigator": 1, "script": true },
+  "03257": { "enterCluesPerInvestigator": 1, "script": true },
+  "03258": { "spawn": { "nearest": true, "unrevealed": "ifAble" }, "script": true },
+  "03259": { "spawn": { "enemyTrait": "Humanoid" }, "script": true },
+  "03260": { "script": true },
+  "03261": { "script": true },
+  "03262": { "script": true },
+  "03274": { "script": true },
+  "03275": { "script": true },
+  "03276a": { "script": true },
+  "03276b": { "script": true },
+  "03277": { "script": true },
+  "03278": { "script": true },
+  "03279a": { "script": true },
+  "03279b": { "script": true },
+  "03280": { "script": true },
+  "03281": { "abilities": [{ "kind": "revelation", "effects": [{ "op": "resolution", "id": "R1" }] }] },
+  "03282": { "abilities": [{ "kind": "revelation", "effects": [{ "op": "resolution", "id": "R2" }] }] },
+  "03283": { "script": true },
+  "03284": { "script": true },
+  "03285": { "abilities": [
+    { "kind": "forced", "trigger": "doomPlaced", "condition": { "script": "onDeckA" }, "effects": [{ "op": "takeDamage", "amount": 1, "target": "eachAtAttachedLocation" }] }
+  ] },
+  "03286": { "script": true },
+  "03287": { "abilities": [
+    { "kind": "forced", "trigger": "doomPlaced", "condition": { "script": "onDeckC" }, "effects": [{ "op": "takeHorror", "amount": 1, "target": "eachAtAttachedLocation" }] }
+  ] },
+  "03288": { "script": true },
+  "03289": { "script": true },
+  "03290": { "script": true },
+  "03291": { "enterCluesPerInvestigator": 3, "enterCluesFromHere": true, "script": true },
+  "03292": { "script": true },
+  "03293": { "script": true },
+  "03294": { "abilities": [
+    { "kind": "action", "designator": "parley", "label": "Cloister: parley (willpower 3) to find a guide", "condition": { "cluesOnYourLocation": "none" }, "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": 3, "onSuccess": [{ "op": "remember", "key": "foundAGuide" }] }] }
+  ] },
+  "03295": { "abilities": [
+    { "kind": "action", "designator": "investigate", "label": "Knight's Hall: investigate with agility to find the tower key", "condition": { "cluesOnYourLocation": "none" }, "effects": [{ "op": "investigate", "skill": "agility", "insteadOfClues": [{ "op": "remember", "key": "foundTheTowerKey" }] }] }
+  ] },
+  "03296": { "cannotEnterUnrevealed": true, "script": true },
+  "03297": { "cannotEnterUnrevealed": true, "script": true },
+  "03298": { "cannotEnterUnrevealed": true, "script": true },
+  "03299": { "cannotEnterUnrevealed": true, "script": true },
+  "03300": { "spawn": { "or": [{ "name": "Porte de l'Avancée" }, { "name": "Chapel of St. Aubert" }] } },
+  "03301": { "script": true },
+  "03302": { "script": true },
+  "03303": { "script": true },
+  "03316": { "script": true },
+  "03317": { "script": true },
+  "03318": { "script": true },
+  "03319": { "script": true },
+  "03320": { "script": true },
+  "03321a": { "script": true },
+  "03321b": { "cannotLeavePlay": true, "abilities": [{ "kind": "constant", "modifiers": [{ "stat": "sanity", "value": -2, "scope": "controller" }] }] },
+  "03322a": { "script": true },
+  "03323a": { "script": true },
+  "03324": { "script": true },
+  "03325b": { "story": { "after": "flipBack" }, "script": true },
+  "03326a": { "abilities": [{ "kind": "constant", "modifiers": [{ "flag": "cannotPlay", "filter": { "type": "asset", "trait": "Ally" }, "scope": "investigatorsAtLocation" }] }] },
+  "03326b": { "story": { "after": "remove" }, "script": true },
+  "03326c": { "back": "03326d", "abilities": [{ "kind": "constant", "modifiers": [{ "flag": "cannotPlay", "filter": { "type": "asset", "trait": "Ally" }, "scope": "investigatorsAtLocation" }] }] },
+  "03326d": { "front": "03326c", "story": { "after": "flipBack" }, "script": true },
+  "03327a": { "abilities": [{ "kind": "forced", "trigger": "cluesDiscovered", "condition": { "all": [{ "eventAtThisLocation": true }, { "not": { "selfHasClues": true } }] }, "effects": [{ "op": "takeDamage", "amount": 1 }] }] },
+  "03327b": { "story": { "after": "remove" }, "script": true },
+  "03327c": { "back": "03327d", "abilities": [{ "kind": "forced", "trigger": "cluesDiscovered", "condition": { "all": [{ "eventAtThisLocation": true }, { "not": { "selfHasClues": true } }] }, "effects": [{ "op": "takeDamage", "amount": 1 }] }] },
+  "03327d": { "front": "03327c", "story": { "after": "remove" }, "script": true },
+  "03327e": { "back": "03327f", "abilities": [{ "kind": "forced", "trigger": "cluesDiscovered", "condition": { "all": [{ "eventAtThisLocation": true }, { "not": { "selfHasClues": true } }] }, "effects": [{ "op": "takeDamage", "amount": 1 }] }] },
+  "03327f": { "front": "03327e", "story": { "after": "flipBack" }, "script": true },
+  "03328a": { "abilities": [{ "kind": "forced", "trigger": "cluesDiscovered", "condition": { "all": [{ "eventAtThisLocation": true }, { "not": { "selfHasClues": true } }] }, "effects": [{ "op": "loseActions", "amount": 1 }] }] },
+  "03328b": { "story": { "after": "flipBack" }, "script": true },
+  "03328c": { "back": "03328d", "abilities": [{ "kind": "forced", "trigger": "cluesDiscovered", "condition": { "all": [{ "eventAtThisLocation": true }, { "not": { "selfHasClues": true } }] }, "effects": [{ "op": "loseActions", "amount": 1 }] }] },
+  "03328d": { "front": "03328c", "story": { "after": "remove" }, "script": true },
+  "03328e": { "back": "03328f", "abilities": [{ "kind": "forced", "trigger": "cluesDiscovered", "condition": { "all": [{ "eventAtThisLocation": true }, { "not": { "selfHasClues": true } }] }, "effects": [{ "op": "loseActions", "amount": 1 }] }] },
+  "03328f": { "front": "03328e", "story": { "after": "remove" }, "script": true },
+  "03329a": { "abilities": [{ "kind": "constant", "modifiers": [{ "flag": "cannotPlay", "filter": { "keyword": "fast" }, "scope": "investigatorsAtLocation" }] }] },
+  "03329b": { "story": { "after": "remove" }, "script": true },
+  "03329c": { "back": "03329d", "abilities": [{ "kind": "constant", "modifiers": [{ "flag": "cannotPlay", "filter": { "keyword": "fast" }, "scope": "investigatorsAtLocation" }] }] },
+  "03329d": { "front": "03329c", "story": { "after": "flipBack" }, "script": true },
+  "03330b": { "story": { "after": "flipBack" }, "script": true },
+  "03331": { "script": true },
+  "03331b": { "story": { "after": "flipBack" }, "script": true },
+  "03332": { "damageOnlyFrom": { "types": ["story"] }, "script": true },
+  "03333": { "damageOnlyFrom": { "types": ["story"] }, "prey": { "highest": "remainingSanity" }, "script": true },
+  "03334": { "damageOnlyFrom": { "types": ["story"] }, "prey": { "highest": "remainingSanity" }, "script": true },
+  "03335": { "script": true },
+  "03336": { "script": true },
+  "03337": { "script": true },
+  "03338": { "script": true },
+  "03339": { "script": true },
+  "03340": { "commitAutoFails": true, "script": true },
+  "03341": { "script": true },
+  "03342": { "script": true }
 }

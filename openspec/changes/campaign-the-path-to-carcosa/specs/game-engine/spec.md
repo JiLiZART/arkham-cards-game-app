@@ -28,9 +28,9 @@ Clues SHALL be placeable on enemies and on assets in play, readable by condition
 
 #### Scenario: Clues become doom
 
-- **GIVEN** Echoes of the Past's agenda and a Cultist with 2 clues
-- **WHEN** the mythos phase begins
-- **THEN** no doom is placed on the agenda, the Cultist's clues become 2 doom, and the agenda's threshold counts them
+- **GIVEN** Echoes of the Past's agenda and a Cultist in play
+- **WHEN** 2 clues are placed on the Cultist
+- **THEN** they turn to 2 doom at once, as the agenda's Forced ability says, and the agenda's threshold counts them; at the mythos phase no doom is placed on the agenda
 
 ### Requirement: Costs and limits keyed to a location
 

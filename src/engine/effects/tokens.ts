@@ -1,11 +1,14 @@
 /** Effects that put clues, doom, tokens and uses on cards, or take them off. */
 import {
   addChaosTokens,
+  allCards,
   addCounter,
   addTokens,
   ask,
   card,
+  cardIf,
   chaosBag,
+  currentAgendas,
   def,
   emit,
   type GameContext,
@@ -15,24 +18,26 @@ import {
   randomInt,
   tokensOn,
 } from "../context";
-import { moveCard } from "../movement";
+import { isInPlay, moveCard } from "../movement";
 import {
   canPlaceClues,
   cardsIn,
   connections,
   enemies,
+  hasFlag,
   invsAt,
   locations,
   matchesFilter,
   tokenHolder,
 } from "../queries";
-import type { InstId } from "../world/types";
-import { amt, enemyTargets, opt } from "./targets";
+import type { EffCtx, InstId } from "../world/types";
+import { amt, enemyTargets, invTargets, opt } from "./targets";
 import type { EffectOf, EffectRun } from "./types";
 import { EVENT } from "../events/event";
 import { ZONE, CHOICE } from "../world/constants";
 import { STEP } from "../steps/step";
-import { campaignTokens } from "../world/flags";
+import { campaignTokens, rememberedFact } from "../world/flags";
+import { win } from "../rules/cards";
 
 function discoverCluesEffect(game: GameContext, run: EffectRun<EffectOf<"discoverClues">>) {
   const { step, ctx, you } = run;
@@ -74,6 +79,9 @@ function placeDoomEffect(game: GameContext, run: EffectRun<EffectOf<"placeDoom">
     push(game, { t: STEP.PlaceDoom, card: "agenda", n });
   } else if (e.on === "self") {
     if (ctx.source) push(game, { t: STEP.PlaceDoom, card: ctx.source, n });
+  } else if (e.on === "eachAgenda") {
+    for (const id of Object.values(currentAgendas(game)))
+      if (id) push(game, { t: STEP.PlaceDoom, card: id, n });
   } else if (e.on === "eachCultist") {
     for (const c of enemies(game).filter((x) => def(game, x.id).traits.includes("Cultist")))
       push(game, { t: STEP.PlaceDoom, card: c.id, n });
@@ -85,8 +93,20 @@ function placeDoomEffect(game: GameContext, run: EffectRun<EffectOf<"placeDoom">
   return;
 }
 
-/** doom off this card, at most what it holds (Destroyed Path) */
+/** doom off this card, at most what it holds (Destroyed Path); or off every card in play ("Remove all doom from play") */
 function removeDoomEffect(game: GameContext, run: EffectRun<EffectOf<"removeDoom">>) {
+  if (run.effect.on === "allInPlay") {
+    const n = amt(game, run.effect.amount, run.ctx);
+    for (const c of allCards(game).filter((x) => x.doom > 0 && isInPlay(x))) {
+      const off = Math.min(c.doom, n);
+      addCounter(game, c.id, "doom", -off);
+      emit(game, EVENT.Doom, `${off} doom is removed from ${def(game, c.id).name}`, {
+        card: c.id,
+        data: { n: -off },
+      });
+    }
+    return;
+  }
   let src = run.ctx.source;
   // a card you control with doom on it, you choose which: your investigator or one in your play or threat area
   if (run.effect.on === "chooseYours") {
@@ -136,7 +156,10 @@ function placeTokensEffect(game: GameContext, run: EffectRun<EffectOf<"placeToke
     return;
   }
   if (!src || !canPlaceClues(game, src.id)) return;
-  addCounter(game, src.id, "clues", e.clues === undefined ? 0 : amt(game, e.clues, ctx));
+  const clues = e.clues === undefined ? 0 : amt(game, e.clues, ctx);
+  addCounter(game, src.id, "clues", clues);
+  if (clues > 0 && src.zone !== ZONE.Location)
+    push(game, win("cluesPlaced", { card: src.id, amount: clues }));
   addCounter(game, src.id, "horror", e.horror ?? 0);
   addCounter(game, src.id, "damage", e.damage === undefined ? 0 : amt(game, e.damage, ctx));
   addCounter(game, src.id, "doom", e.doom ?? 0);
@@ -270,6 +293,113 @@ function addChaosTokensEffect(game: GameContext, run: EffectRun<EffectOf<"addCha
   });
 }
 
+/** the assets in play, controlled or not (a Bystander is attached to its location) */
+const assetsInPlay = (game: GameContext) =>
+  [...cardsIn(game, ZONE.Play), ...cardsIn(game, ZONE.Attached)].filter(
+    (c) => def(game, c.id).type === "asset",
+  );
+
+/** where clues come from or go to, by the effect's word: you, your location, this card's location, this card */
+function clueHolder(game: GameContext, where: string, ctx: EffCtx, you: string): string | null {
+  if (where === "you") return you;
+  if (where === "yourLocation") return inv(game, you).location;
+  if (!ctx.source || !cardIf(game, ctx.source)) return null;
+  return where === "selfLocation" ? card(game, ctx.source).location : ctx.source;
+}
+
+/** clues moved from you or a location to a card, or from you to your location (Fanatic, Agent of the King, Led Astray) */
+function moveCluesEffect(game: GameContext, run: EffectRun<EffectOf<"moveClues">>) {
+  const { step, ctx, you, effect: e } = run;
+  const from = clueHolder(game, e.from, ctx, you);
+  if (!from) return;
+  const n = Math.min(
+    amt(game, e.amount, ctx),
+    from === you ? inv(game, you).clues : card(game, from).clues,
+  );
+  if (n <= 0) return;
+  let to: string | null | undefined;
+  if (e.to === "chooseEnemy" || e.to === "chooseAsset") {
+    const cands = (e.to === "chooseEnemy" ? enemies(game) : assetsInPlay(game)).filter(
+      (c) => !e.filter || matchesFilter(game, c.code, e.filter),
+    );
+    if (!cands.length) return;
+    to = ask<InstId>(
+      game,
+      step,
+      you,
+      CHOICE.Target,
+      "Choose a card to place clues on",
+      cands.map((c) => opt(game, c.id)),
+      { auto: true, key: "chooseCluesTarget" },
+    );
+    if (to === undefined) return;
+  } else to = clueHolder(game, e.to, ctx, you);
+  if (!to || to === from) return;
+  addCounter(game, from, "clues", -n);
+  addCounter(game, to, "clues", n);
+  emit(game, EVENT.Clues, `${n} clue(s) moved to ${def(game, to).name}`, {
+    inv: you,
+    card: to,
+    data: { n, placed: true, source: ctx.source ?? null },
+  });
+  if (to !== you && card(game, to).zone !== ZONE.Location)
+    push(game, win("cluesPlaced", { card: to, amount: n }));
+}
+
+/** the clues on a card taken by an investigator (not discovered): a Bystander's parley, the defeater of Fanatic */
+function takeControlOfCluesEffect(
+  game: GameContext,
+  run: EffectRun<EffectOf<"takeControlOfClues">>,
+) {
+  const { step, ctx, effect: e } = run;
+  const from = e.from === "eventEnemy" ? ctx.enemy : ctx.source;
+  const c = from ? cardIf(game, from) : undefined;
+  const ts = invTargets(game, step, e.target, ctx);
+  if (!c || !ts?.length) return;
+  // "cannot take control of clues" (Dianne Devine's location)
+  if (hasFlag(game, ts[0], "cannotTakeControlOfClues")) return;
+  const n = Math.min(amt(game, e.amount, ctx), c.clues);
+  if (n <= 0) return;
+  addCounter(game, c.id, "clues", -n);
+  addCounter(game, ts[0], "clues", n);
+  emit(
+    game,
+    EVENT.Clues,
+    `${invName(game, ts[0])} takes control of ${n} clue(s) on ${def(game, c.id).name}`,
+    {
+      inv: ts[0],
+      card: c.id,
+      data: { n, source: c.id },
+    },
+  );
+}
+
+/** the clues on a card become doom on it: this card, or each enemy in play (Echoes of the Past) */
+function cluesToDoomEffect(game: GameContext, run: EffectRun<EffectOf<"cluesToDoom">>) {
+  const ids =
+    run.effect.on === "self"
+      ? run.ctx.source
+        ? [run.ctx.source]
+        : []
+      : enemies(game).map((x) => x.id);
+  for (const id of ids) {
+    const n = cardIf(game, id)?.clues ?? 0;
+    if (n <= 0) continue;
+    addCounter(game, id, "clues", -n);
+    addCounter(game, id, "doom", n);
+    emit(game, EVENT.Doom, `${n} clue(s) on ${def(game, id).name} become doom`, {
+      card: id,
+      data: { n },
+    });
+  }
+}
+
+/** a fact the scenario keeps ("Remember that you 'distracted the guards'") */
+function rememberEffect(game: GameContext, run: EffectRun<EffectOf<"remember">>) {
+  rememberedFact.set(game, run.effect.key, true);
+  emit(game, EVENT.Remember, `Remembered: ${run.effect.key}`, { data: { key: run.effect.key } });
+}
+
 export const tokensEffects = {
   addChaosTokens: addChaosTokensEffect,
   revealToken: revealTokenEffect,
@@ -282,6 +412,10 @@ export const tokensEffects = {
   addUses: addUsesEffect,
   checkDoom: checkDoomEffect,
   dropClues: dropCluesEffect,
+  remember: rememberEffect,
+  moveClues: moveCluesEffect,
+  takeControlOfClues: takeControlOfCluesEffect,
+  cluesToDoom: cluesToDoomEffect,
   spendClues: spendCluesEffect,
   removeUses: removeUsesEffect,
 };

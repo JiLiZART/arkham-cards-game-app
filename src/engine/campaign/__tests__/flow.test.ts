@@ -439,6 +439,51 @@ describe("advance: the other prompts", () => {
     expect(c.lead).toBe(AGNES);
   });
 
+  it('mental trauma "sanity": each investigator driven insane with trauma equal to their sanity (Black Stars Rise R3)', () => {
+    const { d, c } = first(
+      { fx: effects({ do: "trauma", who: "each", mental: "sanity" }) },
+      ["fx"],
+      [ROLAND, AGNES],
+    );
+    expect(c.investigators.map((i) => i.status)).toEqual(["insane", "insane"]);
+    expect(c.investigators.map((i) => i.mentalTrauma)).toEqual([
+      d.cards[ROLAND].sanity,
+      d.cards[AGNES].sanity,
+    ]);
+  });
+
+  it('removeAllChaosTokens takes every copy of the token out of the bag (The Path to Carcosa\'s "remove all")', () => {
+    const { c } = first(
+      {
+        fx: effects(
+          { do: "addChaosToken", token: "cultist" },
+          { do: "removeAllChaosTokens", token: "cultist" },
+        ),
+      },
+      ["fx"],
+    );
+    expect(c.chaosBag).not.toContain("cultist");
+    expect(c.chaosBag).toContain("skull");
+  });
+
+  it("xp split evenly: the total from a count of the log, as evenly as possible, the first in order taking what is left over", () => {
+    const split = (who: string[], clues: number) =>
+      first(
+        {
+          fx: effects(
+            { do: "count", id: "cluesOnAct", op: "set", value: clues },
+            { do: "xp", split: "evenly", fromCount: { id: "cluesOnAct", per: 2 } },
+          ),
+        },
+        ["fx"],
+        who,
+      ).c.investigators.map((i) => i.xp);
+    // The Last King: 1 experience for every 2 clues on the act deck, divided among the investigators
+    expect(split([ROLAND, AGNES], 6)).toEqual([2, 1]);
+    expect(split([ROLAND, AGNES], 9)).toEqual([2, 2]);
+    expect(split([ROLAND], 5)).toEqual([2]);
+  });
+
   it("every investigator out ends the campaign as lost", () => {
     const { c } = first({ fx: effects({ do: "trauma", who: "each", physical: 99, mental: 0 }) }, [
       "fx",
@@ -497,6 +542,31 @@ describe("test: conditions", () => {
     expect(t({ kind: "hasCard", card: "01016", inv: "lead" })).toBe(true);
     expect(t({ kind: "hasCard", card: "01016", inv: "input" }, { inv: AGNES })).toBe(false);
     expect(t({ kind: "trauma", inv: "any", mental: 1 })).toBe(false);
+  });
+
+  it("logCompare: one count of the log against another (Conviction against Doubt)", () => {
+    const withConviction = (n: number) =>
+      test(
+        d,
+        { ...c, log: setCount(c.log, "conviction", "set", n, "conviction") },
+        {
+          kind: "logCompare",
+          a: { id: "conviction", section: "conviction" },
+          b: { id: "doubt", section: "doubt" },
+          op: "gte",
+        },
+      );
+    expect(withConviction(2)).toBe(true); // 2 Doubt in the log
+    expect(withConviction(1)).toBe(false);
+    const cmp = (op: "gt" | "gte" | "lt" | "lte" | "eq") =>
+      t({ kind: "logCompare", a: { id: "doubt", section: "doubt" }, b: { id: "none" }, op });
+    expect([cmp("gt"), cmp("gte"), cmp("lt"), cmp("lte"), cmp("eq")]).toEqual([
+      true,
+      true,
+      false,
+      false,
+      false,
+    ]);
   });
 
   it("combines tests, and takes the guide's answer for one it can't make", () => {

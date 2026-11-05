@@ -19,6 +19,7 @@ import {
   invsAt,
   isAloof,
   isMassive,
+  matchesFilter,
   maxHealth,
   maxSanity,
   modSum,
@@ -45,6 +46,7 @@ import {
   logStep,
   nextKey,
   placeInvestigator,
+  currentActs,
   currentRound,
   currentTest,
   setVehicle,
@@ -67,7 +69,7 @@ import { preyCandidates } from "./enemies";
 import { EVENT } from "../events/event";
 import { ZONE, CHOICE, INV_STATUS, isOneOf } from "../world/constants";
 import { STEP } from "../steps/step";
-import { fireGameEnd, fireScenarioHook } from "./scripts";
+import { fireCardHook, fireGameEnd, fireScenarioHook } from "./scripts";
 
 type Handler<T extends Step["t"]> = (game: GameContext, step: Extract<Step, { t: T }>) => void;
 
@@ -265,13 +267,24 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (game, step) => {
       }),
     ];
     const next: Step = { ...step, damage, horror, assigned, choice: undefined };
+    // "as much damage and horror as possible to a single card before assigning it to another" (Beast of Aldebaran):
+    // the card last assigned to takes the rest while it can
+    const focus =
+      step.enemy && hasFlag(game, step.enemy, "assignToSingleCard")
+        ? Object.keys(assigned)
+            .reverse()
+            .find((id) => opts.some((o) => o.id === id))
+        : undefined;
+    // "divided as evenly as possible among eligible cards": only those holding the fewest points of it so far
+    const fewest = Math.min(...opts.map((o) => assigned[o.id]?.[kind] ?? 0));
+    const even = step.evenly ? opts.filter((o) => (assigned[o.id]?.[kind] ?? 0) === fewest) : opts;
     ask(
       game,
       next,
       step.inv,
       CHOICE.Assign,
       `${me.name}: assign 1 ${label} (${kind === 0 ? damage : horror} left)`,
-      opts,
+      focus ? opts.filter((o) => o.id === focus) : even,
       {
         key: kind === 0 ? "assignDamage" : "assignHorror",
         vars: { left: kind === 0 ? damage : horror },
@@ -424,8 +437,16 @@ export const defeatedHandler: Handler<"Defeated"> = (game, step) => {
         : `${me.name} is defeated (${step.by === "damage" ? "physical" : "mental"} trauma)`,
     { inv: step.inv, data: { by: step.by } },
   );
-  // clues drop at location
-  if (me.location && me.clues) addCounter(game, me.location, "clues", me.clues);
+  // clues drop at location, unless an act takes them (The Last King)
+  const taken =
+    me.clues > 0 &&
+    Object.values(currentActs(game)).some(
+      (act) =>
+        !!act &&
+        fireCardHook(game, card(game, act).code, "eliminated", { source: act }, me.id, me.clues) ===
+          true,
+    );
+  if (me.location && me.clues && !taken) addCounter(game, me.location, "clues", me.clues);
   setCounter(game, me.id, "clues", 0);
   // engaged enemies stay at the location, unengaged
   for (const e of enemies(game)) if (e.engagedWith === step.inv) setEngaged(game, e.id, null);
@@ -488,7 +509,13 @@ export function canMoveTo(game: GameContext, i: InvId, to: InstId) {
     !hasFlag(game, to, "cannotMoveInto", modsFor(game, i)) &&
     !hasFlag(game, from, "cannotLeave") &&
     !cannotMove(game, i) &&
-    spendableGroupClues(game) >= enterCost(game, to) &&
+    spendableGroupClues(game, enterPayers(game, i, to)) >= enterCost(game, to) &&
+    inv(game, i).clues >= ownEnterCost(game, to) &&
+    !(
+      def(game, to).cannotEnterUnrevealed &&
+      !card(game, to).revealed &&
+      !unrevealedIgnored(game, to)
+    ) &&
     // "You must have at least 2 clues in order to move to The Edge of the Universe"
     inv(game, i).clues >= (def(game, to).moveInClues ?? 0)
   );
@@ -506,8 +533,33 @@ export function cannotMove(game: GameContext, i: InvId): boolean {
 /** clues the group spends to enter a location (Underground Cistern, unrevealed) */
 export function enterCost(game: GameContext, to: InstId): number {
   const n = def(game, to).enterCluesPerInvestigator;
-  return n && !card(game, to).revealed ? n * playerCount(game) : 0;
+  return n && !card(game, to).revealed && !unrevealedIgnored(game, to) ? n * playerCount(game) : 0;
 }
+
+/** who spends a location's group clue cost to enter it: everyone, or those at the mover's location (Abbey Church) */
+export function enterPayers(game: GameContext, i: InvId, to: InstId): InvId[] | undefined {
+  return def(game, to).enterCluesFromHere ? invsAt(game, inv(game, i).location) : undefined;
+}
+
+/** clues the entering investigator alone spends to enter a location (Patient Confinement, unrevealed) */
+export function ownEnterCost(game: GameContext, to: InstId): number {
+  const n = def(game, to).enterClues;
+  return n && !card(game, to).revealed && !unrevealedIgnored(game, to) ? n : 0;
+}
+
+/**
+ * a modifier in play has the text of this location's unrevealed side ignored: on this location itself (The Pallid
+ * Mask's Stone Archways, for its neighbours), or, from a card that is no location, on the locations its filter matches
+ * (The Unspeakable Oath's acts)
+ */
+const unrevealedIgnored = (game: GameContext, loc: InstId) =>
+  allMods(game).some(
+    (m) =>
+      m.mod.flag === "ignoreUnrevealedText" &&
+      (m.target === loc ||
+        (cardIf(game, m.target)?.zone !== ZONE.Location &&
+          (!m.mod.filter || matchesFilter(game, card(game, loc).code, m.mod.filter)))),
+  );
 
 export const moveHandler: Handler<"Move"> = (game, step) => {
   // moving on your own takes you out of any vehicle you were in
@@ -518,7 +570,7 @@ export const moveHandler: Handler<"Move"> = (game, step) => {
     game,
     ...(from
       ? [
-          win("wouldMoveOut", { inv: step.inv, location: from, key }),
+          win("wouldMoveOut", { inv: step.inv, location: from, to: step.to, key }),
           // what it costs to move into a location (Arcane Barrier): cancelling the key cancels the move
           win("wouldMoveIn", { inv: step.inv, location: step.to, key }),
           win("leaveLocation", { inv: step.inv, location: from, key }),

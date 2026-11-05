@@ -50,58 +50,160 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "script",
+            "fn": "doomOnPossessed"
+          }
+        ]
       },
       "cultist": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "moveClues",
+            "amount": 1,
+            "from": "you",
+            "to": "yourLocation"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -4
+        "modifier": -4,
+        "onFail": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "yourLocationShroud"
       }
     },
     "standard": {
       "skull": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "script",
+            "fn": "doomOnPossessed"
+          }
+        ]
       },
       "cultist": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "moveClues",
+            "amount": 1,
+            "from": "you",
+            "to": "yourLocation"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -4
+        "modifier": -4,
+        "onFail": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "yourLocationShroud"
       }
     },
     "hard": {
       "skull": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "script",
+            "fn": "doomOnPossessed",
+            "args": "mostHealth"
+          }
+        ]
       },
       "cultist": {
-        "modifier": -3
+        "modifier": -3,
+        "onReveal": [
+          {
+            "op": "moveClues",
+            "amount": 1,
+            "from": "you",
+            "to": "yourLocation"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -4
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "yourLocationShroud",
+        "onFail": [
+          {
+            "op": "takeDamage",
+            "amount": 1
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "script",
+            "fn": "doomOnPossessed",
+            "args": "mostHealth"
+          }
+        ]
       },
       "cultist": {
-        "modifier": -3
+        "modifier": -3,
+        "onReveal": [
+          {
+            "op": "moveClues",
+            "amount": 1,
+            "from": "you",
+            "to": "yourLocation"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -4
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "yourLocationShroud",
+        "onFail": [
+          {
+            "op": "takeDamage",
+            "amount": 1
+          }
+        ]
       }
     }
   },

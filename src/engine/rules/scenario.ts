@@ -38,7 +38,7 @@ import {
   tapToDraw,
 } from "../context";
 import { flip, link, moveCard, passBeneath, reshuffleDiscard } from "../movement";
-import type { InstId, Step, StepOf } from "../world/types";
+import type { EffCtx, InstId, Step, StepOf } from "../world/types";
 import { win } from "./cards";
 import { EVENT } from "../events/event";
 import { CHOICE, ZONE, type Zone } from "../world/constants";
@@ -222,7 +222,7 @@ export const doomFor = (game: GameContext, agenda: InstId) =>
     .filter((c) => DOOM_ZONES.includes(c.zone) && (c.zone !== ZONE.Agenda || c.id === agenda))
     .reduce((n, c) => n + c.doom, 0);
 
-export const checkDoomHandler: Handler<"CheckDoom"> = (game) => {
+export const checkDoomHandler: Handler<"CheckDoom"> = (game, step) => {
   if (currentPhase(game) === "ended") return;
   // each agenda deck whose threshold is met advances, in deck order
   const due = agendaDecks(game).filter(
@@ -234,31 +234,36 @@ export const checkDoomHandler: Handler<"CheckDoom"> = (game) => {
         you: leadInvestigator(game),
       }),
   );
-  push(
-    game,
-    ...due.map(([deck]): Step =>
-      deck === "a" ? { t: STEP.AdvanceAgenda } : { t: STEP.AdvanceAgenda, deck },
-    ),
-  );
+  const advance = (deck: string): Step =>
+    deck === "a" ? { t: STEP.AdvanceAgenda } : { t: STEP.AdvanceAgenda, deck };
+  if (due.length > 1) {
+    // "choose only one agenda to advance. Then, once you have completed advancing that agenda, check the doom threshold
+    // of the other agenda" (Black Stars Rise's dual agendas)
+    const pick = ask<string>(
+      game,
+      step,
+      leadInvestigator(game),
+      CHOICE.Target,
+      "Choose the agenda that advances first",
+      due.map(([deck, id]) => ({ id: deck, label: def(game, id).name, card: id, value: deck })),
+      { key: "advanceWhichAgenda" },
+    );
+    if (pick === undefined) return;
+    push(game, advance(pick), { t: STEP.CheckDoom });
+    return;
+  }
+  push(game, ...due.map(([deck]) => advance(deck)));
 };
 
-function backSide(game: GameContext, id: InstId): Step[] {
+function backSide(game: GameContext, id: InstId, by?: EffCtx["actAdvancedBy"]): Step[] {
   const c = card(game, id);
+  const ctx = { source: id, you: leadInvestigator(game), ...(by ? { actAdvancedBy: by } : {}) };
   return abilitiesOf(game, id)
     .filter((a) => a.kind === "revelation")
     .map((a): Step =>
       a.run
-        ? {
-            t: STEP.Script,
-            code: c.code,
-            fn: a.run,
-            ctx: { source: id, you: leadInvestigator(game) },
-          }
-        : {
-            t: STEP.Effects,
-            effects: a.effects ?? [],
-            ctx: { source: id, you: leadInvestigator(game) },
-          },
+        ? { t: STEP.Script, code: c.code, fn: a.run, ctx }
+        : { t: STEP.Effects, effects: a.effects ?? [], ctx },
     );
 }
 
@@ -360,7 +365,7 @@ export const advanceActHandler: Handler<"AdvanceAct"> = (game, step) => {
   moveCard(game, id, ZONE.Limbo);
   push(
     game,
-    ...backSide(game, id),
+    ...backSide(game, id, step.spend ? "clues" : step.by),
     deck === "a" ? { t: STEP.NextAct, card: id } : { t: STEP.NextAct, card: id, deck },
   );
 };

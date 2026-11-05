@@ -2,12 +2,12 @@
 
 ### Requirement: The Path to Carcosa plays start to end
 
-The Path to Carcosa SHALL be a hand-kept campaign in `content/campaigns/the-path-to-carcosa/` with a scenario script for each of its eight scenarios. Its order SHALL be the printed one: prologue, Curtain Call, The Last King, Interlude I (Lunacy's Reward, or the reprint's), Echoes of the Past, The Unspeakable Oath, Interlude II (The King in Yellow), A Phantom of Truth, The Pallid Mask, Black Stars Rise, Dim Carcosa, Epilogue. Each scenario SHALL set up as its guide page says, including what depends on the campaign log and on the number of investigators, SHALL end with the resolution its cards name, and SHALL route a game that reached no resolution as the guide does. Coverage SHALL report every scenario of the campaign complete.
+The Path to Carcosa SHALL be a hand-kept campaign in `content/campaigns/the-path-to-carcosa/` with a scenario script for each of its eight scenarios. Its order SHALL be the printed one: prologue, Curtain Call, The Last King, Interlude I (Lunacy's Reward, read after The Last King's Resolution 1 and skipped after its Resolutions 2 and 3), Echoes of the Past, The Unspeakable Oath, Interlude II (Lost Soul, skipped after The Unspeakable Oath's Resolution 1), A Phantom of Truth, The Pallid Mask, Black Stars Rise, Dim Carcosa, Epilogue. Each scenario SHALL set up as its guide page says, including what depends on the campaign log and on the number of investigators, SHALL end with the resolution its cards name, and SHALL route a game that reached no resolution as the guide does. Coverage SHALL report every scenario of the campaign complete.
 
 #### Scenario: Curtain Call setup and the random act
 
 - **WHEN** Curtain Call starts with two investigators, one of them Lola Hayes
-- **THEN** Theatre, Lobby, Balcony and Backstage are in play, the six Doorways, The Man in the Pallid Mask and Royal Emissary are set aside, Lola starts at Backstage and the others at the Theatre, and when act 1 advances one of the three act 2 versions is chosen at random and the others removed
+- **THEN** Theatre, Lobby, Balcony and Backstage are in play, the six Doorways, The Man in the Pallid Mask and Royal Emissary are set aside, Lola starts at Backstage and the others at the Theatre, and one of the three act 2 versions is chosen at random as the game begins, the other two never entering the game
 
 #### Scenario: The Last King's Bystanders
 
@@ -89,4 +89,4 @@ A flow prompt whose answer the scenario knows SHALL be answered by the scenario 
 
 - **GIVEN** Dim Carcosa ends with Roland holding a Possession and Daisy none
 - **WHEN** the epilogue runs
-- **THEN** only Roland may read it
+- **THEN** the Campaign Log lists Roland alone as possessed, and the epilogue is shown for him to read; with no one possessed it shows nothing

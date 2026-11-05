@@ -159,7 +159,7 @@ describe("musicFor", () => {
   });
 
   it("a scenario without a bed of its own (a generated one) plays the default bed, and fight and tension as usual", () => {
-    const generated = with_((s) => (s.scenarioId = "curtain-call"));
+    const generated = with_((s) => (s.scenarioId = "the-witching-hour"));
     expect(musicFor(generated, m)).toBe("bed:default");
     const ghoul = codeOf("01160");
     expect(

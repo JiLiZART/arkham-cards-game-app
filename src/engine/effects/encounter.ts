@@ -90,7 +90,7 @@ function drawCultistOrSearchEffect(
 function spawnSetAsideEffect(game: GameContext, run: EffectRun<EffectOf<"spawnSetAside">>) {
   const e = run.effect;
 
-  const c = findByCode(game, e.code, [ZONE.SetAside]);
+  const c = findByCode(game, e.code, e.orVictory ? [ZONE.SetAside, ZONE.Victory] : [ZONE.SetAside]);
   if (!c) return;
   const at = e.at
     ? (locationByName(game, e.at) ?? findByCode(game, e.at, [ZONE.Location]))

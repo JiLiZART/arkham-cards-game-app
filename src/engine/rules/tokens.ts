@@ -5,17 +5,23 @@ import {
   cardsBeneath,
   currentAct,
   currentAgenda,
+  currentAgendas,
   def,
   type GameContext,
   inv,
 } from "../context";
 
+/** the doom on each agenda in play, one entry per agenda deck */
+const agendaDoom = (game: GameContext) =>
+  Object.values(currentAgendas(game)).flatMap((id) => (id ? [card(game, id).doom] : []));
+
 /** how many cards lie beneath a card (none: 0) */
 const beneathOf = (game: GameContext, holder: string | null) =>
   holder ? cardsBeneath(game, holder).length : 0;
-import { cardsIn, enemies, enemiesAt, locations, shroud } from "../queries";
+import { cardsIn, distances, enemies, enemiesAt, locations, shroud } from "../queries";
 import type { InvId } from "../world/types";
 import { SCENARIO_CARD, ZONE } from "../world/constants";
+import { startLocation } from "../world/flags";
 
 /** X values used by scenario reference cards */
 export function tokenX(game: GameContext, x: NonNullable<TokenEffect["x"]>, i: InvId): number {
@@ -40,6 +46,25 @@ export function tokenX(game: GameContext, x: NonNullable<TokenEffect["x"]>, i: I
       const loc = inv(game, i).location;
       const n = loc ? shroud(game, loc) : 0;
       return Number.isFinite(n) ? n : 0;
+    }
+    case "horrorOnYou":
+      return inv(game, i).horror;
+    case "baseShroudOfYourLocation": {
+      const loc = inv(game, i).location;
+      return (loc && def(game, loc).shroud) || 0;
+    }
+    case "highestDoomOnEnemy":
+      return Math.max(0, ...enemies(game).map((e) => e.doom));
+    case "doomOnEnemies":
+      return enemies(game).reduce((n, e) => n + e.doom, 0);
+    case "highestDoomOnAgenda":
+      return Math.max(0, ...agendaDoom(game));
+    case "doomOnAgendas":
+      return agendaDoom(game).reduce((n, d) => n + d, 0);
+    case "distanceFromStart": {
+      const from = startLocation.get(game);
+      const loc = inv(game, i).location;
+      return (from && loc && distances(game, from).get(loc)) || 0;
     }
     case "monstersInPlay":
       return enemies(game).filter((e) => def(game, e.id).traits.includes("Monster")).length;

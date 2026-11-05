@@ -256,33 +256,33 @@ describe("The Devourer Below", () => {
 });
 
 describe("a generated scenario ends at its last act or agenda", () => {
-  // The Dunwich Legacy is hand-written now: Echoes of the Past is still generated, its last act and agenda unscripted
+  // The Wages of Sin (The Circle Undone, generated) has no scenario script: its last act and agenda unscripted
   beforeAll(async () => {
-    await loadPack("ptc");
-    await loadCampaign("the-path-to-carcosa");
+    await loadPack("tcu");
+    await loadCampaign("the-circle-undone");
   });
   const dunwich = (seed = 3) =>
     skipMulligans(
-      start("echoes-of-the-past", [ROLAND], seed, {
-        campaignId: "the-path-to-carcosa",
+      start("the-wages-of-sin", [ROLAND], seed, {
+        campaignId: "the-circle-undone",
         chaosBag: ["+1"] as never,
       }),
     );
 
-  it("advancing the act when no act is left ends the scenario: Race for Answers, made the last, names none and gives Resolution 1", () => {
+  it("advancing the act when no act is left ends the scenario: In Pursuit of the Dead, made the last, names none and gives Resolution 1", () => {
     let r = dunwich();
     r = mutate(r, (game) => {
       for (const id of pileRecIn(game.s, PILE.ActDeck).splice(0)) moveCard(game, id, ZONE.Removed);
       invStateIn(game.s, game.s.lead).clues = 20;
     });
-    expect(act(r)).toBe("Race for Answers");
+    expect(act(r)).toBe("In Pursuit of the Dead");
     r = pick(r, /^Advance act/);
     r = settle(r);
     expect(r.state.phase).toBe("ended");
     expect(r.state.resolution).toBe("R1");
   });
 
-  it("the last agenda's back names the resolution: Secrets Better Left Hidden gives Resolution 4", () => {
+  it("the last agenda's back names the resolution: Death's Approach gives Resolution 2", () => {
     let r = dunwich();
     r = mutate(r, (game) => {
       const last = pileRecIn(game.s, PILE.AgendaDeck).pop()!;
@@ -293,7 +293,7 @@ describe("a generated scenario ends at its last act or agenda", () => {
     });
     r = pick(r, "End turn");
     r = settle(r);
-    expect(r.state.resolution).toBe("R4");
+    expect(r.state.resolution).toBe("R2");
   });
 
   it("without a marker the last act gives the first numbered resolution, the last agenda none", () => {

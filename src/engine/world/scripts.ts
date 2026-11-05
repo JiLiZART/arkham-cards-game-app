@@ -1,11 +1,12 @@
 /**
  * The script registry: the only code that reads the loaded scripts (`db.scripts`; the content loader fills it). It
  * finds a card's or scenario's script, and a script function or condition by the one fallback rule: the card's own,
- * else the current scenario's. It only looks things up; calling them is the script adapter's (rules/scripts.ts).
+ * else the current scenario's (else its reference card's, whose token table a Return-to scenario shares). It only looks
+ * things up; calling them is the script adapter's (rules/scripts.ts).
  */
 import type { CardScript, ContentDb, EffCtx, GameContext, ScriptFn } from "./types";
 
-type Scripts = Pick<ContentDb, "scripts">;
+type Scripts = Pick<ContentDb, "scripts"> & Partial<Pick<ContentDb, "scenarios">>;
 
 /** the script of a card or scenario, if it has one */
 export const scriptOf = (db: Scripts, code: string): CardScript | undefined => db.scripts[code];
@@ -13,7 +14,10 @@ export const hasScript = (db: Scripts, code: string): boolean => code in db.scri
 /** every code with a script */
 export const scriptCodes = (db: Scripts): string[] => Object.keys(db.scripts);
 
-/** the function `fn` for a card: its own, else the scenario's, with the code it was found under */
+/**
+ * the function `fn` for a card: its own, else the scenario's, else the scenario reference card's (its token table's
+ * functions: Curtain Call's and Return to Curtain Call's both play with 03043), with the code it was found under
+ */
 export function scriptFnFor(
   db: Scripts,
   scenarioId: string,
@@ -23,10 +27,13 @@ export function scriptFnFor(
   const own = db.scripts[code]?.fns?.[fn];
   if (own) return { code, fn: own };
   const scen = db.scripts[scenarioId]?.fns?.[fn];
-  return scen ? { code: scenarioId, fn: scen } : undefined;
+  if (scen) return { code: scenarioId, fn: scen };
+  const ref = db.scenarios?.[scenarioId]?.card;
+  const viaCard = ref ? db.scripts[ref]?.fns?.[fn] : undefined;
+  return ref && viaCard ? { code: ref, fn: viaCard } : undefined;
 }
 
-/** the condition `name` for a card (or none): its own, else the scenario's */
+/** the condition `name` for a card (or none): its own, else the scenario's, else the scenario reference card's */
 export const conditionFor = (
   db: Scripts,
   scenarioId: string,
@@ -34,11 +41,15 @@ export const conditionFor = (
   name: string,
 ): ((game: GameContext, ctx: EffCtx) => boolean) | undefined =>
   (code ? db.scripts[code]?.conditions?.[name] : undefined) ??
-  db.scripts[scenarioId]?.conditions?.[name];
+  db.scripts[scenarioId]?.conditions?.[name] ??
+  db.scripts[db.scenarios?.[scenarioId]?.card ?? ""]?.conditions?.[name];
 
-/** at load time no scenario is current: is `fn` the card's own, or any of these scenarios'? */
+/** at load time no scenario is current: is `fn` the card's own, or any of these scenarios' (or their reference cards')? */
 export const scriptFnIn = (db: Scripts, code: string, fn: string, scenarioIds: string[]): boolean =>
-  !!db.scripts[code]?.fns?.[fn] || scenarioIds.some((s) => !!db.scripts[s]?.fns?.[fn]);
+  !!db.scripts[code]?.fns?.[fn] ||
+  scenarioIds.some(
+    (s) => !!db.scripts[s]?.fns?.[fn] || !!db.scripts[db.scenarios?.[s]?.card ?? ""]?.fns?.[fn],
+  );
 
 const MEMBERS: Record<keyof CardScript, true> = {
   abilities: true,
@@ -47,6 +58,7 @@ const MEMBERS: Record<keyof CardScript, true> = {
   icons: true,
   difficulty: true,
   modifiers: true,
+  inHandModifiers: true,
   extraPlayable: true,
   blanks: true,
   extraActionCost: true,

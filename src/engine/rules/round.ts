@@ -63,10 +63,10 @@ import {
   startRound,
   turnOrder,
 } from "../context";
-import type { ChoiceOption, InvId, Step, TurnAction, StepOf, EffCtx } from "../world/types";
+import type { ChoiceOption, InstId, InvId, Step, TurnAction, StepOf, EffCtx } from "../world/types";
 import { activatable, canPlay, playAbility, playable, spendGroupClues, win } from "./cards";
 import { attacksOfOpportunity } from "./enemies";
-import { canMoveTo, checkEngagement, enterCost } from "./investigators";
+import { canMoveTo, checkEngagement, enterCost, enterPayers, ownEnterCost } from "./investigators";
 import { actClueCost } from "./scenario";
 import { startTest } from "./skillTest";
 import { EVENT } from "../events/event";
@@ -129,9 +129,13 @@ export const phasePauseHandler: Handler<"PhasePause"> = (game, step) => {
 export const mythosHandler: Handler<"MythosPhase"> = (game) => {
   beginPhase(game, PHASE.Mythos);
   const steps: Step[] = [win("phaseBegins", { phase: "mythos" })];
-  if (Object.values(currentAgendas(game)).some(Boolean)) {
+  const agendas = Object.values(currentAgendas(game)).filter((a): a is InstId => !!a);
+  if (agendas.length) {
     logStep(game, "doom");
-    steps.push({ t: STEP.PlaceDoom, card: "agenda", n: 1 }, { t: STEP.CheckDoom });
+    // "Skip the 'Place 1 doom on the current agenda' step" (Echoes of the Past): the threshold is still checked
+    if (!agendas.some((a) => def(game, a).noMythosDoom))
+      steps.push({ t: STEP.PlaceDoom, card: "agenda", n: 1 });
+    steps.push({ t: STEP.CheckDoom });
   }
   for (const i of turnOrder(game)) steps.push({ t: STEP.MythosDraw, inv: i });
   steps.push(win("playerWindow", { phase: "mythos" }), win("mythosEnds", {}));
@@ -360,7 +364,7 @@ export function legalTurnActions(game: GameContext, i: InvId): ChoiceOption[] {
     );
   }
   for (const e of enemiesAt(game, loc)) {
-    if (attackable(game, e.id) && def(game, e.id).enemy?.fight !== null)
+    if (attackable(game, e.id, null, i) && def(game, e.id).enemy?.fight !== null)
       add({ kind: "fight", enemy: e.id }, `Fight ${def(game, e.id).name}`, e.id);
     if (e.engagedWith !== i && !isMassive(game, e.id))
       add({ kind: EVENT.Engage, enemy: e.id }, `Engage ${def(game, e.id).name}`, e.id);
@@ -521,7 +525,9 @@ export const performActionHandler: Handler<"PerformAction"> = (game, step) => {
     }
     case "move": {
       const clues = enterCost(game, a.to);
-      if (clues) spendGroupClues(game, clues);
+      if (clues) spendGroupClues(game, clues, enterPayers(game, i, a.to));
+      const own = ownEnterCost(game, a.to);
+      if (own) addCounter(game, i, "clues", -own);
       steps.push({ t: STEP.Move, inv: i, to: a.to });
       break;
     }
@@ -539,6 +545,9 @@ export const performActionHandler: Handler<"PerformAction"> = (game, step) => {
       break;
     case "ability":
       steps.push({ t: STEP.UseAbility, inv: i, card: a.card, index: a.index });
+      // "after you perform a parley action in the Ballroom"
+      if (designator === "parley")
+        steps.push(win("parleyed", { inv: i, card: a.card, location: me.location }));
       break;
     case "fight":
       steps.push({ t: STEP.BasicFight, ctx: { ...ctx, enemy: a.enemy } });

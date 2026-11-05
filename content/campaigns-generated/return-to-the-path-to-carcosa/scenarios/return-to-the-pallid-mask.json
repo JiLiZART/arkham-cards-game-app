@@ -45,58 +45,204 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "distanceFromStart",
+        "xMax": 5
       },
       "cultist": {
-        "modifier": -2
+        "modifier": -2,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "lessDamage"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "onReveal": [
+          {
+            "op": "enemyAttack",
+            "enemy": "chooseAtLocation",
+            "filter": {
+              "trait": [
+                "Ghoul",
+                "Geist"
+              ]
+            },
+            "onlyReady": true
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "searchEncounterDraw",
+            "filter": {
+              "trait": [
+                "Ghoul",
+                "Geist"
+              ],
+              "type": "enemy"
+            },
+            "zones": [
+              "deck",
+              "discard"
+            ]
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "distanceFromStart",
+        "xMax": 5
       },
       "cultist": {
-        "modifier": -2
+        "modifier": -2,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "lessDamage"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "onReveal": [
+          {
+            "op": "enemyAttack",
+            "enemy": "chooseAtLocation",
+            "filter": {
+              "trait": [
+                "Ghoul",
+                "Geist"
+              ]
+            },
+            "onlyReady": true
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "searchEncounterDraw",
+            "filter": {
+              "trait": [
+                "Ghoul",
+                "Geist"
+              ],
+              "type": "enemy"
+            },
+            "zones": [
+              "deck",
+              "discard"
+            ]
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "distanceFromStart"
       },
       "cultist": {
-        "modifier": -3
+        "modifier": -3,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "noDamage"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -3
+        "modifier": -3,
+        "onReveal": [
+          {
+            "op": "enemyAttack",
+            "enemy": "chooseAtLocation",
+            "filter": {
+              "trait": [
+                "Ghoul",
+                "Geist"
+              ]
+            },
+            "ready": true
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -4
+        "modifier": -4,
+        "onFail": [
+          {
+            "op": "searchEncounterDraw",
+            "filter": {
+              "trait": [
+                "Ghoul",
+                "Geist"
+              ],
+              "type": "enemy"
+            },
+            "zones": [
+              "deck",
+              "discard"
+            ]
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "distanceFromStart"
       },
       "cultist": {
-        "modifier": -3
+        "modifier": -3,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "noDamage"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -3
+        "modifier": -3,
+        "onReveal": [
+          {
+            "op": "enemyAttack",
+            "enemy": "chooseAtLocation",
+            "filter": {
+              "trait": [
+                "Ghoul",
+                "Geist"
+              ]
+            },
+            "ready": true
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -4
+        "modifier": -4,
+        "onFail": [
+          {
+            "op": "searchEncounterDraw",
+            "filter": {
+              "trait": [
+                "Ghoul",
+                "Geist"
+              ],
+              "type": "enemy"
+            },
+            "zones": [
+              "deck",
+              "discard"
+            ]
+          }
+        ]
       }
     }
   },

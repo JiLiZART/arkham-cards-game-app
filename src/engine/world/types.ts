@@ -311,12 +311,16 @@ export interface EffCtx {
   x?: number;
   /** the location a move left (enterLocation) */
   from?: InstId | null;
+  /** the location a move is going to (wouldMoveOut: Narrow Shaft's "to an unrevealed location") */
+  to?: InstId | null;
   /** [damage, horror] an attack just dealt, in its attackDealsDamage window */
   dealt?: [number, number];
   /** the card whose effect caused the event (horrorHealed) */
   by?: InstId | null;
   /** the effect belongs to a parley action (Fine Clothes) */
   parley?: true;
+  /** an act's back: what advanced it, clues spent or what the advance named (A Phantom of Truth's act 1) */
+  actAdvancedBy?: "clues" | "objective" | "doom";
 }
 
 export interface ChoiceOption {
@@ -466,6 +470,8 @@ export type Step = { choice?: any } & (
       direct: boolean;
       /** damage goes to the investigator's assets while any can take it (Claws of Steam) */
       assetsFirst?: boolean;
+      /** divided as evenly as possible among the cards that can take it (Eyes in the Walls) */
+      evenly?: boolean;
       source: InstId | null;
       enemy?: InstId | null;
       /** the attack's key: what its window prevented waits under it */ key?: string;
@@ -509,7 +515,8 @@ export type Step = { choice?: any } & (
   | { t: "PlaceDoom"; card: InstId | "agenda"; n: number }
   | { t: "CheckDoom" }
   | { t: "AdvanceAgenda"; fired?: boolean; deck?: string }
-  | { t: "AdvanceAct"; spend?: boolean; deck?: string }
+  /** `by`: what made it advance, when not clues spent (`spend`): its back reads it as `ctx.actAdvancedBy` */
+  | { t: "AdvanceAct"; spend?: boolean; deck?: string; by?: "objective" | "doom" }
   | { t: "Resolution"; id: string }
   /** `killer`: the attacking enemy kills whom it would defeat (Crazed Shoggoth) */
   | { t: "CheckDefeat"; inv: InvId; killer?: InstId }
@@ -588,6 +595,8 @@ export interface EventData {
   amount?: number;
   /** the location a move left (enterLocation) */
   from?: InstId | null;
+  /** the location a move is going to (wouldMoveOut) */
+  to?: InstId | null;
   /** what an attack just dealt (the attackDealsDamage window) */
   damage?: number;
   horror?: number;
@@ -660,6 +669,8 @@ export interface CardScript {
   icons?: (game: GameContext, cardId: InstId) => Partial<Record<Skill | "wild", number>>;
   /** dynamic constant modifiers */
   modifiers?: (game: GameContext, cardId: InstId) => { target: string; mod: Modifier }[];
+  /** modifiers while the card is in its owner's hand (Clasp of Black Onyx) */
+  inHandModifiers?: (game: GameContext, cardId: InstId) => { target: string; mod: Modifier }[];
   /** cards (e.g. top event of discard) the controller may additionally play */
   extraPlayable?: (game: GameContext, cardId: InstId, inv: InvId) => InstId[];
   /** card instances whose text is treated as blank while this card is in play */
@@ -728,6 +739,9 @@ export interface HookRun {
 }
 
 /** every moment the engine fires a script hook at, each with its own signature (a misspelt name fails the typecheck) */
+/** a path for an enemy's move: `true`, or the moving enemy itself; `false`: an investigator's */
+export type EnemyMove = boolean | InstId;
+
 export interface ScriptHooks {
   /** an investigator's own setup, before their deck is shuffled (Joe Diamond's hunch deck) */
   setup(game: GameContext, run: HookRun): void;
@@ -737,14 +751,19 @@ export interface ScriptHooks {
   ended(game: GameContext, won: boolean): void;
   /** scenario: every investigator is eliminated (default: no resolution) */
   allEliminated(game: GameContext): void;
-  /** scenario: where an enemy with no spawn location of its own spawns, if the scenario says */
-  spawnRedirect(game: GameContext, enemy: InstId): InstId | null | undefined;
+  /**
+   * scenario: where an enemy with no spawn location of its own spawns, if the scenario says; `inv`: who drew it (The
+   * Pallid Mask's Corpse Dweller gains surge)
+   */
+  spawnRedirect(game: GameContext, enemy: InstId, inv?: InvId | null): InstId | null | undefined;
   /** card: "when the game ends" (Cover Up, Hospital Debts) */
   gameEnd(game: GameContext, run: HookRun): void;
   /** card: an event its controller played finished resolving (Wendy's Amulet) */
   eventFinished(game: GameContext, run: HookRun, event: InstId): void;
   /** card: a heal of `n` horror from `target` is about to happen; returns what may still be healed (Rational Thought) */
   healHorror(game: GameContext, run: HookRun, target: InstId, n: number): number;
+  /** act: an investigator is eliminated with clues; `true`: the act took them, not their location (The Last King) */
+  eliminated(game: GameContext, run: HookRun, inv: InvId, clues: number): boolean;
   /** agenda: its doom threshold is reached; `true` replaces the advance ("Instead, …": The Beast Unleashed) */
   doomThreshold(game: GameContext, run: HookRun): boolean;
   /** card: its story face was resolved, after its abilities and before what the card says to do next */
@@ -759,6 +778,12 @@ export interface ScriptHooks {
   ): boolean;
   /** scenario: where a Patrol enemy patrols toward, when its expression can't say (Fortune and Folly's ring) */
   patrolTarget(game: GameContext, enemy: InstId): InstId[] | undefined;
+  /**
+   * scenario: the locations connected to this one now beyond the map's, by what the cards say (Echoes of the Past's
+   * Passageways); `enemy`: for an enemy's move ("while an enemy is moving"), the moving enemy when the move knows it
+   * (A Phantom of Truth's Gardens of Luxembourg: "while a [[Byakhee]] enemy is moving")
+   */
+  connections(game: GameContext, loc: InstId, enemy: EnemyMove): InstId[];
 }
 
 /** engine context passed to every rule: the state (mutated in place, one deep copy per choice) + static content */

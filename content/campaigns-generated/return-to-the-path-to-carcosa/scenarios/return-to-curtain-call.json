@@ -49,58 +49,150 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -1
+        "modifier": -1,
+        "instead": {
+          "when": {
+            "horror": {
+              "min": 3
+            }
+          },
+          "modifier": -3
+        }
       },
       "cultist": {
-        "modifier": -4
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "horrorHere"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -4
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "horrorHere"
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -4
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "horrorHere"
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -1
+        "modifier": -1,
+        "instead": {
+          "when": {
+            "horror": {
+              "min": 3
+            }
+          },
+          "modifier": -3
+        }
       },
       "cultist": {
-        "modifier": -4
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "horrorHere"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -4
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "horrorHere"
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -4
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "horrorHere"
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "horrorOnYou",
+        "xMin": 1
       },
       "cultist": {
-        "modifier": -5
+        "modifier": -5,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "horrorHere"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -5
+        "modifier": -5,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "horrorHere"
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -5
+        "modifier": -5,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "horrorHere"
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "horrorOnYou",
+        "xMin": 1
       },
       "cultist": {
-        "modifier": -5
+        "modifier": -5,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "horrorHere"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -5
+        "modifier": -5,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "horrorHere"
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -5
+        "modifier": -5,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "horrorHere"
+          }
+        ]
       }
     }
   },

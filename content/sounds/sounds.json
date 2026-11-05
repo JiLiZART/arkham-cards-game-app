@@ -639,6 +639,72 @@
       "original": "cathedral.ogg",
       "loop": true
     },
+    "bed:curtain-call": {
+      "file": "bed-gathering",
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "original": "sector.mp3",
+      "loop": true
+    },
+    "bed:the-last-king": {
+      "file": "bed-midnight-masks",
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "original": "airy.mp3",
+      "loop": true,
+      "loopStart": 10
+    },
+    "bed:echoes-of-the-past": {
+      "file": "bed-devourer-below",
+      "source": "https://opengameart.org/content/cathedral-in-the-forest-ambient-loop",
+      "author": "congusbongus",
+      "license": "CC0",
+      "original": "cathedral.ogg",
+      "loop": true
+    },
+    "bed:the-unspeakable-oath": {
+      "file": "bed-gathering",
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "original": "sector.mp3",
+      "loop": true
+    },
+    "bed:a-phantom-of-truth": {
+      "file": "bed-midnight-masks",
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "original": "airy.mp3",
+      "loop": true,
+      "loopStart": 10
+    },
+    "bed:the-pallid-mask": {
+      "file": "bed-devourer-below",
+      "source": "https://opengameart.org/content/cathedral-in-the-forest-ambient-loop",
+      "author": "congusbongus",
+      "license": "CC0",
+      "original": "cathedral.ogg",
+      "loop": true
+    },
+    "bed:black-stars-rise": {
+      "file": "bed-gathering",
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "original": "sector.mp3",
+      "loop": true
+    },
+    "bed:dim-carcosa": {
+      "file": "bed-devourer-below",
+      "source": "https://opengameart.org/content/cathedral-in-the-forest-ambient-loop",
+      "author": "congusbongus",
+      "license": "CC0",
+      "original": "cathedral.ogg",
+      "loop": true
+    },
     "fight": {
       "file": "music-fight",
       "author": "Nikolay Kostyurin",

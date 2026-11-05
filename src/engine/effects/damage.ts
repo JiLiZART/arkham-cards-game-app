@@ -326,7 +326,15 @@ function enemyAttackEffect(game: GameContext, run: EffectRun<EffectOf<"enemyAtta
     ? named
       ? [named.id]
       : []
-    : enemyTargets(game, step, e.enemy ?? "self", ctx);
+    : enemyTargets(
+        game,
+        step,
+        e.enemy ?? "self",
+        ctx,
+        (id) =>
+          (!e.filter || matchesFilter(game, card(game, id).code, e.filter)) &&
+          (!e.onlyReady || !card(game, id).exhausted),
+      );
   const ts = invTargets(game, step, e.target, ctx);
   if (!attackers || !ts) return;
   const steps: Step[] = [];

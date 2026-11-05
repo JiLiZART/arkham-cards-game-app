@@ -131,6 +131,33 @@ describe("checkFlow", () => {
     expect(run(g).join("\n")).toMatch(/section elsewhere/);
   });
 
+  it("reports the sections of a logCompare and of an xp from a count", () => {
+    const f = flow({
+      steps: {
+        ...flow().steps,
+        check: {
+          kind: "branch",
+          condition: {
+            kind: "logCompare",
+            a: { id: "doubt", section: "doubt" },
+            b: { id: "conviction", section: "nowhere" },
+            op: "gt",
+          },
+          then: ["done"],
+          else: [],
+        },
+        done: {
+          kind: "effects",
+          effects: [{ do: "xp", split: "evenly", fromCount: { id: "c", section: "elsewhere" } }],
+        },
+      },
+    });
+    const errors = run(f).join("\n");
+    expect(errors).toMatch(/section nowhere/);
+    expect(errors).toMatch(/section elsewhere/);
+    expect(errors).not.toMatch(/section doubt/);
+  });
+
   it("allows the notes and hidden sections without declaring them", () => {
     const f = flow({
       steps: {

@@ -65,58 +65,204 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -2
+        "modifier": -2,
+        "instead": {
+          "when": {
+            "remainingSanity": {
+              "max": 0
+            }
+          },
+          "modifier": -4
+        }
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": -3
+        "modifier": -3,
+        "condition": {
+          "enemyInPlay": {
+            "code": [
+              "03332",
+              "03333",
+              "03334"
+            ]
+          }
+        },
+        "onFail": [
+          {
+            "op": "placeTokens",
+            "on": "yourLocation",
+            "clues": 1
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "condition": {
+          "script": "againstMonsterOrAncientOne"
+        },
+        "onReveal": [
+          {
+            "op": "loseActions",
+            "amount": 1
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -2
+        "modifier": -2,
+        "instead": {
+          "when": {
+            "remainingSanity": {
+              "max": 0
+            }
+          },
+          "modifier": -4
+        }
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": -3
+        "modifier": -3,
+        "condition": {
+          "enemyInPlay": {
+            "code": [
+              "03332",
+              "03333",
+              "03334"
+            ]
+          }
+        },
+        "onFail": [
+          {
+            "op": "placeTokens",
+            "on": "yourLocation",
+            "clues": 1
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "condition": {
+          "script": "againstMonsterOrAncientOne"
+        },
+        "onReveal": [
+          {
+            "op": "loseActions",
+            "amount": 1
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "horrorOnYou"
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "takeHorror",
+            "amount": 2
+          }
+        ]
       },
       "tablet": {
-        "modifier": -5
+        "modifier": -5,
+        "condition": {
+          "enemyInPlay": {
+            "code": [
+              "03332",
+              "03333",
+              "03334"
+            ]
+          }
+        },
+        "onFail": [
+          {
+            "op": "placeTokens",
+            "on": "yourLocation",
+            "clues": 1
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -5
+        "modifier": -5,
+        "condition": {
+          "script": "againstMonsterOrAncientOne"
+        },
+        "onReveal": [
+          {
+            "op": "loseActions",
+            "amount": 1
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "horrorOnYou"
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "takeHorror",
+            "amount": 2
+          }
+        ]
       },
       "tablet": {
-        "modifier": -5
+        "modifier": -5,
+        "condition": {
+          "enemyInPlay": {
+            "code": [
+              "03332",
+              "03333",
+              "03334"
+            ]
+          }
+        },
+        "onFail": [
+          {
+            "op": "placeTokens",
+            "on": "yourLocation",
+            "clues": 1
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -5
+        "modifier": -5,
+        "condition": {
+          "script": "againstMonsterOrAncientOne"
+        },
+        "onReveal": [
+          {
+            "op": "loseActions",
+            "amount": 1
+          }
+        ]
       }
     }
   },

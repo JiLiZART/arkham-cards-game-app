@@ -211,8 +211,8 @@ describe("the real content", () => {
       Object.values(db.campaigns).flatMap((c) => c.scenarios).length,
     );
     expect(db.coverage!.scenarios["the-gathering"].campaign).toBe("night-of-the-zealot");
-    expect(db.coverage!.scenarios["the-unspeakable-oath"]).toMatchObject({
-      campaign: "the-path-to-carcosa",
+    expect(db.coverage!.scenarios["the-wages-of-sin"]).toMatchObject({
+      campaign: "the-circle-undone",
       tokens: false,
       scripted: false,
       complete: false,

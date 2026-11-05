@@ -14,9 +14,14 @@ const CONSTANCE = "03076a"; // an asset whose other face is 03076b, a story card
 const ID = "zz-faces";
 
 beforeAll(() => loadPack("ptc"));
+const printedStory = () => db.cards["03076b"].story;
+let story: ReturnType<typeof printedStory>;
+beforeAll(() => {
+  story = printedStory();
+});
 afterEach(() => {
   delete db.scenarios[ID];
-  delete db.cards["03076b"].story;
+  db.cards["03076b"].story = story;
 });
 
 describe("card faces", () => {

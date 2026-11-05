@@ -10,6 +10,7 @@ import type {
 import { randInt } from "../world/rng";
 import {
   abilitiesOf,
+  allMods,
   baseSkill,
   cardBlocked,
   checkCondition,
@@ -253,6 +254,7 @@ export function canCommit(
   t: SkillTestState,
 ): boolean {
   const d = def(game, cardId);
+  if (d.commitAutoFails) return !cardBlocked(game, who, cardId);
   if (d.subtype) return false;
   // under Mind over Matter either skill may end up tested, so icons for either count
   const mom =
@@ -288,11 +290,20 @@ export function testParts(game: GameContext, t: SkillTestState) {
       : ownSkill(game, t.inv, skill);
   const icons = t.committed.map((c) => ({ card: c, n: iconsFor(game, c, skill) }));
   const mods = t.skillBonus + modSum(game, t.inv, "testValue");
+  const total = base + icons.reduce((n, i) => n + i.n, 0) + mods;
+  // "your [intellect] cannot be increased" (Historical Museum): no more than the base value
+  const capped = allMods(game).some(
+    (m) =>
+      m.target === t.inv &&
+      m.mod.flag === "skillCannotIncrease" &&
+      m.mod.stat === skill &&
+      hasFlag(game, t.inv, "skillCannotIncrease", [m]),
+  );
   return {
     base,
     icons,
     mods,
-    total: base + icons.reduce((n, i) => n + i.n, 0) + mods,
+    total: capped ? Math.min(total, baseSkill(game, t.inv, skill)) : total,
     difficulty: difficultyOf(game, t),
   };
 }
@@ -714,7 +725,10 @@ function resolveTokensStage(game: GameContext) {
                   }, 0)
                 : tokenX(game, eff.x!, t.inv));
         const x = () =>
-          -(Math.min(xOf(), eff.xMax ?? Infinity) * (eff.xTimes ?? 1) + (eff.xPlus ?? 0));
+          -(
+            Math.max(Math.min(xOf(), eff.xMax ?? Infinity), eff.xMin ?? 0) * (eff.xTimes ?? 1) +
+            (eff.xPlus ?? 0)
+          );
         mod = eff.modifier === "X" ? x() : eff.modifier;
         // "−3 instead if …": the other modifier while its condition holds for the investigator testing
         // "If it is Agenda 2, you automatically fail instead"
@@ -825,6 +839,8 @@ function resultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
   const tokens = tokenTotal(game, t);
   const total = Math.max(0, value + tokens);
   const diff = difficultyOf(game, t);
+  // a card committed that makes the test fail (Possession (Traitorous))
+  if (t.committed.some((c) => def(game, c).commitAutoFails)) t.autoFail = true;
   const success = t.autoSucceed || (!t.autoFail && total >= diff);
   if (success && !t.succeedWindowDone) {
     t.succeedWindowDone = true;
@@ -1033,12 +1049,14 @@ export function attackDamage(game: GameContext, t: SkillTestState): number {
     checkCondition(game, t.extraDamageIf, { ...t.ctx, you: t.inv, enemy: t.target })
       ? (t.extraDamage ?? 1)
       : 0;
-  return (
+  // a penalty can take it to nothing, not below (The Pallid Mask's cultist: "this attack deals no damage")
+  return Math.max(
+    0,
     marginDamage(t) +
-    t.damageBonus +
-    extra +
-    modSum(game, t.inv, "attackDamage") +
-    (t.marginDamage !== undefined && (t.margin ?? 0) >= t.marginDamage ? 1 : 0)
+      t.damageBonus +
+      extra +
+      modSum(game, t.inv, "attackDamage") +
+      (t.marginDamage !== undefined && (t.margin ?? 0) >= t.marginDamage ? 1 : 0),
   );
 }
 
@@ -1203,7 +1221,9 @@ function kindResultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) 
 function endStage(game: GameContext) {
   const t = test(game);
   for (const c of t.committed)
-    if (cardOfIf(game.s, c)?.zone === "commit") moveCard(game, c, ZONE.Discard);
+    if (cardOfIf(game.s, c)?.zone === "commit")
+      // an encounter card committed (Possession (Traitorous)) goes to the encounter discard pile
+      moveCard(game, c, cardOfIf(game.s, c)?.owner ? ZONE.Discard : ZONE.EncounterDiscard);
   game.s.chaosBag.push(...t.tokens, ...(t.ignored ?? []));
   expireMods(game, "test");
   // "for the next attack performed against it" (Expose Weakness): over once that attack is

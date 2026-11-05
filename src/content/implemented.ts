@@ -38,6 +38,11 @@ const LINE_RULES: [RegExp, (c: CardDef, db: ContentDb) => boolean][] = [
   ],
   [/investigated using \[\w+\] instead/i, (c) => !!c.investigateSkill],
   [/^Uses \(/, (c) => !!c.uses],
+  // an unrevealed location's entry: a clue the entering investigator spends, or a lock (rules/investigators.ts)
+  [/^As an additional cost to enter .+, you must spend \d+ clues?\.$/, (c) => !!c.enterClues],
+  [/ is locked\. You cannot enter the .+\.$/, (c) => !!c.cannotEnterUnrevealed],
+  // an enemy damaged only by some sources (rules/enemies.ts)
+  [/^Cannot be damaged except by .+\.$/, (c) => !!c.damageOnlyFrom],
   [/^Max \d+ committed per skill test/i, (c) => c.maxCommitted !== undefined],
   [/^As an additional cost to commit .*, take \d+ horror/i, (c) => !!c.commitHorror],
   [/^You may commit .* after revealing chaos tokens/i, (c) => !!c.commitAfterReveal],
@@ -103,6 +108,7 @@ const SYMBOLS: Record<string, string> = {
 /** what a printed token line needs from the scenario's token entry, read off its sentences */
 type TokenNeed =
   | "x"
+  | "xMax"
   | "instead"
   | "onFail"
   | "onSuccess"
@@ -118,15 +124,19 @@ function tokenNeeds(rest: string): TokenNeed[] {
     .map((p) => p.trim())
     .filter(Boolean)) {
     if (/^[-+]?\d+$/.test(sentence)) continue; // the modifier
-    if (/^-X$/.test(sentence) || /^-\d+ for each/.test(sentence)) needs.add("x");
+    // "-X", "-X, where X is …", "-2 for each …"; "(If you have no horror on you, X is 1.)" bounds that X
+    if (/^-X(,|$)/.test(sentence) || /^-\d+ for each/.test(sentence)) needs.add("x");
+    else if (/^\(If .*, X is \d+\.?\)$/.test(sentence)) needs.add("x");
     // "-2 (-4 instead if …)", "-3 instead if …": the other modifier under a condition
     else if (/^-\d+ \(-\d+ instead/.test(sentence) || /^-\d+ instead if/.test(sentence))
       needs.add("instead");
+    // "X is the amount of doom in play (max 5)": the cap is the entry's
+    else if (sentence.startsWith("X is ") && /\(max \d+\)$/.test(sentence)) needs.add("xMax");
     else if (sentence.startsWith("X is ")) continue;
     else if (/^You may spend \d+ resources to treat this token as a 0/i.test(sentence))
       needs.add("payToZero");
     // "You must either …, or this token's modifier is −4 instead / this test automatically fails"
-    else if (/^You must either /i.test(sentence)) needs.add("either");
+    else if (/^(You must e|E)ither /.test(sentence)) needs.add("either");
     else if (/^If you succeed/i.test(sentence)) {
       needs.add("onSuccess");
       failing = false;
@@ -179,27 +189,29 @@ export function tokensReal(db: ContentDb, scenarioId: string): boolean {
           const ok =
             need === "x"
               ? engineX(e.x)
-              : need === "instead"
-                ? e.instead !== undefined || engineX(e.x)
-                : need === "onFail"
-                  ? !!e.onFail?.length || !!e.afterTest?.ifFailed
-                  : need === "onSuccess"
-                    ? !!e.onSuccess?.length
-                    : need === "payToZero"
-                      ? !!e.payToZero
-                      : need === "either"
-                        ? !!e.either
-                        : need === "revealAnother"
-                          ? !!e.revealAnother
-                          : !!(
-                              e.onReveal?.length ||
-                              e.condition ||
-                              e.cancelCommitted ||
-                              // "After this skill test, …"
-                              e.afterTest ||
-                              // "If it is Agenda 2, you automatically fail instead"
-                              e.instead?.autoFail
-                            );
+              : need === "xMax"
+                ? e.xMax !== undefined
+                : need === "instead"
+                  ? e.instead !== undefined || engineX(e.x)
+                  : need === "onFail"
+                    ? !!e.onFail?.length || !!e.afterTest?.ifFailed
+                    : need === "onSuccess"
+                      ? !!e.onSuccess?.length
+                      : need === "payToZero"
+                        ? !!e.payToZero
+                        : need === "either"
+                          ? !!e.either
+                          : need === "revealAnother"
+                            ? !!e.revealAnother
+                            : !!(
+                                e.onReveal?.length ||
+                                e.condition ||
+                                e.cancelCommitted ||
+                                // "After this skill test, …"
+                                e.afterTest ||
+                                // "If it is Agenda 2, you automatically fail instead"
+                                e.instead?.autoFail
+                              );
           if (!ok) return false;
         }
       }

@@ -60,58 +60,176 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "highestDoomOnAgenda"
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "instead": {
+          "when": {
+            "enemyWithDoom": "testEnemy"
+          },
+          "autoFail": true
+        }
       },
       "tablet": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "eachAgenda"
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "searchEncounterDraw",
+            "filter": {
+              "trait": "Byakhee",
+              "type": "enemy"
+            },
+            "zones": [
+              "deck",
+              "discard"
+            ]
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "highestDoomOnAgenda"
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "instead": {
+          "when": {
+            "enemyWithDoom": "testEnemy"
+          },
+          "autoFail": true
+        }
       },
       "tablet": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "eachAgenda"
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "searchEncounterDraw",
+            "filter": {
+              "trait": "Byakhee",
+              "type": "enemy"
+            },
+            "zones": [
+              "deck",
+              "discard"
+            ]
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "doomOnAgendas"
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "instead": {
+          "when": {
+            "enemyWithDoom": "atYourLocation"
+          },
+          "autoFail": true
+        }
       },
       "tablet": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "afterTest": {
+          "effects": [
+            {
+              "op": "script",
+              "fn": "doomUnlessByOne"
+            }
+          ]
+        }
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "searchEncounterDraw",
+            "filter": {
+              "trait": "Byakhee",
+              "type": "enemy"
+            },
+            "zones": [
+              "deck",
+              "discard"
+            ]
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "doomOnAgendas"
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "instead": {
+          "when": {
+            "enemyWithDoom": "atYourLocation"
+          },
+          "autoFail": true
+        }
       },
       "tablet": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "afterTest": {
+          "effects": [
+            {
+              "op": "script",
+              "fn": "doomUnlessByOne"
+            }
+          ]
+        }
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "searchEncounterDraw",
+            "filter": {
+              "trait": "Byakhee",
+              "type": "enemy"
+            },
+            "zones": [
+              "deck",
+              "discard"
+            ]
+          }
+        ]
       }
     }
   },

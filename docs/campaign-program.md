@@ -71,7 +71,7 @@ Status comes from `openspec/changes/` (and `archive/`): *not written*, *being wr
 | `campaign-return-to-the-dunwich-legacy` | implemented (35/35) | campaign `return-to-the-dunwich-legacy`: its encounter cards, scenario scripts, token effects, flow |
 | `campaign-side-all-or-nothing` | being written | campaign `side-all-or-nothing`: its encounter cards, scenario scripts, token effects, flow |
 | `campaign-side-read-or-die` | being written | campaign `side-read-or-die`: its encounter cards, scenario scripts, token effects, flow |
-| `campaign-the-path-to-carcosa` | ready (0/63) | campaign `the-path-to-carcosa`: its encounter cards, scenario scripts, token effects, flow |
+| `campaign-the-path-to-carcosa` | implemented (63/63) | campaign `the-path-to-carcosa`: its encounter cards, scenario scripts, token effects, flow |
 | `campaign-return-to-the-path-to-carcosa` | ready (0/35) | campaign `return-to-the-path-to-carcosa`: its encounter cards, scenario scripts, token effects, flow |
 | `campaign-side-enthralling-encore` | being written | campaign `side-enthralling-encore`: its encounter cards, scenario scripts, token effects, flow |
 | `campaign-the-forgotten-age` | ready (0/71) | campaign `the-forgotten-age`: its encounter cards, scenario scripts, token effects, flow |
@@ -142,13 +142,13 @@ Status comes from `openspec/changes/` (and `archive/`): *not written*, *being wr
 | [x] | `wda` | return-to-the-dunwich-legacy, the-dunwich-legacy | 0 of 25 | 0 of 14 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
 | [x] | `litas` | return-to-the-dunwich-legacy, the-dunwich-legacy | 0 of 23 | 0 of 12 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
 | [x] | `rtdwl` | return-to-the-dunwich-legacy, side-all-or-nothing | 0 of 60 | 0 of 13 | `campaign-return-to-the-dunwich-legacy`, `player-cards-dwl` |
-| [ ] | `ptc` | return-to-the-path-to-carcosa, side-enthralling-encore, the-path-to-carcosa | 67 of 68 | 45 of 47 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
-| [ ] | `eotp` | return-to-the-path-to-carcosa, the-path-to-carcosa | 24 of 24 | 16 of 17 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
-| [ ] | `tuo` | return-to-the-path-to-carcosa, the-path-to-carcosa | 30 of 30 | 13 of 13 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
-| [ ] | `apot` | return-to-the-path-to-carcosa, the-path-to-carcosa | 28 of 28 | 12 of 12 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
-| [ ] | `tpm` | return-to-the-path-to-carcosa, the-path-to-carcosa | 24 of 24 | 11 of 12 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
-| [ ] | `bsr` | return-to-the-path-to-carcosa, the-path-to-carcosa | 32 of 32 | 11 of 11 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
-| [ ] | `dca` | return-to-the-path-to-carcosa, the-path-to-carcosa | 44 of 46 | 13 of 13 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
+| [x] | `ptc` | return-to-the-path-to-carcosa, side-enthralling-encore, the-path-to-carcosa | 0 of 68 | 45 of 47 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
+| [x] | `eotp` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 24 | 16 of 17 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
+| [x] | `tuo` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 30 | 13 of 13 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
+| [x] | `apot` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 28 | 12 of 12 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
+| [x] | `tpm` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 24 | 11 of 12 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
+| [x] | `bsr` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 32 | 11 of 11 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
+| [x] | `dca` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 46 | 13 of 13 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
 | [ ] | `rtptc` | return-to-the-path-to-carcosa | 61 of 69 | 15 of 15 | `campaign-return-to-the-path-to-carcosa`, `player-cards-ptc` |
 | [ ] | `tfa` | return-to-the-forgotten-age, side-bad-blood, side-relics-of-the-past, the-forgotten-age | 57 of 57 | 39 of 40 | `campaign-the-forgotten-age`, `player-cards-tfa` |
 | [ ] | `tof` | return-to-the-forgotten-age, side-bad-blood, the-forgotten-age | 41 of 41 | 13 of 15 | `campaign-the-forgotten-age`, `player-cards-tfa` |

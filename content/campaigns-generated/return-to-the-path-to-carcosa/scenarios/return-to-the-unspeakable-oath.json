@@ -58,58 +58,186 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -1
+        "modifier": -1,
+        "onFail": [
+          {
+            "op": "script",
+            "fn": "monsterBeneath"
+          }
+        ]
       },
       "cultist": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "horrorOnYou"
       },
       "tablet": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "baseShroudOfYourLocation"
       },
       "elderThing": {
-        "modifier": 0
+        "modifier": 0,
+        "either": {
+          "do": [
+            {
+              "op": "script",
+              "fn": "monsterBeneath"
+            }
+          ],
+          "can": {
+            "script": "monstersAside"
+          },
+          "label": "Place a random set-aside Monster enemy beneath the act deck",
+          "key": "tuoMonsterBeneath",
+          "autoFail": true
+        }
       }
     },
     "standard": {
       "skull": {
-        "modifier": -1
+        "modifier": -1,
+        "onFail": [
+          {
+            "op": "script",
+            "fn": "monsterBeneath"
+          }
+        ]
       },
       "cultist": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "horrorOnYou"
       },
       "tablet": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "baseShroudOfYourLocation"
       },
       "elderThing": {
-        "modifier": 0
+        "modifier": 0,
+        "either": {
+          "do": [
+            {
+              "op": "script",
+              "fn": "monsterBeneath"
+            }
+          ],
+          "can": {
+            "script": "monstersAside"
+          },
+          "label": "Place a random set-aside Monster enemy beneath the act deck",
+          "key": "tuoMonsterBeneath",
+          "autoFail": true
+        }
       }
     },
     "hard": {
       "skull": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": {
+          "if": {
+            "script": "firstSkull"
+          }
+        },
+        "condition": {
+          "script": "firstSkull"
+        },
+        "onFail": [
+          {
+            "op": "script",
+            "fn": "monsterBeneath"
+          }
+        ]
       },
       "cultist": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "horrorOnYou",
+        "onFail": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "baseShroudOfYourLocation",
+        "onFail": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "elderThing": {
-        "modifier": 0
+        "modifier": 0,
+        "either": {
+          "do": [
+            {
+              "op": "script",
+              "fn": "monsterBeneath"
+            }
+          ],
+          "can": {
+            "script": "monstersAside"
+          },
+          "label": "Place a random set-aside Monster enemy beneath the act deck",
+          "key": "tuoMonsterBeneath",
+          "autoFail": true
+        }
       }
     },
     "expert": {
       "skull": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": {
+          "if": {
+            "script": "firstSkull"
+          }
+        },
+        "condition": {
+          "script": "firstSkull"
+        },
+        "onFail": [
+          {
+            "op": "script",
+            "fn": "monsterBeneath"
+          }
+        ]
       },
       "cultist": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "horrorOnYou",
+        "onFail": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "baseShroudOfYourLocation",
+        "onFail": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "elderThing": {
-        "modifier": 0
+        "modifier": 0,
+        "either": {
+          "do": [
+            {
+              "op": "script",
+              "fn": "monsterBeneath"
+            }
+          ],
+          "can": {
+            "script": "monstersAside"
+          },
+          "label": "Place a random set-aside Monster enemy beneath the act deck",
+          "key": "tuoMonsterBeneath",
+          "autoFail": true
+        }
       }
     }
   },

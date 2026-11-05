@@ -19,6 +19,7 @@ import type {
 
 // ---------- reading the game ----------
 export {
+  activeInvestigator,
   activeInvs,
   allCards,
   campaignLogOf,
@@ -66,9 +67,12 @@ export {
   isElite,
   locationByName,
   locations,
+  maxSanity,
   remainingHealth,
   remainingSanity,
+  rememberedCount,
   shroud,
+  skillValue,
   spendableGroupClues,
   stepsToward,
   threatArea,
@@ -84,6 +88,7 @@ export { resolvesOnDraw } from "./rules/investigators";
 export {
   addChaosTokens,
   addCounter,
+  addTokens,
   attachTo,
   cancelEvent,
   emit,
@@ -295,7 +300,7 @@ export function compose(
   const { checkObjectives: xc, ended: xe, spawnRedirect: xs, healHorror: xh } = extra;
   if (bc && xc) out.checkObjectives = (game) => (xc(game), bc(game));
   if (be && xe) out.ended = (game, won) => (xe(game, won), be(game, won));
-  if (bs && xs) out.spawnRedirect = (game, enemy) => xs(game, enemy) ?? bs(game, enemy);
+  if (bs && xs) out.spawnRedirect = (game, enemy, i) => xs(game, enemy, i) ?? bs(game, enemy, i);
   if (bh && xh)
     out.healHorror = (game, run, target, n) => xh(game, run, target, bh(game, run, target, n));
   return out;

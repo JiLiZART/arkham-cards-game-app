@@ -229,8 +229,11 @@ describe("the campaign list", () => {
     expect(ids.indexOf("the-dunwich-legacy")).toBeLessThan(
       ids.indexOf("return-to-the-dunwich-legacy"),
     );
+    expect(ids.indexOf("the-path-to-carcosa")).toBeLessThan(
+      ids.indexOf("return-to-the-dunwich-legacy"),
+    );
     expect(ids.indexOf("return-to-the-dunwich-legacy")).toBeLessThan(
-      ids.indexOf("the-path-to-carcosa"),
+      ids.indexOf("the-circle-undone"),
     );
     const firstSide = ids.findIndex((id) => id.startsWith("side-"));
     expect(ids.slice(firstSide).every((id) => id.startsWith("side-"))).toBe(true);
@@ -257,6 +260,7 @@ describe("filtering the campaign list", () => {
       "night-of-the-zealot",
       "return-to-the-dunwich-legacy",
       "the-dunwich-legacy",
+      "the-path-to-carcosa",
     ]);
   });
 
@@ -281,24 +285,25 @@ describe("filtering the campaign list", () => {
     expect(ids({ rules: "complete" }).length + ids({ rules: "partial" }).length).toBe(ids().length);
   });
 
-  it("Night of the Zealot, Brethren of Ash, The Dunwich Legacy and its Return are the campaigns the Complete filter shows", () => {
+  it("Night of the Zealot, Brethren of Ash, The Dunwich Legacy and its Return, and The Path to Carcosa are the campaigns the Complete filter shows", () => {
     expect(ids({ rules: "complete" }).sort()).toEqual([
       "brethren-of-ash",
       "night-of-the-zealot",
       "return-to-the-dunwich-legacy",
       "the-dunwich-legacy",
+      "the-path-to-carcosa",
     ]);
     expect(campaignComplete(db, "night-of-the-zealot")).toBe(true);
   });
 
-  it("the mark follows the numbers: Night of the Zealot until its cards all work, Dunwich complete, Carcosa partial", () => {
+  it("the mark follows the numbers: Night of the Zealot until its cards all work, Dunwich and Carcosa complete, The Forgotten Age partial", () => {
     const zealot = db.coverage!.campaigns["night-of-the-zealot"];
     expect(campaignComplete(db, "night-of-the-zealot")).toBe(
       zealot.cards.works === zealot.cards.total && !zealot.unscripted.length,
     );
     expect(campaignComplete(db, "the-dunwich-legacy")).toBe(true);
-    expect(campaignComplete(db, "the-path-to-carcosa")).toBe(false);
-    expect(ids({ rules: "partial" })).toContain("the-path-to-carcosa");
+    expect(campaignComplete(db, "the-path-to-carcosa")).toBe(true);
+    expect(ids({ rules: "partial" })).toContain("the-forgotten-age");
   });
 
   it("says how far a campaign is: the cards that work, and the scenarios without a script", () => {
@@ -377,7 +382,7 @@ describe("filtering the campaign list", () => {
     expect(ids({ kind: "side", rules: "complete" }).every((id) => id.startsWith("side-"))).toBe(
       true,
     );
-    expect(ids({ kind: "campaign", rules: "partial" })).toContain("the-path-to-carcosa");
+    expect(ids({ kind: "campaign", rules: "partial" })).toContain("the-forgotten-age");
   });
 });
 

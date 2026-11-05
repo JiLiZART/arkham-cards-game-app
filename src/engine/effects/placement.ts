@@ -1,6 +1,7 @@
 /** Effects that put cards into play, attach, move, discard, remove or ready them. */
 import { deckDiscarded, noReady } from "../world/flags";
 import {
+  activeInvs,
   ask,
   card,
   def,
@@ -23,8 +24,12 @@ import {
   connections,
   controlled,
   distances,
+  enemies,
   enemiesAt,
   invsAt,
+  isAloof,
+  isMassive,
+  stepsToward,
   locations,
   matchesFilter,
   isHidden,
@@ -32,6 +37,7 @@ import {
 } from "../queries";
 import { discard, discardTop, isInPlay, moveCard, shuffleIntoDeck } from "../movement";
 import { win } from "../rules/cards";
+import { canEnemyEnter, preyCandidates } from "../rules/enemies";
 import type { InstId } from "../world/types";
 import { amt, invTargets, opt } from "./targets";
 import type { EffectOf, EffectRun } from "./types";
@@ -322,6 +328,71 @@ function moveEnemyEffect(game: GameContext, run: EffectRun<EffectOf<"moveEnemy">
   push(game, win("enemyEntersLocation", { enemy: e.id, location: to }));
 }
 
+/**
+ * each enemy of the trait moved once toward the nearest investigator, one at a time, the lead choosing among equal
+ * paths; a ready one that enters an investigator's location engages its prey there (A Phantom of Truth's cultist)
+ */
+function moveEnemiesEffect(game: GameContext, run: EffectRun<EffectOf<"moveEnemies">>) {
+  const { step, effect: e } = run;
+  const done = e.done ?? [];
+  const next = { ...step, choice: undefined, effect: { ...e, done } };
+  const en = enemies(game).find(
+    (x) =>
+      !done.includes(x.id) &&
+      !!x.location &&
+      (!e.trait || def(game, x.id).traits.includes(e.trait)) &&
+      (!e.unengaged || !x.engagedWith),
+  );
+  if (!en) return;
+  next.effect.done = [...done, en.id];
+  const dist = distances(game, en.location!, en.id);
+  const targets = activeInvs(game).flatMap((i) => inv(game, i).location ?? []);
+  const nearest = Math.min(...targets.map((t) => dist.get(t) ?? Infinity));
+  const options =
+    nearest > 0 && nearest < Infinity
+      ? stepsToward(
+          game,
+          en.location!,
+          targets.filter((t) => dist.get(t) === nearest),
+          en.id,
+        ).filter((l) => canEnemyEnter(game, en.id, l))
+      : [];
+  if (!options.length) {
+    push(game, next);
+    return;
+  }
+  const to = ask<InstId>(
+    game,
+    step,
+    leadInvestigator(game),
+    CHOICE.Target,
+    `Where does ${def(game, en.id).name} move?`,
+    options.map((l) => opt(game, l)),
+    { auto: true, key: "enemyMoveWhere", vars: { card: en.id } },
+  );
+  if (to === undefined) return;
+  const from = en.location;
+  setCardLocation(game, en.id, to);
+  emit(game, EVENT.EnemyMove, `${def(game, en.id).name} moves to ${def(game, to).name}`, {
+    card: en.id,
+    data: { from, to },
+  });
+  const prey = en.exhausted ? undefined : preyCandidates(game, en.id, invsAt(game, to))[0];
+  if (prey && !isAloof(game, en.id) && !isMassive(game, en.id)) {
+    setEngaged(game, en.id, prey);
+    emit(game, EVENT.Engage, `${def(game, en.id).name} engages ${invName(game, prey)}`, {
+      inv: prey,
+      card: en.id,
+    });
+    push(
+      game,
+      win("enemyEntersLocation", { enemy: en.id, location: to }),
+      win("enemyEngages", { inv: prey, enemy: en.id }),
+      next,
+    );
+  } else push(game, win("enemyEntersLocation", { enemy: en.id, location: to }), next);
+}
+
 /** every card you control matching the filter exhausted (Wracked by Nightmares) */
 function exhaustCardsEffect(game: GameContext, run: EffectRun<EffectOf<"exhaustCards">>) {
   for (const c of controlled(game, run.you))
@@ -423,6 +494,7 @@ export const placementEffects = {
   discardEventCard: discardEventCardEffect,
   moveTo: moveToEffect,
   moveEnemy: moveEnemyEffect,
+  moveEnemies: moveEnemiesEffect,
   exhaustCards: exhaustCardsEffect,
   takeControl: takeControlEffect,
   takeFromDiscard: takeFromDiscardEffect,

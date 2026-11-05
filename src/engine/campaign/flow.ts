@@ -94,6 +94,11 @@ export function test(
       return hasEntry(c.log, cond.id, cond.section ?? NOTES, true);
     case "logCount":
       return within(logCount(c.log, cond.id, cond.section ?? NOTES), cond.min, cond.max);
+    case "logCompare": {
+      const a = logCount(c.log, cond.a.id, cond.a.section ?? NOTES);
+      const b = logCount(c.log, cond.b.id, cond.b.section ?? NOTES);
+      return { gt: a > b, gte: a >= b, lt: a < b, lte: a <= b, eq: a === b }[cond.op];
+    }
     case "logCards": {
       const cards = c.log[cond.section ?? NOTES]?.cards[cond.id] ?? [];
       return cond.card ? cards.includes(cond.card) : cards.length > 0;
@@ -235,7 +240,22 @@ function apply(
     case "xp": {
       // a checkpoint between two parts earns nothing yet
       if (facts?.checkpoint) return;
-      const n = e.bonus + (e.victory ? (facts?.victory ?? 0) : 0);
+      const n =
+        e.bonus +
+        (e.victory ? (facts?.victory ?? 0) : 0) +
+        (e.fromCount
+          ? Math.floor(
+              logCount(c.log, e.fromCount.id, e.fromCount.section ?? NOTES) / e.fromCount.per,
+            )
+          : 0);
+      if (e.split === "evenly") {
+        // as evenly as possible: the first in order take one more each until the total is used
+        const them = who(e.who);
+        them.forEach((i, k) => {
+          i.xp += Math.floor(n / them.length) + (k < n % them.length ? 1 : 0);
+        });
+        return;
+      }
       for (const i of who(e.who)) i.xp += n;
       const last = c.history.at(-1);
       if (last && facts && last.scenarioId === facts.id && e.who !== "lead" && e.who !== "defeated")
@@ -245,7 +265,10 @@ function apply(
     case "trauma":
       for (const i of who(e.who)) {
         i.physicalTrauma += e.physical;
-        i.mentalTrauma += e.mental;
+        i.mentalTrauma =
+          e.mental === "sanity"
+            ? Math.max(i.mentalTrauma, db.cards[i.code].sanity ?? 0)
+            : i.mentalTrauma + e.mental;
       }
       return;
     case "kill":
@@ -283,6 +306,9 @@ function apply(
       if (at >= 0) c.chaosBag.splice(at, 1);
       return;
     }
+    case "removeAllChaosTokens":
+      c.chaosBag = c.chaosBag.filter((t) => t !== e.token);
+      return;
     case "end":
       endCampaign(db, c, e.result);
       return;

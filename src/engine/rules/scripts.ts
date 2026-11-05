@@ -115,7 +115,8 @@ type CardHook =
   | "eventFinished"
   | "healHorror"
   | "storyResolved"
-  | "doomThreshold";
+  | "doomThreshold"
+  | "eliminated";
 type AfterGame<F> = F extends (game: GameContext, ...a: infer A) => unknown ? A : never;
 type AfterRun<F> = F extends (game: GameContext, run: HookRun, ...a: infer A) => unknown
   ? A

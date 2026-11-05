@@ -101,6 +101,7 @@ export function checkFlow(db: ContentDb, campaignId: string): ContentError[] {
     list.forEach((e, n) => {
       const p = `${path}.${n}`;
       if ("section" in e) section(p, e.section);
+      if (e.do === "xp" && e.fromCount) section(p, e.fromCount.section);
       if (e.do === "nextScenario" || e.do === "skipScenario" || e.do === "replayScenario")
         scenario(p, e.scenario);
       for (const code of effectCodes(e)) card(p, code);
@@ -111,6 +112,7 @@ export function checkFlow(db: ContentDb, campaignId: string): ContentError[] {
       if (x.kind === "scenarioCompleted") scenario(path, x.scenario);
       if (x.kind === "hasCard") card(path, x.card);
       if (x.kind === "logCards" && x.card) card(path, x.card);
+      if (x.kind === "logCompare") for (const side of [x.a, x.b]) section(path, side.section);
     }
   };
   for (const [id, st] of Object.entries(flow.steps)) {

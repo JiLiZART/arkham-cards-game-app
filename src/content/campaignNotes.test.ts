@@ -57,6 +57,92 @@ function flowNames(campaign: string): Set<string> {
   return names;
 }
 
+/**
+ * The Path to Carcosa's scripts (campaign-the-path-to-carcosa task 10.1): every count, card list and hidden entry they
+ * write (`count:`, `cards:`, `log:hidden:`) is one a flow condition or effect reads. The pack's card scripts serve
+ * Return to The Path to Carcosa too, whose generated flow reads what the base one no longer asks (Curtain Call's act 2
+ * tokens), so either flow may be the reader. A key built from a variable (`[which, which]`) takes each string the
+ * variable is declared with.
+ */
+describe("the-path-to-carcosa's campaign notes", () => {
+  const sources = sourcesOf([
+    "content/campaigns/the-path-to-carcosa/scripts",
+    "content/packs/ptc/scripts",
+  ]);
+
+  function writtenByCarcosa(): string[] {
+    const out: string[] = [];
+    for (const src of sources)
+      for (const m of src.matchAll(
+        /(countEntry|cardsEntry|logEntry)\.set\(\s*game,\s*(\[[^\]]*\]|\w+),/g,
+      )) {
+        const [kind, arg] = [m[1], m[2].trim()];
+        const def = new RegExp(`const ${arg} = (\\[[^\\]]*\\])`).exec(src)?.[1] ?? arg;
+        const parts = /^\[\s*([^,\s]+),\s*([^\]\s]+)\s*\]$/.exec(def);
+        if (!parts) throw new Error(`a note key the check cannot read: ${arg}`);
+        const values = (p: string) => {
+          const literal = /^"([^"]+)"$/.exec(p);
+          if (literal) return [literal[1]];
+          const decl = new RegExp(`\\b${p}\\b\\s*[:=]([^;\\n{]*)`).exec(src)?.[1] ?? "";
+          const strings = [...decl.matchAll(/"([^"]+)"/g)].map((x) => x[1]);
+          if (!strings.length) throw new Error(`a note key the check cannot read: ${p}`);
+          return strings;
+        };
+        // a plain log entry is shown in the log; only the hidden ones need a reader
+        const sections = values(parts[1]).filter((s) => kind !== "logEntry" || s === "hidden");
+        if (!sections.length) continue;
+        out.push(
+          ...(parts[1] === parts[2]
+            ? sections.map((s) => `${s}:${s}`)
+            : sections.flatMap((s) => values(parts[2]).map((i) => `${s}:${i}`))),
+        );
+      }
+    return out;
+  }
+
+  /** `<section>:<id>` of every log id a flow's conditions and effects read */
+  function readByFlow(file: string): Set<string> {
+    const names = new Set<string>();
+    const add = (r: Record<string, unknown>) => {
+      if (typeof r.id === "string")
+        names.add(`${typeof r.section === "string" ? r.section : "campaign_notes"}:${r.id}`);
+    };
+    const walk = (o: unknown) => {
+      if (Array.isArray(o)) o.forEach(walk);
+      else if (o && typeof o === "object") {
+        const r = o as Record<string, unknown>;
+        if (typeof r.kind === "string" && r.kind.startsWith("log")) {
+          add(r);
+          for (const side of [r.a, r.b])
+            if (side && typeof side === "object") add(side as Record<string, unknown>);
+        }
+        if (r.fromCount && typeof r.fromCount === "object")
+          add(r.fromCount as Record<string, unknown>);
+        Object.values(r).forEach(walk);
+      }
+    };
+    walk(JSON.parse(readFileSync(file, "utf8")));
+    return names;
+  }
+
+  it("every count, card list and hidden entry a script writes is read by a flow", () => {
+    const notes = writtenByCarcosa();
+    expect(notes).toEqual(
+      expect.arrayContaining([
+        "hidden:tlkCluesOnAct",
+        "conviction:conviction",
+        "doubt:doubt",
+        "campaign_notes:possessed",
+      ]),
+    );
+    const read = new Set([
+      ...readByFlow("content/campaigns/the-path-to-carcosa/flow.json"),
+      ...readByFlow("content/campaigns-generated/return-to-the-path-to-carcosa/flow.json"),
+    ]);
+    for (const n of notes) expect(read.has(n), n).toBe(true);
+  });
+});
+
 describe.each(Object.entries(CAMPAIGNS))("%s's campaign notes", (campaign, dirs) => {
   it("every count and card list a script writes is read by the flow or a later scenario", () => {
     const sources = sourcesOf(dirs);

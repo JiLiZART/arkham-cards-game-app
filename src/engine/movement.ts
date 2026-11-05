@@ -118,6 +118,15 @@ export function moveCard(
   } = {},
 ) {
   const c = cardRec(game, id);
+  // "cannot leave play" (The Pallid Mask): no discard, return or removal takes it, unless its controller is out
+  if (
+    def(game, id).cannotLeavePlay &&
+    isInPlay(c) &&
+    !IN_PLAY.includes(dest) &&
+    !opts.keep &&
+    (!c.controller || inv(game, c.controller).status === "playing")
+  )
+    return;
   // "Forced - When this leaves play": it goes where its card says (the void, out of the game), and what follows is queued
   const leaves = def(game, id).leavesPlay;
   const redirected =
@@ -307,6 +316,8 @@ export function discard(game: GameContext, id: InstId) {
   const d = def(game, id);
   if (c.owner) moveCard(game, id, ZONE.Discard, { inv: c.owner });
   else moveCard(game, id, ZONE.EncounterDiscard);
+  // a card that cannot leave play stayed
+  if (isInPlay(card(game, id))) return;
   emit(game, EVENT.Discard, `${d.name} is discarded`, { card: id });
 }
 
@@ -314,15 +325,22 @@ export function discard(game: GameContext, id: InstId) {
 export const otherFace = (game: GameContext, code: string): string | undefined =>
   game.db.cards[code]?.back ?? game.db.cards[code]?.front;
 
-/** the zone a card's new face lives in, from the zone it was in */
-function zoneForFace(type: string, from: Zone): Zone {
+/**
+ * the zone a card's new face lives in, from the zone it was in; an asset no one controls that is at a location (a
+ * story asset, The Last King's Bystanders) is attached there
+ */
+function zoneForFace(type: string, from: Zone, atLocation: boolean): Zone {
   switch (type) {
     case "enemy":
       return ZONE.Enemy;
     case "location":
       return ZONE.Location;
     case "asset":
-      return from === ZONE.Play || from === ZONE.Threat ? from : ZONE.Play;
+      return from === ZONE.Play || from === ZONE.Threat || from === ZONE.Attached
+        ? from
+        : atLocation
+          ? ZONE.Attached
+          : ZONE.Play;
     case "story":
       // out of the play area, still where it was
       return ZONE.SetAside;
@@ -348,7 +366,7 @@ export function becomes(game: GameContext, id: InstId, code: string) {
   const { location, controller } = c;
   const from = c.code;
   cardRec(game, id).code = code;
-  const zone = zoneForFace(game.db.cards[code].type, c.zone);
+  const zone = zoneForFace(game.db.cards[code].type, c.zone, !!location && !controller);
   if (zone !== c.zone) moveCard(game, id, zone, { keep: true, location, inv: controller });
   cardRec(game, id).controller = controller;
   emit(game, EVENT.Flip, `${game.db.cards[from].name} flips: ${game.db.cards[code].name}`, {

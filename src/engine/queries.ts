@@ -1,4 +1,4 @@
-import { attacked, baseRaised, named } from "./world/flags";
+import { attacked, baseRaised, named, rememberedFact } from "./world/flags";
 import { keywordName, type Keyword } from "../content/schema";
 import type {
   Amount,
@@ -22,6 +22,7 @@ import type {
   GameContext,
   ContentDb,
   EffCtx,
+  EnemyMove,
   GameState,
   InstId,
   InvId,
@@ -126,8 +127,17 @@ export const isAloof = (game: GameContext, id: InstId) =>
     allMods(game).some((m) => m.target === id && m.mod.keyword === "aloof")) &&
   !hasFlag(game, id, "notAloof");
 /** an aloof enemy can only be attacked while it is engaged with an investigator; some only with one card (`by`) */
-export const attackable = (game: GameContext, id: InstId, by?: InstId | null) =>
-  attackableBy(game, id, by) && (!isAloof(game, id) || !!cardRecIf(game, id)?.engagedWith);
+export const attackable = (game: GameContext, id: InstId, by?: InstId | null, who?: InvId) =>
+  attackableBy(game, id, by) &&
+  (!isAloof(game, id) || !!cardRecIf(game, id)?.engagedWith) &&
+  // "You cannot attack [[Possessed]] enemies" (Gift of Madness (Pity))
+  (!who ||
+    !allMods(game).some(
+      (m) =>
+        m.target === who &&
+        m.mod.flag === "cannotAttack" &&
+        (!m.mod.filter || matchesFilter(game, def(game, id).code, m.mod.filter)),
+    ));
 /** an enemy that can be attacked and damaged only with one card's ability, and this isn't it (Brood of Yog-Sothoth) */
 export const attackableBy = (game: GameContext, id: InstId, by?: InstId | null) => {
   const only = def(game, id).onlyAttackableBy;
@@ -155,8 +165,8 @@ export function actClueCost(game: GameContext, deck = "a"): number {
   return d.actClues * (d.actCluesPerInvestigator ? game.s.order.length : 1);
 }
 /** clues the group may spend (Masked Hunter blocks engaged investigators) */
-export function spendableGroupClues(game: GameContext) {
-  return activeInvs(game)
+export function spendableGroupClues(game: GameContext, among?: readonly InvId[]) {
+  return (among ?? activeInvs(game))
     .filter((x) => !hasFlag(game, x, "cannotSpendClues"))
     .reduce((n, x) => n + inv(game, x).clues, 0);
 }
@@ -207,6 +217,7 @@ export function matchesFilter(game: GameContext, code: string, f: CardFilter): b
   if (f.elite !== undefined && d.traits.includes("Elite") !== f.elite) return false;
   if (f.faction && !arr(f.faction)!.includes(d.faction)) return false;
   if (f.maxXp !== undefined && (d.xp ?? 0) > f.maxXp) return false;
+  if (f.keyword && !d.keywords.some((k) => keywordName(k) === f.keyword)) return false;
   return true;
 }
 
@@ -217,7 +228,7 @@ export function matchesFilter(game: GameContext, code: string, f: CardFilter): b
  * runtime (two-way and one-way); and, when the scenario's adjacency is orthogonal, the locations on cells sharing a
  * side with its cell. Only locations in play.
  */
-export function connections(game: GameContext, loc: InstId): InstId[] {
+export function connections(game: GameContext, loc: InstId, enemy: EnemyMove = false): InstId[] {
   const scen = game.db.scenarios[game.s.scenarioId];
   const code = card(game, loc).code;
   const codes = new Set<string>();
@@ -228,6 +239,10 @@ export function connections(game: GameContext, loc: InstId): InstId[] {
   for (const [a, b] of scen.oneWay ?? []) if (a === code) codes.add(b);
   const t = game.s.world.tables;
   const linked = new Set([...(t.links[loc] ?? []), ...(t.oneWay[loc] ?? [])]);
+  // what the scenario's cards connect now (Echoes of the Past's Passageways)
+  for (const l of scriptOf(game.db, game.s.scenarioId)?.hooks?.connections?.(game, loc, enemy) ??
+    [])
+    linked.add(l);
   const here = t.cell[loc];
   const side = (l: InstId) => {
     const c = t.cell[l];
@@ -296,12 +311,16 @@ export const connectionsOf = (db: ContentDb, s: GameState, loc: InstId): InstId[
   connections({ s, db, events: [] }, loc);
 
 /** BFS distances from a location */
-export function distances(game: GameContext, from: InstId): Map<InstId, number> {
+export function distances(
+  game: GameContext,
+  from: InstId,
+  enemy: EnemyMove = false,
+): Map<InstId, number> {
   const dist = new Map<InstId, number>([[from, 0]]);
   const q = [from];
   while (q.length) {
     const cur = q.shift()!;
-    for (const n of connections(game, cur)) {
+    for (const n of connections(game, cur, enemy)) {
       if (!dist.has(n)) {
         dist.set(n, dist.get(cur)! + 1);
         q.push(n);
@@ -312,12 +331,17 @@ export function distances(game: GameContext, from: InstId): Map<InstId, number> 
 }
 
 /** next location on a shortest path from `from` toward any of `targets` (all ties) */
-export function stepsToward(game: GameContext, from: InstId, targets: InstId[]): InstId[] {
+export function stepsToward(
+  game: GameContext,
+  from: InstId,
+  targets: InstId[],
+  enemy: EnemyMove = false,
+): InstId[] {
   if (targets.includes(from)) return [];
   let best = Infinity;
   const options: InstId[] = [];
-  for (const n of connections(game, from)) {
-    const d = distances(game, n);
+  for (const n of connections(game, from, enemy)) {
+    const d = distances(game, n, enemy);
     const min = Math.min(...targets.map((t) => d.get(t) ?? Infinity));
     if (min < best) {
       best = min;
@@ -405,6 +429,11 @@ export function allMods(game: GameContext): AppliedMod[] {
     const script = scriptOf(game.db, c.code);
     if (script?.modifiers && !blanked.has(c.id))
       for (const m of script.modifiers(game, c.id)) out.push({ ...m, source: c.id });
+  }
+  // a player card's text that works from its owner's hand (Clasp of Black Onyx)
+  for (const c of cardsIn(game, ZONE.Hand)) {
+    const fn = c.owner ? scriptOf(game.db, c.code)?.inHandModifiers : undefined;
+    if (fn) for (const m of fn(game, c.id)) out.push({ ...m, source: c.id });
   }
   for (const t of game.s.tempMods) out.push({ target: t.target, mod: t.mod, source: t.source });
   // a card immune to player card effects takes no modifier from one (Grimoire, Immune)
@@ -570,8 +599,9 @@ export const maxSanity = (game: GameContext, i: InvId) =>
   (def(game, inv(game, i).cardId).sanity ?? 0) + modSum(game, i, "sanity");
 export const remainingHealth = (game: GameContext, i: InvId) =>
   maxHealth(game, i) - inv(game, i).damage;
+/** never below 0: in Dim Carcosa horror may exceed sanity, and "remaining sanity" is then 0 */
 export const remainingSanity = (game: GameContext, i: InvId) =>
-  maxSanity(game, i) - inv(game, i).horror;
+  Math.max(0, maxSanity(game, i) - inv(game, i).horror);
 
 export function enemyStat(
   game: GameContext,
@@ -657,6 +687,10 @@ export function canPay(
 /** the actions the investigator has left in their turn (none outside it, or for no one) */
 export const actionsLeft = (game: GameContext, i: InvId | null) =>
   !!i && game.s.active === i && game.s.phase === "investigation" ? invRec(game, i).actionsLeft : 0;
+
+/** how many of these facts the scenario remembers ("remember that you …") */
+export const rememberedCount = (game: GameContext, keys: readonly string[]) =>
+  keys.filter((k) => rememberedFact.get(game, k)).length;
 
 export function checkCondition(game: GameContext, c: Condition, ctx: EffCtx): boolean {
   const you = ctx.you ?? null;
@@ -820,6 +854,14 @@ export function checkCondition(game: GameContext, c: Condition, ctx: EffCtx): bo
   }
   if ("enemyNotEngagedWithYou" in c)
     return !!you && enemiesAt(game, yourLoc).some((e) => e.engagedWith !== you);
+  if ("rememberedCount" in c) {
+    const n = rememberedCount(game, c.rememberedCount.of);
+    return n >= (c.rememberedCount.min ?? 0) && n <= (c.rememberedCount.max ?? Infinity);
+  }
+  if ("enemyWithDoom" in c)
+    return c.enemyWithDoom === "testEnemy"
+      ? !!ctx.enemy && (cardRecIf(game, ctx.enemy)?.doom ?? 0) > 0
+      : enemiesAt(game, yourLoc).some((e) => e.doom > 0);
   if ("script" in c) {
     const own = ctx.source ? cardRecIf(game, ctx.source)?.code : undefined;
     const fn = conditionFor(game.db, game.s.scenarioId, own, c.script);
@@ -895,12 +937,14 @@ export function spawnTargets(
         ? from
           ? [from]
           : []
-        : allCards(game)
-            .filter((c) =>
-              "code" in to ? c.code === to.code : def(game, c.id).traits.includes(to.trait),
-            )
-            .map((c) => (c.zone === ZONE.Location ? c.id : c.location))
-            .filter((x): x is InstId => !!x);
+        : to === "investigators"
+          ? activeInvs(game).flatMap((i) => inv(game, i).location ?? [])
+          : allCards(game)
+              .filter((c) =>
+                "code" in to ? c.code === to.code : def(game, c.id).traits.includes(to.trait),
+              )
+              .map((c) => (c.zone === ZONE.Location ? c.id : c.location))
+              .filter((x): x is InstId => !!x);
     const maps = origins.map((o) => distances(game, o));
     const d = (l: InstId) => Math.min(...maps.map((m) => m.get(l) ?? Infinity));
     if (maps.length) {

@@ -1,0 +1,561 @@
+{
+  "id": "black-stars-rise",
+  "name": "Black Stars Rise",
+  "card": "03274",
+  "intro": "The island commune of Mont Saint-Michel lies off the northwestern coast of France. It is beautiful, elegant, and enigmatic—a place out of a fairy tale. Only this tale is one of horrors and madness. During low tide, you would be able to reach the island on foot by crossing the tidal causeway that emerges from the sea. However, by the time you reach the coast, the tide is much higher than you’d anticipated. Dark clouds cover the sky, and a distant crash of thunder signals the start of the oncoming storm. You find a boat whose captain is willing to take you to the island, and prepare for the ritual to come.",
+  "encounterSets": [
+    "black_stars_rise",
+    "evil_portents",
+    "byakhee",
+    "inhabitants_of_carcosa",
+    "stranger",
+    "pentagram",
+    "ancient_evils",
+    "flood",
+    "vortex"
+  ],
+  "sideDecks": {},
+  "acts": [],
+  "agendas": {
+    "a": [
+      "03275",
+      "03276b",
+      "03277"
+    ],
+    "c": [
+      "03278",
+      "03279a",
+      "03280"
+    ]
+  },
+  "setupCards": [],
+  "setup": [
+    {
+      "do": "script",
+      "fn": "ashleighAside",
+      "when": {
+        "not": {
+          "logHas": "03069b"
+        }
+      }
+    },
+    {
+      "do": "script",
+      "fn": "ashleighsInformation",
+      "when": {
+        "logHas": "03080"
+      }
+    },
+    {
+      "do": "script",
+      "fn": "pile"
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "03088",
+        "03300",
+        "03301"
+      ]
+    },
+    {
+      "do": "chooseRandom",
+      "from": [
+        "03292",
+        "03293"
+      ],
+      "then": "setAside",
+      "rest": "remove"
+    },
+    {
+      "do": "putRandomIntoPlay",
+      "from": [
+        "03287",
+        "03288"
+      ],
+      "count": 1
+    },
+    {
+      "do": "putRandomIntoPlay",
+      "from": [
+        "03285",
+        "03286"
+      ],
+      "count": 1
+    },
+    {
+      "do": "putRandomIntoPlay",
+      "from": [
+        "03289",
+        "03290"
+      ],
+      "count": 1
+    },
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "03283",
+        "03284",
+        "03291"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "03283"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": "X",
+        "x": "highestDoomOnAgenda"
+      },
+      "cultist": {
+        "modifier": 0,
+        "revealAnother": true,
+        "instead": {
+          "when": {
+            "enemyWithDoom": "testEnemy"
+          },
+          "autoFail": true
+        }
+      },
+      "tablet": {
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "eachAgenda"
+          }
+        ]
+      },
+      "elderThing": {
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "searchEncounterDraw",
+            "filter": {
+              "trait": "Byakhee",
+              "type": "enemy"
+            },
+            "zones": [
+              "deck",
+              "discard"
+            ]
+          }
+        ]
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": "X",
+        "x": "highestDoomOnAgenda"
+      },
+      "cultist": {
+        "modifier": 0,
+        "revealAnother": true,
+        "instead": {
+          "when": {
+            "enemyWithDoom": "testEnemy"
+          },
+          "autoFail": true
+        }
+      },
+      "tablet": {
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "eachAgenda"
+          }
+        ]
+      },
+      "elderThing": {
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "searchEncounterDraw",
+            "filter": {
+              "trait": "Byakhee",
+              "type": "enemy"
+            },
+            "zones": [
+              "deck",
+              "discard"
+            ]
+          }
+        ]
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": "X",
+        "x": "doomOnAgendas"
+      },
+      "cultist": {
+        "modifier": 0,
+        "revealAnother": true,
+        "instead": {
+          "when": {
+            "enemyWithDoom": "atYourLocation"
+          },
+          "autoFail": true
+        }
+      },
+      "tablet": {
+        "modifier": 0,
+        "revealAnother": true,
+        "afterTest": {
+          "effects": [
+            {
+              "op": "script",
+              "fn": "doomUnlessByOne"
+            }
+          ]
+        }
+      },
+      "elderThing": {
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "searchEncounterDraw",
+            "filter": {
+              "trait": "Byakhee",
+              "type": "enemy"
+            },
+            "zones": [
+              "deck",
+              "discard"
+            ]
+          }
+        ]
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": "X",
+        "x": "doomOnAgendas"
+      },
+      "cultist": {
+        "modifier": 0,
+        "revealAnother": true,
+        "instead": {
+          "when": {
+            "enemyWithDoom": "atYourLocation"
+          },
+          "autoFail": true
+        }
+      },
+      "tablet": {
+        "modifier": 0,
+        "revealAnother": true,
+        "afterTest": {
+          "effects": [
+            {
+              "op": "script",
+              "fn": "doomUnlessByOne"
+            }
+          ]
+        }
+      },
+      "elderThing": {
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "searchEncounterDraw",
+            "filter": {
+              "trait": "Byakhee",
+              "type": "enemy"
+            },
+            "zones": [
+              "deck",
+              "discard"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Each investigator was defeated",
+      "effects": [
+        {
+          "do": "record",
+          "key": "carcosaMerged",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "mental": "sanity"
+        },
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You hold your breath as you swim through freezing water toward the spires below. As you get closer, you see ripples throughout the water, as though you are peering into a reflection upon the sea’s surface. You break through the surface and gasp as air fills your lungs.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "openedPathBelow",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "You marvel at the cloud-waves encircling you and fly toward the spires above. The desolate and inscrutable city of Carcosa towers before you. You suddenly realize you are falling—not floating—and a pulling force takes hold of your body.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "openedPathAbove",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "When you awaken, you are sitting in the choeur gothique of Mont Saint-Michel’s abbey. No rain pelts the glass of the windows above, and you hear no thunder, nor the screeching of winged horrors overhead. Somehow, you had escaped the island’s certain doom. You creep to the door of the abbey and open it with trepidation. A dazzling light sears your eyes, and you lift your hand to block the glare of two suns. You stand overlooking the Lake of Hali. Black stars hang in the heavens above. Beyond, over leagues of tossing cloud- waves, the towers of Carcosa rise behind the shattered moon.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "carcosaMerged",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "mental": "sanity"
+        },
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    }
+  },
+  "i18nId": "black_stars_rise",
+  "connections": [
+    [
+      "03283",
+      "03284"
+    ],
+    [
+      "03284",
+      "03285"
+    ],
+    [
+      "03284",
+      "03286"
+    ],
+    [
+      "03284",
+      "03287"
+    ],
+    [
+      "03284",
+      "03288"
+    ],
+    [
+      "03284",
+      "03289"
+    ],
+    [
+      "03284",
+      "03290"
+    ],
+    [
+      "03285",
+      "03287"
+    ],
+    [
+      "03285",
+      "03288"
+    ],
+    [
+      "03285",
+      "03289"
+    ],
+    [
+      "03285",
+      "03290"
+    ],
+    [
+      "03286",
+      "03287"
+    ],
+    [
+      "03286",
+      "03288"
+    ],
+    [
+      "03286",
+      "03289"
+    ],
+    [
+      "03286",
+      "03290"
+    ],
+    [
+      "03287",
+      "03289"
+    ],
+    [
+      "03287",
+      "03290"
+    ],
+    [
+      "03288",
+      "03289"
+    ],
+    [
+      "03288",
+      "03290"
+    ],
+    [
+      "03289",
+      "03291"
+    ],
+    [
+      "03290",
+      "03291"
+    ],
+    [
+      "03291",
+      "03292"
+    ],
+    [
+      "03291",
+      "03293"
+    ],
+    [
+      "03291",
+      "03294"
+    ],
+    [
+      "03291",
+      "03295"
+    ],
+    [
+      "03291",
+      "03296"
+    ],
+    [
+      "03291",
+      "03297"
+    ],
+    [
+      "03292",
+      "03298"
+    ],
+    [
+      "03292",
+      "03299"
+    ],
+    [
+      "03293",
+      "03298"
+    ],
+    [
+      "03293",
+      "03299"
+    ],
+    [
+      "03294",
+      "03295"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "03298": [
+      1,
+      0
+    ],
+    "03299": [
+      1,
+      0
+    ],
+    "03292": [
+      1,
+      1
+    ],
+    "03293": [
+      1,
+      1
+    ],
+    "03287": [
+      3,
+      1
+    ],
+    "03288": [
+      3,
+      1
+    ],
+    "03296": [
+      0,
+      2
+    ],
+    "03297": [
+      0,
+      2
+    ],
+    "03291": [
+      1,
+      2
+    ],
+    "03289": [
+      2,
+      2
+    ],
+    "03290": [
+      2,
+      2
+    ],
+    "03285": [
+      4,
+      2
+    ],
+    "03286": [
+      4,
+      2
+    ],
+    "03294": [
+      0,
+      3
+    ],
+    "03295": [
+      2,
+      3
+    ],
+    "03284": [
+      3,
+      3
+    ],
+    "03283": [
+      3,
+      4
+    ]
+  }
+}

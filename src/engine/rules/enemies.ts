@@ -98,6 +98,8 @@ export function preyCandidates(game: GameContext, enemy: InstId, candidates: Inv
         return inv(game, i).hand.length;
       case "resources":
         return inv(game, i).resources;
+      case "horror":
+        return inv(game, i).horror;
       default:
         return skillValue(game, i, stat);
     }
@@ -119,7 +121,7 @@ export const spawnHandler: Handler<"Spawn"> = (game, step) => {
   let at = step.at ?? null;
   let engage: InvId | null = null;
   const drawerLoc = step.inv ? inv(game, step.inv).location : null;
-  if (!at) at = fireScenarioHook(game, "spawnRedirect", step.enemy) ?? null;
+  if (!at) at = fireScenarioHook(game, "spawnRedirect", step.enemy, step.inv) ?? null;
   if (!at && (step.among || (d.spawn && typeof d.spawn === "object"))) {
     // a spawn expression, or the locations the step names (Hired Gun): the drawer chooses among them; with none in play,
     // the enemy is discarded
@@ -338,7 +340,7 @@ export function elusive(game: GameContext, id: InstId, step: Step) {
 export const resolveAttackHandler: Handler<"ResolveAttack"> = (game, step) => {
   const e = cardIf(game, step.enemy);
   if (!e || e.zone !== "enemy" || inv(game, step.inv).status !== "playing") return;
-  if (isCancelled(game, step.key)) {
+  if (isCancelled(game, step.key) && !hasFlag(game, step.enemy, "attacksCannotBeCancelled")) {
     emit(game, EVENT.AttackCancelled, `${def(game, step.enemy).name}'s attack is cancelled`, {
       card: step.enemy,
     });
@@ -405,7 +407,8 @@ export const damageEnemyHandler: Handler<"DamageEnemy"> = (game, step) => {
   if (!e || e.zone !== "enemy" || step.amount <= 0) return;
   if (
     hasFlag(game, step.enemy, "cannotBeDamaged") ||
-    !attackableBy(game, step.enemy, step.source)
+    !attackableBy(game, step.enemy, step.source) ||
+    !damageableBy(game, step.enemy, step.source)
   ) {
     emit(game, EVENT.NoDamage, `${def(game, step.enemy).name} cannot be damaged`, {
       card: step.enemy,
@@ -471,6 +474,20 @@ export const damageEnemyHandler: Handler<"DamageEnemy"> = (game, step) => {
     );
   }
 };
+
+/** an enemy that takes damage only from some sources: is this card one (Poltergeist, Hastur)? */
+function damageableBy(game: GameContext, enemy: InstId, source: InstId | null | undefined) {
+  const only = def(game, enemy).damageOnlyFrom;
+  if (!only) return true;
+  const src = source ? cardIf(game, source) : undefined;
+  if (!src) return false;
+  const d = def(game, src.id);
+  return (
+    !!only.traits?.some((t) => d.traits.includes(t)) ||
+    !!only.types?.includes(d.type) ||
+    (!!only.encounter && !src.owner && d.type !== "investigator")
+  );
+}
 
 export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (game, step) => {
   const e = cardIf(game, step.enemy);
@@ -583,7 +600,7 @@ export const patrolMovesHandler: Handler<"PatrolMoves"> = (game, step) => {
   const next: Step = { t: STEP.PatrolMoves, done: [...done, e.id] };
   const lured = lures(game);
   const goals = lured.length ? lured : (patrolGoals(game, e.id) ?? []);
-  const dist = distances(game, e.location!);
+  const dist = distances(game, e.location!, e.id);
   const nearest = Math.min(...goals.map((g) => dist.get(g) ?? Infinity));
   if (!goals.length || nearest === 0 || nearest === Infinity) {
     push(game, next);
@@ -607,7 +624,7 @@ export const patrolMovesHandler: Handler<"PatrolMoves"> = (game, step) => {
     }
     goal = tied[0];
   }
-  const options = stepsToward(game, e.location!, [goal]).filter((l) =>
+  const options = stepsToward(game, e.location!, [goal], e.id).filter((l) =>
     canEnemyEnter(game, e.id, l),
   );
   if (!options.length) {
@@ -660,10 +677,12 @@ export const hunterMovesHandler: Handler<"HunterMoves"> = (game, step) => {
     : (onlyPrey(game, e.id) ? preyCandidates(game, e.id, activeInvs(game)) : activeInvs(game))
         .map((i) => inv(game, i).location!)
         .filter(Boolean);
-  const dist = distances(game, e.location!);
+  const dist = distances(game, e.location!, e.id);
   const nearest = Math.min(...targets.map((t) => dist.get(t) ?? Infinity));
   const goals = targets.filter((t) => dist.get(t) === nearest);
-  let options = stepsToward(game, e.location!, goals).filter((l) => canEnemyEnter(game, e.id, l));
+  let options = stepsToward(game, e.location!, goals, e.id).filter((l) =>
+    canEnemyEnter(game, e.id, l),
+  );
   if (options.length === 0 || nearest === Infinity) {
     push(game, { ...step, choice: undefined, done: [...done, e.id] });
     return;
@@ -679,7 +698,9 @@ export const hunterMovesHandler: Handler<"HunterMoves"> = (game, step) => {
       activeInvs(game).filter((i) => goals.includes(inv(game, i).location!)),
     );
     const preyLocs = preyInvs.map((i) => inv(game, i).location!);
-    const toward = stepsToward(game, e.location!, preyLocs).filter((l) => options.includes(l));
+    const toward = stepsToward(game, e.location!, preyLocs, e.id).filter((l) =>
+      options.includes(l),
+    );
     if (toward.length) options = toward;
   }
   const to = ask<InstId>(

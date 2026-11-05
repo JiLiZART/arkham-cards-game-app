@@ -254,7 +254,7 @@ describe("on the real content", () => {
   });
 
   it("a generated scenario's tokens are placeholders", () => {
-    expect(tokensReal(real, "curtain-call")).toBe(false);
+    expect(tokensReal(real, "at-deaths-doorstep")).toBe(false);
   });
 
   it("over every scenario: Night of the Zealot's and The Dunwich Legacy's tokens are real, the generated placeholders are not", () => {

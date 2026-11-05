@@ -84,58 +84,154 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "highestDoomOnEnemy"
       },
       "cultist": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "nearestEnemy"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "discardFromHand",
+            "amount": 1,
+            "random": true
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": -2,
+        "condition": {
+          "enemyAtYourLocation": true
+        },
+        "onFail": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "highestDoomOnEnemy"
       },
       "cultist": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "nearestEnemy"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "discardFromHand",
+            "amount": 1,
+            "random": true
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": -2,
+        "condition": {
+          "enemyAtYourLocation": true
+        },
+        "onFail": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "doomOnEnemies"
       },
       "cultist": {
-        "modifier": -4
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "nearestEnemy"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -4
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "discardFromHand",
+            "amount": 1,
+            "random": true
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -4
+        "modifier": -4,
+        "condition": {
+          "enemyAtYourLocation": true
+        },
+        "onReveal": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "doomOnEnemies"
       },
       "cultist": {
-        "modifier": -4
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "nearestEnemy"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -4
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "discardFromHand",
+            "amount": 1,
+            "random": true
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -4
+        "modifier": -4,
+        "condition": {
+          "enemyAtYourLocation": true
+        },
+        "onReveal": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       }
     }
   },

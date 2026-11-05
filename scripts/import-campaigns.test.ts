@@ -156,6 +156,17 @@ describe("the generated campaigns (pnpm import:campaigns output)", () => {
       readdirSync(join(G, d.name, "scenarios")).map((f) => json(join(G, d.name, "scenarios", f))),
     );
 
+  it("leaves the hand-written campaigns alone: no generated copy of them", () => {
+    for (const id of [
+      "the-dunwich-legacy",
+      "return-to-the-dunwich-legacy",
+      "the-path-to-carcosa",
+    ]) {
+      expect(existsSync(join("content/campaigns", id, "campaign.json")), id).toBe(true);
+      expect(existsSync(join(G, id)), id).toBe(false);
+    }
+  });
+
   it("writes the agenda-only and random-start scenarios the import used to skip", () => {
     expect(existsSync(join(G, "the-drowned-city/scenarios/sepulchre-of-the-sleeper.json"))).toBe(
       true,
@@ -173,8 +184,11 @@ describe("the generated campaigns (pnpm import:campaigns output)", () => {
     expect(own).not.toEqual(notz);
   });
 
+  // The Path to Carcosa is hand-written now; its Return-to box gathers the same Midnight Masks subset
   it("removes the Midnight Masks cards Echoes of the Past doesn't gather", () => {
-    const echoes = json(join(G, "the-path-to-carcosa/scenarios/echoes-of-the-past.json"));
+    const echoes = json(
+      join(G, "return-to-the-path-to-carcosa/scenarios/return-to-echoes-of-the-past.json"),
+    );
     const removed = echoes.setup.find((st: { do: string }) => st.do === "remove");
     // its locations, acts, agendas and The Masked Hunter go; Hunting Shadow (01135) and False Lead (01136) stay
     expect(removed?.codes).toEqual(expect.arrayContaining(["01121b", "01123", "01124", "01134"]));
@@ -233,8 +247,12 @@ describe("the generated flows (campaign-flow-compiler-fixes)", () => {
       ...(f.steps[id].choices ?? []).flatMap((c) => c.effects ?? []),
     ]);
 
+  // The Path to Carcosa is hand-written now: its flow there started as the importer's output
   it("Carcosa plays in the guide's order, with the original Interlude I", () => {
-    expect(flowOf("the-path-to-carcosa").order).toEqual([
+    const hand: Flow = JSON.parse(
+      readFileSync("content/campaigns/the-path-to-carcosa/flow.json", "utf8"),
+    );
+    expect(hand.order).toEqual([
       "ptc-prologue",
       "curtain-call",
       "the-last-king",

@@ -125,12 +125,12 @@ export function payCost(
   return take;
 }
 
-/** spend clues as a group, lead investigator first then player order */
-export function spendGroupClues(game: GameContext, n: number) {
+/** spend clues as a group (or as the group `among`), lead investigator first then player order */
+export function spendGroupClues(game: GameContext, n: number, among?: readonly InvId[]) {
   const order = [
     leadInvestigator(game),
     ...activeInvs(game).filter((x) => x !== leadInvestigator(game)),
-  ];
+  ].filter((x) => !among || among.includes(x));
   for (const i of order) {
     const take = Math.min(n, inv(game, i).clues);
     addCounter(game, i, "clues", -take);
@@ -204,6 +204,14 @@ export function activatable(
     if (assetBlocked(game, c.id)) continue;
     abilitiesOf(game, c.id, blanked).forEach((a, index) => {
       if (!kinds.includes(a.kind as "action" | "fast")) return;
+      if (a.kind === "fast" && hasFlag(game, i, "cannotTriggerFast")) return;
+      // "You cannot trigger [action] abilities on locations" (Gift of Madness (Misery))
+      if (
+        a.kind === "action" &&
+        c.zone === ZONE.Location &&
+        hasFlag(game, i, "cannotUseLocationActions")
+      )
+        return;
       if (!usersOf(game, c.id, a).includes(i)) return;
       if (!withinLimit(game, c.id, index, a)) return;
       if (
@@ -241,8 +249,11 @@ function isSubject(game: GameContext, cardId: InstId, data: EventData) {
   );
 }
 
-/** events about the whole game an encounter card's forced ability may wait for, whatever card they name */
-const GAME_EVENTS: readonly Trigger[] = ["agendaAdvances"];
+/**
+ * events about the whole game an encounter card's forced ability may wait for, whatever card they name (Black Stars
+ * Rise's Outer Wall: "after 1 or more doom is placed on the 'a' agenda deck")
+ */
+const GAME_EVENTS: readonly Trigger[] = ["agendaAdvances", "doomPlaced"];
 
 function triggerMatches(
   game: GameContext,
@@ -300,6 +311,7 @@ export function ctxFor(data: EventData, source: InstId, you: InvId | null): EffC
     key: data.key,
     card: data.card ?? null,
     from: data.from,
+    ...(data.to ? { to: data.to } : {}),
     by: data.by,
     token: data.token,
     testId: data.testId,
@@ -599,7 +611,13 @@ export const playAbility = (game: GameContext, cardId: InstId) =>
 /** no asset or event may be played now, or no event (House in the Reeds) */
 const playForbidden = (game: GameContext, i: InvId, cardId: InstId) =>
   hasFlag(game, i, "cannotPlayAssetsOrEvents") ||
-  (def(game, cardId).type === "event" && hasFlag(game, i, "cannotPlayEvents"));
+  (def(game, cardId).type === "event" && hasFlag(game, i, "cannotPlayEvents")) ||
+  allMods(game).some(
+    (m) =>
+      m.target === i &&
+      m.mod.flag === "cannotPlay" &&
+      (!m.mod.filter || matchesFilter(game, card(game, cardId).code, m.mod.filter)),
+  );
 
 export type PlayBlock =
   | { reason: "forbidden"; by: InstId | null }
@@ -618,7 +636,7 @@ export function playBlock(game: GameContext, i: InvId, cardId: InstId): PlayBloc
         (m.mod.flag === "cannotPlayAssets" &&
           d.type === "asset" &&
           (!m.mod.filter || matchesFilter(game, code, m.mod.filter))) ||
-        (m.mod.flag === "cannotPlayOrCommit" &&
+        ((m.mod.flag === "cannotPlayOrCommit" || m.mod.flag === "cannotPlay") &&
           (!m.mod.filter || matchesFilter(game, code, m.mod.filter)))),
   );
   if (ban)
@@ -644,6 +662,7 @@ export function canPlay(game: GameContext, i: InvId, cardId: InstId, asFast: boo
     )
   )
     return false;
+  if (d.type === "asset" && noRoomFor(game, i, cardId)) return false;
   if (cardBlocked(game, i, cardId)) return false;
   if (uniqueInPlay(game, cardId)) return false;
   // "Limit 1 per investigator": no second copy (by title) of the asset in your play area
@@ -813,6 +832,14 @@ export function overfullSlot(game: GameContext, i: InvId, incoming: InstId | nul
   return null;
 }
 
+/** the slots the asset needs are taken by what isn't an asset of theirs (Straitjacket): no asset can make room */
+function noRoomFor(game: GameContext, i: InvId, cardId: InstId): boolean {
+  const slot = overfullSlot(game, i, cardId);
+  return (
+    !!slot && !slotted(game, i).some((c) => c.id !== cardId && def(game, c.id).slots.includes(slot))
+  );
+}
+
 export const slotCheckHandler: Handler<"SlotCheck"> = (game, step) => {
   const slot = overfullSlot(game, step.inv, step.card);
   if (!slot) return;
@@ -820,6 +847,11 @@ export const slotCheckHandler: Handler<"SlotCheck"> = (game, step) => {
   const victims = slotted(game, step.inv).filter(
     (c) => c.id !== step.card && def(game, c.id).slots.includes(slot),
   );
+  // none can: the new one can't stay in play (an asset put into play while a Straitjacket holds the slots)
+  if (!victims.length) {
+    if (step.card && cardIf(game, step.card)?.zone === ZONE.Play) discard(game, step.card);
+    return;
+  }
   const pick = ask<InstId>(
     game,
     step,

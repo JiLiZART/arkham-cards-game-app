@@ -4,13 +4,17 @@
   "arkham": "midnight_masks",
   "card": "card-outline",
   "cultists": "cult_of_umordoth",
+  "decay": "decay_and_filth",
   "essex_county_express": "the_essex_county_express",
+  "flood": "the_flood_below",
   "pentagram": "dark_cult",
   "return_to_essex_county_express": "return_to_the_essex_county_express",
   "return_to_extracurricular_activity": "return_to_extracurricular_activities",
+  "stranger": "the_stranger",
   "tentacles": "the_devourer_below",
   "the_midnight_masks": "midnight_masks",
-  "torch": "the_gathering"
+  "torch": "the_gathering",
+  "vortex": "the_vortex_above"
  },
  "symbols": {
   "a_light_in_the_fog": {
@@ -537,6 +541,10 @@
    "file": "death_of_the_stars.svg",
    "set": "standalone"
   },
+  "decay": {
+   "file": "decay_and_filth.svg",
+   "set": "extra"
+  },
   "decaying_reality": {
    "file": "decaying_reality.svg",
    "set": "extra"
@@ -695,6 +703,10 @@
   },
   "fire_ch2": {
    "file": "fire_ch2.svg",
+   "set": "extra"
+  },
+  "flood": {
+   "file": "the_flood_below.svg",
    "set": "extra"
   },
   "flying_terrors": {
@@ -1793,6 +1805,10 @@
    "file": "strange_happenings.svg",
    "set": "extra"
   },
+  "stranger": {
+   "file": "the_stranger.svg",
+   "set": "extra"
+  },
   "striking_fear": {
    "file": "striking_fear.svg",
    "set": "extra"
@@ -2440,6 +2456,10 @@
   "vile_experiments": {
    "file": "vile_experiments.svg",
    "set": "standalone"
+  },
+  "vortex": {
+   "file": "the_vortex_above.svg",
+   "set": "extra"
   },
   "waking_nightmare": {
    "file": "waking_nightmare.svg",

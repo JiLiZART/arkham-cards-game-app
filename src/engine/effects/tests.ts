@@ -75,7 +75,7 @@ function fightEffect(game: GameContext, run: EffectRun<EffectOf<"fight">>) {
     e.target ?? "chooseAtLocation",
     ctx,
     (id) =>
-      attackable(game, id, ctx.source) &&
+      attackable(game, id, ctx.source, you) &&
       (!e.notEngagedWithYou || card(game, id).engagedWith !== you) &&
       (!e.filter || matchesFilter(game, card(game, id).code, e.filter)),
   );

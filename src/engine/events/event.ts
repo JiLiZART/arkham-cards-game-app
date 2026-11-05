@@ -67,6 +67,7 @@ export const EVENT = {
   Play: "play",
   Prevent: "prevent",
   Ready: "ready",
+  Remember: "remember",
   Remove: "remove",
   Reshuffle: "reshuffle",
   Resign: "resign",

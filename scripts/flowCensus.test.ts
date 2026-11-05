@@ -5,12 +5,12 @@ import { CampaignDef, CampaignFlow, type FlowCondition } from "../src/content/sc
 // the committed output of `npm run import:campaigns`: every generated campaign's flow, counted, so a change to the
 // compiler (or to what the guides give) shows as a number that moved
 const DIR = "content/campaigns-generated";
-// The Dunwich Legacy was generated, then moved to the hand-written campaigns (campaign-the-dunwich-legacy): its files
-// there are still the importer's last output, read where they are now
-const HAND = "content/campaigns/the-dunwich-legacy";
+// The Dunwich Legacy and The Path to Carcosa were generated, then moved to the hand-written campaigns
+// (campaign-the-dunwich-legacy, campaign-the-path-to-carcosa): their files there started as the importer's output
+const HAND = new Set(["the-dunwich-legacy", "the-path-to-carcosa"]);
 const read = (id: string, file: string) =>
   JSON.parse(
-    readFileSync(id === "the-dunwich-legacy" ? `${HAND}/${file}` : `${DIR}/${id}/${file}`, "utf8"),
+    readFileSync(HAND.has(id) ? `content/campaigns/${id}/${file}` : `${DIR}/${id}/${file}`, "utf8"),
   );
 // folders only: a stray file there (a Finder .DS_Store) is not a campaign
 const ids = readdirSync(DIR, { withFileTypes: true })
@@ -20,6 +20,10 @@ const flows = ids.map((id) => ({ id, flow: CampaignFlow.parse(read(id, "flow.jso
 const dunwich = {
   id: "the-dunwich-legacy",
   flow: CampaignFlow.parse(read("the-dunwich-legacy", "flow.json")),
+};
+const carcosa = {
+  id: "the-path-to-carcosa",
+  flow: CampaignFlow.parse(read("the-path-to-carcosa", "flow.json")),
 };
 
 const unsupportedTests = (c: FlowCondition): number =>
@@ -33,25 +37,25 @@ const unsupportedTests = (c: FlowCondition): number =>
 
 describe("the generated flows", () => {
   it("are one per generated campaign, each valid", () => {
-    expect(ids.length).toBe(35); // Curse of the Rougarou now imports (its setup names no location); The Dunwich Legacy and its Return-to box are hand-written
-    expect(flows.length).toBe(35);
+    expect(ids.length).toBe(34); // Curse of the Rougarou now imports (its setup names no location); The Dunwich Legacy, its Return-to box and The Path to Carcosa are hand-written
+    expect(flows.length).toBe(34);
   });
 
   it("hold the interludes, the resolutions and the prompts the guides give, and as many as can't be offered as the census says", () => {
     const steps = flows.flatMap((f) => Object.values(f.flow.steps));
-    expect(flows.reduce((n, f) => n + Object.keys(f.flow.interludes).length, 0)).toBe(71); // only the interludes a flow reaches (no side flow carries another campaign's)
+    expect(flows.reduce((n, f) => n + Object.keys(f.flow.interludes).length, 0)).toBe(67); // only the interludes a flow reaches (no side flow carries another campaign's)
     expect(
       flows.reduce(
         (n, f) =>
           n + Object.values(f.flow.resolutions).reduce((m, r) => m + Object.keys(r).length, 0),
         0,
       ),
-    ).toBe(477); // hidden resolutions are tails, not endings; a defeated/resigned pair is one none
-    expect(steps.filter((s) => s.kind === "unsupported").length).toBe(154); // guide inputs the engine lacks: campaign links, supplies, partners, investigator choices
+    ).toBe(447); // hidden resolutions are tails, not endings; a defeated/resigned pair is one none
+    expect(steps.filter((s) => s.kind === "unsupported").length).toBe(153); // guide inputs the engine lacks: campaign links, supplies, partners, investigator choices
     expect(
       steps.reduce((n, s) => n + (s.kind === "branch" ? unsupportedTests(s.condition) : 0), 0),
-    ).toBe(392); // The Scarlet Keys' $embark compiled per scenario (127); with the scenarios' own setup steps (flow.before) and the version check (always true)
-    expect(steps.filter((s) => s.kind === "upgradeDecks").length).toBe(146);
+    ).toBe(390); // The Scarlet Keys' $embark compiled per scenario (127); with the scenarios' own setup steps (flow.before) and the version check (always true)
+    expect(steps.filter((s) => s.kind === "upgradeDecks").length).toBe(136);
   });
 
   it("list their scenario reference cards in the campaign's order, the interludes marked, as the picker needs", () => {
@@ -127,7 +131,7 @@ describe("the generated flows", () => {
   });
 
   it("play Carcosa's scenarios the guide leaves to the players in the file's order after the listed ones", () => {
-    const { flow } = flows.find((f) => f.id === "the-path-to-carcosa")!;
+    const { flow } = carcosa;
     expect(flow.order.slice(0, 3)).toEqual(["ptc-prologue", "curtain-call", "the-last-king"]);
     expect(flow.order).toEqual(
       expect.arrayContaining([
@@ -145,9 +149,9 @@ describe("the generated flows", () => {
   });
 
   it("count Carcosa's doubt and conviction in sections of their own", () => {
-    const carcosa = CampaignDef.parse(read("the-path-to-carcosa", "campaign.json"));
-    expect(carcosa.logSections.some((s) => s.kind === "count")).toBe(true);
-    const { flow } = flows.find((f) => f.id === "the-path-to-carcosa")!;
+    const def = CampaignDef.parse(read("the-path-to-carcosa", "campaign.json"));
+    expect(def.logSections.some((s) => s.kind === "count")).toBe(true);
+    const { flow } = carcosa;
     expect(
       Object.values(flow.steps).some(
         (s) => s.kind === "effects" && s.effects.some((e) => e.do === "count"),

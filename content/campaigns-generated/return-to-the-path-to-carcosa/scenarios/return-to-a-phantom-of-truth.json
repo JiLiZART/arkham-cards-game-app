@@ -77,58 +77,124 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "totalDoomInPlay",
+        "xMax": 5
       },
       "cultist": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "moveEnemies",
+            "trait": "Byakhee",
+            "unengaged": true,
+            "toward": "nearestInvestigator"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -3
+        "modifier": -3,
+        "cancelCommitted": true
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "loseResources",
+            "amount": "failBy"
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "totalDoomInPlay",
+        "xMax": 5
       },
       "cultist": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "moveEnemies",
+            "trait": "Byakhee",
+            "unengaged": true,
+            "toward": "nearestInvestigator"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -3
+        "modifier": -3,
+        "cancelCommitted": true
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "loseResources",
+            "amount": "failBy"
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "totalDoomInPlay"
       },
       "cultist": {
-        "modifier": -2
+        "modifier": -2,
+        "onReveal": [
+          {
+            "op": "moveEnemies",
+            "trait": "Byakhee",
+            "unengaged": true,
+            "toward": "nearestInvestigator"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -4
+        "modifier": -4,
+        "cancelCommitted": true
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "loseResources",
+            "amount": "failBy"
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "totalDoomInPlay"
       },
       "cultist": {
-        "modifier": -2
+        "modifier": -2,
+        "onReveal": [
+          {
+            "op": "moveEnemies",
+            "trait": "Byakhee",
+            "unengaged": true,
+            "toward": "nearestInvestigator"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -4
+        "modifier": -4,
+        "cancelCommitted": true
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "loseResources",
+            "amount": "failBy"
+          }
+        ]
       }
     }
   },
