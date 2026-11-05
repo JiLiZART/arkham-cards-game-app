@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { db } from "../../engine/kits/testkit";
-import { cardImage, faceLines } from "./images";
+import { cardImage, classBackground, faceLines } from "./images";
 
 describe("card images", () => {
   it("resolves front and back URLs", () => {
@@ -41,5 +41,13 @@ describe("card images", () => {
     expect(f.stats).toMatch(/AGI×1/);
     expect(f.body.join(" ")).toMatch(/Uses \(4 ammo\)/);
     expect(faceLines(db.cards["01116"], "front").stats).toMatch(/Fight 4 · HP 5\/inv · Evade 4/);
+  });
+
+  it("an investigator's class painting: their class, neutral for neutral or multi-class", () => {
+    expect(classBackground(db.cards["01001"])).toBe("/art/investigator-bg/guardian.webp");
+    expect(classBackground({ faction: "neutral" })).toBe("/art/investigator-bg/neutral.webp");
+    expect(classBackground({ faction: "rogue", factions: ["rogue", "survivor"] })).toBe(
+      "/art/investigator-bg/neutral.webp",
+    );
   });
 });

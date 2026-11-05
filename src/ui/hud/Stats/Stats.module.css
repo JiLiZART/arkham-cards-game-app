@@ -157,6 +157,13 @@
 }
 .stat-bar {
   padding: 12px 14px;
+  /* the class painting (--class-bg) under a night scrim: lightest behind the portrait, dark enough under the ability
+     text and the numbers for bone ink to keep 4.5:1 on the brightest painting */
+  background:
+    linear-gradient(90deg, #0b141873 0%, #0b1418b3 26%, #0b1418c2 100%),
+    var(--class-bg) center / cover no-repeat,
+    var(--band);
+  text-shadow: 0 1px 3px #000;
 }
 .token-row {
   padding: 9px 16px 9px 12px;

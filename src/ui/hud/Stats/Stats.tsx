@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { cardText, t } from "../../../content/i18n";
 import { SKILLS } from "../../../content/schema";
 import { invOf, invOfIf } from "../../../engine/context";
@@ -8,7 +8,7 @@ import type { ChoiceOption, GameState, InvId } from "../../../engine/world/types
 import { db, gameStore, useGame } from "../../state/context";
 import { Icon, Stat } from "../../components/Icon";
 import { isIcon } from "../../assets/icons";
-import { backUrl } from "../../assets/images";
+import { backUrl, classBackground } from "../../assets/images";
 import { Portrait } from "../../components/Portrait";
 import { TokenPile } from "../../components/TokenPile";
 import { abilityOptionsOf } from "../../state/players";
@@ -142,7 +142,12 @@ export function StatBody({
         <TokenStack kind="clue" value={n.clues} />
         <HandCount value={n.hand} limit={n.handLimit} />
       </div>
-      <div className={styles.statBar}>
+      {/* the panel sits on the investigator's class painting */}
+      <div
+        className={styles.statBar}
+        data-testid="stat-bar"
+        style={{ "--class-bg": `url(${classBackground(d)})` } as CSSProperties}
+      >
         <div className={styles.statHead}>
           <button
             data-tip="portrait"

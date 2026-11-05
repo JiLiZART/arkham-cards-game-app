@@ -2,7 +2,14 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { CHAOS_TOKENS, hasTokenArt, layersFor } from "./chaosTokens";
 import { spriteIds } from "../../../scripts/import-icons";
-import { hasSymbol, ICON_SOURCES, MARKUP_ICONS, registerSymbols, type IconSource } from "./icons";
+import {
+  classBadge,
+  hasSymbol,
+  ICON_SOURCES,
+  MARKUP_ICONS,
+  registerSymbols,
+  type IconSource,
+} from "./icons";
 
 /** WebP alpha flag: VP8X flags byte bit 4, or VP8L header bit 28 (byte 24, 0x10) */
 const hasAlpha = (file: string) => {
@@ -37,7 +44,7 @@ describe("icons", () => {
     expect(hasSymbol("made_up_icon")).toBe(false);
   });
 
-  it("WebP art only for the cardboard tokens the sprite doesn't draw and the painted chaos bag; no stacked token art", () => {
+  it("WebP art only for the cardboard tokens the sprite doesn't draw, the class shields and the painted chaos bag", () => {
     const webps = Object.entries(ICON_SOURCES as Record<string, IconSource>)
       .filter(([, src]) => "webp" in src)
       .map(([n]) => n);
@@ -50,11 +57,16 @@ describe("icons", () => {
       "connectorOneWay",
       "damage",
       "doom",
+      "guardianBadge",
       "horror",
       "lead",
+      "mysticBadge",
       "resource",
       "resource-3",
       "resource-5",
+      "rogueBadge",
+      "seekerBadge",
+      "survivorBadge",
     ]);
     for (const n of ["health", "sanity"])
       expect("glyph" in (ICON_SOURCES as Record<string, IconSource>)[n], n).toBe(true);
@@ -64,6 +76,11 @@ describe("icons", () => {
         .sort(),
     ).toEqual([
       "chaos-bag.webp",
+      "class-guardian.webp",
+      "class-mystic.webp",
+      "class-rogue.webp",
+      "class-seeker.webp",
+      "class-survivor.webp",
       "clue-3.webp",
       "clue.webp",
       "connector-both.webp",
@@ -81,6 +98,19 @@ describe("icons", () => {
   it("every remaining WebP icon has a transparent background", () => {
     for (const src of Object.values(ICON_SOURCES) as IconSource[])
       if ("webp" in src) expect(hasAlpha(`public/icons/${src.webp}.webp`), src.webp).toBe(true);
+  });
+
+  it("a class shown large is its shield, neutral its glyph; the glyphs stay for text and small spots", () => {
+    expect(classBadge("seeker", 32)).toEqual({ name: "seekerBadge", size: 32 });
+    expect(classBadge("neutral", 32)).toEqual({ name: "neutral", size: 26 });
+    expect(classBadge("mythos", 32).name).toBe("neutral");
+    for (const c of ["guardian", "seeker", "rogue", "mystic", "survivor"])
+      expect("glyph" in (ICON_SOURCES as Record<string, IconSource>)[c], c).toBe(true);
+  });
+
+  it("every class has a painting for the active investigator's avatar", () => {
+    for (const c of ["guardian", "seeker", "rogue", "mystic", "survivor", "neutral"])
+      expect(existsSync(`public/art/investigator-bg/${c}.webp`), c).toBe(true);
   });
 
   it("every rules-text markup key names a symbol in the sprite", () => {

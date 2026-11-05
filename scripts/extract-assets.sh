@@ -11,11 +11,12 @@ UPSCAYL=/Applications/Upscayl.app/Contents/Resources
 mkdir -p "$OUT" public/table
 
 # target name  ←  source file
-# only the cardboard tokens are copied: damage, horror, doom, clues and resources (with their 3 and 5 stacks), lead, the connector plaques.
+# only the lead token and the connector plaques are copied: damage, horror, doom, clues and resources (with their stacks)
+# and the class shields are the author's art, from scripts/convert-user-art.sh.
 # Tokens and plaques come on an opaque white box; $SRC/transparent has them cut out by hand, but its cut also
 # cleared white inside the art (the heart, the 3s). Keep its outline, fill the holes: alpha = its alpha, or opaque
 # for anything not reachable from the border through fully transparent pixels (eroded 1px to keep its soft edge).
-rm -f "$OUT"/*.webp  # the sprite (sprite.svg) is not touched
+rm -f "$OUT"/{lead,connector-both,connector-one-way,chaos-bag}.webp  # the sprite and the author's art are not touched
 TMP=$(mktemp -d)
 mkdir -p "$TMP/png" "$TMP/up"
 while read -r dst src; do
@@ -24,14 +25,6 @@ while read -r dst src; do
   magick "$SRC/transparent/$src" -alpha extract "$TMP/inside.png" -compose Lighten -composite "$TMP/alpha.png"
   magick "$SRC/$src" -alpha off "$TMP/alpha.png" -compose CopyOpacity -composite "$TMP/png/$dst.png"
 done <<'MAP'
-damage damage-token-one.png
-horror horror-token.png
-doom doom-token.png
-clue evidence-coin.png
-clue-3 token-clue-trhee.png
-resource resource-one.png
-resource-3 token-resource-3.png
-resource-5 token-resource-5.png
 lead token-lead-player.png
 connector-both connector-both-ways.png
 connector-one-way connector-one-way-from-left-to-right.png

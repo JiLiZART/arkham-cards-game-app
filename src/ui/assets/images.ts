@@ -45,6 +45,13 @@ export function cardImage(
 export const backUrl = (kind: "player" | "encounter") =>
   asset(kind === "encounter" ? "table/back-encounter.png" : "table/back-player.png");
 
+const PAINTED = new Set(["guardian", "seeker", "rogue", "mystic", "survivor"]);
+/** the class painting behind an investigator panel (public/art/investigator-bg, the author's art): neutral for neutral or multi-class */
+export const classBackground = (c: Pick<CardDef, "faction" | "factions">) =>
+  asset(
+    `art/investigator-bg/${(c.factions?.length ?? 1) <= 1 && PAINTED.has(c.faction) ? c.faction : "neutral"}.webp`,
+  );
+
 /** cards that use the generic encounter back; the others use the player back */
 export const isEncounterCard = (c: Pick<CardDef, "faction" | "subtype">) =>
   c.faction === "mythos" && !c.subtype;

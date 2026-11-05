@@ -16,7 +16,7 @@ import {
   type PoolFilter,
 } from "../../game/decks";
 import { Icon, UiIcon } from "../../components/Icon";
-import { isIcon } from "../../assets/icons";
+import { classBadge } from "../../assets/icons";
 import { moment } from "../../hud/SoundLayer";
 import { cx } from "../../components/cx";
 import styles from "./DeckEditArea.module.css";
@@ -169,7 +169,7 @@ export function DeckEditArea({
                 })
               }
             >
-              {isIcon(c) ? <Icon name={c} size={22} title={tr(`card.faction.${c}`)} /> : c}
+              <Icon {...classBadge(c, 26)} title={tr(`card.faction.${c}`)} />
             </button>
           ))}
         </div>

@@ -11,7 +11,7 @@ import { Glyph, Icon, Stat, UiIcon } from "../../components/Icon";
 import { CardFace } from "../../components/CardFace";
 import { formatText } from "../../hud/Hud";
 import { cardImage } from "../../assets/images";
-import { hasSymbol, isIcon, scenarioIcon } from "../../assets/icons";
+import { classBadge, hasSymbol, scenarioIcon } from "../../assets/icons";
 import { Avatar } from "../Avatar";
 import { BagCard } from "../BagCard";
 import {
@@ -244,7 +244,7 @@ function InvestigatorSheet({ code }: { code: string }) {
   return (
     <div className={styles.wzSheet}>
       <div className="wz-sheet-head">
-        {isIcon(info.faction) && <Icon name={info.faction} size={30} />}
+        <Icon {...classBadge(info.faction, 34)} />
         <div>
           <b>{info.name}</b>
           {info.subname && <i>{info.subname}</i>}
@@ -329,7 +329,7 @@ function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) =
           data-testid={`wz-class-${c}`}
           onClick={() => setFilter({ faction: filter.faction === c ? null : c })}
         >
-          <Icon name={c} size={24} title={tr(`card.faction.${c}`)} />
+          <Icon {...classBadge(c, 28)} title={tr(`card.faction.${c}`)} />
         </button>
       ))}
     </div>

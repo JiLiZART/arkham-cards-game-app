@@ -2,9 +2,10 @@ import { asset } from "./images";
 
 /**
  * The one place that maps game concepts to icon sources. Sprite symbols come first (public/icons/sprite.svg, from
- * scripts/import-icons.ts: sharp at any size, coloured like the printed icons); WebP art (public/icons, from inspired/icons via
- * scripts/extract-assets.sh, upscaled 4x) for the cardboard tokens: damage, horror, doom, clues and resources (with their
- * 3 and 5 stacks), the lead token, the connector plaques and the painted chaos bag.
+ * scripts/import-icons.ts: sharp at any size, coloured like the printed icons); WebP art (public/icons) for the cardboard
+ * tokens: damage, horror, doom, clues and resources (with their 3 and 5 stacks) and the class shields drawn as large badges,
+ * supplied by the author (scripts/convert-user-art.sh); the lead token, the connector plaques and the painted chaos bag,
+ * from inspired/icons (scripts/extract-assets.sh, upscaled 4x).
  */
 
 /** a sprite symbol drawn in a colour, optionally over a silhouette layer (printed skill boxes, health and sanity) */
@@ -95,6 +96,11 @@ export const ICON_SOURCES = {
   lead: { webp: "lead" },
   connectorBoth: { webp: "connector-both" },
   connectorOneWay: { webp: "connector-one-way" },
+  guardianBadge: { webp: "class-guardian" },
+  seekerBadge: { webp: "class-seeker" },
+  rogueBadge: { webp: "class-rogue" },
+  mysticBadge: { webp: "class-mystic" },
+  survivorBadge: { webp: "class-survivor" },
 } satisfies Record<string, IconSource>;
 export type IconName = keyof typeof ICON_SOURCES;
 
@@ -143,10 +149,25 @@ export const ICON_LABELS: Record<IconName, string> = {
   chaosBag: "Bag",
   connectorBoth: "↔",
   connectorOneWay: "→",
+  guardianBadge: "Gua",
+  seekerBadge: "See",
+  rogueBadge: "Rog",
+  mysticBadge: "Mys",
+  survivorBadge: "Sur",
 };
 
 export const isIcon = (name: string): name is IconName => name in ICON_SOURCES;
 export const iconSource = (name: IconName): IconSource => ICON_SOURCES[name];
+/**
+ * A class drawn large (picker, filters) at `size`: its painted shield; neutral (and anything unknown) keeps the neutral
+ * glyph, shrunk to the shields' height (they fill 104 px of their 128 px square, scripts/convert-user-art.sh).
+ */
+export const classBadge = (faction: string, size: number): { name: IconName; size: number } => {
+  const badge = `${faction}Badge`;
+  return isIcon(badge)
+    ? { name: badge, size }
+    : { name: "neutral", size: Math.round((size * 104) / 128) };
+};
 /** URL of a WebP icon (only for the art the sprite doesn't have) */
 export const iconUrl = (name: IconName) => {
   const s = ICON_SOURCES[name] as IconSource;
