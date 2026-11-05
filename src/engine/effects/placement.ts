@@ -13,7 +13,10 @@ import {
   cardIf,
   randomInt,
   ready,
+  exhaust,
+  setCardLocation,
   setController,
+  setEngaged,
 } from "../context";
 import {
   cardsIn,
@@ -24,6 +27,7 @@ import {
   locations,
   matchesFilter,
   isHidden,
+  canReady,
 } from "../queries";
 import { discard, discardTop, isInPlay, moveCard, shuffleIntoDeck } from "../movement";
 import { win } from "../rules/cards";
@@ -238,17 +242,20 @@ function discardDeckTopEffect(game: GameContext, run: EffectRun<EffectOf<"discar
   }
 }
 
-/** the card the event was about discarded, if it is still in play (or resolving) */
+/** the card the event was about discarded, if it is still in play, resolving or in the hand it was drawn to (Dr. Henry Armitage) */
 function discardEventCardEffect(game: GameContext, run: EffectRun<EffectOf<"discardEventCard">>) {
   const c = run.ctx.card ? cardIf(game, run.ctx.card) : undefined;
-  if (c && (isInPlay(c) || c.zone === ZONE.Resolving)) discard(game, c.id);
+  if (c && (isInPlay(c) || c.zone === ZONE.Resolving || c.zone === ZONE.Hand)) discard(game, c.id);
 }
 
 function moveToEffect(game: GameContext, run: EffectRun<EffectOf<"moveTo">>) {
   const { step, ctx, you } = run;
   const e = run.effect;
 
-  const from = inv(game, you).location;
+  // another investigator moved (Shortcut): who first, then where, you choosing both
+  const who = e.target ? invTargets(game, step, e.target, ctx)?.[0] : you;
+  if (!who) return;
+  const from = inv(game, who).location;
   let cands: InstId[] = [];
   if (e.where === "connecting" && from) cands = connections(game, from);
   if (e.where === "connectingRevealed" && from)
@@ -281,8 +288,41 @@ function moveToEffect(game: GameContext, run: EffectRun<EffectOf<"moveTo">>) {
     { auto: true, key: "chooseMove" },
   );
   if (pick === undefined) return;
-  push(game, { t: STEP.Move, inv: you, to: pick });
+  push(game, { t: STEP.Move, inv: who, to: pick });
   return;
+}
+
+/** the event's enemy moved to a location connecting to its own (Bait and Switch); it engages no one while exhausted */
+function moveEnemyEffect(game: GameContext, run: EffectRun<EffectOf<"moveEnemy">>) {
+  const { step, ctx, you } = run;
+  const e = ctx.enemy ? cardIf(game, ctx.enemy) : undefined;
+  if (e?.zone !== ZONE.Enemy || !e.location) return;
+  const cands = connections(game, e.location);
+  if (!cands.length) return;
+  const to = ask<InstId>(
+    game,
+    step,
+    you,
+    CHOICE.Target,
+    `Where does ${def(game, e.id).name} move?`,
+    cands.map((l) => opt(game, l)),
+    { auto: true, key: "enemyMoveWhere", vars: { card: e.id } },
+  );
+  if (to === undefined) return;
+  const from = e.location;
+  setEngaged(game, e.id, null);
+  setCardLocation(game, e.id, to);
+  emit(game, EVENT.EnemyMove, `${def(game, e.id).name} moves to ${def(game, to).name}`, {
+    card: e.id,
+    data: { from, to },
+  });
+  push(game, win("enemyEntersLocation", { enemy: e.id, location: to }));
+}
+
+/** every card you control matching the filter exhausted (Wracked by Nightmares) */
+function exhaustCardsEffect(game: GameContext, run: EffectRun<EffectOf<"exhaustCards">>) {
+  for (const c of controlled(game, run.you))
+    if (!c.exhausted && matchesFilter(game, c.code, run.effect.filter)) exhaust(game, c.id);
 }
 
 function takeControlEffect(game: GameContext, run: EffectRun<EffectOf<"takeControl">>) {
@@ -329,7 +369,7 @@ function readyCardEffect(game: GameContext, run: EffectRun<EffectOf<"readyCard">
   const e = run.effect;
 
   const ids = controlled(game, you)
-    .filter((c) => c.exhausted && matchesFilter(game, c.code, e.filter))
+    .filter((c) => c.exhausted && matchesFilter(game, c.code, e.filter) && canReady(game, c.id))
     .map((c) => c.id);
   if (!ids.length) return;
   const pick = ask<InstId>(
@@ -379,6 +419,8 @@ export const placementEffects = {
   discardDeckTop: discardDeckTopEffect,
   discardEventCard: discardEventCardEffect,
   moveTo: moveToEffect,
+  moveEnemy: moveEnemyEffect,
+  exhaustCards: exhaustCardsEffect,
   takeControl: takeControlEffect,
   takeFromDiscard: takeFromDiscardEffect,
   readyCard: readyCardEffect,

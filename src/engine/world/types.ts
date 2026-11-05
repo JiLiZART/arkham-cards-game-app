@@ -9,6 +9,7 @@ import type {
   CampaignFlow,
   CardDef,
   ChaosToken,
+  Condition,
   ContentCoverage,
   DeckDef,
   Difficulty,
@@ -181,6 +182,8 @@ export interface TempMod {
   target: string;
   until: "test" | "turn" | "phase" | "round";
   source: InstId | null;
+  /** it ends sooner, with the next attack against its target enemy (Expose Weakness) */
+  nextAttack?: true;
 }
 
 export interface SkillTestState {
@@ -212,9 +215,12 @@ export interface SkillTestState {
   onFail?: Effect[];
   perPointFailed?: Effect[];
   insteadOfClues?: Effect[];
-  onTokens?: { tokens: string[]; effects: Effect[] };
+  onTokens?: { tokens: string[]; effects: Effect[]; after?: boolean };
   /** +1 damage if the attack succeeds by at least this much */
   marginDamage?: number;
+  /** more damage (`extraDamage`, else 1) if this holds as the damage is dealt (Song of the Dead: a skull revealed) */
+  extraDamageIf?: Condition;
+  extraDamage?: number;
   /** damage by the margin (Shotgun) */
   damagePerMargin?: { max: number; instead?: boolean; failMax?: number };
   /** paid for more after a success (Sledgehammer); asked once */
@@ -259,6 +265,29 @@ export interface SkillTestState {
   /** cancel key of the most recently revealed token */
   tokenKey?: string;
   /** chosen skill when the test allows several (Locked Door) */
+  /** the tested skill's base value in place of the investigator's (Duke: "a base [combat] skill of 4") */
+  baseSkill?: number;
+  /** a failed attack deals no damage to the other investigator engaged with the enemy (Blackjack) */
+  noDamageToOthersOnFail?: boolean;
+  /** clues a successful investigation discovers beyond the 1 (Rite of Seeking) */
+  extraClues?: number;
+  /** a success doesn't evade the enemy (an Elite enemy against "if the enemy is non-[[Elite]], evade it") */
+  noEvade?: boolean;
+  /** the "would succeed" window was opened (Rex's Curse) */
+  succeedWindowDone?: boolean;
+  /** the revealed tokens go back and new ones are revealed before the result (Rex's Curse) */
+  redraw?: boolean;
+  /** the tokens were revealed again by `redrawTokens` */
+  redrawn?: boolean;
+  /** the card whose success is resolved once more (Double or Nothing), and whether it was */
+  repeatBy?: InstId;
+  repeated?: boolean;
+  /** symbols whose effects and modifier this test ignores (Defiance) */
+  ignoredSymbols?: ChaosToken[];
+  /** the token just revealed is to be ignored and another revealed in its place (Lucky Dice) */
+  ignoreLast?: boolean;
+  /** steps that run once the test has ended ("after it resolves": Quick Thinking) */
+  afterEnd?: Step[];
 }
 
 export interface EffCtx {
@@ -286,6 +315,8 @@ export interface EffCtx {
   dealt?: [number, number];
   /** the card whose effect caused the event (horrorHealed) */
   by?: InstId | null;
+  /** the effect belongs to a parley action (Fine Clothes) */
+  parley?: true;
 }
 
 export interface ChoiceOption {
@@ -345,6 +376,8 @@ export type Step = { choice?: any } & (
   | { t: "Turn"; inv: InvId }
   | { t: "EndTurn"; inv: InvId }
   | { t: "PerformAction"; inv: InvId; action: TurnAction; free?: boolean }
+  /** an action taken as if it were the investigator's turn, counting toward none (Quick Thinking); they may decline */
+  | { t: "BonusAction"; inv: InvId }
   | { t: "EnemyPhase" }
   | { t: "HunterMoves"; done?: InstId[]; stepped?: boolean }
   | { t: "EnemyAttacks"; inv?: InvId; done?: InstId[] }
@@ -356,7 +389,8 @@ export type Step = { choice?: any } & (
   | { t: "Eff"; effect: Effect; ctx: EffCtx }
   | { t: "GainClues"; inv: InvId; location: InstId; n: number; key: string }
   | { t: "SlotCheck"; inv: InvId; card: InstId }
-  | { t: "EnterPlay"; inv: InvId; card: InstId }
+  /** `uses`: the uses it enters play with, chosen as its X cost (Jenny's Twin .45s) */
+  | { t: "EnterPlay"; inv: InvId; card: InstId; uses?: number }
   | { t: "ChooseTurnOrder" }
   | { t: "Script"; code: string; fn: string; ctx: EffCtx; args?: unknown }
   // the engine's deferred rules: each runs after the steps queued before it
@@ -392,14 +426,33 @@ export type Step = { choice?: any } & (
       /** a forced ability waiting in its window: the zone its card was in; it doesn't resolve once the card has moved */
       from?: Zone;
     }
-  | { t: "PlayCard"; inv: InvId; card: InstId; ctx?: EffCtx; free?: boolean; viaTrigger?: boolean }
+  /** `x`: the X chosen for an X cost */
+  | {
+      t: "PlayCard";
+      inv: InvId;
+      card: InstId;
+      ctx?: EffCtx;
+      free?: boolean;
+      viaTrigger?: boolean;
+      x?: number;
+    }
   /** `tapped`: the draw was asked for by tapping the deck already (the Draw action, or the second card of a draw of several) */
   | { t: "Draw"; inv: InvId; n: number; tapped?: boolean }
   /** `card`: that card is drawn as the encounter card (from beneath a card), not the deck's top */
-  | { t: "DrawEncounter"; inv: InvId; card?: InstId }
+  /** `key`: the card came from the encounter deck and its encounterDrawn window was opened (cancelled: it is discarded) */
+  | { t: "DrawEncounter"; inv: InvId; card?: InstId; key?: string }
   | { t: "Revelation"; inv: InvId; card: InstId }
   /** `redirect`: the spawn was turned away from `at` (Barricade (3)) and the player chooses where instead */
-  | { t: "Spawn"; enemy: InstId; inv: InvId | null; at?: InstId | null; redirect?: boolean }
+  /** `asked`: the "would spawn" window was opened, `engage` who it engages as it spawns (if they are still there) */
+  | {
+      t: "Spawn";
+      enemy: InstId;
+      inv: InvId | null;
+      at?: InstId | null;
+      redirect?: boolean;
+      asked?: boolean;
+      engage?: InvId | null;
+    }
   | { t: "EnemyAttack"; enemy: InstId; inv: InvId; aoo: boolean; key: string }
   | { t: "ResolveAttack"; enemy: InstId; inv: InvId; key: string }
   | {
@@ -511,6 +564,8 @@ export interface EventData {
   inv?: InvId | null;
   /** who defeated the enemy (an enemyDefeatedSelf window): the event's investigator for its effects */
   defeatedBy?: InvId | null;
+  /** the enemy an enemyDefeated window is about, gone from play: the context's enemy, not the event's subject */
+  defeated?: InstId;
   /** the card whose effect caused the event (horrorHealed) */
   by?: InstId | null;
   /** the keyword an enemy was defeated through (a predator's attack) */
@@ -596,6 +651,8 @@ export interface CardScript {
   fns?: Record<string, ScriptFn>;
   /** conditions named by `{ script: name }` in the card's (or scenario's) data */
   conditions?: Record<string, (game: GameContext, ctx: EffCtx) => boolean>;
+  /** the test's difficulty while the card is committed to it (Double or Nothing: doubled) */
+  difficulty?: (game: GameContext, cardId: InstId, difficulty: number) => number;
   /** icons the card gains on top of its printed ones, while it is committed (Steadfast, Curiosity) */
   icons?: (game: GameContext, cardId: InstId) => Partial<Record<Skill | "wild", number>>;
   /** dynamic constant modifiers */

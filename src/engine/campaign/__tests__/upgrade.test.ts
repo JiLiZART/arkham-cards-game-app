@@ -150,3 +150,80 @@ describe("spending experience on a campaign's deck", () => {
     if (r.ok) expect(r.cost).toBe(0);
   });
 });
+
+describe("Adaptable: two free level 0 swaps between scenarios", () => {
+  const ADAPTABLE = "02110";
+  const skids = () => {
+    const c = startCampaign(all, {
+      campaignId: "night-of-the-zealot",
+      difficulty: "standard",
+      seed: 1,
+      investigators: [{ code: "01003", deckId: "skids-starter" }],
+    });
+    c.investigators[0].deck.push(ADAPTABLE);
+    return c;
+  };
+  const own = (deck: string[]) => {
+    const out: Record<string, number> = {};
+    for (const code of deck) out[code] = (out[code] ?? 0) + 1;
+    return out;
+  };
+  /** n level 0 cards of the deck out, n new level 0 rogue cards of other titles in */
+  const swap = (deck: Record<string, number>, n: number) => {
+    const inv = all.investigators["01003"];
+    const outs = Object.keys(deck)
+      .filter((code) => {
+        const c = all.cards[code];
+        return (c.xp ?? 0) === 0 && !c.subtype && !inv.signatures.includes(code);
+      })
+      .slice(0, n);
+    const titles = new Set(Object.keys(deck).map((code) => all.cards[code].name));
+    const ins = Object.values(all.cards)
+      .filter(
+        (c) =>
+          c.faction === "rogue" &&
+          c.type === "event" &&
+          (c.xp ?? 0) === 0 &&
+          !c.subtype &&
+          !c.encounterSet &&
+          !c.factions &&
+          !/Exceptional|Myriad|Limit|Permanent/.test(c.text) &&
+          !titles.has(c.name),
+      )
+      .slice(0, n);
+    return withCards(deck, {
+      ...Object.fromEntries(outs.map((code) => [code, -1])),
+      ...Object.fromEntries(ins.map((c) => [c.code, 1])),
+    });
+  };
+
+  it("costs nothing for up to two level 0 cards swapped for level 0 cards, 1 for a third", () => {
+    const before = own(skids().investigators[0].deck);
+    expect(deckChangeCost(all, "01003", before, swap(before, 2))).toBe(0);
+    expect(deckChangeCost(all, "01003", before, swap(before, 3))).toBe(1);
+    const without = withCards(before, { [ADAPTABLE]: -1 });
+    expect(deckChangeCost(all, "01003", without, swap(without, 2))).toBe(2);
+  });
+
+  it("counts the swaps between two scenarios across upgrades; the next scenario gives two more", () => {
+    let c = skids();
+    const first = upgradeDeck(all, c, "01003", swap(own(c.investigators[0].deck), 2));
+    expect(first).toMatchObject({ ok: true, cost: 0 });
+    if (!first.ok) return;
+    c = first.campaign;
+    expect(c.investigators[0].swapsUsed).toEqual({ after: 0, n: 2 });
+    // a third swap before the next scenario costs experience Skids doesn't have
+    expect(upgradeDeck(all, c, "01003", swap(own(c.investigators[0].deck), 1))).toMatchObject({
+      ok: false,
+      reason: { key: "upgrade.cost" },
+    });
+    const later = {
+      ...c,
+      history: [{ scenarioId: "the-gathering", resolution: "R1", xp: 0, victory: 0 }],
+    };
+    expect(upgradeDeck(all, later, "01003", swap(own(c.investigators[0].deck), 1))).toMatchObject({
+      ok: true,
+      cost: 0,
+    });
+  });
+});

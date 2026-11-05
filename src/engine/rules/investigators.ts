@@ -162,17 +162,16 @@ function soakers(
   assigned: Record<string, [number, number]>,
 ) {
   const here = inv(game, i).location;
-  // another investigator's asset that may be assigned damage dealt at its location (Bodyguard)
-  const guards =
-    kind === 0
-      ? cardsIn(game, ZONE.Play).filter(
-          (c) =>
-            c.controller &&
-            c.controller !== i &&
-            def(game, c.id).soaksForLocation &&
-            inv(game, c.controller).location === here,
-        )
-      : [];
+  // another investigator's asset that may be assigned damage (and horror: Brother Xavier) dealt at its location (Bodyguard)
+  const guards = cardsIn(game, ZONE.Play).filter((c) => {
+    const soaks = def(game, c.id).soaksForLocation;
+    return (
+      c.controller &&
+      c.controller !== i &&
+      (kind === 0 ? !!soaks : soaks === "damageAndHorror") &&
+      inv(game, c.controller).location === here
+    );
+  });
   return [...controlled(game, i), ...guards].filter((c) => {
     const d = def(game, c.id);
     const cap = kind === 0 ? d.health : d.sanity;
@@ -433,7 +432,7 @@ export const defeatedHandler: Handler<"Defeated"> = (game, step) => {
     allCards(game).filter(
       (c) =>
         c.owner === step.inv &&
-        isOneOf(c.zone, ZONE.Play, ZONE.Threat, ZONE.Hand) &&
+        isOneOf(c.zone, ZONE.Play, ZONE.Threat, ZONE.Hand, ZONE.Attached) &&
         def(game, c.id).subtype,
     ),
   );

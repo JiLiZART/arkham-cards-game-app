@@ -17,7 +17,7 @@ import {
   setCounter,
   setEngaged,
 } from "../context";
-import { controlled, enemies, invsAt, matchesFilter } from "../queries";
+import { controlled, enemies, invsAt, isElite, matchesFilter } from "../queries";
 import { attackKey } from "../rules/enemies";
 import { win } from "../rules/cards";
 import type { EffCtx, InstId, InvId, Step } from "../world/types";
@@ -81,6 +81,8 @@ function takeDamageOrHorrorEffect(
 function healEffect(game: GameContext, run: EffectRun<EffectOf<"heal">>) {
   const { step, ctx } = run;
   const e = run.effect;
+  const damage = e.damage === undefined ? 0 : amt(game, e.damage, ctx);
+  const horror = e.horror === undefined ? 0 : amt(game, e.horror, ctx);
 
   // an Ally asset may be healed instead of an investigator: choose who first, then heal them
   if (e.targetAlly && ctx.you) {
@@ -111,8 +113,8 @@ function healEffect(game: GameContext, run: EffectRun<EffectOf<"heal">>) {
     if (pick === undefined) return;
     const asset = cardIf(game, pick);
     if (asset) {
-      const d = Math.min(e.damage ?? 0, asset.damage);
-      const h = Math.min(horrorHealable(game, ctx.you, asset.id, e.horror ?? 0), asset.horror);
+      const d = Math.min(damage, asset.damage);
+      const h = Math.min(horrorHealable(game, ctx.you, asset.id, horror), asset.horror);
       addCounter(game, asset.id, "damage", -d);
       addCounter(game, asset.id, "horror", -h);
       if (d || h)
@@ -135,8 +137,8 @@ function healEffect(game: GameContext, run: EffectRun<EffectOf<"heal">>) {
   if (!ts) return;
   for (const i of ts) {
     const me = inv(game, i);
-    const d = Math.min(e.damage ?? 0, me.damage);
-    const h = Math.min(horrorHealable(game, ctx.you, me.cardId, e.horror ?? 0), me.horror);
+    const d = Math.min(damage, me.damage);
+    const h = Math.min(horrorHealable(game, ctx.you, me.cardId, horror), me.horror);
     addCounter(game, me.id, "damage", -d);
     addCounter(game, me.id, "horror", -h);
     if (d || h)
@@ -182,6 +184,46 @@ function preventDamageEffect(game: GameContext, run: EffectRun<EffectOf<"prevent
   if (!ctx.key || !ctx.dealt) return;
   const done = prevented.get(game, ctx.key) ?? [0, 0];
   const left: [number, number] = [ctx.dealt[0] - done[0], ctx.dealt[1] - done[1]];
+  // up to `amount` points among both: all of it when it fits, else the player splits them ("I've had worse…")
+  if (e.kind === "both") {
+    let split: [number, number] = left;
+    if (left[0] + left[1] > e.amount) {
+      const lo = Math.max(0, e.amount - left[1]);
+      const hi = Math.min(e.amount, left[0]);
+      const d = ask<number>(
+        game,
+        step,
+        you,
+        CHOICE.Generic,
+        `Cancel which ${e.amount}?`,
+        Array.from({ length: hi - lo + 1 }, (_, k) => {
+          const damage = hi - k;
+          const horror = e.amount - damage;
+          return {
+            id: String(damage),
+            label: `Cancel ${damage} damage and ${horror} horror`,
+            value: damage,
+            key: "option.preventSplit",
+            vars: { damage, horror },
+          };
+        }),
+        { key: "preventSplit", vars: { n: e.amount } },
+      );
+      if (d === undefined) return;
+      split = [d, e.amount - d];
+    }
+    const n = split[0] + split[1];
+    if (n <= 0) return;
+    prevented.set(game, ctx.key, [done[0] + split[0], done[1] + split[1]]);
+    emit(
+      game,
+      EVENT.Prevent,
+      `${invName(game, you)} prevents ${split[0]} damage and ${split[1]} horror`,
+      { inv: you, card: ctx.source ?? null, data: { damage: split[0], horror: split[1] } },
+    );
+    if (e.gain) push(game, { t: STEP.Eff, effect: { op: "gainResources", amount: n }, ctx });
+    return;
+  }
   let kind = e.kind;
   if (kind === "either") {
     if (left[0] > 0 && left[1] > 0) {
@@ -327,7 +369,16 @@ function damageAssetsEffect(game: GameContext, run: EffectRun<EffectOf<"damageAs
   push(game, { t: STEP.AssetDefeatCheck, inv: you });
 }
 
+/** the context's enemy, still in play, is defeated; `nonElite`: unless it is [[Elite]] (Monster Slayer 5) */
+function defeatEnemyEffect(game: GameContext, run: EffectRun<EffectOf<"defeatEnemy">>) {
+  const enemy = run.ctx.enemy;
+  if (!enemy || cardIf(game, enemy)?.zone !== "enemy") return;
+  if (run.effect.nonElite && isElite(game, enemy)) return;
+  push(game, { t: STEP.DefeatEnemy, enemy, by: run.you });
+}
+
 export const damageEffects = {
+  defeatEnemy: defeatEnemyEffect,
   enemyAttack: enemyAttackEffect,
   damageAssets: damageAssetsEffect,
   takeDamage: takeDamageOrHorrorEffect,

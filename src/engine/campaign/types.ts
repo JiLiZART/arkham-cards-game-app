@@ -95,6 +95,8 @@ export interface CampaignInvestigator {
   status: "active" | "killed" | "insane";
   /** cards exiled from the deck in play, which an upgrade can buy back */
   exiled?: string[];
+  /** the free Adaptable swaps made since scenario `after` (the number of scenarios played then) */
+  swapsUsed?: { after: number; n: number };
 }
 
 export interface ScenarioRecord {

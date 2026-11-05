@@ -1,9 +1,18 @@
-import { actionsOwed, atTurnEnd, noReady, noVehicles, vehicleUsed } from "../world/flags";
+import {
+  actionsOwed,
+  atTurnEnd,
+  discardAtRoundEnd,
+  noReady,
+  noVehicles,
+  vehicleUsed,
+} from "../world/flags";
 import type { Ability, Boost, Effect, OnTokens, Skill } from "../../content/schema";
 import {
   abilitiesOf as abilitiesOfCard,
   allMods,
   cannotGainResources,
+  canReady,
+  enemies,
   attackable,
   cardsIn,
   enemiesAt,
@@ -26,6 +35,7 @@ import {
   beginActions,
   bumpCounter,
   card,
+  cardIf,
   clearDefeatedHealth,
   clearRoundActions,
   clearTurnDone,
@@ -34,6 +44,7 @@ import {
   currentPhase,
   currentRound,
   def,
+  dropQueuedUntil,
   emit,
   type GameContext,
   inv,
@@ -62,6 +73,7 @@ import { EVENT } from "../events/event";
 import { ZONE, PHASE, CHOICE, isOneOf } from "../world/constants";
 import { STEP } from "../steps/step";
 import { scriptOf } from "../world/scripts";
+import { discard } from "../movement";
 
 type Handler<T extends Step["t"]> = (game: GameContext, step: Extract<Step, { t: T }>) => void;
 
@@ -430,13 +442,37 @@ export function endTurnCleanup(game: GameContext, i: InvId) {
 
 const NO_AOO = ["fight", "evade", "parley", "resign"];
 
+/** one action as if it were the investigator's turn, outside the count of their actions (Quick Thinking); or none */
+export const bonusActionHandler: Handler<"BonusAction"> = (game, step) => {
+  const me = inv(game, step.inv);
+  if (me.status !== "playing" || currentPhase(game) === "ended") return;
+  // the actions that take one action, offered as if the investigator had one left
+  const left = me.actionsLeft;
+  setCounter(game, me.id, "actionsLeft", 1);
+  const opts = legalTurnActions(game, step.inv).filter(
+    (o) => actionCost(game, step.inv, o.value as TurnAction) === 1,
+  );
+  setCounter(game, me.id, "actionsLeft", left);
+  const a = ask<TurnAction | "none">(
+    game,
+    step,
+    step.inv,
+    CHOICE.Generic,
+    `${me.name}: take an action?`,
+    [...opts, { id: "none", label: "No action", value: "none", key: "option.noAction" }],
+    { key: "bonusAction" },
+  );
+  if (a === undefined || a === "none") return;
+  push(game, { t: STEP.PerformAction, inv: step.inv, action: a, free: true });
+};
+
 export const performActionHandler: Handler<"PerformAction"> = (game, step) => {
   const { inv: i, action: a } = step;
   const me = inv(game, i);
   const cost = actionCost(game, i, a);
   const designator = designatorOf(game, a);
-  // spend actions (restricted actions first when they apply)
-  let left = cost;
+  // spend actions (restricted actions first when they apply); a free one counts toward none (Quick Thinking)
+  let left = step.free ? 0 : cost;
   me.restrictedActions.forEach((r, index) => {
     if (left > 0 && restrictedFits(game, i, r, a, designator)) {
       const n = Math.min(left, r.left);
@@ -531,6 +567,8 @@ export function basicInvestigate(
     onFail?: Effect[];
     onTokens?: OnTokens;
     boost?: Boost;
+    baseSkill?: number;
+    extraClues?: number;
   } = {},
 ) {
   const skill = extra.skill ?? def(game, loc).investigateSkill ?? "intellect";
@@ -548,6 +586,8 @@ export function basicInvestigate(
     onFail: extra.onFail,
     onTokens: extra.onTokens,
     boost: extra.boost,
+    baseSkill: extra.baseSkill,
+    extraClues: extra.extraClues,
     ctx: { you: i, location: loc, source: extra.source ?? null },
   });
 }
@@ -570,6 +610,7 @@ export const enemyPhaseHandler: Handler<"EnemyPhase"> = (game) => {
 
 // ---------- upkeep ----------
 export function readyAll(game: GameContext) {
+  const mods = allMods(game);
   for (const c of allCards(game)) {
     // an enemy kept from readying this upkeep (Slippery)
     if (noReady.get(game, c.id)) {
@@ -585,7 +626,8 @@ export function readyAll(game: GameContext) {
         ZONE.Attached,
         ZONE.Investigator,
         ZONE.Threat,
-      )
+      ) &&
+      canReady(game, c.id, mods)
     )
       ready(game, c.id);
   }
@@ -600,6 +642,10 @@ export const upkeepHandler: Handler<"UpkeepPhase"> = (game) => {
   const steps: Step[] = [
     win("phaseBegins", { phase: "upkeep" }),
     win("playerWindow", { phase: "upkeep" }),
+    // "when attached enemy would ready" (Bind Monster)
+    ...enemies(game)
+      .filter((e) => e.exhausted)
+      .map((e) => win("enemyWouldReady", { enemy: e.id })),
     { t: STEP.ReadyAll },
   ];
   // readied enemies at an investigator's location engage
@@ -612,6 +658,8 @@ export const upkeepHandler: Handler<"UpkeepPhase"> = (game) => {
     if (!hasFlag(game, i, "noUpkeepResources", mods)) steps.push({ t: STEP.GainResource, inv: i });
   }
   for (const i of turnOrder(game)) steps.push({ t: STEP.HandSize, inv: i });
+  // "at the end of the upkeep phase" (Hired Muscle)
+  steps.push(win("upkeepPhaseEnds", {}));
   push(game, ...steps);
 };
 
@@ -625,6 +673,36 @@ export const endRoundHandler: Handler<"EndRound"> = (game) => {
 
 export function roundCleanup(game: GameContext) {
   expireMods(game, "round");
+  // "at the end of the round, if that asset is still in play, discard it" (A Chance Encounter)
+  for (const id of discardAtRoundEnd.get(game) ?? [])
+    if (cardIf(game, id)?.zone === ZONE.Play) discard(game, id);
+  discardAtRoundEnd.clear(game);
+}
+
+/** the step that starts each phase, and the round's end: where a phase's own steps stop */
+const PHASE_STEPS: readonly Step["t"][] = [
+  STEP.PhasePause,
+  STEP.MythosPhase,
+  STEP.InvestigationPhase,
+  STEP.EnemyPhase,
+  STEP.UpkeepPhase,
+  STEP.EndRound,
+];
+const PHASE_STEP = {
+  mythos: STEP.MythosPhase,
+  investigation: STEP.InvestigationPhase,
+  enemy: STEP.EnemyPhase,
+  upkeep: STEP.UpkeepPhase,
+} as const;
+
+/** the rest of the phase that has just begun does not happen (The Gold Pocket Watch) */
+export function skipPhase(game: GameContext) {
+  dropQueuedUntil(game, (s) => PHASE_STEPS.includes(s.t));
+}
+
+/** the phase that has just ended happens once more, now (The Gold Pocket Watch) */
+export function repeatPhase(game: GameContext, phase: keyof typeof PHASE_STEP) {
+  push(game, { t: PHASE_STEP[phase] } as Step);
 }
 
 export { checkEngagement };
@@ -650,7 +728,32 @@ export const handlers = {
   EndTurnCleanup: (game: GameContext, step: StepOf<"EndTurnCleanup">) =>
     endTurnCleanup(game, step.inv),
   GainResource: (game: GameContext, step: StepOf<"GainResource">) => {
-    if (!cannotGainResources(game, step.inv)) addCounter(game, step.inv, "resources", 1);
+    if (cannotGainResources(game, step.inv)) return;
+    // Jenny Barnes collects 1 more
+    const n = 1 + modSum(game, step.inv, "upkeepResources");
+    // Dark Horse: "you may choose to not gain resources"
+    if (hasFlag(game, step.inv, "mayDeclineUpkeepResources")) {
+      const gain = ask<boolean>(
+        game,
+        step,
+        step.inv,
+        CHOICE.Generic,
+        `Gain ${n} resources in the upkeep phase?`,
+        [
+          {
+            id: "gain",
+            label: `Gain ${n} resources`,
+            value: true,
+            key: "option.gainResources",
+            vars: { n },
+          },
+          { id: "decline", label: "Gain none", value: false, key: "option.gainNone" },
+        ],
+        { key: "upkeepResources", vars: { n } },
+      );
+      if (!gain) return;
+    }
+    addCounter(game, step.inv, "resources", n);
   },
   RoundCleanup: (game: GameContext) => roundCleanup(game),
   ReadyAll: (game: GameContext) => readyAll(game),
@@ -663,6 +766,7 @@ export const handlers = {
   Turn: turnHandler,
   EndTurn: endTurnHandler,
   PerformAction: performActionHandler,
+  BonusAction: bonusActionHandler,
   EnemyPhase: enemyPhaseHandler,
   UpkeepPhase: upkeepHandler,
   EndRound: endRoundHandler,

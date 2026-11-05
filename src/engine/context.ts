@@ -439,6 +439,12 @@ export function push(game: GameContext, ...steps: Step[]) {
   for (let i = steps.length - 1; i >= 0; i--) game.s.queue.push(steps[i]);
 }
 
+/** the queued steps that would resolve next are dropped, up to the first one `stop` keeps (a skipped phase) */
+export function dropQueuedUntil(game: GameContext, stop: (s: Step) => boolean) {
+  const q = game.s.queue;
+  while (q.length && !stop(q[q.length - 1])) q.pop();
+}
+
 /**
  * Ask a player. Returns the chosen value when the step is re-run with an answer,
  * otherwise records a pending choice and returns undefined (handler must return).

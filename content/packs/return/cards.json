@@ -22,6 +22,37 @@
       }
     ]
   },
+  "51001": { "script": true, "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "handSlots", "value": 2, "filter": { "trait": "Weapon" } }] },
+    { "kind": "constant", "condition": { "script": "twoHandsOfWeapons" }, "modifiers": [{ "stat": "willpower", "value": 1 }] }
+  ] },
+  "51002": { "abilities": [
+    { "kind": "action", "designator": "fight", "label": "Blackjack: fight (+2 combat)", "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "bonus": 2, "noDamageToOthersOnFail": true, "extraDamageIf": { "testEnemyEngagedWithOther": true } }] }
+  ] },
+  "51003": { "abilities": [
+    { "kind": "onPlay", "condition": { "cluesOnYourLocation": "some" }, "effects": [{ "op": "drawCards", "amount": 3 }] }
+  ] },
+  "51004": { "keywords": [{ "researched": { "log": "identifiedTheSolution" } }], "abilities": [
+    { "kind": "action", "label": "Strange Solution: an investigator at your location gains 2 resources and draws 1 card", "cost": { "uses": 1, "exhaust": true }, "effects": [{ "op": "forInvestigator", "target": "chooseAtLocation", "effects": [{ "op": "gainResources", "amount": 2 }, { "op": "drawCards", "amount": 1 }] }] }
+  ] },
+  "51005": { "abilities": [
+    { "kind": "onPlay", "effects": [{ "op": "chooseOne", "options": [
+      { "label": "Place 2 ammo or supplies on an asset and draw 1 card", "effects": [{ "op": "addUses", "amount": 2, "usesType": ["ammo", "supplies"], "filter": { "type": "asset" } }, { "op": "drawCards", "amount": 1 }] },
+      { "label": "Double the ammo or supplies on an asset", "effects": [{ "op": "addUses", "double": true, "usesType": ["ammo", "supplies"], "filter": { "type": "asset" } }] }
+    ] }] }
+  ] },
+  "51006": { "script": true, "abilities": [
+    { "kind": "reaction", "fromHand": true, "trigger": "enemyEntersLocation", "usableBy": "anyone", "condition": { "eventAtYourLocation": true }, "effects": [{ "op": "script", "fn": "stayBehind" }, { "op": "moveTo", "where": "connecting" }] }
+  ] },
+  "51007": { "abilities": [
+    { "kind": "action", "designator": "investigate", "label": "Rite of Seeking: investigate with willpower (+2)", "cost": { "uses": 1 }, "effects": [{ "op": "investigate", "skill": "willpower", "bonus": 2, "extraClues": 1,
+      "onTokens": { "tokens": ["skull", "cultist", "tablet", "elderThing", "autoFail"], "after": true, "effects": [{ "op": "loseActions", "amount": "all" }, { "op": "endTurn" }] } }] }
+  ] },
+  "51009": { "abilities": [
+    { "kind": "reaction", "fromHand": true, "trigger": "attackFailed", "condition": { "failedBy": { "max": 3 } }, "effects": [{ "op": "redirectDamage" }] }
+  ] },
+  "51010": { "script": true, "commitOnlyOwnTest": true, "commitDifficultyOverBase": 1 },
+  "51011": { "script": true },
   "50001": {
     "abilities": [
       {

@@ -10,6 +10,8 @@ import {
 } from "../context";
 import { checkCondition } from "../queries";
 import type { EffectOf, EffectRun } from "./types";
+import type { Step } from "../world/types";
+import { invTargets } from "./targets";
 import { CHOICE } from "../world/constants";
 import { STEP } from "../steps/step";
 import { scriptFnFor } from "../world/scripts";
@@ -79,7 +81,23 @@ function scriptEffect(game: GameContext, run: EffectRun<EffectOf<"script">>) {
   return;
 }
 
+/** effects for an investigator chosen by `target`, who is "you" in them (Liquid Courage's healed investigator) */
+function forInvestigatorEffect(game: GameContext, run: EffectRun<EffectOf<"forInvestigator">>) {
+  const { step, ctx } = run;
+  const ts = invTargets(game, step, run.effect.target, ctx);
+  if (!ts) return;
+  push(
+    game,
+    ...ts.map((i): Step => ({
+      t: STEP.Effects,
+      effects: run.effect.effects,
+      ctx: { ...ctx, you: i, inv: i },
+    })),
+  );
+}
+
 export const choicesEffects = {
+  forInvestigator: forInvestigatorEffect,
   chooseOne: chooseOneEffect,
   cancel: cancelEffect,
   resolution: resolutionEffect,

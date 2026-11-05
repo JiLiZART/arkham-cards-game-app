@@ -126,7 +126,7 @@ describe("works in the game", () => {
     expect(implemented(db, "01020")).toBe(true); // Machete
   });
   it("a card of a later cycle without written behaviour is text only", () => {
-    expect(implemented(db, "02006")).toBe(false); // Zoey's Cross
+    expect(implemented(db, "03007")).toBe(false); // The Home Front
   });
   it("a card with no rules text or only keywords works", () => {
     const vanilla = Object.values(db.cards).find(

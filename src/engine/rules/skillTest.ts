@@ -1,5 +1,12 @@
 import { deckDiscarded, peril } from "../world/flags";
-import type { Boost, ChaosToken, Effect, Skill, SymbolToken } from "../../content/schema";
+import type {
+  Boost,
+  ChaosToken,
+  Condition,
+  Effect,
+  Skill,
+  SymbolToken,
+} from "../../content/schema";
 import { randInt } from "../world/rng";
 import {
   abilitiesOf,
@@ -63,12 +70,18 @@ export interface TestOpts {
   perPointFailed?: Effect[];
   insteadOfClues?: Effect[];
   after?: { code: string; fn: string };
-  onTokens?: { tokens: string[]; effects: Effect[] };
+  onTokens?: { tokens: string[]; effects: Effect[]; after?: boolean };
   marginDamage?: number;
+  extraDamageIf?: Condition;
+  extraDamage?: number;
   damagePerMargin?: { max: number; instead?: boolean; failMax?: number };
   boost?: Boost;
   onDefeat?: Effect[];
   autoSucceed?: boolean;
+  baseSkill?: number;
+  noDamageToOthersOnFail?: boolean;
+  extraClues?: number;
+  noEvade?: boolean;
   ctx: EffCtx;
 }
 
@@ -88,6 +101,21 @@ export function forceResult(game: GameContext, result: "succeed" | "fail") {
 export function flipNegativeTokens(game: GameContext) {
   const t = game.s.skillTest;
   if (t) t.flipNegative = true;
+}
+/** the token just revealed is ignored: set aside until the test ends, another one revealed in its place (Lucky Dice) */
+export function ignoreToken(game: GameContext) {
+  const t = game.s.skillTest;
+  if (t?.tokens.length) t.ignoreLast = true;
+}
+/** the effects of a symbol, its modifier included, are ignored for the rest of the test (Defiance) */
+export function ignoreSymbol(game: GameContext, token: ChaosToken) {
+  const t = game.s.skillTest;
+  if (t) (t.ignoredSymbols ??= []).push(token);
+}
+/** steps that run once the test has ended, in the order given ("after it resolves": Quick Thinking) */
+export function afterTest(game: GameContext, steps: Step[]) {
+  const t = game.s.skillTest;
+  if (t) t.afterEnd = [...(t.afterEnd ?? []), ...steps];
 }
 /** a script run with the token chosen from several (Mask of Silenus) */
 export function setOnChoose(game: GameContext, code: string, fn: string) {
@@ -125,6 +153,7 @@ export function startTest(game: GameContext, o: TestOpts) {
     after: o.after,
     onTokens: o.onTokens,
     marginDamage: o.marginDamage,
+    ...(o.extraDamageIf ? { extraDamageIf: o.extraDamageIf, extraDamage: o.extraDamage } : {}),
     damagePerMargin: o.damagePerMargin,
     boost: o.boost,
     onDefeat: o.onDefeat,
@@ -135,6 +164,10 @@ export function startTest(game: GameContext, o: TestOpts) {
     failWindowDone: false,
     resolvedTokens: 0,
     flipNegative: false,
+    ...(o.baseSkill !== undefined ? { baseSkill: o.baseSkill } : {}),
+    ...(o.noDamageToOthersOnFail ? { noDamageToOthersOnFail: true } : {}),
+    ...(o.extraClues ? { extraClues: o.extraClues } : {}),
+    ...(o.noEvade ? { noEvade: true } : {}),
   };
   game.s.skillTest = t;
   emit(game, EVENT.TestStart, `${invName(game, o.inv)} tests ${o.skill} (${t.sourceLabel})`, {
@@ -152,11 +185,26 @@ const test = (game: GameContext) => {
 };
 
 export function difficultyOf(game: GameContext, t: SkillTestState): number {
-  if (t.kind === "investigate" && t.target)
-    return Math.max(0, shroud(game, t.target) + t.shroudMod);
-  if (t.kind === "fight" && t.target) return enemyStat(game, t.target, "fight");
-  if (t.kind === "evade" && t.target) return enemyStat(game, t.target, "evade");
-  return t.difficulty;
+  const d =
+    t.kind === "investigate" && t.target
+      ? Math.max(0, shroud(game, t.target) + t.shroudMod)
+      : t.kind === "fight" && t.target
+        ? enemyStat(game, t.target, "fight")
+        : t.kind === "evade" && t.target
+          ? enemyStat(game, t.target, "evade")
+          : t.difficulty;
+  // the tester's modifiers to the difficulty (Fine Clothes: -2 during a parley)
+  const mod = modSum(game, t.inv, "difficulty");
+  // a committed card that changes the difficulty while it is committed (Double or Nothing doubles it)
+  return t.committed.reduce(
+    (n, c) => {
+      const f = cancelledSkill(game, c)
+        ? undefined
+        : scriptOf(game.db, card(game, c).code)?.difficulty;
+      return f ? f(game, c, n) : n;
+    },
+    mod ? Math.max(0, d + mod) : d,
+  );
 }
 
 /** the skill whose icons count: intellect when Mind over Matter lets it stand in for combat/agility and its whole total (value + committed icons) is higher */
@@ -184,7 +232,18 @@ export function iconsFor(game: GameContext, cardId: InstId, skill: Skill): numbe
   const d = def(game, cardId);
   if (cancelledSkill(game, cardId)) return 0;
   const extra = scriptOf(game.db, d.code)?.icons?.(game, cardId) ?? {};
-  return (d.icons[skill] ?? 0) + (d.icons.wild ?? 0) + (extra[skill] ?? 0) + (extra.wild ?? 0);
+  // committed (or offered) to a test another investigator performs (Leadership)
+  const t = game.s.skillTest;
+  const other = d.iconsOnOthersTest && t && card(game, cardId).owner !== t.inv;
+  const more = other ? d.iconsOnOthersTest! : {};
+  return (
+    (d.icons[skill] ?? 0) +
+    (d.icons.wild ?? 0) +
+    (extra[skill] ?? 0) +
+    (extra.wild ?? 0) +
+    (more[skill] ?? 0) +
+    (more.wild ?? 0)
+  );
 }
 
 export function canCommit(
@@ -202,6 +261,14 @@ export function canCommit(
   if (iconsFor(game, cardId, t.skill) === 0 && !(mom && iconsFor(game, cardId, "intellect") > 0))
     return false;
   if (d.commitOnlyOwnTest && who !== t.inv) return false;
+  if (d.commitIf && !checkCondition(game, d.commitIf, { you: who, source: cardId })) return false;
+  // "only if the difficulty of that test is at least 2 higher than your base skill value" (Rise to the Occasion)
+  if (
+    d.commitDifficultyOverBase !== undefined &&
+    difficultyOf(game, t) - (t.baseSkill ?? baseSkill(game, who, t.skill)) <
+      d.commitDifficultyOverBase
+  )
+    return false;
   if (cardBlocked(game, who, cardId)) return false;
   if (
     d.maxCommitted !== undefined &&
@@ -214,7 +281,11 @@ export function canCommit(
 /** the current skill value without tokens, part by part: base skill, each committed card's icons, other modifiers */
 export function testParts(game: GameContext, t: SkillTestState) {
   const skill = testedSkill(game, t);
-  const base = ownSkill(game, t.inv, skill);
+  // "you attack with a base [combat] skill of 4" (Duke): that value in place of the investigator's, modifiers still apply
+  const base =
+    t.baseSkill !== undefined && skill === t.skill
+      ? Math.max(0, t.baseSkill + modSum(game, t.inv, skill))
+      : ownSkill(game, t.inv, skill);
   const icons = t.committed.map((c) => ({ card: c, n: iconsFor(game, c, skill) }));
   const mods = t.skillBonus + modSum(game, t.inv, "testValue");
   return {
@@ -445,6 +516,15 @@ function revealStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
 function afterRevealStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
   const t = test(game);
   const idx = t.tokens.length - 1;
+  if (t.ignoreLast) {
+    t.ignoreLast = false;
+    const [tok] = t.tokens.splice(idx, 1);
+    if (t.treatAs) delete t.treatAs[idx];
+    (t.ignored ??= []).push(tok);
+    emit(game, EVENT.TokenIgnored, `Ignored chaos token: ${tok}`, { inv: t.inv });
+    push(game, { t: STEP.Test, stage: TEST_STAGE.Reveal });
+    return;
+  }
   if (t.tokenKey && game.s.cancelled.includes(t.tokenKey)) {
     const [tok] = t.tokens.splice(idx, 1);
     game.s.chaosBag.push(tok);
@@ -570,6 +650,8 @@ function resolveTokensStage(game: GameContext) {
     if (t.paidToZero?.[at]) mod = 0;
     else if (/^[+-]?\d+$/.test(token)) mod = Number(token);
     else if (token === "autoFail") t.autoFail = true;
+    // Defiance: the chosen symbol does nothing this test, its modifier included
+    else if (t.ignoredSymbols?.includes(token) && !t.committedCancelled) mod = 0;
     else if (token === "elderSign" && hasFlag(game, t.inv, "elderSignIsAutoFail"))
       t.autoFail = true;
     else if (token === "elderSign") {
@@ -582,8 +664,17 @@ function resolveTokensStage(game: GameContext) {
             ? (cardIf(game, inv(game, t.inv).location)?.clues ?? 0)
             : v === "horrorOnYou"
               ? inv(game, t.inv).horror
-              : v;
+              : v === "resources"
+                ? inv(game, t.inv).resources
+                : v;
         if (es.effects) t.tokenOnSuccess.push(...es.effects);
+        // effects of the elder sign itself, before the result (Pete readies Duke, Rex may fail to draw 3)
+        if (es.onReveal)
+          onReveal.push({
+            t: STEP.Effects,
+            effects: es.onReveal,
+            ctx: { ...ctx, source: invCard, token },
+          });
         // runs now so it can adjust the current test (auto-succeed, extra on-success effects)
         const code = card(game, invCard).code;
         const fn = es.run ? scriptOf(game.db, code)?.fns?.[es.run] : undefined;
@@ -650,6 +741,8 @@ function resolveTokensStage(game: GameContext) {
           t.tokenAfterFail = [...(t.tokenAfterFail ?? []), ...eff.afterTest.effects];
         else if (condOk && eff.afterTest) t.tokenAfter.push(...eff.afterTest.effects);
         if (condOk && eff.cancelCommitted) t.committedCancelled = true;
+        // Jim Culver: the skull's modifier is 0, its effects still resolve
+        if (token === "skull" && hasFlag(game, t.inv, "skullIsZero")) mod = 0;
         if (eff.revealAnother === true) revealAnother = true;
         if (
           typeof eff.revealAnother === "object" &&
@@ -685,6 +778,12 @@ export function tokenTotal(game: GameContext, t: SkillTestState): number {
 
 function resultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
   const t = test(game);
+  // the tokens went back to the bag: reveal anew (Rex's Curse)
+  if (t.redraw) {
+    t.redraw = false;
+    push(game, { t: STEP.Test, stage: TEST_STAGE.Reveal });
+    return;
+  }
   // a card committed after the reveal (Timely Intervention): asked once, before the result
   if (!t.lateAsked) {
     const late = inv(game, t.inv).hand.filter(
@@ -727,6 +826,14 @@ function resultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
   const total = Math.max(0, value + tokens);
   const diff = difficultyOf(game, t);
   const success = t.autoSucceed || (!t.autoFail && total >= diff);
+  if (success && !t.succeedWindowDone) {
+    t.succeedWindowDone = true;
+    push(game, win("wouldSucceedSkillTest", { inv: t.inv, testId: t.id }), {
+      t: STEP.Test,
+      stage: TEST_STAGE.Result,
+    });
+    return;
+  }
   if (!success && !t.failWindowDone) {
     t.failWindowDone = true;
     push(
@@ -774,32 +881,106 @@ function resultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
   push(game, { t: STEP.Test, stage: TEST_STAGE.Apply });
 }
 
-function applyStage(game: GameContext) {
-  const t = test(game);
+/** the context the test's results resolve in */
+function applyCtx(t: SkillTestState): EffCtx {
   const ok = !!t.success;
-  const failBy = ok ? undefined : Math.max(0, -(t.margin ?? 0));
-  const ctx: EffCtx = {
+  return {
     ...t.ctx,
     you: t.ctx.you ?? t.inv,
     inv: t.ctx.inv ?? t.inv,
     testId: t.id,
-    failBy,
+    failBy: ok ? undefined : Math.max(0, -(t.margin ?? 0)),
     succeedBy: ok ? t.margin : undefined,
     enemy: t.kind === "fight" || t.kind === "evade" ? t.target : t.ctx.enemy,
     location: t.kind === "investigate" ? t.target : t.ctx.location,
   };
+}
+
+/** the committed skill cards' own text whose condition holds; `again` leaves out `skip` and a modifier for the test */
+function committedText(game: GameContext, t: SkillTestState, ctx: EffCtx, again?: InstId): Step[] {
   const steps: Step[] = [];
   // committed skill cards' own text; a committed asset or event only lends its icons (Grimoire, Skill Icons)
   for (const c of t.committed) {
-    if (def(game, c).type !== "skill" || cancelledSkill(game, c)) continue;
+    if (def(game, c).type !== "skill" || cancelledSkill(game, c) || c === again) continue;
     for (const a of abilitiesOf(game, c)) {
       if (a.kind !== "onPlay") continue;
       const cctx = { ...ctx, source: c, you: card(game, c).owner ?? t.inv };
       if (a.condition && !checkCondition(game, a.condition, cctx)) continue;
-      if (a.run) steps.push({ t: STEP.Script, code: card(game, c).code, fn: a.run, ctx: cctx });
-      else if (a.effects) steps.push({ t: STEP.Effects, effects: a.effects, ctx: cctx });
+      if (a.run && !again)
+        steps.push({ t: STEP.Script, code: card(game, c).code, fn: a.run, ctx: cctx });
+      else if (a.effects) {
+        // a modifier for the test already counts in every resolution of it (Deduction's clue, Vicious Blow's damage)
+        const effects = again
+          ? a.effects.filter((e) => !(e.op === "modify" && e.until === "test"))
+          : a.effects;
+        if (effects.length) steps.push({ t: STEP.Effects, effects, ctx: cctx });
+      }
     }
   }
+  return steps;
+}
+
+/**
+ * The success resolved once more (Double or Nothing, committed as `by`): the action's outcome and every "if this test
+ * is successful" effect of the test and of the other committed cards; reactions and token effects only once.
+ */
+export function repeatSuccess(game: GameContext, by: InstId) {
+  const t = game.s.skillTest;
+  if (t?.success) t.repeatBy = by;
+}
+
+/** the second resolution of a success, once the first one's outcome is under way (`repeatSuccess`) */
+function repeatSteps(game: GameContext, t: SkillTestState): Step[] {
+  if (!t.success || !t.repeatBy || t.repeated) return [];
+  t.repeated = true;
+  const ctx = applyCtx(t);
+  return [
+    ...committedText(game, t, ctx, t.repeatBy),
+    { t: STEP.Test, stage: TEST_STAGE.KindResult },
+    ...(t.onSuccess?.length ? [{ t: STEP.Effects, effects: t.onSuccess, ctx } as Step] : []),
+  ];
+}
+
+/**
+ * The revealed tokens go back to the bag and new ones are revealed before the result (Rex's Curse): what they did is
+ * undone, the test's other numbers stay.
+ */
+export function redrawTokens(game: GameContext) {
+  const t = game.s.skillTest;
+  if (!t) return;
+  game.s.chaosBag.push(...t.tokens);
+  emit(game, EVENT.TokenCancelled, `${t.tokens.join(", ")} go back to the bag`, { inv: t.inv });
+  Object.assign(t, {
+    tokens: [],
+    tokenMods: [],
+    resolvedTokens: 0,
+    tokenOnFail: [],
+    tokenOnSuccess: [],
+    tokenAfter: [],
+    tokenAfterFail: undefined,
+    treatAs: undefined,
+    paidToZero: undefined,
+    eitherDone: undefined,
+    revealedFirst: undefined,
+    committedCancelled: undefined,
+    autoFail: false,
+    revealAsked: undefined,
+    redraw: true,
+    redrawn: true,
+  });
+}
+
+function applyStage(game: GameContext) {
+  const t = test(game);
+  const ok = !!t.success;
+  const ctx = applyCtx(t);
+  const failBy = ctx.failBy;
+  // "after you fail … while attacking": before the failed attack's damage goes to another investigator (Oops! 2)
+  const steps: Step[] =
+    !ok && t.kind === "fight"
+      ? [win("attackFailed", { inv: t.inv, margin: t.margin, testId: t.id })]
+      : [];
+  steps.push(...committedText(game, t, ctx));
   steps.push({ t: STEP.Test, stage: TEST_STAGE.KindResult });
   const list = ok ? t.onSuccess : t.onFail;
   if (list?.length) steps.push({ t: STEP.Effects, effects: list, ctx });
@@ -809,8 +990,9 @@ function applyStage(game: GameContext) {
   if (!ok && t.tokenOnFail.length) steps.push({ t: STEP.Effects, effects: t.tokenOnFail, ctx });
   if (ok && t.tokenOnSuccess.length)
     steps.push({ t: STEP.Effects, effects: t.tokenOnSuccess, ctx });
-  if (t.onTokens && t.tokens.some((x) => t.onTokens!.tokens.includes(x)))
-    steps.push({ t: STEP.Effects, effects: t.onTokens.effects, ctx });
+  const tokensHit = !!t.onTokens && t.tokens.some((x) => t.onTokens!.tokens.includes(x));
+  if (tokensHit && !t.onTokens!.after)
+    steps.push({ t: STEP.Effects, effects: t.onTokens!.effects, ctx });
   if (t.after) steps.push({ t: STEP.Script, code: t.after.code, fn: t.after.fn, ctx });
   if (ok) {
     if (t.kind === "investigate")
@@ -830,6 +1012,9 @@ function applyStage(game: GameContext) {
   if (t.tokenAfter.length) steps.push({ t: STEP.Effects, effects: t.tokenAfter, ctx });
   if (!ok && t.tokenAfterFail?.length)
     steps.push({ t: STEP.Effects, effects: t.tokenAfterFail, ctx });
+  // "after this test resolves" (Rite of Seeking)
+  if (tokensHit && t.onTokens!.after)
+    steps.push({ t: STEP.Effects, effects: t.onTokens!.effects, ctx });
   push(game, ...steps);
 }
 
@@ -839,6 +1024,22 @@ function marginDamage(t: SkillTestState): number {
   if (!m) return 1;
   const by = t.margin ?? 0;
   return m.instead ? Math.min(m.max, Math.max(1, by)) : 1 + Math.min(m.max, Math.max(0, by));
+}
+
+/** the damage an attack deals, with its bonuses and the attacker's modifiers (Oops! deals a failed one's elsewhere) */
+export function attackDamage(game: GameContext, t: SkillTestState): number {
+  const extra =
+    t.extraDamageIf &&
+    checkCondition(game, t.extraDamageIf, { ...t.ctx, you: t.inv, enemy: t.target })
+      ? (t.extraDamage ?? 1)
+      : 0;
+  return (
+    marginDamage(t) +
+    t.damageBonus +
+    extra +
+    modSum(game, t.inv, "attackDamage") +
+    (t.marginDamage !== undefined && (t.margin ?? 0) >= t.marginDamage ? 1 : 0)
+  );
 }
 
 function kindResultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
@@ -883,6 +1084,8 @@ function kindResultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) 
     }
     t.boostDone = true;
   }
+  // Double or Nothing: the second resolution follows this one's outcome
+  push(game, ...repeatSteps(game, t));
   const steps: Step[] = [];
   if (t.success) {
     if (t.kind === "investigate" && t.target) {
@@ -897,7 +1100,7 @@ function kindResultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) 
           t: STEP.DiscoverClues,
           inv: t.inv,
           location: t.target,
-          n: 1 + modSum(game, t.inv, "clueBonus") + (t.boostClues ?? 0),
+          n: 1 + modSum(game, t.inv, "clueBonus") + (t.boostClues ?? 0) + (t.extraClues ?? 0),
         });
       steps.push(win("locationInvestigated", { location: t.target, inv: null }));
     }
@@ -905,11 +1108,7 @@ function kindResultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) 
       steps.push({
         t: STEP.DamageEnemy,
         enemy: t.target,
-        amount:
-          marginDamage(t) +
-          t.damageBonus +
-          modSum(game, t.inv, "attackDamage") +
-          (t.marginDamage !== undefined && (t.margin ?? 0) >= t.marginDamage ? 1 : 0),
+        amount: attackDamage(game, t),
         by: t.inv,
         attack: true,
         source: t.source,
@@ -929,7 +1128,7 @@ function kindResultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) 
           ctx: { ...t.ctx, you: t.inv, enemy: t.target },
         });
     }
-    if (t.kind === "evade" && t.target) {
+    if (t.kind === "evade" && t.target && !t.noEvade) {
       const e = cardOfIf(game.s, t.target);
       if (e?.zone === "enemy") {
         exhaust(game, e.id);
@@ -950,6 +1149,7 @@ function kindResultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) 
     // the attack's damage goes to the one other investigator the enemy is engaged with (Grimoire, Fight Action)
     if (
       t.kind === "fight" &&
+      !t.noDamageToOthersOnFail &&
       e?.zone === "enemy" &&
       e.engagedWith &&
       e.engagedWith !== t.inv &&
@@ -1006,6 +1206,9 @@ function endStage(game: GameContext) {
     if (cardOfIf(game.s, c)?.zone === "commit") moveCard(game, c, ZONE.Discard);
   game.s.chaosBag.push(...t.tokens, ...(t.ignored ?? []));
   expireMods(game, "test");
+  // "for the next attack performed against it" (Expose Weakness): over once that attack is
+  if (t.kind === "fight" && t.target)
+    game.s.tempMods = game.s.tempMods.filter((m) => !(m.nextAttack && m.target === t.target));
   game.s.skillTest = game.s.testStack.pop() ?? null;
   peril.clear(game);
   push(
@@ -1022,6 +1225,7 @@ function endStage(game: GameContext) {
         ]
       : []),
     win("skillTestEnds", { inv: t.inv, testId: t.id }),
+    ...(t.afterEnd ?? []),
   );
 }
 

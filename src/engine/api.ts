@@ -4,6 +4,7 @@
  * and `queue`: the step union is the engine's own, so no script names a step kind or a step's fields.
  */
 import { push, type GameContext } from "./context";
+import { afterTest as afterTestSteps } from "./rules/skillTest";
 import { STEP } from "./steps/step";
 import type { BeneathOf, Effect, Placement, TokenHolder, Trigger } from "../content/schema";
 import type { EffCtx, EventData, InstId, InvId, ScriptHooks, Step } from "./world/types";
@@ -40,7 +41,9 @@ export {
 } from "./context";
 export {
   abilitiesOf,
+  baseSkill,
   canPay,
+  canReady,
   cardsIn,
   checkCondition,
   connections,
@@ -65,7 +68,8 @@ export {
 } from "./queries";
 export { canPlay, playCost } from "./rules/cards";
 export { attackKey, canEnemyEnter, randomLocation } from "./rules/enemies";
-export { canCommit } from "./rules/skillTest";
+export { canCommit, difficultyOf as testDifficulty } from "./rules/skillTest";
+export { repeatPhase, skipPhase } from "./rules/round";
 export { resolvesOnDraw } from "./rules/investigators";
 
 // ---------- changing the game ----------
@@ -120,6 +124,10 @@ export {
   addExtraReveal,
   flipNegativeTokens,
   forceResult,
+  ignoreSymbol,
+  ignoreToken,
+  redrawTokens,
+  repeatSuccess,
   setOnChoose,
   startTest,
   treatTokenAs,
@@ -246,6 +254,13 @@ export const revealLocation = (location: InstId): Queued => verb(STEP.RevealLoca
 export const checkAssetDefeat = (inv: InvId): Queued => verb(STEP.AssetDefeatCheck)({ inv });
 /** the basic Fight action against the context's enemy */
 export const basicFight = (ctx: EffCtx): Queued => verb(STEP.BasicFight)({ ctx });
+export const checkSlots = verb(STEP.SlotCheck);
+export const enterPlay = verb(STEP.EnterPlay);
+/** one action taken as if it were the investigator's turn, counting toward none of their actions; they may decline */
+export const bonusAction = verb(STEP.BonusAction);
+/** steps run once the skill test under way has ended, the first given first ("after it resolves") */
+export const afterTest = (game: GameContext, ...steps: Queued[]) =>
+  afterTestSteps(game, steps as unknown as Step[]);
 
 // ---------- a Return-to scenario's script over its base's ----------
 /**

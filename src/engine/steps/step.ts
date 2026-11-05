@@ -90,4 +90,5 @@ export const STEP = {
   RelentlessAttack: "RelentlessAttack",
   PredatorAttacks: "PredatorAttacks",
   AddSwarm: "AddSwarm",
+  BonusAction: "BonusAction",
 } as const satisfies { [K in StepKind]: K };

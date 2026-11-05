@@ -20,6 +20,7 @@ import {
   invName,
   isCancelled,
   leadInvestigator,
+  logLength,
   pile,
   placeInvestigator,
   push,
@@ -56,11 +57,28 @@ export const drawEncounterHandler: Handler<"DrawEncounter"> = (game, step) => {
   const id = step.card ?? pile(game, ZONE.EncounterDeck)[0];
   if (!id) return;
   const d = def(game, id);
-  moveCard(game, id, ZONE.Resolving);
-  emit(game, EVENT.Encounter, `${invName(game, step.inv)} draws ${d.name}`, {
-    inv: step.inv,
-    card: id,
-  });
+  if (!step.key) {
+    moveCard(game, id, ZONE.Resolving);
+    emit(game, EVENT.Encounter, `${invName(game, step.inv)} draws ${d.name}`, {
+      inv: step.inv,
+      card: id,
+    });
+    // drawn from the deck: the draw can be cancelled before the card resolves (Ward of Protection 5, Dr. Maleson)
+    if (!step.card) {
+      const key = `enc:${id}:${logLength(game)}`;
+      push(game, win("encounterDrawn", { inv: step.inv, card: id, key }), {
+        ...step,
+        card: id,
+        key,
+      });
+      return;
+    }
+  } else if (isCancelled(game, step.key)) {
+    // cancelled: discarded, unless the canceller put it elsewhere (shuffled back into the deck)
+    if (cardIf(game, id)?.zone === ZONE.Resolving) moveCard(game, id, ZONE.EncounterDiscard);
+    emit(game, EVENT.Cancelled, `${d.name} is cancelled`, { card: id });
+    return;
+  }
   // a location that prints its own revelation ("Put … into play") resolves it as a treachery does (Lost in Time and Space)
   if (d.type === "location" && !abilitiesOf(game, id).some((a) => a.kind === "revelation")) {
     // a location drawn as an encounter card enters play connected to the drawer's location
@@ -439,10 +457,16 @@ export const resolutionHandler: Handler<"Resolution"> = (game, step) => {
   endScenario(game, step.id);
   // what the scenario's script records about the game, before its cards are gone (Smoke and Mirrors)
   fireScenarioHook(game, "ended", step.id !== "none");
-  // "when the game ends" effects (Cover Up, Hospital Debts; Dead Ends in the hand)
+  // "when the game ends" effects (Cover Up, Hospital Debts; Dead Ends in the hand; Smite the Wicked on its enemy)
   fireGameEnd(
     game,
-    allCards(game).filter((c) => c.zone === "threat" || c.zone === "play" || c.zone === "hand"),
+    allCards(game).filter(
+      (c) =>
+        c.zone === "threat" ||
+        c.zone === "play" ||
+        c.zone === "hand" ||
+        (c.zone === "attached" && !!c.owner),
+    ),
   );
   const r = game.db.scenarios[scenarioIdOf(game)].resolutions[step.id];
   emit(game, EVENT.Resolution, `Scenario ends: ${r?.title ?? step.id}`, { data: { id: step.id } });

@@ -1,4 +1,4 @@
-import { attacked, named } from "./world/flags";
+import { attacked, baseRaised, named } from "./world/flags";
 import { keywordName, type Keyword } from "../content/schema";
 import type {
   Amount,
@@ -444,7 +444,8 @@ function modApplies(game: GameContext, mod: Modifier, target: string): boolean {
   return (
     (when === "investigating" && t.kind === "investigate") ||
     (when === "fighting" && t.kind === "fight") ||
-    (when === "evading" && t.kind === "evade")
+    (when === "evading" && t.kind === "evade") ||
+    (when === "parleying" && !!t.ctx.parley)
   );
 }
 
@@ -470,6 +471,16 @@ export const hasFlag = (
 ) =>
   mods.some((m) => m.target === target && m.mod.flag === flag && modApplies(game, m.mod, target));
 
+/** the card may ready: not an asset whose controller's assets cannot ready (Wracked by Nightmares) */
+export function canReady(game: GameContext, id: InstId, mods = allMods(game)): boolean {
+  const c = card(game, id);
+  return !(
+    def(game, id).type === "asset" &&
+    !!c.controller &&
+    hasFlag(game, c.controller, "assetsCannotReady", mods)
+  );
+}
+
 /** clues may be placed on the location (Ascending the Hill: not on non-[[Altered]] ones) */
 export const canPlaceClues = (game: GameContext, loc: InstId) =>
   !hasFlag(game, loc, "cannotPlaceClues");
@@ -493,8 +504,26 @@ export function modsFor(game: GameContext, i: InvId): AppliedMod[] {
   return allMods(game).filter((m) => !m.source || !ignored.has(m.source));
 }
 
+/** the skill cards an investigator owns committed to the skill test under way (Try and Try Again) */
+export const committedSkillsOf = (game: GameContext, i: InvId | null | undefined): InstId[] =>
+  (game.s.skillTest?.committed ?? []).filter(
+    (c) =>
+      !!i &&
+      cardRecIf(game, c)?.zone === ZONE.Commit &&
+      cardRecIf(game, c)?.owner === i &&
+      def(game, c).type === "skill",
+  );
+
+/** the printed value, or what a card in play raises it to (The Red-Gloved Man) */
 export function baseSkill(game: GameContext, i: InvId, skill: Skill): number {
-  return def(game, inv(game, i).cardId).skills![skill];
+  const printed = def(game, inv(game, i).cardId).skills![skill];
+  let v = printed;
+  for (const [id, r] of Object.entries(baseRaised.get(game) ?? {})) {
+    const c = cardRecIf(game, id);
+    if (c?.zone === ZONE.Play && c.controller === i && r.skills.includes(skill))
+      v = Math.max(v, r.to);
+  }
+  return v;
 }
 
 export function skillValue(game: GameContext, i: InvId, skill: Skill): number {
@@ -550,8 +579,17 @@ export function addTempMod(
   target: string,
   until: "test" | "turn" | "phase" | "round",
   source: InstId | null = null,
+  /** it ends with the next attack against its target enemy, if that comes first (Expose Weakness) */
+  nextAttack?: boolean,
 ) {
-  game.s.tempMods.push({ id: game.s.seq++, mod, target, until, source });
+  game.s.tempMods.push({
+    id: game.s.seq++,
+    mod,
+    target,
+    until,
+    source,
+    ...(nextAttack ? { nextAttack: true as const } : {}),
+  });
 }
 export function expireMods(game: GameContext, until: "test" | "turn" | "phase" | "round") {
   game.s.tempMods = game.s.tempMods.filter((t) => t.until !== until);
@@ -584,6 +622,7 @@ export function canPay(
   }
   if (cost.discardFromHand && me.hand.filter((h) => h !== cardId).length < cost.discardFromHand)
     return false;
+  if (cost.actions && actionsLeft(game, i) < cost.actions) return false;
   return true;
 }
 
@@ -646,6 +685,7 @@ export function checkCondition(game: GameContext, c: Condition, ctx: EffCtx): bo
   if ("scenarioFlag" in c) return !!named(game, c.scenarioFlag);
   if ("phase" in c) return game.s.phase === c.phase;
   if ("selfHasClues" in c) return !!ctx.source && card(game, ctx.source).clues > 0;
+  if ("selfHasHorror" in c) return !!ctx.source && card(game, ctx.source).horror > 0;
   if ("engaged" in c) return !!you && engagedWith(game, you).length > 0;
   if ("yourSkillTest" in c) return !!game.s.skillTest && game.s.skillTest.inv === you;
   if ("eventCard" in c)
@@ -729,6 +769,31 @@ export function checkCondition(game: GameContext, c: Condition, ctx: EffCtx): bo
     const here = src?.zone === ZONE.Location ? src.id : src?.location;
     return !!ctx.inv && !!here && invRecIf(game, ctx.inv)?.location === here;
   }
+  if ("testSourceIsSelf" in c) return !!ctx.source && game.s.skillTest?.source === ctx.source;
+  if ("testEnemyEngagedWithYou" in c) {
+    const target = game.s.skillTest?.target;
+    return !!you && !!target && cardRecIf(game, target)?.engagedWith === you;
+  }
+  if ("testEnemyEngagedWithOther" in c) {
+    const target = game.s.skillTest?.target;
+    const engaged = target ? cardRecIf(game, target)?.engagedWith : null;
+    return !!engaged && engaged !== you;
+  }
+  if ("committedSkillYouOwn" in c) return committedSkillsOf(game, you).length > 0;
+  if ("resignInPlay" in c)
+    return cardsInAny(game, MOD_ZONES).some(
+      (x) =>
+        !x.owner &&
+        (x.zone !== ZONE.Location || x.revealed) &&
+        abilitiesOf(game, x.id).some((a) => a.designator === "resign"),
+    );
+  if ("aloneAtYourLocation" in c) return !!you && invsAt(game, yourLoc).every((i) => i === you);
+  if ("cardsInHand" in c) {
+    const n = you ? inv(game, you).hand.length : 0;
+    return !!you && n >= (c.cardsInHand.min ?? 0) && n <= (c.cardsInHand.max ?? Infinity);
+  }
+  if ("enemyNotEngagedWithYou" in c)
+    return !!you && enemiesAt(game, yourLoc).some((e) => e.engagedWith !== you);
   if ("script" in c) {
     const own = ctx.source ? cardRecIf(game, ctx.source)?.code : undefined;
     const fn = conditionFor(game.db, game.s.scenarioId, own, c.script);

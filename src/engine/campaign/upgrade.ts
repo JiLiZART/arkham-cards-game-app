@@ -8,18 +8,38 @@ const level = (c: CardDef) => c.xp ?? 0;
 const exceptional = (c: CardDef) =>
   (c.keywords ?? []).includes("exceptional") || /Exceptional/.test(c.text);
 const myriad = (c: CardDef) => /Myriad/.test(c.text);
+/** Adaptable: "you may swap up to two level 0 cards out of your deck in exchange for an equal number of level 0 cards" */
+const ADAPTABLE = /you may swap up to two level 0 cards out of your deck/;
+/** the free level 0 swaps a deck's Adaptable copies allow between two scenarios: 2 each */
+export const freeSwapsOf = (db: ContentDb, deck: Record<string, number>): number =>
+  Object.entries(deck).reduce(
+    (n, [code, k]) => n + (ADAPTABLE.test(db.cards[code]?.text ?? "") ? 2 * k : 0),
+    0,
+  );
 
 /**
  * What changing a deck costs in experience, by the campaign rules: each new card costs its level (at least 1); replacing
  * a card with a higher level of the same title costs the difference (at least 1); an Exceptional card costs double;
- * Myriad copies come together for one price. Taking cards out, signature cards and weaknesses cost nothing.
+ * Myriad copies come together for one price. Taking cards out, signature cards and weaknesses cost nothing. Up to
+ * `freeSwaps` level 0 cards that replace level 0 cards taken out cost nothing (Adaptable; by default all its copies allow).
  */
 export function deckChangeCost(
   db: ContentDb,
   investigator: string,
   before: Record<string, number>,
   after: Record<string, number>,
+  freeSwaps = freeSwapsOf(db, before),
 ): number {
+  return deckChange(db, investigator, before, after, freeSwaps).cost;
+}
+
+function deckChange(
+  db: ContentDb,
+  investigator: string,
+  before: Record<string, number>,
+  after: Record<string, number>,
+  freeSwaps: number,
+): { cost: number; swaps: number } {
   const inv = db.investigators[investigator];
   const free = new Set([
     ...(inv?.signatures ?? []),
@@ -47,8 +67,10 @@ export function deckChangeCost(
       Object.entries(before).reduce((n, [code, k]) => n + (isFree(db.cards[code]) ? 0 : k), 0),
   );
   let total = 0;
+  // what a level 0 card that replaces no card of its title costs: an Adaptable swap may make it free
+  const swappable: number[] = [];
   for (const [title, adds] of added) {
-    const olds = [...(removed.get(title) ?? [])].sort((a, b) => level(b) - level(a));
+    const olds = (removed.get(title) ?? []).sort((a, b) => level(b) - level(a));
     const news = [...adds].sort((a, b) => level(b) - level(a));
     let paidMyriad = false;
     for (const c of news) {
@@ -63,10 +85,19 @@ export function deckChangeCost(
         continue;
       }
       const base = Math.max(1, level(c) - (old ? level(old) : 0));
-      total += exceptional(c) ? base * 2 : base;
+      const price = exceptional(c) ? base * 2 : base;
+      total += price;
+      if (!old && level(c) === 0) swappable.push(price);
     }
   }
-  return total;
+  // the level 0 cards taken out that no card of their title replaced, each of which a swap may trade for a new one
+  const out = [...removed.values()].flat().filter((c) => level(c) === 0).length;
+  const swaps = Math.min(freeSwaps, out, swappable.length);
+  const saved = swappable
+    .sort((a, b) => b - a)
+    .slice(0, swaps)
+    .reduce((n, x) => n + x, 0);
+  return { cost: total - saved, swaps };
 }
 
 export type UpgradeResult =
@@ -127,7 +158,16 @@ export function upgradeDeck(
     if (!replaced)
       return { ok: false, reason: { key: "upgrade.researched", vars: { card: code } } };
   }
-  const cost = deckChangeCost(db, investigator, before, cards);
+  // Adaptable's swaps are counted between two scenarios, however many upgrades are made there
+  const after = campaign.history.length;
+  const used = who.swapsUsed?.after === after ? who.swapsUsed.n : 0;
+  const { cost, swaps } = deckChange(
+    db,
+    investigator,
+    before,
+    cards,
+    Math.max(0, freeSwapsOf(db, before) - used),
+  );
   if (cost > who.xp)
     return { ok: false, reason: { key: "upgrade.cost", vars: { need: cost, have: who.xp } } };
   const deck = Object.entries(cards).flatMap(([code, n]) => Array<string>(n).fill(code));
@@ -137,7 +177,14 @@ export function upgradeDeck(
     campaign: {
       ...campaign,
       investigators: campaign.investigators.map((i) =>
-        i.code === investigator ? { ...i, deck, xp: i.xp - cost } : i,
+        i.code === investigator
+          ? {
+              ...i,
+              deck,
+              xp: i.xp - cost,
+              ...(swaps ? { swapsUsed: { after, n: used + swaps } } : {}),
+            }
+          : i,
       ),
     },
   };

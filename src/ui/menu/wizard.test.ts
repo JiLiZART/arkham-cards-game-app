@@ -417,7 +417,8 @@ describe("choosing among all investigators", () => {
   it("notes the investigators whose ability has no written behaviour, and those with no deck", () => {
     const byCode = Object.fromEntries(pickerList(db, "en", all).map((i) => [i.code, i]));
     expect(byCode["01001"]).toMatchObject({ partlyImplemented: false, needsDeck: false });
-    expect(byCode["02001"]).toMatchObject({ partlyImplemented: true, needsDeck: false });
+    const partly = Object.values(byCode).find((i) => i.partlyImplemented && !i.needsDeck);
+    expect(partly).toBeDefined();
     const without = Object.values(byCode).find((i) => i.needsDeck);
     expect(without).toBeDefined();
   });

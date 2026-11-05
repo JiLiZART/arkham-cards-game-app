@@ -6,6 +6,7 @@ import {
   ask,
   card,
   cardIf,
+  currentPhase,
   currentRound,
   def,
   emit,
@@ -37,6 +38,7 @@ import {
   enemiesAt,
   keywordArg,
   enemyStat,
+  allMods,
   engagedWith,
   hasFlag,
   hasKeyword,
@@ -58,7 +60,7 @@ import { moveCard, putBeneath } from "../movement";
 import type { InstId, InvId, Step, StepOf } from "../world/types";
 import { win } from "./cards";
 import { EVENT } from "../events/event";
-import { ZONE, CHOICE } from "../world/constants";
+import { ZONE, CHOICE, PHASE } from "../world/constants";
 import { STEP } from "../steps/step";
 import { fireScenarioHook } from "./scripts";
 
@@ -221,6 +223,19 @@ export const spawnHandler: Handler<"Spawn"> = (game, step) => {
       at = pick;
     }
   }
+  // "when an enemy would spawn at your location" (Think on Your Feet): then it spawns there, engaging whom it would if
+  // they are still there
+  if (!step.asked) {
+    push(game, win("enemyWouldSpawn", { inv: step.inv, enemy: step.enemy, location: at }), {
+      ...step,
+      at,
+      engage,
+      asked: true,
+      choice: undefined,
+    });
+    return;
+  }
+  if (step.engage && inv(game, step.engage).location === at) engage = step.engage;
   moveCard(game, step.enemy, ZONE.Enemy, { location: at });
   // a unique encounter card entering play discards the player card with its title (Grimoire, Unique)
   if (d.unique)
@@ -497,15 +512,32 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (game, step) => {
   if (d.victory !== undefined) moveCard(game, step.enemy, ZONE.Victory);
   else moveCard(game, step.enemy, e.owner ? ZONE.Discard : ZONE.EncounterDiscard);
   defeated.set(game, e.code, true);
-  push(game, win("enemyDefeated", { inv: step.by, ...(step.via ? { via: step.via } : {}) }), {
-    t: STEP.CheckObjectives,
-  });
+  push(
+    game,
+    win("enemyDefeated", {
+      inv: step.by,
+      defeated: step.enemy,
+      ...(step.via ? { via: step.via } : {}),
+    }),
+    {
+      t: STEP.CheckObjectives,
+    },
+  );
   // Doomed: 1 doom on the current agenda, which can make it advance
   if (d.keywords.includes("doomed"))
     push(game, { t: STEP.PlaceDoom, card: "agenda", n: 1 }, { t: STEP.CheckDoom });
 };
 
 // ---------- enemy phase ----------
+/** in the enemy phase, the locations a Lure draws each moving enemy toward instead (none: they move as usual) */
+function lures(game: GameContext): InstId[] {
+  if (currentPhase(game) !== PHASE.Enemy) return [];
+  const mods = allMods(game);
+  return locations(game)
+    .filter((l) => hasFlag(game, l.id, "luresEnemies", mods))
+    .map((l) => l.id);
+}
+
 /** where a Patrol enemy patrols toward: the scenario's say, else its keyword's expression from where it is */
 function patrolGoals(game: GameContext, enemy: InstId): InstId[] | null {
   const hooked = fireScenarioHook(game, "patrolTarget", enemy);
@@ -536,7 +568,8 @@ export const patrolMovesHandler: Handler<"PatrolMoves"> = (game, step) => {
   );
   if (!e) return;
   const next: Step = { t: STEP.PatrolMoves, done: [...done, e.id] };
-  const goals = patrolGoals(game, e.id) ?? [];
+  const lured = lures(game);
+  const goals = lured.length ? lured : (patrolGoals(game, e.id) ?? []);
   const dist = distances(game, e.location!);
   const nearest = Math.min(...goals.map((g) => dist.get(g) ?? Infinity));
   if (!goals.length || nearest === 0 || nearest === Infinity) {
@@ -608,11 +641,12 @@ export const hunterMovesHandler: Handler<"HunterMoves"> = (game, step) => {
   if (hunters.length === 0) return;
   const e = hunters[0];
   // "only" prey hunts just its prey; other prey only breaks ties between the nearest
-  const targets = (
-    onlyPrey(game, e.id) ? preyCandidates(game, e.id, activeInvs(game)) : activeInvs(game)
-  )
-    .map((i) => inv(game, i).location!)
-    .filter(Boolean);
+  const lured = lures(game);
+  const targets = lured.length
+    ? lured
+    : (onlyPrey(game, e.id) ? preyCandidates(game, e.id, activeInvs(game)) : activeInvs(game))
+        .map((i) => inv(game, i).location!)
+        .filter(Boolean);
   const dist = distances(game, e.location!);
   const nearest = Math.min(...targets.map((t) => dist.get(t) ?? Infinity));
   const goals = targets.filter((t) => dist.get(t) === nearest);
@@ -624,7 +658,7 @@ export const hunterMovesHandler: Handler<"HunterMoves"> = (game, step) => {
   // the first hunter that actually moves this phase opens the step
   if (!step.stepped && step.choice === undefined) logStep(game, "hunters");
   const next: Step = { ...step, choice: undefined, done: [...done, e.id], stepped: true };
-  if (options.length > 1) {
+  if (options.length > 1 && !lured.length) {
     // prefer the path toward prey
     const preyInvs = preyCandidates(
       game,

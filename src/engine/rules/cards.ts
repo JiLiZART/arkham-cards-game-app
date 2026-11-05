@@ -96,6 +96,7 @@ export function payCost(
     else addCounter(game, me.id, "resources", -cost.resourcesOrUses);
   }
   if (cost.clues) addCounter(game, me.id, "clues", -cost.clues);
+  if (cost.actions) addCounter(game, me.id, "actionsLeft", -cost.actions);
   if (cost.cluesPerInvestigator)
     spendGroupClues(game, cost.cluesPerInvestigator * playerCount(game));
   // damage or horror taken as a cost is not direct: it may go on assets (Holy Rosary)
@@ -119,6 +120,7 @@ export function payCost(
     });
   if (cost.horrorOnSelf) addCounter(game, c.id, "horror", cost.horrorOnSelf);
   if (cost.damageOnSelf) addCounter(game, c.id, "damage", cost.damageOnSelf);
+  if (cost.doomOnSelf) take.push({ t: STEP.PlaceDoom, card: c.id, n: cost.doomOnSelf });
   if (cost.discardSelf) discard(game, cardId);
   return take;
 }
@@ -290,7 +292,7 @@ export function ctxFor(data: EventData, source: InstId, you: InvId | null): EffC
     you,
     ...(data.via ? { via: data.via } : {}),
     inv: data.inv ?? data.defeatedBy ?? null,
-    enemy: data.enemy ?? null,
+    enemy: data.enemy ?? data.defeated ?? null,
     location: data.location ?? null,
     key: data.key,
     card: data.card ?? null,
@@ -354,7 +356,9 @@ function triggered(game: GameContext, trigger: Trigger, data: EventData): Abilit
         consider(c.id, null, false, "forced");
         for (const i of activeInvs(game)) consider(c.id, i, false, "reaction");
       }
-    }
+    } else if (c.zone === ZONE.Commit && c.controller && def(game, c.id).type === "skill")
+      // a committed skill's own forced timing within its test ("before revealing chaos tokens": Defiance)
+      consider(c.id, c.controller, false, "forced");
   }
   for (const i of activeInvs(game)) for (const h of playable(game, i)) consider(h, i, true);
   if (trigger === "playerWindow") {
@@ -517,6 +521,8 @@ export const useAbilityHandler: Handler<"UseAbility"> = (game, step) => {
   const c = cardIf(game, step.card);
   const ctx: EffCtx = { ...step.ctx, source: step.card, you: step.ctx?.you ?? step.inv };
   if (c && c.zone === "location") ctx.location ??= c.id;
+  // the tests of a parley action know it (Fine Clothes)
+  if (a.designator === "parley") ctx.parley = true;
   emit(
     game,
     EVENT.Ability,
@@ -571,7 +577,8 @@ export const discardIfEmptyHandler: Handler<"DiscardIfEmpty"> = (game, step) => 
 // ---------- playing cards ----------
 export function playCost(game: GameContext, i: InvId, cardId: InstId): number {
   const d = def(game, cardId);
-  if (d.cost === "X") return Infinity; // ponytail: no X choice yet, so an X-cost card can't be played
+  // an X the player chooses as they play it costs at least 0; any other X cost can't be played yet
+  if (d.cost === "X") return d.costX ? 0 : Infinity;
   // a discount on this very card (Joe Diamond's revealed hunch: -2)
   let cost = (d.cost ?? 0) + (costMod.get(game, cardId) ?? 0);
   for (const m of allMods(game)) {
@@ -636,6 +643,13 @@ export function canPlay(game: GameContext, i: InvId, cardId: InstId, asFast: boo
     return false;
   if (cardBlocked(game, i, cardId)) return false;
   if (uniqueInPlay(game, cardId)) return false;
+  // "Limit 1 per investigator": no second copy (by title) of the asset in your play area
+  if (
+    d.type === "asset" &&
+    /^Limit 1 per investigator\./m.test(d.text) &&
+    controlled(game, i).some((c) => c.id !== cardId && def(game, c.id).name === d.name)
+  )
+    return false;
   const isFast = d.keywords.includes("fast");
   if (asFast !== isFast) return false;
   // events that are only playable in response to a trigger
@@ -652,7 +666,28 @@ export const playCardHandler: Handler<"PlayCard"> = (game, step) => {
   const d = def(game, step.card);
   const me = inv(game, step.inv);
   const c = card(game, step.card);
-  const paid = step.free ? 0 : playCost(game, step.inv, step.card);
+  // an X cost: the player chooses X, up to their resources (Jenny's Twin .45s)
+  if (d.cost === "X" && d.costX && step.x === undefined) {
+    const x = ask<number>(
+      game,
+      step,
+      step.inv,
+      CHOICE.Generic,
+      `${d.name}: choose X`,
+      Array.from({ length: me.resources + 1 }, (_, n) => ({
+        id: String(n),
+        label: `X = ${n}`,
+        value: n,
+        key: "option.costX",
+        vars: { n },
+      })),
+      { key: "costX", vars: { card: step.card } },
+    );
+    if (x === undefined) return;
+    push(game, { ...step, choice: undefined, x });
+    return;
+  }
+  const paid = step.free ? 0 : (step.x ?? playCost(game, step.inv, step.card));
   addCounter(game, me.id, "resources", -paid);
   emit(game, EVENT.Play, `${me.name} plays ${d.name}`, { inv: step.inv, card: step.card });
   // after the card resolves (Syndicate Obligations)
@@ -664,7 +699,12 @@ export const playCardHandler: Handler<"PlayCard"> = (game, step) => {
     push(
       game,
       { t: STEP.SlotCheck, inv: step.inv, card: step.card },
-      { t: STEP.EnterPlay, inv: step.inv, card: step.card },
+      {
+        t: STEP.EnterPlay,
+        inv: step.inv,
+        card: step.card,
+        ...(d.costX === "uses" ? { uses: step.x ?? 0 } : {}),
+      },
       win("cardPlayed", { inv: step.inv, card: step.card }),
     );
     return;
@@ -707,7 +747,8 @@ export const enterPlayHandler: Handler<"EnterPlay"> = (game, step) => {
   const d = def(game, step.card);
   moveCard(game, step.card, ZONE.Play);
   setController(game, c.id, step.inv);
-  if (d.uses) setCounter(game, c.id, "uses", d.uses.count);
+  if (step.uses !== undefined) setCounter(game, c.id, "uses", step.uses);
+  else if (d.uses) setCounter(game, c.id, "uses", d.uses.count);
   push(game, win("enterPlay", { inv: step.inv, card: step.card }));
 };
 

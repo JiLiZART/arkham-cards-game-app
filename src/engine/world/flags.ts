@@ -3,7 +3,7 @@
  * hold, and a few facts about the whole scenario. This module owns every key format; engine modules and scripts read
  * and write flags only through it. Each family is `prefix:id` (or `prefix:id:id`); a global is a fixed name.
  */
-import type { ChaosToken, Effect } from "../../content/schema";
+import type { ChaosToken, Effect, Skill } from "../../content/schema";
 import type { EffCtx, FlagTables, GameState, InstId, InvId } from "./types";
 
 /** anything holding a game state: the engine context, or `{ s }` around a state */
@@ -158,6 +158,10 @@ export const servantBeneath = global<true>("servantBeneath");
 export const devourer = global<true>("devourer");
 /** chaos tokens added "for the remainder of the campaign": the campaign's bag gains them as the scenario ends */
 export const campaignTokens = global<ChaosToken[]>("campaignTokens");
+/** per card in play: the base skills its controller has raised to a value while it stays (The Red-Gloved Man) */
+export const baseRaised = global<Record<InstId, { skills: Skill[]; to: number }>>("baseRaised");
+/** the cards put into play to be discarded at the end of the round, if still in play (A Chance Encounter) */
+export const discardAtRoundEnd = global<InstId[]>("discardAtRoundEnd");
 
 /** a scenario flag a condition names (`scenarioFlag` in card data) */
 export const named = (game: HasState, name: string) => game.s.flags[name];

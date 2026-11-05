@@ -39,9 +39,13 @@ function discoverCluesEffect(game: GameContext, run: EffectRun<EffectOf<"discove
   const e = run.effect;
 
   let loc = e.at === "testLocation" ? ctx.location : inv(game, you).location;
-  if ((e.at === "yourOrConnecting" && loc) || e.at === "anyLocation") {
+  if (((e.at === "yourOrConnecting" || e.at === "connecting") && loc) || e.at === "anyLocation") {
     const cands = (
-      e.at === "anyLocation" ? locations(game).map((l) => l.id) : [loc!, ...connections(game, loc!)]
+      e.at === "anyLocation"
+        ? locations(game).map((l) => l.id)
+        : e.at === "connecting"
+          ? connections(game, loc!)
+          : [loc!, ...connections(game, loc!)]
     ).filter((l) => card(game, l).clues > 0);
     if (!cands.length) return;
     const pick = ask<InstId>(
@@ -83,7 +87,27 @@ function placeDoomEffect(game: GameContext, run: EffectRun<EffectOf<"placeDoom">
 
 /** doom off this card, at most what it holds (Destroyed Path) */
 function removeDoomEffect(game: GameContext, run: EffectRun<EffectOf<"removeDoom">>) {
-  const src = run.ctx.source;
+  let src = run.ctx.source;
+  // a card you control with doom on it, you choose which: your investigator or one in your play or threat area
+  if (run.effect.on === "chooseYours") {
+    const mine = [
+      inv(game, run.you).cardId,
+      ...cardsIn(game, ZONE.Play)
+        .concat(cardsIn(game, ZONE.Threat))
+        .filter((c) => c.controller === run.you)
+        .map((c) => c.id),
+    ].filter((id) => card(game, id).doom > 0);
+    if (!mine.length) return;
+    src = ask<InstId>(
+      game,
+      run.step,
+      run.you,
+      CHOICE.Target,
+      "Choose a card to remove doom from",
+      mine.map((id) => opt(game, id)),
+      { auto: true, key: "removeDoomFrom" },
+    );
+  }
   if (!src) return;
   const n = Math.min(card(game, src).doom, amt(game, run.effect.amount, run.ctx));
   if (n <= 0) return;
@@ -128,7 +152,11 @@ function addUsesEffect(game: GameContext, run: EffectRun<EffectOf<"addUses">>) {
 
   const here = invsAt(game, inv(game, you).location);
   const cands = cardsIn(game, ZONE.Play).filter(
-    (c) => c.controller && here.includes(c.controller) && matchesFilter(game, c.code, e.filter),
+    (c) =>
+      c.controller &&
+      here.includes(c.controller) &&
+      matchesFilter(game, c.code, e.filter) &&
+      (!e.usesType || e.usesType.includes(def(game, c.id).uses?.type ?? "")),
   );
   if (!cands.length) return;
   const pick = ask<InstId>(
@@ -141,7 +169,7 @@ function addUsesEffect(game: GameContext, run: EffectRun<EffectOf<"addUses">>) {
     { auto: true, key: "chooseAsset" },
   );
   if (pick === undefined) return;
-  addCounter(game, pick, "uses", e.amount);
+  addCounter(game, pick, "uses", e.double ? card(game, pick).uses : (e.amount ?? 0));
   return;
 }
 

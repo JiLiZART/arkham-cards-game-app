@@ -17,11 +17,13 @@ import {
   actionsLeft,
   beneathCount,
   checkCondition,
+  connections,
   tokenHolder,
   distances,
   enemies,
   enemiesAt,
   engagedWith,
+  enemyStat,
   invsAt,
   skillValue,
 } from "../queries";
@@ -57,7 +59,11 @@ export function amt(game: GameContext, a: Amount, ctx: EffCtx): number {
                     ? a.base + (checkCondition(game, a.if, ctx) ? a.plus : 0)
                     : "actionsLeft" in a
                       ? a.actionsLeft * actionsLeft(game, ctx.you ?? null)
-                      : a.perInvestigator * playerCount(game);
+                      : "eventEnemyStat" in a
+                        ? ctx.enemy && cardIf(game, ctx.enemy)
+                          ? enemyStat(game, ctx.enemy, a.eventEnemyStat)
+                          : 0
+                        : a.perInvestigator * playerCount(game);
   if (a === "failBy") return ctx.failBy ?? 0;
   if (a === "succeedBy") return ctx.succeedBy ?? 0;
   if (a === "X") return ctx.x ?? 0;
@@ -97,10 +103,19 @@ export function invTargets(
     case "eventInvestigator":
       return ctx.inv ? [ctx.inv] : [];
     case "chooseOtherAtLocation":
+    case "chooseAtOrConnecting":
+    case "chooseAny":
     case "chooseAtLocation": {
-      const here = invsAt(game, inv(game, you).location).filter(
-        (i) => t === "chooseAtLocation" || i !== you,
-      );
+      const loc = inv(game, you).location;
+      const here =
+        t === "chooseAny"
+          ? activeInvs(game)
+          : [
+              ...invsAt(game, loc),
+              ...(t === "chooseAtOrConnecting" && loc
+                ? connections(game, loc).flatMap((l) => invsAt(game, l))
+                : []),
+            ].filter((i) => t !== "chooseOtherAtLocation" || i !== you);
       if (!here.length) return [];
       const pick = ask<InvId>(
         game,

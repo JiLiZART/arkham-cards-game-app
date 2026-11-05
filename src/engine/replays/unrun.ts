@@ -14,6 +14,37 @@ export const UNRUN_SCRIPTS: string[] = [
   "12179b",
   // return (Return to the Night of the Zealot): no team plays it; src/engine/__tests__/rtnotzPlayerCards.test.ts
   "50008",
+  // The Dunwich Legacy's player cards: no team plays them; src/engine/__tests__/dwlPlayerCards.test.ts
+  "02004",
+  "02005",
+  "02007",
+  "02009",
+  "02011",
+  "02013",
+  "02018",
+  "02021",
+  "02026",
+  "02031",
+  // Blood on the Altar's and Undimensioned and Unseen's: src/engine/__tests__/dwlAltarUnseenPlayerCards.test.ts
+  "02190",
+  "02228",
+  "02229",
+  "02230",
+  "02232",
+  "02235",
+  // Where Doom Awaits' and Lost in Time and Space's: src/engine/__tests__/dwlDoomTimePlayerCards.test.ts
+  "02265",
+  "02270",
+  "02302",
+  "02303",
+  "02304",
+  "02305",
+  "02310",
+  // Return to The Dunwich Legacy's: src/engine/__tests__/rtdwlPlayerCards.test.ts
+  "51001",
+  "51006",
+  "51010",
+  "51011",
   // The Dunwich Legacy, Extracurricular Activity and the shared encounter sets: no recording plays the campaign yet;
   // src/engine/__tests__/extracurricular.test.ts
   "02042",

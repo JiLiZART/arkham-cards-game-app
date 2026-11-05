@@ -79,6 +79,7 @@ describe("the script registry", () => {
         "blanks",
         "cancelsSearch",
         "conditions",
+        "difficulty",
         "extraActionCost",
         "extraPlayable",
         "fns",

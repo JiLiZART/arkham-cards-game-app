@@ -11,6 +11,7 @@ import {
   invName,
   pile,
   push,
+  setController,
   shuffleDeck,
 } from "../context";
 import { matchesFilter, uniqueInPlay } from "../queries";
@@ -50,12 +51,13 @@ function searchDeckEffect(game: GameContext, run: EffectRun<EffectOf<"searchDeck
   if (step.choice === undefined && searchBlocked(game, who, top ?? me.deck)) return;
   const pool = (top ?? me.deck).filter((id) => matchesFilter(game, card(game, id).code, e.filter));
   // the top cards that don't match are shown too: the searcher sees what they looked at
+  // the deck's investigator searches it (Old Book of Lore); for a card put into play, you do (Flare: any investigator's deck)
   const pick = ask<InstId | "none">(
     game,
     step,
-    who,
+    e.intoPlay ? run.you : who,
     CHOICE.Generic,
-    `Search your deck${top ? ` (top ${n})` : ""}`,
+    `Search ${e.intoPlay && who !== run.you ? `${me.name}'s` : "your"} deck${top ? ` (top ${n})` : ""}`,
     [...pool.map((id) => opt(game, id)), { id: "none", label: "Take nothing", value: "none" }],
     {
       key: top ? "searchTop" : "searchDeck",
@@ -85,6 +87,18 @@ function searchDeckEffect(game: GameContext, run: EffectRun<EffectOf<"searchDeck
     // drawn: the rest is shuffled, the card goes on top and is drawn from there (a weakness resolves as drawn)
     shuffleThenTop(game, who, [pick]);
     push(game, { t: STEP.Draw, inv: who, n: 1, tapped: true });
+    return;
+  }
+  if (pick !== "none" && e.intoPlay) {
+    // into play under the searcher's control, slots checked first; the searched deck shuffled
+    moveCard(game, pick, ZONE.Limbo);
+    setController(game, pick, run.you);
+    shuffleDeck(game, me.id);
+    push(
+      game,
+      { t: STEP.SlotCheck, inv: run.you, card: pick },
+      { t: STEP.EnterPlay, inv: run.you, card: pick },
+    );
     return;
   }
   if (pick !== "none") {

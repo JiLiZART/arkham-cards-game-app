@@ -45,6 +45,7 @@ const MEMBERS: Record<keyof CardScript, true> = {
   fns: true,
   conditions: true,
   icons: true,
+  difficulty: true,
   modifiers: true,
   extraPlayable: true,
   blanks: true,

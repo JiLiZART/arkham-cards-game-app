@@ -41,9 +41,26 @@ const LINE_RULES: [RegExp, (c: CardDef, db: ContentDb) => boolean][] = [
   [/^Max \d+ committed per skill test/i, (c) => c.maxCommitted !== undefined],
   [/^As an additional cost to commit .*, take \d+ horror/i, (c) => !!c.commitHorror],
   [/^You may commit .* after revealing chaos tokens/i, (c) => !!c.commitAfterReveal],
+  // commit restrictions, read by canCommit (engine/rules/skillTest.ts)
+  [/^Commit only to a skill test you are performing\.$/, (c) => !!c.commitOnlyOwnTest],
+  [
+    /^Commit only to a skill test you are performing, and only if the difficulty of that test is at least \d+ higher than your base skill value\.$/,
+    (c) => !!c.commitOnlyOwnTest && c.commitDifficultyOverBase !== undefined,
+  ],
+  [/^Commit to a skill test only if /, (c) => !!c.commitIf],
+  // icons on another investigator's test, read by iconsFor (engine/rules/skillTest.ts)
+  [
+    /^While .+ is committed to a skill test being performed by another investigator, .+ gains /,
+    (c) => !!c.iconsOnOthersTest,
+  ],
   // deckbuilding lines, read by the deck validator (engine/decks.ts) and the setup (a permanent card starts in play)
   [/^((Permanent|Reward|Limit \d+ per deck|Purchase only at deck creation)\.\s*)+$/, () => true],
   [/^You get \+\d+ deck size\.$/, () => true],
+  // Adaptable's swaps between scenarios, read by the upgrade (engine/campaign/upgrade.ts)
+  [
+    /^In between each game of a campaign, you may swap up to two level 0 cards out of your deck/,
+    () => true,
+  ],
   [
     /^Your investigator's Deckbuilding Options gains: "one other \[\[\w+\]\] or \[\[\w+\]\] asset/,
     () => true,
