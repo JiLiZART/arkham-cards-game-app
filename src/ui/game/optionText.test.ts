@@ -65,6 +65,21 @@ describe("optionLabel", () => {
     expect(optionLabel(o, g, "ru")).toBe("Предотвратить ужас");
   });
 
+  it("an option's numbers and investigator go into its string (Cold Spring Glen, a Brood's clues)", () => {
+    const g = game();
+    const clues = { id: "2", label: "2 clues", value: 2, key: "option.clueCount", vars: { n: 2 } };
+    expect(optionLabel(clues, g, "ru")).toBe("Улик: 2");
+    const test = {
+      id: ROLAND,
+      label: "Roland Banks tests agility (3)",
+      value: ROLAND,
+      key: "option.glenTest",
+      vars: { inv: ROLAND },
+    };
+    expect(optionLabel(test, g, "en")).toBe("Roland Banks tests agility (3)");
+    expect(optionLabel(test, g, "ru")).toBe("Роланд Бэнкс проверяет ловкость (3)");
+  });
+
   it("anything else keeps the engine's label", () => {
     const g = game();
     expect(optionLabel({ id: "pass", label: "Pass", value: "pass" }, g, "ru")).toBe("Pass");

@@ -37,16 +37,15 @@ export function optionLabel(
   game: Pick<GameState, "world">,
   locale: string,
 ): string {
-  // an option with a string of its own (who takes the damage): the card's name in the game's language goes into it
-  if (o.key)
-    return (
-      t(
-        db,
-        locale,
-        o.key,
-        o.vars?.code ? { card: cardText(db, String(o.vars.code), locale).name } : {},
-      ) + (o.vars?.defeated ? t(db, locale, "option.defeated") : "")
-    );
+  // an option with a string of its own (who takes the damage): its numbers, and the card's or investigator's name in the
+  // game's language, go into it
+  if (o.key) {
+    const v = o.vars ?? {};
+    const vars = { ...v };
+    if (v.code) vars.card = cardText(db, String(v.code), locale).name;
+    if (v.inv) vars.inv = cardText(db, String(v.inv), locale).name;
+    return t(db, locale, o.key, vars) + (v.defeated ? t(db, locale, "option.defeated") : "");
+  }
   const ref = abilityRef(o, game);
   if (!ref) return o.label;
   const key = `ability.${ref.code}.${ref.index}`;
