@@ -10,6 +10,9 @@
     "hideous_abominations",
     "agents_of_yog"
   ],
+  "encounterLocations": [
+    "lost_in_time_and_space"
+  ],
   "sideDecks": {},
   "acts": [
     "02316",
@@ -35,7 +38,8 @@
       "do": "setAside",
       "codes": [
         "02321",
-        "02322"
+        "02322",
+        "02323"
       ]
     },
     {
@@ -46,58 +50,184 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -1
+        "modifier": "X",
+        "x": "extradimensionalLocations",
+        "xMax": 5
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "afterTest": {
+          "effects": [
+            {
+              "op": "script",
+              "fn": "litasFindLocation"
+            }
+          ],
+          "ifFailed": true
+        }
       },
       "tablet": {
-        "modifier": -3
+        "modifier": -3,
+        "afterTest": {
+          "effects": [
+            {
+              "op": "enemyAttack",
+              "named": "02323"
+            }
+          ]
+        }
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "yourLocationShroud",
+        "condition": {
+          "yourLocationIs": {
+            "trait": "Extradimensional"
+          }
+        },
+        "onFail": [
+          {
+            "op": "removeLocation",
+            "location": "yourLocation"
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -1
+        "modifier": "X",
+        "x": "extradimensionalLocations",
+        "xMax": 5
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "afterTest": {
+          "effects": [
+            {
+              "op": "script",
+              "fn": "litasFindLocation"
+            }
+          ],
+          "ifFailed": true
+        }
       },
       "tablet": {
-        "modifier": -3
+        "modifier": -3,
+        "afterTest": {
+          "effects": [
+            {
+              "op": "enemyAttack",
+              "named": "02323"
+            }
+          ]
+        }
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "yourLocationShroud",
+        "condition": {
+          "yourLocationIs": {
+            "trait": "Extradimensional"
+          }
+        },
+        "onFail": [
+          {
+            "op": "removeLocation",
+            "location": "yourLocation"
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -1
+        "modifier": "X",
+        "x": "extradimensionalLocations"
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "afterTest": {
+          "effects": [
+            {
+              "op": "script",
+              "fn": "litasFindLocation"
+            }
+          ]
+        }
       },
       "tablet": {
-        "modifier": -5
+        "modifier": -5,
+        "afterTest": {
+          "effects": [
+            {
+              "op": "enemyAttack",
+              "named": "02323"
+            }
+          ]
+        }
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "yourLocationShroud",
+        "xTimes": 2,
+        "condition": {
+          "yourLocationIs": {
+            "trait": "Extradimensional"
+          }
+        },
+        "onFail": [
+          {
+            "op": "removeLocation",
+            "location": "yourLocation"
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -1
+        "modifier": "X",
+        "x": "extradimensionalLocations"
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "afterTest": {
+          "effects": [
+            {
+              "op": "script",
+              "fn": "litasFindLocation"
+            }
+          ]
+        }
       },
       "tablet": {
-        "modifier": -5
+        "modifier": -5,
+        "afterTest": {
+          "effects": [
+            {
+              "op": "enemyAttack",
+              "named": "02323"
+            }
+          ]
+        }
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "yourLocationShroud",
+        "xTimes": 2,
+        "condition": {
+          "yourLocationIs": {
+            "trait": "Extradimensional"
+          }
+        },
+        "onFail": [
+          {
+            "op": "removeLocation",
+            "location": "yourLocation"
+          }
+        ]
       }
     }
   },
@@ -165,7 +295,15 @@
   "connections": [
     [
       "02320",
-      "02321"
+      "02324"
+    ],
+    [
+      "02320",
+      "02325"
+    ],
+    [
+      "02320",
+      "02326"
     ],
     [
       "02320",
@@ -173,22 +311,74 @@
     ],
     [
       "02321",
-      "02322"
+      "02327"
+    ],
+    [
+      "02321",
+      "02328"
+    ],
+    [
+      "02322",
+      "02327"
+    ],
+    [
+      "02322",
+      "02328"
+    ],
+    [
+      "02324",
+      "02324"
+    ],
+    [
+      "02324",
+      "02325"
+    ],
+    [
+      "02324",
+      "02326"
+    ],
+    [
+      "02325",
+      "02327"
+    ],
+    [
+      "02326",
+      "02328"
     ]
   ],
   "oneWay": [],
   "layout": {
     "02320": [
       0,
-      0
+      1
     ],
-    "02321": [
+    "02324": [
       1,
       0
     ],
-    "02322": [
+    "02325": [
+      1,
+      1
+    ],
+    "02326": [
+      1,
+      2
+    ],
+    "02327": [
       2,
       0
+    ],
+    "02328": [
+      2,
+      2
+    ],
+    "02321": [
+      3,
+      1
+    ],
+    "02322": [
+      3,
+      1
     ]
   }
 }

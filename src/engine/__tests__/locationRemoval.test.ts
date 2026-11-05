@@ -90,7 +90,8 @@ describe("removing a location", () => {
 });
 
 describe("the void", () => {
-  it("keeps an enemy's damage and attachments, and a search over the void finds it and spawns it with them", () => {
+  // it leaves play, so its tokens go (Grimoire, Leaves Play); what is attached stays with it (Shadow-spawned)
+  it("keeps an enemy's attachments, not its damage, and a search over the void finds it and spawns it with them", () => {
     let enemy = "";
     let att = "";
     let r = game({
@@ -114,7 +115,7 @@ describe("the void", () => {
       }),
     );
     expect(card(gOf(r), enemy).zone).toBe(ZONE.Void);
-    expect(card(gOf(r), enemy).damage).toBe(1);
+    expect(card(gOf(r), enemy).damage).toBe(0);
     expect(card(gOf(r), att).attachedTo).toBe(enemy);
     r = toTurn(
       inject(r, () => {}, {
@@ -128,7 +129,7 @@ describe("the void", () => {
       }),
     );
     expect(card(gOf(r), enemy).zone).toBe(ZONE.Enemy);
-    expect(card(gOf(r), enemy).damage).toBe(1);
+    expect(card(gOf(r), enemy).damage).toBe(0);
     expect(card(gOf(r), att).attachedTo).toBe(enemy);
   });
 });

@@ -19,6 +19,7 @@ import {
   logStep,
   nextKey,
   push,
+  randomInt,
   ready,
   setCounter,
   setCardLocation,
@@ -26,6 +27,8 @@ import {
   turnOrder,
 } from "../context";
 import {
+  attackableBy,
+  cellOf,
   connections,
   distances,
   enemies,
@@ -37,9 +40,11 @@ import {
   engagedWith,
   hasFlag,
   hasKeyword,
+  isAloof,
   invsAt,
   isElite,
   isMassive,
+  locationAt,
   locationByName,
   locations,
   nearestTo,
@@ -149,6 +154,10 @@ export const spawnHandler: Handler<"Spawn"> = (game, step) => {
         if (pick === undefined) return;
         at = pick;
       }
+    } else if (d.spawn === "toYourRight") {
+      // the location on the map's cell to the right of the drawer's, else the drawer's (Emergent Monstrosity)
+      const here = drawerLoc ? cellOf(game, drawerLoc) : null;
+      at = (here && locationAt(game, [here[0] + 1, here[1]])) || drawerLoc;
     } else if (d.spawn === "Engaged with Prey") {
       const cands = preyCandidates(game, step.enemy, activeInvs(game));
       if (!cands.length) {
@@ -222,7 +231,9 @@ export const spawnHandler: Handler<"Spawn"> = (game, step) => {
     card: step.enemy,
     data: { at },
   });
-  const aloof = d.keywords.includes("aloof");
+  // an enemy that enters play exhausted engages no one as it spawns (Emergent Monstrosity)
+  if (d.entersExhausted) exhaust(game, step.enemy);
+  const aloof = isAloof(game, step.enemy) || !!d.entersExhausted;
   if (!engage && !aloof && !isMassive(game, step.enemy)) {
     // ponytail: first tied prey in player order; lead choice if it ever matters
     engage = preyCandidates(game, step.enemy, invsAt(game, at))[0] ?? null;
@@ -339,6 +350,14 @@ export const resolveAttackHandler: Handler<"ResolveAttack"> = (game, step) => {
   );
 };
 
+/** a random location in play, but those excluded (Undimensioned and Unseen: one drawn from the removed other versions) */
+export function randomLocation(game: GameContext, exclude: readonly InstId[] = []): InstId | null {
+  const pool = locations(game)
+    .map((l) => l.id)
+    .filter((id) => !exclude.includes(id));
+  return pool.length ? pool[randomInt(game, pool.length)] : null;
+}
+
 export function attackKey(game: GameContext) {
   return nextKey(game, "atk");
 }
@@ -347,10 +366,7 @@ export function attackKey(game: GameContext) {
 export function attacksOfOpportunity(game: GameContext, i: InvId): Step[] {
   return engagedWith(game, i)
     .filter(
-      (e) =>
-        !e.exhausted &&
-        !def(game, e.id).keywords.includes("aloof") &&
-        !hasFlag(game, e.id, "noAttacksOfOpportunity"),
+      (e) => !e.exhausted && !isAloof(game, e.id) && !hasFlag(game, e.id, "noAttacksOfOpportunity"),
     )
     .map((e) => ({ t: STEP.EnemyAttack, enemy: e.id, inv: i, aoo: true, key: attackKey(game) }));
 }
@@ -359,7 +375,10 @@ export function attacksOfOpportunity(game: GameContext, i: InvId): Step[] {
 export const damageEnemyHandler: Handler<"DamageEnemy"> = (game, step) => {
   const e = cardIf(game, step.enemy);
   if (!e || e.zone !== "enemy" || step.amount <= 0) return;
-  if (hasFlag(game, step.enemy, "cannotBeDamaged")) {
+  if (
+    hasFlag(game, step.enemy, "cannotBeDamaged") ||
+    !attackableBy(game, step.enemy, step.source)
+  ) {
     emit(game, EVENT.NoDamage, `${def(game, step.enemy).name} cannot be damaged`, {
       card: step.enemy,
     });
@@ -451,6 +470,8 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (game, step) => {
       win("enemyDefeatedSelf", {
         enemy: step.enemy,
         inv: null,
+        // who defeated it, for "after you defeat …" (Servant of Many Mouths)
+        defeatedBy: step.by ?? null,
         ...(step.via ? { via: step.via } : {}),
       }),
       {
@@ -564,7 +585,7 @@ export const patrolMovesHandler: Handler<"PatrolMoves"> = (game, step) => {
     data: { from, to },
   });
   const p = preyCandidates(game, e.id, invsAt(game, to))[0];
-  if (p && !hasKeyword(game, e.id, "aloof") && !isMassive(game, e.id)) {
+  if (p && !isAloof(game, e.id) && !isMassive(game, e.id)) {
     setEngaged(game, e.id, p);
     emit(game, EVENT.Engage, `${def(game, e.id).name} engages ${invName(game, p)}`, {
       inv: p,
@@ -631,7 +652,7 @@ export const hunterMovesHandler: Handler<"HunterMoves"> = (game, step) => {
     data: { from, to },
   });
   const p = preyCandidates(game, e.id, invsAt(game, to))[0];
-  if (p && !def(game, e.id).keywords.includes("aloof") && !isMassive(game, e.id)) {
+  if (p && !isAloof(game, e.id) && !isMassive(game, e.id)) {
     setEngaged(game, e.id, p);
     emit(game, EVENT.Engage, `${def(game, e.id).name} engages ${invName(game, p)}`, {
       inv: p,

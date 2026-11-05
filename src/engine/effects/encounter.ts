@@ -152,7 +152,15 @@ function searchEncounterDrawEffect(
       inv: you,
       card: id,
     });
-    push(game, { t: STEP.Spawn, enemy: id, inv: you });
+    const at = e.at
+      ? (locationByName(game, e.at) ?? findByCode(game, e.at, [ZONE.Location]))
+      : undefined;
+    push(
+      game,
+      at
+        ? { t: STEP.Spawn, enemy: id, inv: null, at: at.id }
+        : { t: STEP.Spawn, enemy: id, inv: you },
+    );
   }
   shuffleDeck(game, "encounter");
   emit(game, EVENT.Shuffle, `${invName(game, you)} shuffles the encounter deck`, { inv: you });

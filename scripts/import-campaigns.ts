@@ -413,7 +413,10 @@ export function main() {
   for (const c of cards.values()) if (c.set) bySet.set(c.set, [...(bySet.get(c.set) ?? []), c]);
   // earlier generated folders go; a rerun writes exactly what the guides give now
   rmSync(OUT, { recursive: true, force: true });
-  rmSync(EN_TEXT, { recursive: true, force: true });
+  // a hand-written campaign's text stays: the importer no longer writes it
+  if (existsSync(EN_TEXT))
+    for (const f of readdirSync(EN_TEXT))
+      if (!handWritten(f.replace(/\.json$/, ""))) rmSync(join(EN_TEXT, f));
   const used = new Set<string>();
   const handIds = new Set<string>();
   for (const g of guides) if (g.campaign.id === "core") handIds.add("core");

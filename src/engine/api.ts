@@ -13,6 +13,7 @@ export {
   activeInvs,
   allCards,
   campaignLogOf,
+  chaosBag,
   card,
   cardIf,
   currentAct,
@@ -50,6 +51,7 @@ export {
   enemyStat,
   findByCode,
   invsAt,
+  isAloof,
   isElite,
   locationByName,
   locations,
@@ -62,7 +64,7 @@ export {
   uniqueInPlay,
 } from "./queries";
 export { canPlay, playCost } from "./rules/cards";
-export { attackKey, canEnemyEnter } from "./rules/enemies";
+export { attackKey, canEnemyEnter, randomLocation } from "./rules/enemies";
 export { canCommit } from "./rules/skillTest";
 export { resolvesOnDraw } from "./rules/investigators";
 
@@ -70,6 +72,7 @@ export { resolvesOnDraw } from "./rules/investigators";
 export {
   addChaosTokens,
   addCounter,
+  attachTo,
   cancelEvent,
   emit,
   placeInvestigator,
@@ -83,15 +86,19 @@ export {
   setOwner,
   shuffleDeck,
   shuffleList,
+  unreveal,
 } from "./context";
 export {
   createCard,
   discard,
+  discardTop,
   link,
   linkOneWay,
   moveCard,
   putBeneath,
   putOnTop,
+  reshuffleDiscard,
+  setCell,
   shuffleIntoDeck,
   unlink,
 } from "./movement";
@@ -115,6 +122,7 @@ export {
   forceResult,
   setOnChoose,
   startTest,
+  treatTokenAs,
 } from "./rules/skillTest";
 export { resolveWeakness } from "./rules/investigators";
 export * as flags from "./world/flags";
@@ -166,6 +174,9 @@ export const dealDamage = verb(STEP.AssignDamage);
 export const resolveEffects = verb(STEP.Effects);
 export const resolveEffect = verb(STEP.Eff);
 export const advanceAct = (args: StepOf<"AdvanceAct"> = {}): Queued => verb(STEP.AdvanceAct)(args);
+/** the agenda advances (an objective that says so, not its doom) */
+export const advanceAgenda = (args: StepOf<"AdvanceAgenda"> = {}): Queued =>
+  verb(STEP.AdvanceAgenda)(args);
 export const placeDoom = verb(STEP.PlaceDoom);
 /** the scenario ends with this resolution */
 export const endScenario = verb(STEP.Resolution);

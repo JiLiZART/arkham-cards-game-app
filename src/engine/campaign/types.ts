@@ -78,6 +78,8 @@ export interface FlowState {
   item: string | null;
   /** the scenario whose own setup steps (`flow.before`) are running: it is offered to play once they have; absent in older saves */
   next?: string | null;
+  /** the guide has called the campaign won: its epilogue is read before it ends */
+  won?: boolean;
 }
 
 export type FlowValue = string | number | string[] | null;

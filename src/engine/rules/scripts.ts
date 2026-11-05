@@ -109,7 +109,13 @@ type ScenarioHook =
   | "locationLeavesPlay"
   | "wouldBeDefeated"
   | "patrolTarget";
-type CardHook = "setup" | "gameEnd" | "eventFinished" | "healHorror" | "storyResolved";
+type CardHook =
+  | "setup"
+  | "gameEnd"
+  | "eventFinished"
+  | "healHorror"
+  | "storyResolved"
+  | "doomThreshold";
 type AfterGame<F> = F extends (game: GameContext, ...a: infer A) => unknown ? A : never;
 type AfterRun<F> = F extends (game: GameContext, run: HookRun, ...a: infer A) => unknown
   ? A

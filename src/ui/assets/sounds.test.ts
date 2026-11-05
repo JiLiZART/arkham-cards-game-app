@@ -159,13 +159,13 @@ describe("musicFor", () => {
   });
 
   it("a scenario without a bed of its own (a generated one) plays the default bed, and fight and tension as usual", () => {
-    const generated = with_((s) => (s.scenarioId = "extracurricular-activity"));
+    const generated = with_((s) => (s.scenarioId = "curtain-call"));
     expect(musicFor(generated, m)).toBe("bed:default");
     const ghoul = codeOf("01160");
     expect(
       musicFor(
         with_((s) => {
-          s.scenarioId = "extracurricular-activity";
+          s.scenarioId = "curtain-call";
           putCardIn(s, {
             ...cardDataIn(s, ghoul),
             zone: ZONE.Enemy,

@@ -179,21 +179,14 @@
   "bota": {
    "encounter": {
     "total": 26,
-    "works": 0,
-    "rest": {
-     "act": 2,
-     "agenda": 3,
-     "enemy": 2,
-     "location": 14,
-     "scenario": 1,
-     "treachery": 4
-    }
+    "works": 26,
+    "rest": {}
    },
    "player": {
     "total": 15,
-    "works": 0,
+    "works": 4,
     "rest": {
-     "asset": 10,
+     "asset": 6,
      "event": 3,
      "skill": 2
     }
@@ -438,21 +431,14 @@
   "dwl": {
    "encounter": {
     "total": 59,
-    "works": 0,
-    "rest": {
-     "act": 7,
-     "agenda": 6,
-     "enemy": 11,
-     "location": 18,
-     "scenario": 2,
-     "treachery": 15
-    }
+    "works": 59,
+    "rest": {}
    },
    "player": {
     "total": 40,
-    "works": 2,
+    "works": 7,
     "rest": {
-     "asset": 20,
+     "asset": 15,
      "event": 9,
      "skill": 1,
      "treachery": 8
@@ -917,15 +903,8 @@
   "litas": {
    "encounter": {
     "total": 23,
-    "works": 0,
-    "rest": {
-     "act": 4,
-     "agenda": 4,
-     "enemy": 3,
-     "location": 8,
-     "scenario": 1,
-     "treachery": 3
-    }
+    "works": 23,
+    "rest": {}
    },
    "player": {
     "total": 12,
@@ -1611,24 +1590,16 @@
   "tece": {
    "encounter": {
     "total": 23,
-    "works": 0,
-    "rest": {
-     "act": 2,
-     "agenda": 5,
-     "enemy": 2,
-     "location": 11,
-     "scenario": 1,
-     "treachery": 2
-    }
+    "works": 23,
+    "rest": {}
    },
    "player": {
     "total": 14,
-    "works": 0,
+    "works": 2,
     "rest": {
-     "asset": 8,
+     "asset": 7,
      "event": 4,
-     "skill": 1,
-     "treachery": 1
+     "skill": 1
     }
    }
   },
@@ -1723,21 +1694,14 @@
   "tmm": {
    "encounter": {
     "total": 26,
-    "works": 0,
-    "rest": {
-     "act": 4,
-     "agenda": 3,
-     "enemy": 1,
-     "location": 12,
-     "scenario": 1,
-     "treachery": 5
-    }
+    "works": 26,
+    "rest": {}
    },
    "player": {
     "total": 16,
-    "works": 2,
+    "works": 5,
     "rest": {
-     "asset": 8,
+     "asset": 5,
      "event": 6
     }
    }
@@ -1941,21 +1905,14 @@
   "uau": {
    "encounter": {
     "total": 23,
-    "works": 0,
-    "rest": {
-     "act": 2,
-     "agenda": 3,
-     "enemy": 1,
-     "location": 12,
-     "scenario": 1,
-     "treachery": 4
-    }
+    "works": 23,
+    "rest": {}
    },
    "player": {
     "total": 12,
-    "works": 0,
+    "works": 1,
     "rest": {
-     "asset": 6,
+     "asset": 5,
      "event": 2,
      "skill": 4
     }
@@ -1964,15 +1921,8 @@
   "wda": {
    "encounter": {
     "total": 25,
-    "works": 1,
-    "rest": {
-     "act": 5,
-     "agenda": 2,
-     "enemy": 2,
-     "location": 11,
-     "scenario": 1,
-     "treachery": 3
-    }
+    "works": 25,
+    "rest": {}
    },
    "player": {
     "total": 14,
@@ -2235,15 +2185,15 @@
   "return-to-the-dunwich-legacy": {
    "cards": {
     "total": 285,
-    "works": 14,
+    "works": 230,
     "rest": {
-     "act": 27,
-     "agenda": 28,
-     "asset": 16,
-     "enemy": 31,
-     "location": 109,
-     "scenario": 10,
-     "treachery": 50
+     "act": 1,
+     "agenda": 2,
+     "asset": 2,
+     "enemy": 9,
+     "location": 23,
+     "scenario": 2,
+     "treachery": 16
     }
    },
    "unscripted": [
@@ -2337,15 +2287,14 @@
   "side-all-or-nothing": {
    "cards": {
     "total": 41,
-    "works": 5,
+    "works": 31,
     "rest": {
-     "act": 6,
-     "agenda": 4,
-     "asset": 2,
-     "enemy": 5,
-     "location": 10,
-     "scenario": 2,
-     "treachery": 7
+     "act": 2,
+     "agenda": 1,
+     "enemy": 2,
+     "location": 2,
+     "scenario": 1,
+     "treachery": 2
     }
    },
    "unscripted": [
@@ -2582,15 +2531,13 @@
   "side-read-or-die": {
    "cards": {
     "total": 40,
-    "works": 4,
+    "works": 35,
     "rest": {
-     "act": 4,
-     "agenda": 4,
-     "asset": 4,
-     "enemy": 5,
-     "location": 10,
-     "scenario": 2,
-     "treachery": 7
+     "act": 1,
+     "agenda": 1,
+     "asset": 1,
+     "enemy": 1,
+     "scenario": 1
     }
    },
    "unscripted": [
@@ -2760,28 +2707,11 @@
   "the-dunwich-legacy": {
    "cards": {
     "total": 235,
-    "works": 16,
-    "rest": {
-     "act": 26,
-     "agenda": 26,
-     "asset": 14,
-     "enemy": 22,
-     "location": 86,
-     "scenario": 8,
-     "treachery": 37
-    }
+    "works": 235,
+    "rest": {}
    },
-   "unscripted": [
-    "extracurricular-activity",
-    "the-house-always-wins",
-    "the-miskatonic-museum",
-    "essex-county-express",
-    "blood-on-the-altar",
-    "undimensioned-and-unseen",
-    "where-doom-awaits",
-    "lost-in-time-and-space"
-   ],
-   "complete": false
+   "unscripted": [],
+   "complete": true
   },
   "the-feast-of-hemlock-vale": {
    "cards": {
@@ -3036,15 +2966,14 @@
    "campaign": "side-all-or-nothing",
    "cards": {
     "total": 41,
-    "works": 5,
+    "works": 31,
     "rest": {
-     "act": 6,
-     "agenda": 4,
-     "asset": 2,
-     "enemy": 5,
-     "location": 10,
-     "scenario": 2,
-     "treachery": 7
+     "act": 2,
+     "agenda": 1,
+     "enemy": 2,
+     "location": 2,
+     "scenario": 1,
+     "treachery": 2
     }
    },
    "tokens": false,
@@ -3244,20 +3173,12 @@
    "campaign": "the-dunwich-legacy",
    "cards": {
     "total": 40,
-    "works": 3,
-    "rest": {
-     "act": 2,
-     "agenda": 3,
-     "asset": 4,
-     "enemy": 5,
-     "location": 14,
-     "scenario": 1,
-     "treachery": 8
-    }
+    "works": 40,
+    "rest": {}
    },
-   "tokens": false,
-   "scripted": false,
-   "complete": false
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "buenos-aires": {
    "campaign": "the-scarlet-keys",
@@ -3549,39 +3470,23 @@
    "campaign": "the-dunwich-legacy",
    "cards": {
     "total": 35,
-    "works": 7,
-    "rest": {
-     "act": 2,
-     "agenda": 5,
-     "asset": 1,
-     "enemy": 2,
-     "location": 11,
-     "scenario": 1,
-     "treachery": 6
-    }
+    "works": 35,
+    "rest": {}
    },
-   "tokens": false,
-   "scripted": false,
-   "complete": false
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "extracurricular-activity": {
    "campaign": "the-dunwich-legacy",
    "cards": {
     "total": 35,
-    "works": 4,
-    "rest": {
-     "act": 3,
-     "agenda": 3,
-     "asset": 3,
-     "enemy": 4,
-     "location": 10,
-     "scenario": 1,
-     "treachery": 7
-    }
+    "works": 35,
+    "rest": {}
    },
-   "tokens": false,
-   "scripted": false,
-   "complete": false
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "eztli": {
    "campaign": "the-forgotten-age",
@@ -4074,19 +3979,12 @@
    "campaign": "the-dunwich-legacy",
    "cards": {
     "total": 32,
-    "works": 2,
-    "rest": {
-     "act": 4,
-     "agenda": 4,
-     "enemy": 5,
-     "location": 8,
-     "scenario": 1,
-     "treachery": 8
-    }
+    "works": 32,
+    "rest": {}
    },
-   "tokens": false,
-   "scripted": false,
-   "complete": false
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "machinations-through-time": {
    "campaign": "side-machinations-through-time",
@@ -4239,15 +4137,13 @@
    "campaign": "side-read-or-die",
    "cards": {
     "total": 40,
-    "works": 4,
+    "works": 35,
     "rest": {
-     "act": 4,
-     "agenda": 4,
-     "asset": 4,
-     "enemy": 5,
-     "location": 10,
-     "scenario": 2,
-     "treachery": 7
+     "act": 1,
+     "agenda": 1,
+     "asset": 1,
+     "enemy": 1,
+     "scenario": 1
     }
    },
    "tokens": false,
@@ -4371,18 +4267,14 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 49,
-    "works": 3,
+    "works": 40,
     "rest": {
-     "act": 2,
-     "agenda": 3,
-     "asset": 4,
-     "enemy": 6,
-     "location": 21,
-     "scenario": 1,
-     "treachery": 9
+     "enemy": 1,
+     "location": 7,
+     "treachery": 1
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4447,18 +4339,17 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 43,
-    "works": 4,
+    "works": 29,
     "rest": {
-     "act": 2,
-     "agenda": 6,
-     "asset": 2,
-     "enemy": 3,
-     "location": 14,
-     "scenario": 2,
-     "treachery": 10
+     "agenda": 1,
+     "asset": 1,
+     "enemy": 1,
+     "location": 3,
+     "scenario": 1,
+     "treachery": 7
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4466,18 +4357,15 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 38,
-    "works": 0,
+    "works": 28,
     "rest": {
-     "act": 3,
-     "agenda": 3,
-     "asset": 3,
-     "enemy": 6,
-     "location": 11,
-     "scenario": 2,
-     "treachery": 10
+     "enemy": 2,
+     "location": 1,
+     "scenario": 1,
+     "treachery": 6
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4558,17 +4446,16 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 40,
-    "works": 1,
+    "works": 28,
     "rest": {
-     "act": 5,
-     "agenda": 5,
-     "enemy": 7,
-     "location": 12,
-     "scenario": 1,
-     "treachery": 9
+     "act": 1,
+     "agenda": 1,
+     "enemy": 2,
+     "location": 4,
+     "treachery": 4
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4703,18 +4590,13 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 37,
-    "works": 2,
+    "works": 30,
     "rest": {
-     "act": 4,
-     "agenda": 3,
-     "asset": 2,
-     "enemy": 5,
-     "location": 10,
-     "scenario": 1,
-     "treachery": 10
+     "location": 2,
+     "treachery": 5
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4758,18 +4640,13 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 44,
-    "works": 1,
+    "works": 34,
     "rest": {
-     "act": 4,
-     "agenda": 3,
-     "asset": 3,
-     "enemy": 1,
-     "location": 14,
-     "scenario": 1,
-     "treachery": 17
+     "location": 2,
+     "treachery": 8
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4927,18 +4804,13 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 40,
-    "works": 1,
+    "works": 32,
     "rest": {
-     "act": 2,
-     "agenda": 3,
-     "asset": 1,
-     "enemy": 8,
-     "location": 12,
-     "scenario": 1,
-     "treachery": 12
+     "enemy": 4,
+     "treachery": 4
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4966,18 +4838,14 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 47,
-    "works": 2,
+    "works": 36,
     "rest": {
-     "act": 5,
-     "agenda": 2,
      "asset": 1,
-     "enemy": 8,
-     "location": 15,
-     "scenario": 1,
-     "treachery": 13
+     "location": 4,
+     "treachery": 6
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -5355,20 +5223,12 @@
    "campaign": "the-dunwich-legacy",
    "cards": {
     "total": 32,
-    "works": 4,
-    "rest": {
-     "act": 4,
-     "agenda": 3,
-     "asset": 2,
-     "enemy": 5,
-     "location": 8,
-     "scenario": 1,
-     "treachery": 5
-    }
+    "works": 32,
+    "rest": {}
    },
-   "tokens": false,
-   "scripted": false,
-   "complete": false
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "the-lair-of-dagon": {
    "campaign": "the-innsmouth-conspiracy",
@@ -5483,20 +5343,12 @@
    "campaign": "the-dunwich-legacy",
    "cards": {
     "total": 39,
-    "works": 3,
-    "rest": {
-     "act": 4,
-     "agenda": 3,
-     "asset": 3,
-     "enemy": 1,
-     "location": 12,
-     "scenario": 1,
-     "treachery": 12
-    }
+    "works": 39,
+    "rest": {}
    },
-   "tokens": false,
-   "scripted": false,
-   "complete": false
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "the-nights-usurper": {
    "campaign": "guardians-of-the-abyss",
@@ -5825,20 +5677,12 @@
    "campaign": "the-dunwich-legacy",
    "cards": {
     "total": 34,
-    "works": 3,
-    "rest": {
-     "act": 2,
-     "agenda": 3,
-     "asset": 1,
-     "enemy": 4,
-     "location": 12,
-     "scenario": 1,
-     "treachery": 8
-    }
+    "works": 34,
+    "rest": {}
    },
-   "tokens": false,
-   "scripted": false,
-   "complete": false
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "union-and-disillusion": {
    "campaign": "the-circle-undone",
@@ -5921,19 +5765,12 @@
    "campaign": "the-dunwich-legacy",
    "cards": {
     "total": 41,
-    "works": 7,
-    "rest": {
-     "act": 5,
-     "agenda": 2,
-     "enemy": 8,
-     "location": 11,
-     "scenario": 1,
-     "treachery": 7
-    }
+    "works": 41,
+    "rest": {}
    },
-   "tokens": false,
-   "scripted": false,
-   "complete": false
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "where-gods-dwell": {
    "campaign": "the-dream-quest",

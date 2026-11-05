@@ -32,6 +32,11 @@ const files = import.meta.glob(
   ],
   { eager: true, import: "default" },
 ) as Record<string, unknown>;
+// the text of a campaign once generated, now hand-written: there is no loadCampaign to bring it, so it comes at once
+const handTexts = import.meta.glob("/content/i18n/*/campaign-texts/the-dunwich-legacy.json", {
+  eager: true,
+  import: "default",
+}) as Record<string, unknown>;
 const eagerPacks = import.meta.glob("/content/packs/core/cards*.json", {
   eager: true,
   import: "default",
@@ -51,6 +56,7 @@ const lazyCampaignFiles = import.meta.glob(
     "/content/campaigns-generated/*/scenarios/*.json",
     "/content/campaigns-generated/*/flow.json",
     "/content/i18n/*/campaign-texts/*.json",
+    "!/content/i18n/*/campaign-texts/the-dunwich-legacy.json",
   ],
   { import: "default" },
 ) as Record<string, () => Promise<unknown>>;
@@ -63,7 +69,12 @@ const lazyNames = [...new Set(Object.keys(lazyPacks).map((f) => f.match(PACK_FIL
 const lazyCampaigns = Object.keys(files).flatMap(
   (f) => f.match(/^\/content\/campaigns-generated\/([^/]+)\/campaign\.json$/)?.[1] ?? [],
 );
-const built = buildContent({ ...files, ...eagerPacks }, scripts, lazyNames, lazyCampaigns);
+const built = buildContent(
+  { ...files, ...handTexts, ...eagerPacks },
+  scripts,
+  lazyNames,
+  lazyCampaigns,
+);
 
 export const content: ContentDb = built.db;
 export const contentErrors: ContentError[] = built.errors;

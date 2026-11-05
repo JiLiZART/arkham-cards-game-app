@@ -3,7 +3,7 @@
  * hold, and a few facts about the whole scenario. This module owns every key format; engine modules and scripts read
  * and write flags only through it. Each family is `prefix:id` (or `prefix:id:id`); a global is a fixed name.
  */
-import type { Effect } from "../../content/schema";
+import type { ChaosToken, Effect } from "../../content/schema";
 import type { EffCtx, FlagTables, GameState, InstId, InvId } from "./types";
 
 /** anything holding a game state: the engine context, or `{ s }` around a state */
@@ -98,6 +98,16 @@ export const xp = counts<InvId>("xp", "xp");
 /** Joe Diamond's hunch deck, and its revealed card */
 export const hunch = family<InstId[], InvId>("hunch", "hunch");
 export const hunchRevealed = family<InstId, InvId>("hunchRevealed", "hunchRevealed");
+/** actions the investigator lost outside their turn: their next turn has that many fewer (Grimoire, Actions) */
+export const actionsOwed = counts<InvId>("actionsOwed");
+/** the story assets (no owner) the investigator controlled when they resigned ("resigned with Peter Clover") */
+export const resignedWith = family<string[], InvId>("resignedWith");
+/** the investigator was killed in the scenario, not only defeated (Crazed Shoggoth): the campaign marks them killed */
+export const killed = family<true, InvId>("killed");
+/** the investigator was driven insane in the scenario (Yog-Sothoth's discards emptied their deck): the campaign marks them insane */
+export const insane = family<true, InvId>("insane");
+/** "remember that you have …": a fact a scenario keeps about an investigator, by what it is ("had a drink") */
+export const remembered = family<true, readonly [string, InvId]>("remembered");
 
 // ---------- about an enemy and an investigator ----------
 /** the round the enemy last attacked the investigator */
@@ -108,6 +118,10 @@ export const noAttack = family<number, readonly [InstId, InvId]>("noAttack", "no
 // ---------- about an event (an attack's or a test's key) ----------
 /** damage and horror an attack's window has prevented, to take off when it is placed */
 export const prevented = family<[number, number], string>("prevented");
+/** how many copies of a card were drawn, by `code:round:phase` (Terror from Beyond: "not the first copy this phase") */
+export const copiesDrawn = counts<string>("copiesDrawn");
+/** the cards a test's token effects discarded from the deck, by test id (an elder thing's "X is their printed cost") */
+export const deckDiscarded = family<InstId[], string>("deckDiscarded");
 /** extra damage an attack deals */
 export const attackBonus = counts<string>("attackBonus");
 /** extra damage dealt to an enemy */
@@ -120,6 +134,8 @@ export const isabelle = family<InstId, string>("isabelle");
 export const logEntry = family<boolean, readonly [string, string]>("log");
 /** a campaign log count to add at the scenario's end */
 export const countEntry = family<number, readonly [string, string]>("count");
+/** a campaign log card list to add to at the scenario's end (the sacrificed to Yog-Sothoth) */
+export const cardsEntry = family<string[], readonly [string, string]>("cards");
 
 // ---------- about the scenario ----------
 /** a peril card is resolving: other investigators can't help */
@@ -140,19 +156,26 @@ export const killedServant = global<true>("killedServant");
 export const servantBeneath = global<true>("servantBeneath");
 /** The Devourer Below: the final act is both act and agenda */
 export const devourer = global<true>("devourer");
+/** chaos tokens added "for the remainder of the campaign": the campaign's bag gains them as the scenario ends */
+export const campaignTokens = global<ChaosToken[]>("campaignTokens");
 
 /** a scenario flag a condition names (`scenarioFlag` in card data) */
 export const named = (game: HasState, name: string) => game.s.flags[name];
+/** a scenario flag a script sets by name, for its own cards and the `scenarioFlag` condition (the museum's broken door) */
+export function setNamed(game: HasState, name: string, value: true) {
+  game.s.flags[name] = value;
+}
 
-/** the log and count entries a scenario left for the campaign log, in the order they were set */
+/** the log, count and card-list entries a scenario left for the campaign log, in the order they were set */
 export function campaignNotes(
   s: GameState,
-): { kind: "log" | "count"; section: string; id: string; value: unknown }[] {
-  const out: { kind: "log" | "count"; section: string; id: string; value: unknown }[] = [];
+): { kind: "log" | "count" | "cards"; section: string; id: string; value: unknown }[] {
+  const out: { kind: "log" | "count" | "cards"; section: string; id: string; value: unknown }[] =
+    [];
   for (const [k, value] of Object.entries(s.flags)) {
-    const m = /^(log|count):([^:]*):(.+)$/.exec(k);
+    const m = /^(log|count|cards):([^:]*):(.+)$/.exec(k);
     if (!m || value === undefined || value === false) continue;
-    out.push({ kind: m[1] as "log" | "count", section: m[2], id: m[3], value });
+    out.push({ kind: m[1] as "log" | "count" | "cards", section: m[2], id: m[3], value });
   }
   return out;
 }

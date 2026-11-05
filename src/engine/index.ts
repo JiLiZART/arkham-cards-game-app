@@ -53,7 +53,7 @@ import { ZONE, PHASE, INV_STATUS, PILE, SCENARIO_CARD, isOneOf } from "./world/c
 import { STEP } from "./steps/step";
 import { scriptOf } from "./world/scripts";
 
-export const ENGINE_VERSION = 11;
+export const ENGINE_VERSION = 12;
 
 /**
  * Whether a save written by this engine version replays to the same game on this one. Version 8 changed the setup (a
@@ -72,6 +72,7 @@ export function checkLog(
 ): boolean {
   if (!c) return true;
   if ("logHas" in c) return !!log[c.logHas];
+  if ("any" in c) return c.any.some((x) => checkLog(log, x, players));
   if ("not" in c) return !checkLog(log, c.not, players);
   if ("playerCount" in c) return players === c.playerCount;
   if ("playersAtLeast" in c) return players >= c.playersAtLeast;
@@ -81,6 +82,17 @@ export function checkLog(
     return n >= (c.logCount.min ?? 0) && n <= (c.logCount.max ?? Infinity);
   }
   return false;
+}
+
+/** which version of an act or agenda the log picks: the first whose condition holds, else the one after the conditions */
+function versionOf(
+  log: Record<string, unknown>,
+  when: LogCondition | LogCondition[],
+  players: number,
+): number {
+  const conds = Array.isArray(when) ? when : [when];
+  const k = conds.findIndex((c) => checkLog(log, c, players));
+  return k < 0 ? conds.length : k;
 }
 
 function emptyState(setup: GameSetup): GameState {
@@ -477,7 +489,7 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
           typeof e === "string"
             ? e
             : e.when
-              ? (e.oneOf[checkLog(s.campaignLog, e.when, s.order.length) ? 0 : 1] ?? e.oneOf[0])
+              ? (e.oneOf[versionOf(s.campaignLog, e.when, s.order.length)] ?? e.oneOf[0])
               : e.oneOf[randInt(s, e.oneOf.length)];
         moveCard(
           game,

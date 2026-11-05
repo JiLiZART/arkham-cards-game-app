@@ -25,78 +25,167 @@
   "setupCards": [],
   "setup": [
     {
-      "do": "putIntoPlay",
-      "codes": [
-        "02167",
-        "02177"
-      ]
+      "do": "script",
+      "fn": "train"
     },
     {
       "do": "setAside",
       "codes": [
         "02178"
       ]
-    },
-    {
-      "do": "startAt",
-      "code": "02167"
     }
   ],
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "agendaStage"
       },
       "cultist": {
-        "modifier": -1
+        "modifier": -1,
+        "onFail": [
+          {
+            "op": "loseActions",
+            "amount": "all"
+          },
+          {
+            "op": "endTurn"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "onReveal": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "nearestCultist"
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "discardFromHand",
+            "amount": 1
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "agendaStage"
       },
       "cultist": {
-        "modifier": -1
+        "modifier": -1,
+        "onFail": [
+          {
+            "op": "loseActions",
+            "amount": "all"
+          },
+          {
+            "op": "endTurn"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "onReveal": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "nearestCultist"
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "discardFromHand",
+            "amount": 1
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "agendaStage",
+        "xPlus": 1
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "loseActions",
+            "amount": "all"
+          },
+          {
+            "op": "endTurn"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -4
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "eachCultist"
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "discardFromHand",
+            "amount": "failBy"
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "agendaStage",
+        "xPlus": 1
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "loseActions",
+            "amount": "all"
+          },
+          {
+            "op": "endTurn"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -4
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "eachCultist"
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "discardFromHand",
+            "amount": "failBy"
+          }
+        ]
       }
     }
   },
@@ -105,6 +194,11 @@
       "title": "No resolution was reached",
       "text": "Each investigator was defeated",
       "effects": [
+        {
+          "do": "record",
+          "key": "investigatorsDelayed",
+          "value": true
+        },
         {
           "do": "xp",
           "victory": true,
@@ -144,21 +238,6 @@
     }
   },
   "i18nId": "essex_county_express",
-  "connections": [
-    [
-      "02167",
-      "02177"
-    ]
-  ],
-  "oneWay": [],
-  "layout": {
-    "02167": [
-      0,
-      0
-    ],
-    "02177": [
-      6,
-      0
-    ]
-  }
+  "connections": [],
+  "oneWay": []
 }

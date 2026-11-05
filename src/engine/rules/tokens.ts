@@ -13,7 +13,7 @@ import {
 /** how many cards lie beneath a card (none: 0) */
 const beneathOf = (game: GameContext, holder: string | null) =>
   holder ? cardsBeneath(game, holder).length : 0;
-import { cardsIn, enemies, enemiesAt, locations } from "../queries";
+import { cardsIn, enemies, enemiesAt, locations, shroud } from "../queries";
 import type { InvId } from "../world/types";
 import { SCENARIO_CARD, ZONE } from "../world/constants";
 
@@ -31,6 +31,16 @@ export function tokenX(game: GameContext, x: NonNullable<TokenEffect["x"]>, i: I
           .filter((e) => def(game, e.id).traits.includes("Cultist"))
           .map((e) => e.doom),
       );
+    case "broodInPlay":
+      return enemies(game).filter((e) => def(game, e.id).name === "Brood of Yog-Sothoth").length;
+    case "extradimensionalLocations":
+      return locations(game).filter((l) => def(game, l.id).traits.includes("Extradimensional"))
+        .length;
+    case "yourLocationShroud": {
+      const loc = inv(game, i).location;
+      const n = loc ? shroud(game, loc) : 0;
+      return Number.isFinite(n) ? n : 0;
+    }
     case "monstersInPlay":
       return enemies(game).filter((e) => def(game, e.id).traits.includes("Monster")).length;
     case "totalDoomInPlay":
@@ -39,6 +49,8 @@ export function tokenX(game: GameContext, x: NonNullable<TokenEffect["x"]>, i: I
         .reduce((n, c) => n + c.doom, 0);
     case "actStage":
       return currentAct(game) ? (def(game, currentAct(game)!).stage ?? 0) : 0;
+    case "agendaStage":
+      return currentAgenda(game) ? (def(game, currentAgenda(game)!).stage ?? 0) : 0;
     case "elitesInVictoryOrUnderAct":
       return (
         cardsIn(game, ZONE.Victory).filter(
@@ -54,7 +66,8 @@ export function tokenX(game: GameContext, x: NonNullable<TokenEffect["x"]>, i: I
     case "locationsWithoutCardBeneath":
       return locations(game).filter((l) => !cardsBeneath(game, l.id).length).length;
     case "tokensOn":
-      return 0; // read with the line's `xTokens` (rules/skillTest.ts)
+    case "discardedPrintedCost":
+      return 0; // read with the line's `xTokens`, or from the test's discards (rules/skillTest.ts)
     case "cluesYouControl":
       return inv(game, i).clues;
     case "fireInPlay":

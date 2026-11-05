@@ -20,6 +20,7 @@ import {
   enemiesAt,
   engagedWith,
   isElite,
+  matchesFilter,
 } from "../queries";
 import { win } from "../rules/cards";
 import { basicInvestigate } from "../rules/round";
@@ -35,13 +36,14 @@ function skillTestEffect(game: GameContext, run: EffectRun<EffectOf<"skillTest">
   const e = run.effect;
 
   const skills = Array.isArray(e.skill) ? e.skill : [e.skill];
+  const difficulty = amt(game, e.difficulty, ctx);
   const skill = ask<(typeof skills)[number]>(
     game,
     step,
     you,
     CHOICE.Generic,
     "Choose which skill to test",
-    skills.map((s) => ({ id: s, label: `Test ${s} (${e.difficulty})`, value: s })),
+    skills.map((s) => ({ id: s, label: `Test ${s} (${difficulty})`, value: s })),
     { auto: true },
   );
   if (skill === undefined) return;
@@ -49,7 +51,7 @@ function skillTestEffect(game: GameContext, run: EffectRun<EffectOf<"skillTest">
     inv: you,
     skill,
     kind: "plain",
-    difficulty: e.difficulty,
+    difficulty,
     source: ctx.source,
     onSuccess: e.onSuccess,
     onFail: e.onFail,
@@ -63,19 +65,26 @@ function fightEffect(game: GameContext, run: EffectRun<EffectOf<"fight">>) {
   const { step, ctx, you } = run;
   const e = run.effect;
 
-  const ts = enemyTargets(game, step, e.target ?? "chooseAtLocation", ctx, (id) =>
-    attackable(game, id),
+  const ts = enemyTargets(
+    game,
+    step,
+    e.target ?? "chooseAtLocation",
+    ctx,
+    (id) =>
+      attackable(game, id, ctx.source) &&
+      (!e.filter || matchesFilter(game, card(game, id).code, e.filter)),
   );
   if (!ts?.length) return;
   const fctx = { ...ctx, enemy: ts[0] };
-  const extra = e.extraDamageIf && checkCondition(game, e.extraDamageIf, fctx) ? 1 : 0;
+  const extra =
+    e.extraDamageIf && checkCondition(game, e.extraDamageIf, fctx) ? (e.extraDamage ?? 1) : 0;
   startTest(game, {
     inv: you,
     skill: e.skill ?? "combat",
     kind: "fight",
     target: ts[0],
     source: ctx.source,
-    skillBonus: e.bonus,
+    skillBonus: e.bonus === undefined ? undefined : amt(game, e.bonus, fctx),
     damageBonus: (e.damageBonus ?? 0) + extra,
     onSuccess: e.onSuccess,
     onFail: e.onFail,
@@ -125,6 +134,9 @@ function investigateEffect(game: GameContext, run: EffectRun<EffectOf<"investiga
   return;
 }
 
+/** an enemy with no printed evade value cannot be evaded, not even automatically (Yog-Sothoth) */
+const evadable = (game: GameContext, id: InstId) => def(game, id).enemy?.evade !== null;
+
 function evadeEffect(game: GameContext, run: EffectRun<EffectOf<"evade">>) {
   const { step, ctx, you } = run;
   const e = run.effect;
@@ -132,6 +144,8 @@ function evadeEffect(game: GameContext, run: EffectRun<EffectOf<"evade">>) {
   const loc = inv(game, you).location;
   if (e.all || e.auto) {
     let ts = enemiesAt(game, loc)
+      .filter((x) => evadable(game, x.id))
+      .filter((x) => !e.filter || matchesFilter(game, x.code, e.filter))
       .map((x) => x.id)
       .filter((id) => !e.nonElite || !isElite(game, id));
     if (!e.all) {
@@ -160,7 +174,10 @@ function evadeEffect(game: GameContext, run: EffectRun<EffectOf<"evade">>) {
     }
     return;
   }
-  const engaged = engagedWith(game, you).map((x) => x.id);
+  const engaged = engagedWith(game, you)
+    .filter((x) => evadable(game, x.id))
+    .filter((x) => !e.filter || matchesFilter(game, x.code, e.filter))
+    .map((x) => x.id);
   if (!engaged.length) return;
   const pick = ask<InstId>(
     game,

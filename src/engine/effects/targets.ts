@@ -14,7 +14,9 @@ import {
   tokensOn,
 } from "../context";
 import {
+  actionsLeft,
   beneathCount,
+  checkCondition,
   tokenHolder,
   distances,
   enemies,
@@ -42,12 +44,20 @@ export function amt(game: GameContext, a: Amount, ctx: EffCtx): number {
             : 0
           : "beneathCount" in a
             ? beneathCount(game, a.beneathCount, ctx)
-            : "tokensOn" in a
-              ? (() => {
-                  const h = tokenHolder(game, a.tokensOn.on, ctx);
-                  return h ? tokensOn(game, h, a.tokensOn.name) : 0;
-                })()
-              : a.perInvestigator * playerCount(game);
+            : "cluesOnEnemy" in a
+              ? a.cluesOnEnemy * (ctx.enemy ? (cardIf(game, ctx.enemy)?.clues ?? 0) : 0)
+              : "tokensOn" in a
+                ? (() => {
+                    const h = tokenHolder(game, a.tokensOn.on, ctx);
+                    return h ? tokensOn(game, h, a.tokensOn.name) : 0;
+                  })()
+                : "onYou" in a
+                  ? (ctx.you ? inv(game, ctx.you)[a.onYou] : 0) + (a.plus ?? 0)
+                  : "base" in a
+                    ? a.base + (checkCondition(game, a.if, ctx) ? a.plus : 0)
+                    : "actionsLeft" in a
+                      ? a.actionsLeft * actionsLeft(game, ctx.you ?? null)
+                      : a.perInvestigator * playerCount(game);
   if (a === "failBy") return ctx.failBy ?? 0;
   if (a === "succeedBy") return ctx.succeedBy ?? 0;
   if (a === "X") return ctx.x ?? 0;
@@ -78,6 +88,12 @@ export function invTargets(
       return activeInvs(game);
     case "eachAtLocation":
       return invsAt(game, inv(game, you).location);
+    case "eachAtAttachedLocation": {
+      const src = ctx.source ? cardIf(game, ctx.source) : undefined;
+      // attached to a card (an enemy): where that card is
+      const host = src?.attachedTo ? cardIf(game, src.attachedTo) : src;
+      return invsAt(game, host?.zone === "location" ? host.id : (host?.location ?? null));
+    }
     case "eventInvestigator":
       return ctx.inv ? [ctx.inv] : [];
     case "chooseOtherAtLocation":

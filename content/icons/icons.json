@@ -4,6 +4,7 @@
   "arkham": "midnight_masks",
   "card": "card-outline",
   "cultists": "cult_of_umordoth",
+  "essex_county_express": "the_essex_county_express",
   "pentagram": "dark_cult",
   "tentacles": "the_devourer_below",
   "the_midnight_masks": "midnight_masks",
@@ -502,6 +503,14 @@
    "file": "day.svg",
    "set": "arkhamicons"
   },
+  "day_of_rain": {
+   "file": "day_of_rain.svg",
+   "set": "extra"
+  },
+  "day_of_rest": {
+   "file": "day_of_rest.svg",
+   "set": "extra"
+  },
   "day_of_the_feast": {
    "file": "day_of_the_feast.svg",
    "set": "extra"
@@ -552,6 +561,10 @@
   },
   "dim_carcosa": {
    "file": "dim_carcosa.svg",
+   "set": "extra"
+  },
+  "disappearance_at_the_twilight_estate": {
+   "file": "disappearance_at_the_twilight_estate.svg",
    "set": "extra"
   },
   "dogs_of_war": {
@@ -616,6 +629,10 @@
   },
   "erratic_fear": {
    "file": "erratic_fear.svg",
+   "set": "extra"
+  },
+  "essex_county_express": {
+   "file": "the_essex_county_express.svg",
    "set": "extra"
   },
   "eternal_slumber": {
@@ -1382,6 +1399,10 @@
    "file": "return_to_dim_carcosa.svg",
    "set": "extra"
   },
+  "return_to_disappearance_at_the_twilight_estate": {
+   "file": "return_to_disappearance_at_the_twilight_estate.svg",
+   "set": "extra"
+  },
   "return_to_echoes_of_the_past": {
    "file": "return_to_echoes_of_the_past.svg",
    "set": "extra"
@@ -1424,6 +1445,10 @@
   },
   "return_to_the_boundary_beyond": {
    "file": "return_to_the_boundary_beyond.svg",
+   "set": "extra"
+  },
+  "return_to_the_depths_of_yoth": {
+   "file": "return_to_the_depths_of_yoth.svg",
    "set": "extra"
   },
   "return_to_the_devourer_below": {
@@ -1601,6 +1626,10 @@
   "seeker": {
    "file": "seeker.svg",
    "set": "arkhamicons"
+  },
+  "sepulchre_of_the_sleeper": {
+   "file": "sepulchre_of_the_sleeper.svg",
+   "set": "extra"
   },
   "serpents": {
    "file": "serpents.svg",
@@ -2060,6 +2089,10 @@
   },
   "the_wages_of_sin": {
    "file": "the_wages_of_sin.svg",
+   "set": "extra"
+  },
+  "the_watcher": {
+   "file": "the_watcher.svg",
    "set": "extra"
   },
   "the_western_wall": {

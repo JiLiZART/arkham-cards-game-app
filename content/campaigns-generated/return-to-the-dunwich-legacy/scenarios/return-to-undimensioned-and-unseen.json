@@ -55,58 +55,256 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -1
+        "modifier": "X",
+        "x": "broodInPlay"
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": 0
+        "modifier": 0,
+        "either": {
+          "do": [
+            {
+              "op": "script",
+              "fn": "uauClearBrood"
+            }
+          ],
+          "can": {
+            "script": "uauBroodWithClues"
+          },
+          "label": "Remove all clues from a Brood of Yog-Sothoth",
+          "key": "removeBroodClues",
+          "modifier": -4
+        }
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "condition": {
+          "all": [
+            {
+              "any": [
+                {
+                  "testKind": "fight"
+                },
+                {
+                  "testKind": "evade"
+                }
+              ]
+            },
+            {
+              "eventEnemy": {
+                "code": "02255"
+              }
+            }
+          ]
+        },
+        "onReveal": [
+          {
+            "op": "enemyAttack",
+            "enemy": "eventEnemy"
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -1
+        "modifier": "X",
+        "x": "broodInPlay"
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": 0
+        "modifier": 0,
+        "either": {
+          "do": [
+            {
+              "op": "script",
+              "fn": "uauClearBrood"
+            }
+          ],
+          "can": {
+            "script": "uauBroodWithClues"
+          },
+          "label": "Remove all clues from a Brood of Yog-Sothoth",
+          "key": "removeBroodClues",
+          "modifier": -4
+        }
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "condition": {
+          "all": [
+            {
+              "any": [
+                {
+                  "testKind": "fight"
+                },
+                {
+                  "testKind": "evade"
+                }
+              ]
+            },
+            {
+              "eventEnemy": {
+                "code": "02255"
+              }
+            }
+          ]
+        },
+        "onReveal": [
+          {
+            "op": "enemyAttack",
+            "enemy": "eventEnemy"
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "broodInPlay",
+        "xTimes": 2
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "takeDamage",
+            "amount": 1
+          },
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": 0
+        "modifier": 0,
+        "either": {
+          "do": [
+            {
+              "op": "script",
+              "fn": "uauClearBrood"
+            }
+          ],
+          "can": {
+            "script": "uauBroodWithClues"
+          },
+          "label": "Remove all clues from a Brood of Yog-Sothoth",
+          "key": "removeBroodClues",
+          "autoFail": true
+        }
       },
       "elderThing": {
-        "modifier": -5
+        "modifier": -5,
+        "condition": {
+          "all": [
+            {
+              "any": [
+                {
+                  "testKind": "fight"
+                },
+                {
+                  "testKind": "evade"
+                }
+              ]
+            },
+            {
+              "eventEnemy": {
+                "code": "02255"
+              }
+            }
+          ]
+        },
+        "onReveal": [
+          {
+            "op": "enemyAttack",
+            "enemy": "eventEnemy"
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "broodInPlay",
+        "xTimes": 2
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "takeDamage",
+            "amount": 1
+          },
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": 0
+        "modifier": 0,
+        "either": {
+          "do": [
+            {
+              "op": "script",
+              "fn": "uauClearBrood"
+            }
+          ],
+          "can": {
+            "script": "uauBroodWithClues"
+          },
+          "label": "Remove all clues from a Brood of Yog-Sothoth",
+          "key": "removeBroodClues",
+          "autoFail": true
+        }
       },
       "elderThing": {
-        "modifier": -5
+        "modifier": -5,
+        "condition": {
+          "all": [
+            {
+              "any": [
+                {
+                  "testKind": "fight"
+                },
+                {
+                  "testKind": "evade"
+                }
+              ]
+            },
+            {
+              "eventEnemy": {
+                "code": "02255"
+              }
+            }
+          ]
+        },
+        "onReveal": [
+          {
+            "op": "enemyAttack",
+            "enemy": "eventEnemy"
+          }
+        ]
       }
     }
   },

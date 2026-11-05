@@ -4,6 +4,8 @@ import {
   abilitiesOf,
   actClueCost,
   allMods,
+  attackableBy,
+  enemiesAt,
   blankedCards,
   advanceableActs,
   canPay,
@@ -212,6 +214,9 @@ export function activatable(
       )
         return;
       if (!canPay(game, i, c.id, a.cost)) return;
+      // a fight with this card isn't offered when the only enemies here can be attacked only with another (the Brood)
+      const here = a.designator === "fight" ? enemiesAt(game, inv(game, i).location) : [];
+      if (here.length && !here.some((e) => attackableBy(game, e.id, c.id))) return;
       out.push({ card: c.id, index, ability: a, controller: i });
     });
   }
@@ -222,13 +227,20 @@ export function activatable(
 /** triggers whose subject is a card; encounter cards only react to themselves */
 function isSubject(game: GameContext, cardId: InstId, data: EventData) {
   const c = card(game, cardId);
+  // a card attached to an enemy watches that enemy and the place it is at (Altered Beast)
+  const host = c.zone === "attached" && c.attachedTo ? cardIf(game, c.attachedTo) : undefined;
   return (
     data.card === cardId ||
     data.enemy === cardId ||
     data.location === cardId ||
-    (c.zone === "attached" && !!data.location && c.location === data.location)
+    (c.zone === "attached" && !!data.location && c.location === data.location) ||
+    (host?.zone === "enemy" &&
+      (data.enemy === host.id || (!!data.location && host.location === data.location)))
   );
 }
+
+/** events about the whole game an encounter card's forced ability may wait for, whatever card they name */
+const GAME_EVENTS: readonly Trigger[] = ["agendaAdvances"];
 
 function triggerMatches(
   game: GameContext,
@@ -238,7 +250,25 @@ function triggerMatches(
   data: EventData,
 ): boolean {
   const hasSubject = !!(data.card || data.enemy || data.location);
-  if (!you) return isSubject(game, cardId, data) || !hasSubject;
+  if (!you) {
+    // "the engaged investigator draws …" (Wizard of Yog-Sothoth): an enemy's forced ability about whom it engages
+    if (a.usableBy === "engaged")
+      return !!data.inv && cardIf(game, cardId)?.engagedWith === data.inv;
+    // an act or agenda is about the whole game ("if an investigator deals damage to a [[Criminal]] enemy")
+    const zone = card(game, cardId).zone;
+    return (
+      isSubject(game, cardId, data) ||
+      !hasSubject ||
+      GAME_EVENTS.includes(a.trigger!) ||
+      zone === ZONE.Act ||
+      zone === ZONE.Agenda ||
+      // a location waits on what an investigator at it draws (Sentinel Peak: "draws a [[Hex]] card")
+      (zone === ZONE.Location &&
+        a.trigger === "treacheryDrawn" &&
+        !!data.inv &&
+        inv(game, data.inv).location === cardId)
+    );
+  }
   if (isSubject(game, cardId, data)) return true;
   // "after X enters play" is about the card itself; an attached card watches only its own location
   if (
@@ -259,7 +289,7 @@ export function ctxFor(data: EventData, source: InstId, you: InvId | null): EffC
     source,
     you,
     ...(data.via ? { via: data.via } : {}),
-    inv: data.inv ?? null,
+    inv: data.inv ?? data.defeatedBy ?? null,
     enemy: data.enemy ?? null,
     location: data.location ?? null,
     key: data.key,
@@ -311,8 +341,7 @@ function triggered(game: GameContext, trigger: Trigger, data: EventData): Abilit
       if (you && a.kind === "reaction" && !canPay(game, you, cardId, a.cost)) return;
       if (fromHand && you && a.kind === "reaction" && !a.revealOnly) {
         const cost = playCost(game, you, cardId);
-        if (inv(game, you).resources < cost || hasFlag(game, you, "cannotPlayAssetsOrEvents"))
-          return;
+        if (inv(game, you).resources < cost || playForbidden(game, you, cardId)) return;
       }
       out.push({ card: cardId, index, ability: a, controller: you as InvId });
     });
@@ -338,11 +367,7 @@ function triggered(game: GameContext, trigger: Trigger, data: EventData): Abilit
         if (a < 0) continue;
         const ab = abilitiesOf(game, h, blanked)[a];
         if (def(game, h).type !== "event" || !def(game, h).keywords.includes("fast")) continue;
-        if (
-          hasFlag(game, i, "cannotPlayAssetsOrEvents") ||
-          inv(game, i).resources < playCost(game, i, h)
-        )
-          continue;
+        if (playForbidden(game, i, h) || inv(game, i).resources < playCost(game, i, h)) continue;
         if (ab.condition && !checkCondition(game, ab.condition, { source: h, you: i })) continue;
         out.push({ card: h, index: a, ability: ab, controller: i });
       }
@@ -557,6 +582,11 @@ export const playAbility = (game: GameContext, cardId: InstId) =>
   abilitiesOf(game, cardId).find((a) => a.kind === "onPlay");
 
 /** why an asset or event in hand can't be played whatever the timing, or null; `by` is the card that forbids it */
+/** no asset or event may be played now, or no event (House in the Reeds) */
+const playForbidden = (game: GameContext, i: InvId, cardId: InstId) =>
+  hasFlag(game, i, "cannotPlayAssetsOrEvents") ||
+  (def(game, cardId).type === "event" && hasFlag(game, i, "cannotPlayEvents"));
+
 export type PlayBlock =
   | { reason: "forbidden"; by: InstId | null }
   | { reason: "unique" }
@@ -570,7 +600,10 @@ export function playBlock(game: GameContext, i: InvId, cardId: InstId): PlayBloc
     (m) =>
       m.target === i &&
       (m.mod.flag === "cannotPlayAssetsOrEvents" ||
-        (m.mod.flag === "cannotPlayAssets" && d.type === "asset") ||
+        (m.mod.flag === "cannotPlayEvents" && d.type === "event") ||
+        (m.mod.flag === "cannotPlayAssets" &&
+          d.type === "asset" &&
+          (!m.mod.filter || matchesFilter(game, code, m.mod.filter))) ||
         (m.mod.flag === "cannotPlayOrCommit" &&
           (!m.mod.filter || matchesFilter(game, code, m.mod.filter)))),
   );
@@ -586,8 +619,17 @@ export function playBlock(game: GameContext, i: InvId, cardId: InstId): PlayBloc
 export function canPlay(game: GameContext, i: InvId, cardId: InstId, asFast: boolean): boolean {
   const d = def(game, cardId);
   if (d.type !== "asset" && d.type !== "event") return false;
-  if (hasFlag(game, i, "cannotPlayAssetsOrEvents")) return false;
-  if (d.type === "asset" && hasFlag(game, i, "cannotPlayAssets")) return false;
+  if (playForbidden(game, i, cardId)) return false;
+  if (
+    d.type === "asset" &&
+    allMods(game).some(
+      (m) =>
+        m.target === i &&
+        m.mod.flag === "cannotPlayAssets" &&
+        (!m.mod.filter || matchesFilter(game, card(game, cardId).code, m.mod.filter)),
+    )
+  )
+    return false;
   if (cardBlocked(game, i, cardId)) return false;
   if (uniqueInPlay(game, cardId)) return false;
   const isFast = d.keywords.includes("fast");

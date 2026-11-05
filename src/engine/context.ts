@@ -232,6 +232,8 @@ export const sideDeck = (game: GameContext, name: string): readonly InstId[] =>
 export function cancelEvent(game: GameContext, key: string) {
   game.s.cancelled.push(key);
 }
+/** the tokens in the chaos bag now */
+export const chaosBag = (game: GameContext): readonly ChaosToken[] => game.s.chaosBag;
 export function addChaosTokens(game: GameContext, tokens: ChaosToken[]) {
   game.s.chaosBag.push(...tokens);
 }
@@ -321,6 +323,9 @@ export const exhaust = (game: GameContext, id: InstId) => void (cardRec(game, id
 export const ready = (game: GameContext, id: InstId) => void (cardRec(game, id).exhausted = false);
 /** turn a location (or anything revealed) face up */
 export const reveal = (game: GameContext, id: InstId) => void (cardRec(game, id).revealed = true);
+/** turn a location back to its unrevealed side (Spaces Between) */
+export const unreveal = (game: GameContext, id: InstId) =>
+  void (cardRec(game, id).revealed = false);
 /** where an enemy or an attachment is (the card of a location), without moving it through zones */
 export const setCardLocation = (game: GameContext, id: InstId, loc: InstId | null) =>
   void (cardRec(game, id).location = loc);

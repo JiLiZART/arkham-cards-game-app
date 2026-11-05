@@ -115,9 +115,18 @@ export function keywordArg<K extends keyof KeywordArgs>(
     }
   return undefined;
 }
-/** an aloof enemy can only be attacked while it is engaged with an investigator */
-export const attackable = (game: GameContext, id: InstId) =>
-  !hasKeyword(game, id, "aloof") || !!cardRecIf(game, id)?.engagedWith;
+/** aloof by its own keywords, or a constant ability grants it (The Clover Club: "each [[Criminal]] enemy gains Aloof") */
+export const isAloof = (game: GameContext, id: InstId) =>
+  hasKeyword(game, id, "aloof") ||
+  allMods(game).some((m) => m.target === id && m.mod.keyword === "aloof");
+/** an aloof enemy can only be attacked while it is engaged with an investigator; some only with one card (`by`) */
+export const attackable = (game: GameContext, id: InstId, by?: InstId | null) =>
+  attackableBy(game, id, by) && (!isAloof(game, id) || !!cardRecIf(game, id)?.engagedWith);
+/** an enemy that can be attacked and damaged only with one card's ability, and this isn't it (Brood of Yog-Sothoth) */
+export const attackableBy = (game: GameContext, id: InstId, by?: InstId | null) => {
+  const only = def(game, id).onlyAttackableBy;
+  return !only || (!!by && cardRecIf(game, by)?.code === only);
+};
 /** a unique card cannot be played or put into play while a card with its title is in play (Grimoire, Unique) */
 export function uniqueInPlay(game: GameContext, id: InstId): boolean {
   const d = def(game, id);
@@ -145,6 +154,15 @@ export function spendableGroupClues(game: GameContext) {
     .filter((x) => !hasFlag(game, x, "cannotSpendClues"))
     .reduce((n, x) => n + inv(game, x).clues, 0);
 }
+/** who may spend clues to advance an act: each investigator who can spend clues (only those at its place, if it names one) */
+export function actSpenders(game: GameContext, deck = "a"): InvId[] {
+  const act = currentAct(game, deck);
+  const at = act ? def(game, act).actSpendAt : undefined;
+  return activeInvs(game).filter((x) => {
+    const loc = invRec(game, x).location;
+    return !hasFlag(game, x, "cannotSpendClues") && (!at || (!!loc && def(game, loc).name === at));
+  });
+}
 /** the act decks the group can advance by spending clues, in deck order (Grimoire, Act Deck and Agenda Deck) */
 export const advanceableActs = (game: GameContext): string[] =>
   Object.entries(currentActs(game))
@@ -152,12 +170,16 @@ export const advanceableActs = (game: GameContext): string[] =>
       ([deck, act]) =>
         !!act &&
         (def(game, act).actAdvance ?? "turn") === "turn" &&
-        spendableGroupClues(game) >= actClueCost(game, deck),
+        actSpenders(game, deck).reduce((n, x) => n + invRec(game, x).clues, 0) >=
+          actClueCost(game, deck),
     )
     .map(([deck]) => deck);
 /** the group can advance an act by spending clues, in any player window */
 export const canAdvanceAct = (game: GameContext) => advanceableActs(game).length > 0;
-export const isMassive = (game: GameContext, id: InstId) => hasKeyword(game, id, "massive");
+/** massive by its own keywords, or a constant ability grants it (Shadow-spawned with 3 resources) */
+export const isMassive = (game: GameContext, id: InstId) =>
+  hasKeyword(game, id, "massive") ||
+  allMods(game).some((m) => m.target === id && m.mod.keyword === "massive");
 export const controlled = (game: GameContext, i: InvId) =>
   cardsIn(game, ZONE.Play).filter((c) => c.controller === i);
 export const threatArea = (game: GameContext, i: InvId) =>
@@ -378,20 +400,24 @@ export function allMods(game: GameContext): AppliedMod[] {
   return out;
 }
 
+/** where a modifier's source is: its controller's location, the location itself, or where the enemy or attachment is */
+const sourceLocation = (game: GameContext, c: CardInst): InstId | null =>
+  (c.controller
+    ? invRecIf(game, c.controller)?.location
+    : c.zone === "location"
+      ? c.id
+      : c.zone === "enemy" || c.zone === "attached"
+        ? c.location
+        : null) ?? null;
+
 function scopeTargets(game: GameContext, c: CardInst, mod: Modifier): string[] {
   switch (mod.scope ?? "controller") {
     case "controller":
       return c.controller ? [c.controller] : [];
-    case "investigatorsAtLocation": {
-      const loc = c.controller
-        ? invRecIf(game, c.controller)?.location
-        : c.zone === "location"
-          ? c.id
-          : c.zone === "enemy" || c.zone === "attached"
-            ? c.location
-            : null;
-      return invsAt(game, loc ?? null);
-    }
+    case "investigatorsAtLocation":
+      return invsAt(game, sourceLocation(game, c));
+    case "enemiesAtLocation":
+      return enemiesAt(game, sourceLocation(game, c)).map((e) => e.id);
     case "attachedLocation":
       return c.location ? [c.location] : [];
     case "self":
@@ -404,6 +430,12 @@ function scopeTargets(game: GameContext, c: CardInst, mod: Modifier): string[] {
 }
 
 function modApplies(game: GameContext, mod: Modifier, target: string): boolean {
+  // an enemy's fight or evade with a filter: only while the test against it uses a card matching it (Avian Thrall)
+  if (mod.filter && (mod.stat === "fight" || mod.stat === "evade")) {
+    const t = game.s.skillTest;
+    const src = t?.source ? cardRecIf(game, t.source) : undefined;
+    return !!t && t.target === target && !!src && matchesFilter(game, src.code, mod.filter);
+  }
   const when = mod.when ?? "always";
   if (when === "always") return true;
   const t = game.s.skillTest;
@@ -437,6 +469,29 @@ export const hasFlag = (
   mods = allMods(game),
 ) =>
   mods.some((m) => m.target === target && m.mod.flag === flag && modApplies(game, m.mod, target));
+
+/** clues may be placed on the location (Ascending the Hill: not on non-[[Altered]] ones) */
+export const canPlaceClues = (game: GameContext, loc: InstId) =>
+  !hasFlag(game, loc, "cannotPlaceClues");
+
+/** the investigator can't gain resources: forbidden outright (Museum Entrance), or by an engaged enemy (O'Bannion's Thug) */
+export function cannotGainResources(game: GameContext, i: InvId): boolean {
+  const mods = allMods(game);
+  return (
+    hasFlag(game, i, "cannotGainResources", mods) ||
+    engagedWith(game, i).some((e) => hasFlag(game, e.id, "cannotGainResourcesWhileEngaged", mods))
+  );
+}
+
+/** the modifiers in effect for an investigator, less those of cards whose text they ignore ("Jazz" Mulligan) */
+export function modsFor(game: GameContext, i: InvId): AppliedMod[] {
+  const ignored = new Set<InstId>();
+  for (const c of cardsInAny(game, MOD_ZONES)) {
+    const fn = scriptOf(game.db, c.code)?.ignores;
+    if (fn) for (const id of fn(game, c.id, i)) ignored.add(id);
+  }
+  return allMods(game).filter((m) => !m.source || !ignored.has(m.source));
+}
 
 export function baseSkill(game: GameContext, i: InvId, skill: Skill): number {
   return def(game, inv(game, i).cardId).skills![skill];
@@ -533,6 +588,10 @@ export function canPay(
 }
 
 // ---------- conditions ----------
+
+/** the actions the investigator has left in their turn (none outside it, or for no one) */
+export const actionsLeft = (game: GameContext, i: InvId | null) =>
+  !!i && game.s.active === i && game.s.phase === "investigation" ? invRec(game, i).actionsLeft : 0;
 
 export function checkCondition(game: GameContext, c: Condition, ctx: EffCtx): boolean {
   const you = ctx.you ?? null;
@@ -644,8 +703,32 @@ export function checkCondition(game: GameContext, c: Condition, ctx: EffCtx): bo
     return n >= (c.beneath.min ?? 0) && n <= (c.beneath.max ?? Infinity);
   }
   if ("testTokens" in c) return !!game.s.skillTest?.tokens.some((t) => c.testTokens.includes(t));
-  if ("eventAtThisLocation" in c)
-    return !!ctx.inv && !!ctx.source && invRecIf(game, ctx.inv)?.location === ctx.source;
+  if ("discardPile" in c) {
+    const n = you ? inv(game, you).discard.length : 0;
+    return !!you && n >= (c.discardPile.min ?? 0) && n <= (c.discardPile.max ?? Infinity);
+  }
+  if ("testSkill" in c) return game.s.skillTest?.skill === c.testSkill;
+  if ("players" in c) {
+    const n = playerCount(game);
+    return n >= (c.players.min ?? 0) && n <= (c.players.max ?? Infinity);
+  }
+  if ("yourLocationIs" in c)
+    return !!yourLoc && matchesFilter(game, card(game, yourLoc).code, c.yourLocationIs);
+  if ("agendaStage" in c) {
+    const agenda = currentAgenda(game);
+    const n = agenda ? (def(game, agenda).stage ?? 0) : 0;
+    return n >= (c.agendaStage.min ?? 0) && n <= (c.agendaStage.max ?? Infinity);
+  }
+  if ("actionsLeft" in c) {
+    const n = actionsLeft(game, you);
+    return !!you && n >= (c.actionsLeft.min ?? 0) && n <= (c.actionsLeft.max ?? Infinity);
+  }
+  if ("eventAtThisLocation" in c) {
+    // this location, or where this enemy (or card at a location) is
+    const src = ctx.source ? cardRecIf(game, ctx.source) : undefined;
+    const here = src?.zone === ZONE.Location ? src.id : src?.location;
+    return !!ctx.inv && !!here && invRecIf(game, ctx.inv)?.location === here;
+  }
   if ("script" in c) {
     const own = ctx.source ? cardRecIf(game, ctx.source)?.code : undefined;
     const fn = conditionFor(game.db, game.s.scenarioId, own, c.script);
@@ -707,6 +790,10 @@ export function spawnTargets(
         enemiesAt(game, l.id).some((e) => def(game, e.id).traits.includes(expr.enemyTrait!))) &&
       (!expr.connected || (!!from && connections(game, from).includes(l.id))),
   );
+  if (expr.mostClues && out.length) {
+    const most = Math.max(...out.map((l) => l.clues));
+    out = out.filter((l) => l.clues === most);
+  }
   if (expr.unrevealed === "ifAble" && out.some((l) => !l.revealed))
     out = out.filter((l) => !l.revealed);
   if ((expr.nearest || expr.farthest) && out.length) {

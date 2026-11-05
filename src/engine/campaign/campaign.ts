@@ -1,4 +1,11 @@
-import { campaignNotes, exiled as exiledFlag, xp } from "../world/flags";
+import {
+  campaignNotes,
+  campaignTokens,
+  exiled as exiledFlag,
+  killed as killedFlag,
+  insane as insaneFlag,
+  xp,
+} from "../world/flags";
 import { addCards, emptyLog, flatLog, migrateLog, NOTES, record, setCount } from "./log";
 import { flowOf } from "../../content/flow";
 import { expandDeck, validateDeck } from "./decks";
@@ -251,6 +258,9 @@ export function applyScenarioEnd(db: ContentDb, c0: CampaignState, s: GameState)
     ci.physicalTrauma += i.physicalTrauma;
     ci.mentalTrauma += i.mentalTrauma;
     ci.xp += xp.get({ s }, i.id) ?? 0;
+    // killed during the scenario (Crazed Shoggoth's attack)
+    if (killedFlag.get({ s }, i.id)) ci.status = "killed";
+    else if (insaneFlag.get({ s }, i.id)) ci.status = "insane";
     // an exiled card leaves the campaign deck: one copy for each exile
     for (const code of exiledFlag.get({ s }, i.id) ?? []) {
       const at = ci.deck.indexOf(code);
@@ -258,15 +268,18 @@ export function applyScenarioEnd(db: ContentDb, c0: CampaignState, s: GameState)
       ci.exiled = [...(ci.exiled ?? []), code];
     }
   }
-  // what the scenario's script found out and the guide asks the players (`log:<section>:<id>`, `count:<section>:<id>`)
+  // what the scenario's script found out and the guide asks the players (`log:<section>:<id>`, `count:<section>:<id>`, `cards:<section>:<id>`)
   for (const n of campaignNotes(s)) {
     if (n.kind === "log") c.log = record(c.log, n.id, n.section || NOTES);
+    else if (n.kind === "cards")
+      c.log = addCards(c.log, n.id, (n.value as string[]).map(String), false, n.section || NOTES);
     else c.log = setCount(c.log, n.id, "add", Number(n.value), n.section || NOTES);
   }
   if (db.scenarios[s.scenarioId].resolutions[s.resolution]?.checkpoint) recordCheckpoint(c, s);
-  // permanent bag additions from this scenario's setup
+  // permanent bag additions from this scenario's setup, and those made during play "for the remainder of the campaign"
   for (const st of db.scenarios[s.scenarioId].setup)
     if (st.do === "addChaosToken") c.chaosBag.push(st.token);
+  c.chaosBag.push(...(campaignTokens.get({ s }) ?? []));
   c.history.push({ scenarioId: s.scenarioId, resolution: s.resolution, xp: 0, victory });
   settle(db, c);
   return startResolution(db, c, scenarioFacts(db, s, victory));

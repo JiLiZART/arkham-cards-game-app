@@ -23,90 +23,286 @@
   "setupCards": [],
   "setup": [
     {
-      "do": "putIntoPlay",
+      "do": "setAside",
       "codes": [
-        "02248",
-        "02252",
-        "02242",
-        "02246",
-        "02250",
-        "02244"
+        "02254",
+        "02255"
       ]
     },
     {
-      "do": "setAside",
-      "codes": [
-        "02254"
-      ]
+      "do": "script",
+      "fn": "uauSetup"
     },
     {
       "do": "startAt",
-      "code": "02242"
+      "code": "Dunwich Village"
     }
   ],
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -1
+        "modifier": "X",
+        "x": "broodInPlay"
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": 0
+        "modifier": 0,
+        "either": {
+          "do": [
+            {
+              "op": "script",
+              "fn": "uauClearBrood"
+            }
+          ],
+          "can": {
+            "script": "uauBroodWithClues"
+          },
+          "label": "Remove all clues from a Brood of Yog-Sothoth",
+          "key": "removeBroodClues",
+          "modifier": -4
+        }
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "condition": {
+          "all": [
+            {
+              "any": [
+                {
+                  "testKind": "fight"
+                },
+                {
+                  "testKind": "evade"
+                }
+              ]
+            },
+            {
+              "eventEnemy": {
+                "code": "02255"
+              }
+            }
+          ]
+        },
+        "onReveal": [
+          {
+            "op": "enemyAttack",
+            "enemy": "eventEnemy"
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -1
+        "modifier": "X",
+        "x": "broodInPlay"
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": 0
+        "modifier": 0,
+        "either": {
+          "do": [
+            {
+              "op": "script",
+              "fn": "uauClearBrood"
+            }
+          ],
+          "can": {
+            "script": "uauBroodWithClues"
+          },
+          "label": "Remove all clues from a Brood of Yog-Sothoth",
+          "key": "removeBroodClues",
+          "modifier": -4
+        }
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "condition": {
+          "all": [
+            {
+              "any": [
+                {
+                  "testKind": "fight"
+                },
+                {
+                  "testKind": "evade"
+                }
+              ]
+            },
+            {
+              "eventEnemy": {
+                "code": "02255"
+              }
+            }
+          ]
+        },
+        "onReveal": [
+          {
+            "op": "enemyAttack",
+            "enemy": "eventEnemy"
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "broodInPlay",
+        "xTimes": 2
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "takeDamage",
+            "amount": 1
+          },
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": 0
+        "modifier": 0,
+        "either": {
+          "do": [
+            {
+              "op": "script",
+              "fn": "uauClearBrood"
+            }
+          ],
+          "can": {
+            "script": "uauBroodWithClues"
+          },
+          "label": "Remove all clues from a Brood of Yog-Sothoth",
+          "key": "removeBroodClues",
+          "autoFail": true
+        }
       },
       "elderThing": {
-        "modifier": -5
+        "modifier": -5,
+        "condition": {
+          "all": [
+            {
+              "any": [
+                {
+                  "testKind": "fight"
+                },
+                {
+                  "testKind": "evade"
+                }
+              ]
+            },
+            {
+              "eventEnemy": {
+                "code": "02255"
+              }
+            }
+          ]
+        },
+        "onReveal": [
+          {
+            "op": "enemyAttack",
+            "enemy": "eventEnemy"
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "broodInPlay",
+        "xTimes": 2
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "takeDamage",
+            "amount": 1
+          },
+          {
+            "op": "takeHorror",
+            "amount": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": 0
+        "modifier": 0,
+        "either": {
+          "do": [
+            {
+              "op": "script",
+              "fn": "uauClearBrood"
+            }
+          ],
+          "can": {
+            "script": "uauBroodWithClues"
+          },
+          "label": "Remove all clues from a Brood of Yog-Sothoth",
+          "key": "removeBroodClues",
+          "autoFail": true
+        }
       },
       "elderThing": {
-        "modifier": -5
+        "modifier": -5,
+        "condition": {
+          "all": [
+            {
+              "any": [
+                {
+                  "testKind": "fight"
+                },
+                {
+                  "testKind": "evade"
+                }
+              ]
+            },
+            {
+              "eventEnemy": {
+                "code": "02255"
+              }
+            }
+          ]
+        },
+        "onReveal": [
+          {
+            "op": "enemyAttack",
+            "enemy": "eventEnemy"
+          }
+        ]
       }
     }
   },
   "resolutions": {
     "none": {
       "title": "No resolution was reached",
-      "text": "Read Resolution 1",
+      "text": "Go to Resolution 1.",
       "effects": [
+        {
+          "do": "removeCard",
+          "code": "02219"
+        },
         {
           "do": "xp",
           "victory": true,
@@ -156,39 +352,183 @@
   "i18nId": "undimensioned_and_unseen",
   "connections": [
     [
-      "02248",
-      "02252"
+      "02242",
+      "02244"
+    ],
+    [
+      "02242",
+      "02245"
+    ],
+    [
+      "02243",
+      "02244"
+    ],
+    [
+      "02243",
+      "02245"
+    ],
+    [
+      "02242",
+      "02248"
+    ],
+    [
+      "02242",
+      "02249"
+    ],
+    [
+      "02243",
+      "02248"
+    ],
+    [
+      "02243",
+      "02249"
     ],
     [
       "02242",
       "02246"
+    ],
+    [
+      "02242",
+      "02247"
+    ],
+    [
+      "02243",
+      "02246"
+    ],
+    [
+      "02243",
+      "02247"
+    ],
+    [
+      "02244",
+      "02246"
+    ],
+    [
+      "02244",
+      "02247"
+    ],
+    [
+      "02245",
+      "02246"
+    ],
+    [
+      "02245",
+      "02247"
+    ],
+    [
+      "02244",
+      "02250"
+    ],
+    [
+      "02244",
+      "02251"
+    ],
+    [
+      "02245",
+      "02250"
+    ],
+    [
+      "02245",
+      "02251"
+    ],
+    [
+      "02246",
+      "02250"
+    ],
+    [
+      "02246",
+      "02251"
+    ],
+    [
+      "02247",
+      "02250"
+    ],
+    [
+      "02247",
+      "02251"
+    ],
+    [
+      "02248",
+      "02252"
+    ],
+    [
+      "02248",
+      "02253"
+    ],
+    [
+      "02249",
+      "02252"
+    ],
+    [
+      "02249",
+      "02253"
+    ],
+    [
+      "02250",
+      "02252"
+    ],
+    [
+      "02250",
+      "02253"
+    ],
+    [
+      "02251",
+      "02252"
+    ],
+    [
+      "02251",
+      "02253"
     ]
   ],
   "oneWay": [],
   "layout": {
-    "02248": [
-      1,
-      0
-    ],
-    "02252": [
-      2,
-      0
-    ],
     "02242": [
       0,
       2
+    ],
+    "02243": [
+      0,
+      2
+    ],
+    "02244": [
+      1,
+      4
+    ],
+    "02245": [
+      1,
+      4
     ],
     "02246": [
       1,
       2
     ],
+    "02247": [
+      1,
+      2
+    ],
+    "02248": [
+      1,
+      0
+    ],
+    "02249": [
+      1,
+      0
+    ],
     "02250": [
       2,
       3
     ],
-    "02244": [
-      1,
-      4
+    "02251": [
+      2,
+      3
+    ],
+    "02252": [
+      2,
+      0
+    ],
+    "02253": [
+      2,
+      0
     ]
   }
 }

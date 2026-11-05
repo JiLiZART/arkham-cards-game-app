@@ -852,5 +852,7 @@ describe("the scenario structure (engine version 8)", () => {
     expect(s.getState().screen).toBe("log");
     expect(s.getState().game).toBeNull();
     expect(s.getState().notice).toMatch(/restart/);
+    // the campaign is kept
+    expect(s.getState().campaign).toEqual(save.campaign);
   });
 });

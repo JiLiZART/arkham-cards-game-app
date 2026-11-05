@@ -52,58 +52,162 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -1
+        "modifier": -1,
+        "instead": {
+          "when": {
+            "yourLocationIs": {
+              "trait": "Altered"
+            }
+          },
+          "modifier": -3
+        }
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "cancelCommitted": true
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "instead": {
+          "when": {
+            "agendaStage": {
+              "min": 2,
+              "max": 2
+            }
+          },
+          "modifier": -4
+        }
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "discardedPrintedCost",
+        "onReveal": [
+          {
+            "op": "discardDeckTop",
+            "amount": 2
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -1
+        "modifier": -1,
+        "instead": {
+          "when": {
+            "yourLocationIs": {
+              "trait": "Altered"
+            }
+          },
+          "modifier": -3
+        }
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "cancelCommitted": true
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "instead": {
+          "when": {
+            "agendaStage": {
+              "min": 2,
+              "max": 2
+            }
+          },
+          "modifier": -4
+        }
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "discardedPrintedCost",
+        "onReveal": [
+          {
+            "op": "discardDeckTop",
+            "amount": 2
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -2
+        "modifier": -2,
+        "instead": {
+          "when": {
+            "yourLocationIs": {
+              "trait": "Altered"
+            }
+          },
+          "modifier": -5
+        }
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "cancelCommitted": true
       },
       "tablet": {
-        "modifier": -3
+        "modifier": -3,
+        "instead": {
+          "when": {
+            "agendaStage": {
+              "min": 2,
+              "max": 2
+            }
+          },
+          "autoFail": true
+        }
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "discardedPrintedCost",
+        "onReveal": [
+          {
+            "op": "discardDeckTop",
+            "amount": 3
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -2
+        "modifier": -2,
+        "instead": {
+          "when": {
+            "yourLocationIs": {
+              "trait": "Altered"
+            }
+          },
+          "modifier": -5
+        }
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "cancelCommitted": true
       },
       "tablet": {
-        "modifier": -3
+        "modifier": -3,
+        "instead": {
+          "when": {
+            "agendaStage": {
+              "min": 2,
+              "max": 2
+            }
+          },
+          "autoFail": true
+        }
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "discardedPrintedCost",
+        "onReveal": [
+          {
+            "op": "discardDeckTop",
+            "amount": 3
+          }
+        ]
       }
     }
   },

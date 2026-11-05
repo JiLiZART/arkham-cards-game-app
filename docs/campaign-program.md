@@ -67,7 +67,7 @@ Status comes from `openspec/changes/` (and `archive/`): *not written*, *being wr
 | --- | --- | --- |
 | `campaign-return-to-the-night-of-the-zealot` | ready (0/24) | campaign `return-to-the-night-of-the-zealot`: its encounter cards, scenario scripts, token effects, flow |
 | `campaign-side-by-the-book` | being written | campaign `side-by-the-book`: its encounter cards, scenario scripts, token effects, flow |
-| `campaign-the-dunwich-legacy` | ready (0/67) | campaign `the-dunwich-legacy`: its encounter cards, scenario scripts, token effects, flow |
+| `campaign-the-dunwich-legacy` | in progress (66/67) | campaign `the-dunwich-legacy`: its encounter cards, scenario scripts, token effects, flow |
 | `campaign-return-to-the-dunwich-legacy` | ready (0/35) | campaign `return-to-the-dunwich-legacy`: its encounter cards, scenario scripts, token effects, flow |
 | `campaign-side-all-or-nothing` | being written | campaign `side-all-or-nothing`: its encounter cards, scenario scripts, token effects, flow |
 | `campaign-side-read-or-die` | being written | campaign `side-read-or-die`: its encounter cards, scenario scripts, token effects, flow |
@@ -134,13 +134,13 @@ Status comes from `openspec/changes/` (and `archive/`): *not written*, *being wr
 
 | Done | Pack | Campaign | Encounter cards left | Player cards left | Change |
 | --- | --- | --- | --- | --- | --- |
-| [ ] | `dwl` | return-to-the-dunwich-legacy, side-all-or-nothing, side-read-or-die, the-dunwich-legacy | 59 of 59 | 38 of 40 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
-| [ ] | `tmm` | return-to-the-dunwich-legacy, the-dunwich-legacy | 26 of 26 | 14 of 16 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
-| [ ] | `tece` | return-to-the-dunwich-legacy, the-dunwich-legacy | 23 of 23 | 14 of 14 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
-| [ ] | `bota` | return-to-the-dunwich-legacy, the-dunwich-legacy | 26 of 26 | 15 of 15 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
-| [ ] | `uau` | return-to-the-dunwich-legacy, the-dunwich-legacy | 23 of 23 | 12 of 12 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
-| [ ] | `wda` | return-to-the-dunwich-legacy, the-dunwich-legacy | 24 of 25 | 13 of 14 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
-| [ ] | `litas` | return-to-the-dunwich-legacy, the-dunwich-legacy | 23 of 23 | 12 of 12 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
+| [ ] | `dwl` | return-to-the-dunwich-legacy, side-all-or-nothing, side-read-or-die, the-dunwich-legacy | 0 of 59 | 38 of 40 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
+| [ ] | `tmm` | return-to-the-dunwich-legacy, the-dunwich-legacy | 0 of 26 | 14 of 16 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
+| [ ] | `tece` | return-to-the-dunwich-legacy, the-dunwich-legacy | 0 of 23 | 14 of 14 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
+| [ ] | `bota` | return-to-the-dunwich-legacy, the-dunwich-legacy | 0 of 26 | 15 of 15 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
+| [ ] | `uau` | return-to-the-dunwich-legacy, the-dunwich-legacy | 0 of 23 | 12 of 12 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
+| [ ] | `wda` | return-to-the-dunwich-legacy, the-dunwich-legacy | 0 of 25 | 13 of 14 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
+| [ ] | `litas` | return-to-the-dunwich-legacy, the-dunwich-legacy | 0 of 23 | 12 of 12 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
 | [ ] | `rtdwl` | return-to-the-dunwich-legacy, side-all-or-nothing | 53 of 60 | 12 of 13 | `campaign-return-to-the-dunwich-legacy`, `player-cards-dwl` |
 | [ ] | `ptc` | return-to-the-path-to-carcosa, side-enthralling-encore, the-path-to-carcosa | 67 of 68 | 45 of 47 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
 | [ ] | `eotp` | return-to-the-path-to-carcosa, the-path-to-carcosa | 24 of 24 | 16 of 17 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |

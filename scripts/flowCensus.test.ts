@@ -5,9 +5,19 @@ import { CampaignDef, CampaignFlow, type FlowCondition } from "../src/content/sc
 // the committed output of `npm run import:campaigns`: every generated campaign's flow, counted, so a change to the
 // compiler (or to what the guides give) shows as a number that moved
 const DIR = "content/campaigns-generated";
-const read = (id: string, file: string) => JSON.parse(readFileSync(`${DIR}/${id}/${file}`, "utf8"));
+// The Dunwich Legacy was generated, then moved to the hand-written campaigns (campaign-the-dunwich-legacy): its files
+// there are still the importer's last output, read where they are now
+const HAND = "content/campaigns/the-dunwich-legacy";
+const read = (id: string, file: string) =>
+  JSON.parse(
+    readFileSync(id === "the-dunwich-legacy" ? `${HAND}/${file}` : `${DIR}/${id}/${file}`, "utf8"),
+  );
 const ids = readdirSync(DIR);
 const flows = ids.map((id) => ({ id, flow: CampaignFlow.parse(read(id, "flow.json")) }));
+const dunwich = {
+  id: "the-dunwich-legacy",
+  flow: CampaignFlow.parse(read("the-dunwich-legacy", "flow.json")),
+};
 
 const unsupportedTests = (c: FlowCondition): number =>
   c.kind === "unsupported"
@@ -20,32 +30,30 @@ const unsupportedTests = (c: FlowCondition): number =>
 
 describe("the generated flows", () => {
   it("are one per generated campaign, each valid", () => {
-    expect(ids.length).toBe(37); // Curse of the Rougarou now imports (its setup names no location)
-    expect(flows.length).toBe(37);
+    expect(ids.length).toBe(36); // Curse of the Rougarou now imports (its setup names no location); The Dunwich Legacy is hand-written
+    expect(flows.length).toBe(36);
   });
 
   it("hold the interludes, the resolutions and the prompts the guides give, and as many as can't be offered as the census says", () => {
     const steps = flows.flatMap((f) => Object.values(f.flow.steps));
-    expect(flows.reduce((n, f) => n + Object.keys(f.flow.interludes).length, 0)).toBe(79); // only the interludes a flow reaches (no side flow carries another campaign's)
+    expect(flows.reduce((n, f) => n + Object.keys(f.flow.interludes).length, 0)).toBe(75); // only the interludes a flow reaches (no side flow carries another campaign's)
     expect(
       flows.reduce(
         (n, f) =>
           n + Object.values(f.flow.resolutions).reduce((m, r) => m + Object.keys(r).length, 0),
         0,
       ),
-    ).toBe(535); // hidden resolutions are tails, not endings; a defeated/resigned pair is one none
+    ).toBe(506); // hidden resolutions are tails, not endings; a defeated/resigned pair is one none
     expect(steps.filter((s) => s.kind === "unsupported").length).toBe(154); // guide inputs the engine lacks: campaign links, supplies, partners, investigator choices
     expect(
       steps.reduce((n, s) => n + (s.kind === "branch" ? unsupportedTests(s.condition) : 0), 0),
     ).toBe(392); // The Scarlet Keys' $embark compiled per scenario (127); with the scenarios' own setup steps (flow.before) and the version check (always true)
-    expect(steps.filter((s) => s.kind === "upgradeDecks").length).toBe(166);
+    expect(steps.filter((s) => s.kind === "upgradeDecks").length).toBe(156);
   });
 
   it("list their scenario reference cards in the campaign's order, the interludes marked, as the picker needs", () => {
     const dwl = CampaignDef.parse(read("the-dunwich-legacy", "campaign.json"));
-    expect(dwl.cards.map((c) => c.scenario)).toEqual(
-      flows.find((f) => f.id === "the-dunwich-legacy")!.flow.order,
-    );
+    expect(dwl.cards.map((c) => c.scenario)).toEqual(dunwich.flow.order);
     expect(dwl.cards.filter((c) => c.interlude).map((c) => c.name)).toEqual([
       "Prologue",
       "Armitage's Fate",
@@ -57,7 +65,7 @@ describe("the generated flows", () => {
       agenda: "02042",
     });
     // every scenario of every campaign has its chapter art: its first agenda and first act, as its scenario file names them
-    for (const { id } of flows) {
+    for (const { id } of [...flows, dunwich]) {
       const c = CampaignDef.parse(read(id, "campaign.json"));
       for (const ch of c.cards.filter((x) => !x.interlude)) {
         const sc = read(id, `scenarios/${ch.scenario}.json`);
@@ -77,7 +85,7 @@ describe("the generated flows", () => {
   });
 
   it("start Dunwich with its prologue, which names the first scenario to play", () => {
-    const { flow } = flows.find((f) => f.id === "the-dunwich-legacy")!;
+    const { flow } = dunwich;
     expect(flow.order[0]).toBe("dwl-prologue");
     const choose = flow.interludes["dwl-prologue"].steps
       .map((s) => flow.steps[s])
@@ -90,7 +98,7 @@ describe("the generated flows", () => {
   });
 
   it("branch Armitage's Fate on whether the investigators were unconscious", () => {
-    const { flow } = flows.find((f) => f.id === "the-dunwich-legacy")!;
+    const { flow } = dunwich;
     const first = flow.steps[flow.interludes["armitages-fate"].steps[0]];
     expect(first).toMatchObject({
       kind: "branch",
@@ -99,7 +107,7 @@ describe("the generated flows", () => {
   });
 
   it("keep Extracurricular Activity's Resolution 4 with its records, experience and token", () => {
-    const { flow } = flows.find((f) => f.id === "the-dunwich-legacy")!;
+    const { flow } = dunwich;
     const effects = flow.resolutions["extracurricular-activity"].R4.map(
       (s) => flow.steps[s],
     ).flatMap((s) => (s.kind === "effects" ? s.effects : []));

@@ -26,13 +26,7 @@
     {
       "do": "putIntoPlay",
       "codes": [
-        "02210",
-        "02212",
-        "02208",
-        "02201",
-        "02206",
-        "02204",
-        "02202"
+        "02201"
       ]
     },
     {
@@ -40,8 +34,35 @@
       "codes": [
         "02216",
         "02214",
-        "02215"
+        "02215",
+        "02219",
+        "02217",
+        "02218"
       ]
+    },
+    {
+      "do": "placeDoomOnAgenda",
+      "amount": 1,
+      "when": {
+        "logHas": "investigatorsDelayed"
+      }
+    },
+    {
+      "do": "remove",
+      "codes": [
+        "02097",
+        "02098",
+        "02099"
+      ],
+      "when": {
+        "not": {
+          "logHas": "boneToPick"
+        }
+      }
+    },
+    {
+      "do": "script",
+      "fn": "village"
     },
     {
       "do": "startAt",
@@ -51,58 +72,136 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -1
+        "modifier": "X",
+        "x": "locationsWithoutCardBeneath",
+        "xMax": 4
       },
       "cultist": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "placeTokens",
+            "on": "yourLocation",
+            "clues": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "revealAnother": {
+          "if": {
+            "yourLocationIs": {
+              "code": "02214"
+            }
+          }
+        }
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "agenda"
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -1
+        "modifier": "X",
+        "x": "locationsWithoutCardBeneath",
+        "xMax": 4
       },
       "cultist": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "placeTokens",
+            "on": "yourLocation",
+            "clues": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "revealAnother": {
+          "if": {
+            "yourLocationIs": {
+              "code": "02214"
+            }
+          }
+        }
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "agenda"
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -1
+        "modifier": "X",
+        "x": "locationsWithoutCardBeneath"
       },
       "cultist": {
-        "modifier": -4
+        "modifier": -4,
+        "onFail": [
+          {
+            "op": "placeTokens",
+            "on": "yourLocation",
+            "clues": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": -3
+        "modifier": -3,
+        "revealAnother": true
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onReveal": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "agenda"
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -1
+        "modifier": "X",
+        "x": "locationsWithoutCardBeneath"
       },
       "cultist": {
-        "modifier": -4
+        "modifier": -4,
+        "onFail": [
+          {
+            "op": "placeTokens",
+            "on": "yourLocation",
+            "clues": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": -3
+        "modifier": -3,
+        "revealAnother": true
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onReveal": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "agenda"
+          }
+        ]
       }
     }
   },
@@ -179,45 +278,158 @@
   "i18nId": "blood_on_the_altar",
   "connections": [
     [
-      "02214",
-      "02210"
+      "02201",
+      "02202"
     ],
     [
-      "02214",
+      "02201",
+      "02203"
+    ],
+    [
+      "02201",
       "02212"
     ],
     [
-      "02214",
-      "02208"
+      "02201",
+      "02213"
     ],
     [
-      "02214",
-      "02201"
-    ],
-    [
-      "02214",
+      "02202",
       "02206"
     ],
     [
-      "02214",
+      "02202",
+      "02207"
+    ],
+    [
+      "02203",
+      "02206"
+    ],
+    [
+      "02203",
+      "02207"
+    ],
+    [
+      "02202",
       "02204"
     ],
     [
-      "02214",
-      "02202"
+      "02202",
+      "02205"
+    ],
+    [
+      "02203",
+      "02204"
+    ],
+    [
+      "02203",
+      "02205"
+    ],
+    [
+      "02204",
+      "02208"
+    ],
+    [
+      "02204",
+      "02209"
+    ],
+    [
+      "02205",
+      "02208"
+    ],
+    [
+      "02205",
+      "02209"
+    ],
+    [
+      "02208",
+      "02210"
+    ],
+    [
+      "02208",
+      "02211"
+    ],
+    [
+      "02209",
+      "02210"
+    ],
+    [
+      "02209",
+      "02211"
+    ],
+    [
+      "02210",
+      "02212"
+    ],
+    [
+      "02210",
+      "02213"
+    ],
+    [
+      "02211",
+      "02212"
+    ],
+    [
+      "02211",
+      "02213"
+    ],
+    [
+      "02212",
+      "02206"
+    ],
+    [
+      "02212",
+      "02207"
+    ],
+    [
+      "02213",
+      "02206"
+    ],
+    [
+      "02213",
+      "02207"
     ]
   ],
-  "oneWay": [],
+  "oneWay": [
+    [
+      "02208",
+      "02201"
+    ],
+    [
+      "02209",
+      "02201"
+    ],
+    [
+      "02201",
+      "02206"
+    ],
+    [
+      "02201",
+      "02207"
+    ]
+  ],
   "layout": {
-    "02210": [
+    "02204": [
       1,
       0
     ],
-    "02212": [
+    "02205": [
+      1,
+      0
+    ],
+    "02202": [
+      3,
+      0
+    ],
+    "02203": [
       3,
       0
     ],
     "02208": [
+      0,
+      1
+    ],
+    "02209": [
       0,
       1
     ],
@@ -229,16 +441,28 @@
       4,
       1
     ],
-    "02204": [
+    "02207": [
+      4,
+      1
+    ],
+    "02210": [
       1,
       2
     ],
-    "02202": [
+    "02211": [
+      1,
+      2
+    ],
+    "02212": [
+      3,
+      2
+    ],
+    "02213": [
       3,
       2
     ],
     "02214": [
-      0,
+      2,
       3
     ]
   }

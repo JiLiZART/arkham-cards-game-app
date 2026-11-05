@@ -210,8 +210,8 @@ describe("the real content", () => {
       Object.values(db.campaigns).flatMap((c) => c.scenarios).length,
     );
     expect(db.coverage!.scenarios["the-gathering"].campaign).toBe("night-of-the-zealot");
-    expect(db.coverage!.scenarios["extracurricular-activity"]).toMatchObject({
-      campaign: "the-dunwich-legacy",
+    expect(db.coverage!.scenarios["the-unspeakable-oath"]).toMatchObject({
+      campaign: "the-path-to-carcosa",
       tokens: false,
       scripted: false,
       complete: false,
@@ -255,11 +255,26 @@ describe("the real content", () => {
     );
   });
 
-  it("The Dunwich Legacy is partial with no scenario scripted", () => {
+  it("The Dunwich Legacy is complete: its 8 scenarios scripted, their cards working, their tokens real", () => {
     const c = campaignCoverage(db, "the-dunwich-legacy");
-    expect(c.complete).toBe(false);
-    expect(c.unscripted).toHaveLength(8);
-    expect(c.cards.works).toBeLessThan(c.cards.total);
+    expect(c.complete).toBe(true);
+    expect(c.unscripted).toEqual([]);
+    for (const id of [
+      "extracurricular-activity",
+      "the-house-always-wins",
+      "the-miskatonic-museum",
+      "essex-county-express",
+      "blood-on-the-altar",
+      "undimensioned-and-unseen",
+      "where-doom-awaits",
+      "lost-in-time-and-space",
+    ])
+      expect(scenarioCoverage(db, id), id).toMatchObject({
+        tokens: true,
+        scripted: true,
+        complete: true,
+      });
+    expect(c.cards.works).toBe(c.cards.total);
   });
 });
 

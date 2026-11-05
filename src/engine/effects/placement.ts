@@ -1,5 +1,5 @@
 /** Effects that put cards into play, attach, move, discard, remove or ready them. */
-import { noReady } from "../world/flags";
+import { deckDiscarded, noReady } from "../world/flags";
 import {
   ask,
   card,
@@ -10,6 +10,7 @@ import {
   invName,
   leadInvestigator,
   push,
+  cardIf,
   randomInt,
   ready,
   setController,
@@ -24,7 +25,8 @@ import {
   matchesFilter,
   isHidden,
 } from "../queries";
-import { discard, moveCard, shuffleIntoDeck } from "../movement";
+import { discard, discardTop, isInPlay, moveCard, shuffleIntoDeck } from "../movement";
+import { win } from "../rules/cards";
 import type { InstId } from "../world/types";
 import { amt, invTargets, opt } from "./targets";
 import type { EffectOf, EffectRun } from "./types";
@@ -220,6 +222,28 @@ function removeDiscardFromGameEffect(
   return;
 }
 
+/** the top cards of the targets' decks discarded; a test's token effect keeps them for its X, an emptied deck is told */
+function discardDeckTopEffect(game: GameContext, run: EffectRun<EffectOf<"discardDeckTop">>) {
+  const { step, ctx } = run;
+  const ts = invTargets(game, step, run.effect.target, ctx);
+  if (!ts) return;
+  for (const i of ts) {
+    const had = inv(game, i).deck.length;
+    const gone = discardTop(game, i, amt(game, run.effect.amount, ctx));
+    if (ctx.testId !== undefined && gone.length) {
+      const key = String(ctx.testId);
+      deckDiscarded.set(game, key, [...(deckDiscarded.get(game, key) ?? []), ...gone]);
+    }
+    if (had && !inv(game, i).deck.length) push(game, win("deckEmptied", { inv: i }));
+  }
+}
+
+/** the card the event was about discarded, if it is still in play (or resolving) */
+function discardEventCardEffect(game: GameContext, run: EffectRun<EffectOf<"discardEventCard">>) {
+  const c = run.ctx.card ? cardIf(game, run.ctx.card) : undefined;
+  if (c && (isInPlay(c) || c.zone === ZONE.Resolving)) discard(game, c.id);
+}
+
 function moveToEffect(game: GameContext, run: EffectRun<EffectOf<"moveTo">>) {
   const { step, ctx, you } = run;
   const e = run.effect;
@@ -352,6 +376,8 @@ export const placementEffects = {
   discardAsset: discardAssetEffect,
   discardAllButOneFromHand: discardAllButOneFromHandEffect,
   removeDiscardFromGame: removeDiscardFromGameEffect,
+  discardDeckTop: discardDeckTopEffect,
+  discardEventCard: discardEventCardEffect,
   moveTo: moveToEffect,
   takeControl: takeControlEffect,
   takeFromDiscard: takeFromDiscardEffect,

@@ -5,6 +5,7 @@ import {
   addCounter,
   allCards,
   ask,
+  card,
   cardIf,
   def,
   emit,
@@ -12,11 +13,14 @@ import {
   inv,
   invName,
   push,
+  ready,
   setCounter,
+  setEngaged,
 } from "../context";
-import { invsAt } from "../queries";
+import { controlled, enemies, invsAt, matchesFilter } from "../queries";
+import { attackKey } from "../rules/enemies";
 import { win } from "../rules/cards";
-import type { EffCtx, InstId, InvId } from "../world/types";
+import type { EffCtx, InstId, InvId, Step } from "../world/types";
 import { amt, enemyTargets, invTargets } from "./targets";
 import type { EffectOf, EffectRun } from "./types";
 import { EVENT } from "../events/event";
@@ -68,6 +72,7 @@ function takeDamageOrHorrorEffect(
       damage: e.op === "takeDamage" ? n : 0,
       horror: e.op === "takeHorror" ? n : 0,
       direct: !!e.direct,
+      ...(e.op === "takeDamage" && e.assetsFirst ? { assetsFirst: true } : {}),
       source: ctx.source ?? null,
     });
   return;
@@ -267,7 +272,64 @@ function healSelfEffect(game: GameContext, run: EffectRun<EffectOf<"healSelf">>)
   return;
 }
 
+/**
+ * An enemy attacks: the source, the event's enemy, each at your location, or the one in play of a code; it readies and
+ * engages the investigator first when the card says (Clover Club Pit Boss)
+ */
+function enemyAttackEffect(game: GameContext, run: EffectRun<EffectOf<"enemyAttack">>) {
+  const { step, ctx } = run;
+  const e = run.effect;
+  const named = e.named ? enemies(game).find((x) => x.code === e.named) : undefined;
+  const attackers = e.named
+    ? named
+      ? [named.id]
+      : []
+    : enemyTargets(game, step, e.enemy ?? "self", ctx);
+  const ts = invTargets(game, step, e.target, ctx);
+  if (!attackers || !ts) return;
+  const steps: Step[] = [];
+  for (const i of ts) {
+    if (inv(game, i).status !== "playing") continue;
+    for (const id of attackers) {
+      if (e.ready) ready(game, id);
+      if (e.engage && card(game, id).engagedWith !== i) {
+        setEngaged(game, id, i);
+        emit(game, EVENT.Engage, `${def(game, id).name} engages ${invName(game, i)}`, {
+          inv: i,
+          card: id,
+        });
+      }
+      steps.push({ t: STEP.EnemyAttack, enemy: id, inv: i, aoo: false, key: attackKey(game) });
+    }
+  }
+  push(game, ...steps);
+}
+
+/** damage on each of your assets with health that matches the filter, then the defeat check */
+function damageAssetsEffect(game: GameContext, run: EffectRun<EffectOf<"damageAssets">>) {
+  const { you, ctx, effect: e } = run;
+  const n = amt(game, e.amount, ctx);
+  const hit = controlled(game, you).filter(
+    (c) =>
+      def(game, c.id).type === "asset" &&
+      !!def(game, c.id).health &&
+      (!e.filter || matchesFilter(game, c.code, e.filter)),
+  );
+  if (n <= 0 || !hit.length) return;
+  for (const c of hit) {
+    addCounter(game, c.id, "damage", n);
+    emit(game, EVENT.AssetDamage, `${def(game, c.id).name} takes ${n} damage, 0 horror`, {
+      card: c.id,
+      inv: you,
+      data: { damage: n, horror: 0, source: ctx.source ?? null },
+    });
+  }
+  push(game, { t: STEP.AssetDefeatCheck, inv: you });
+}
+
 export const damageEffects = {
+  enemyAttack: enemyAttackEffect,
+  damageAssets: damageAssetsEffect,
   takeDamage: takeDamageOrHorrorEffect,
   takeHorror: takeDamageOrHorrorEffect,
   heal: healEffect,

@@ -40,4 +40,29 @@ describe("the scenario's resigned and defeated investigators", () => {
     expect(test(db, c, { kind: "anyDefeated" })).toBe(true);
     expect(test(db, c, { kind: "allResigned" })).toBe(false);
   });
+
+  it("a condition on the defeated reads only their decks (The Essex County Express's Investigator Defeat)", () => {
+    const c0 = startCampaign(db, {
+      campaignId: "night-of-the-zealot",
+      difficulty: "standard",
+      seed: 1,
+      investigators: [
+        { code: ROLAND, deckId: "roland-starter" },
+        { code: DAISY, deckId: "daisy-starter" },
+      ],
+    });
+    const r = inject(
+      toTurn(skipMulligans(createGame(db, scenarioSetup(db, c0, 1)))),
+      (g) => setStatus(g, DAISY, "defeated", "damage"),
+      { t: STEP.Resolution, id: "R1" },
+    );
+    const c = { ...c0, flow: { ...c0.flow, scenario: scenarioFacts(db, r.state) } };
+    const rolands = c0.investigators.find((i) => i.code === ROLAND)!.deck[0];
+    const daisys = c0.investigators.find((i) => i.code === DAISY)!.deck[0];
+    expect(test(db, c, { kind: "hasCard", card: daisys, inv: "defeated" })).toBe(true);
+    expect(test(db, c, { kind: "hasCard", card: rolands, inv: "defeated" })).toBe(
+      c0.investigators.find((i) => i.code === DAISY)!.deck.includes(rolands),
+    );
+    expect(test(db, c, { kind: "hasCard", card: rolands, inv: "any" })).toBe(true);
+  });
 });

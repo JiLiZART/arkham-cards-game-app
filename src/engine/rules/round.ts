@@ -1,8 +1,9 @@
-import { atTurnEnd, noReady, noVehicles, vehicleUsed } from "../world/flags";
+import { actionsOwed, atTurnEnd, noReady, noVehicles, vehicleUsed } from "../world/flags";
 import type { Ability, Boost, Effect, OnTokens, Skill } from "../../content/schema";
 import {
   abilitiesOf as abilitiesOfCard,
   allMods,
+  cannotGainResources,
   attackable,
   cardsIn,
   enemiesAt,
@@ -175,6 +176,9 @@ export const nextTurnHandler: Handler<"NextTurn"> = (game, step) => {
       .filter((m) => m.target === who && m.mod.stat === "additionalActions" && m.mod.filter?.trait)
       .map((m) => ({ trait: String(m.mod.filter!.trait), left: m.mod.value ?? 1 })),
   );
+  // actions lost before the turn (Something in the Drinks in the mythos phase)
+  const owed = actionsOwed.take(game, who) ?? 0;
+  if (owed) addCounter(game, who, "actionsLeft", -Math.min(owed, inv(game, who).actionsLeft));
   emit(game, EVENT.Turn, `${me.name}'s turn`, { inv: who });
   push(
     game,
@@ -271,7 +275,7 @@ export function actionCost(game: GameContext, i: InvId, a: TurnAction): number {
     case "ability": {
       const ab = abilitiesOfCard(game, a.card)[a.index];
       const base = abilityActionCost(ab);
-      return base === 0 ? 0 : base + extraCost(game, i, ab.designator ?? "ability");
+      return base === 0 ? 0 : base + extraCost(game, i, ab.designator ?? "ability", a);
     }
     default:
       return 1 + extraCost(game, i, a.kind, a);
@@ -297,7 +301,12 @@ export function legalTurnActions(game: GameContext, i: InvId): ChoiceOption[] {
   const loc = me.location;
   if (loc) {
     const l = card(game, loc);
-    if (l.revealed && def(game, loc).shroud !== null && !hasFlag(game, loc, "cannotBeInvestigated"))
+    if (
+      l.revealed &&
+      def(game, loc).shroud !== null &&
+      !hasFlag(game, loc, "cannotBeInvestigated") &&
+      !hasFlag(game, i, "cannotInvestigate")
+    )
       add({ kind: "investigate" }, `Investigate ${def(game, loc).name}`, loc);
     for (const c of cardsIn(game, ZONE.Location))
       if (canMoveTo(game, i, c.id))
@@ -466,7 +475,7 @@ export const performActionHandler: Handler<"PerformAction"> = (game, step) => {
       steps.push({ t: STEP.Draw, inv: i, n: 1, tapped: true });
       break;
     case "resource":
-      addCounter(game, me.id, "resources", 1);
+      if (!cannotGainResources(game, i)) addCounter(game, me.id, "resources", 1);
       emit(game, EVENT.Resource, `${me.name} gains 1 resource`, { inv: i, data: { n: 1 } });
       break;
     case "play":
@@ -595,9 +604,12 @@ export const upkeepHandler: Handler<"UpkeepPhase"> = (game) => {
   ];
   // readied enemies at an investigator's location engage
   for (const i of activeInvs(game)) steps.push({ t: STEP.CheckEngagement, inv: i });
+  const mods = allMods(game);
   for (const i of turnOrder(game)) {
     if (inv(game, i).status !== "playing") continue;
-    steps.push({ t: STEP.Draw, inv: i, n: 1 }, { t: STEP.GainResource, inv: i });
+    // the VIP Area: no upkeep draw or resource there
+    if (!hasFlag(game, i, "noUpkeepDraw", mods)) steps.push({ t: STEP.Draw, inv: i, n: 1 });
+    if (!hasFlag(game, i, "noUpkeepResources", mods)) steps.push({ t: STEP.GainResource, inv: i });
   }
   for (const i of turnOrder(game)) steps.push({ t: STEP.HandSize, inv: i });
   push(game, ...steps);
@@ -638,7 +650,7 @@ export const handlers = {
   EndTurnCleanup: (game: GameContext, step: StepOf<"EndTurnCleanup">) =>
     endTurnCleanup(game, step.inv),
   GainResource: (game: GameContext, step: StepOf<"GainResource">) => {
-    addCounter(game, step.inv, "resources", 1);
+    if (!cannotGainResources(game, step.inv)) addCounter(game, step.inv, "resources", 1);
   },
   RoundCleanup: (game: GameContext) => roundCleanup(game),
   ReadyAll: (game: GameContext) => readyAll(game),

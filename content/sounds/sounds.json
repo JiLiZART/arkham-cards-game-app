@@ -573,6 +573,72 @@
       "original": "cathedral.ogg",
       "loop": true
     },
+    "bed:extracurricular-activity": {
+      "file": "bed-gathering",
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "original": "sector.mp3",
+      "loop": true
+    },
+    "bed:the-house-always-wins": {
+      "file": "bed-midnight-masks",
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "original": "airy.mp3",
+      "loop": true,
+      "loopStart": 10
+    },
+    "bed:the-miskatonic-museum": {
+      "file": "bed-devourer-below",
+      "source": "https://opengameart.org/content/cathedral-in-the-forest-ambient-loop",
+      "author": "congusbongus",
+      "license": "CC0",
+      "original": "cathedral.ogg",
+      "loop": true
+    },
+    "bed:essex-county-express": {
+      "file": "bed-gathering",
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "original": "sector.mp3",
+      "loop": true
+    },
+    "bed:blood-on-the-altar": {
+      "file": "bed-midnight-masks",
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "original": "airy.mp3",
+      "loop": true,
+      "loopStart": 10
+    },
+    "bed:undimensioned-and-unseen": {
+      "file": "bed-devourer-below",
+      "source": "https://opengameart.org/content/cathedral-in-the-forest-ambient-loop",
+      "author": "congusbongus",
+      "license": "CC0",
+      "original": "cathedral.ogg",
+      "loop": true
+    },
+    "bed:where-doom-awaits": {
+      "file": "bed-gathering",
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "original": "sector.mp3",
+      "loop": true
+    },
+    "bed:lost-in-time-and-space": {
+      "file": "bed-devourer-below",
+      "source": "https://opengameart.org/content/cathedral-in-the-forest-ambient-loop",
+      "author": "congusbongus",
+      "license": "CC0",
+      "original": "cathedral.ogg",
+      "loop": true
+    },
     "fight": {
       "file": "music-fight",
       "author": "Nikolay Kostyurin",

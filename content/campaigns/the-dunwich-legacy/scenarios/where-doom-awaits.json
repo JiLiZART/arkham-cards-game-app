@@ -16,7 +16,28 @@
   "sideDecks": {},
   "acts": [
     "02277",
-    "02278",
+    {
+      "oneOf": [
+        "02278",
+        "02279",
+        "02280"
+      ],
+      "when": [
+        {
+          "logHas": "restoredSilasBishop"
+        },
+        {
+          "any": [
+            {
+              "logHas": "failedToRecoverNecronomicon"
+            },
+            {
+              "logHas": "necronomiconStolen"
+            }
+          ]
+        }
+      ]
+    },
     "02281"
   ],
   "agendas": [
@@ -34,10 +55,58 @@
       ]
     },
     {
+      "do": "chooseRandom",
+      "from": [
+        "02285",
+        "02286",
+        "02287",
+        "02288"
+      ],
+      "n": 3,
+      "then": "setAside",
+      "rest": "remove"
+    },
+    {
+      "do": "chooseRandom",
+      "from": [
+        "02289",
+        "02290",
+        "02291",
+        "02292"
+      ],
+      "n": 3,
+      "then": "setAside",
+      "rest": "remove"
+    },
+    {
       "do": "setAside",
       "codes": [
         "02293"
       ]
+    },
+    {
+      "do": "remove",
+      "codes": [
+        "02103",
+        "02104"
+      ],
+      "when": {
+        "not": {
+          "logHas": "killedSilasBishop"
+        }
+      }
+    },
+    {
+      "do": "spawn",
+      "code": "02103",
+      "at": "02283",
+      "when": {
+        "logHas": "killedSilasBishop"
+      }
+    },
+    {
+      "do": "script",
+      "fn": "wdaSetup"
     },
     {
       "do": "startAt",
@@ -47,58 +116,162 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -1
+        "modifier": -1,
+        "instead": {
+          "when": {
+            "yourLocationIs": {
+              "trait": "Altered"
+            }
+          },
+          "modifier": -3
+        }
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "cancelCommitted": true
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "instead": {
+          "when": {
+            "agendaStage": {
+              "min": 2,
+              "max": 2
+            }
+          },
+          "modifier": -4
+        }
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "discardedPrintedCost",
+        "onReveal": [
+          {
+            "op": "discardDeckTop",
+            "amount": 2
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -1
+        "modifier": -1,
+        "instead": {
+          "when": {
+            "yourLocationIs": {
+              "trait": "Altered"
+            }
+          },
+          "modifier": -3
+        }
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "cancelCommitted": true
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "instead": {
+          "when": {
+            "agendaStage": {
+              "min": 2,
+              "max": 2
+            }
+          },
+          "modifier": -4
+        }
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "discardedPrintedCost",
+        "onReveal": [
+          {
+            "op": "discardDeckTop",
+            "amount": 2
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -2
+        "modifier": -2,
+        "instead": {
+          "when": {
+            "yourLocationIs": {
+              "trait": "Altered"
+            }
+          },
+          "modifier": -5
+        }
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "cancelCommitted": true
       },
       "tablet": {
-        "modifier": -3
+        "modifier": -3,
+        "instead": {
+          "when": {
+            "agendaStage": {
+              "min": 2,
+              "max": 2
+            }
+          },
+          "autoFail": true
+        }
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "discardedPrintedCost",
+        "onReveal": [
+          {
+            "op": "discardDeckTop",
+            "amount": 3
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -2
+        "modifier": -2,
+        "instead": {
+          "when": {
+            "yourLocationIs": {
+              "trait": "Altered"
+            }
+          },
+          "modifier": -5
+        }
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "cancelCommitted": true
       },
       "tablet": {
-        "modifier": -3
+        "modifier": -3,
+        "instead": {
+          "when": {
+            "agendaStage": {
+              "min": 2,
+              "max": 2
+            }
+          },
+          "autoFail": true
+        }
       },
       "elderThing": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "discardedPrintedCost",
+        "onReveal": [
+          {
+            "op": "discardDeckTop",
+            "amount": 3
+          }
+        ]
       }
     }
   },
@@ -164,26 +337,86 @@
     ],
     [
       "02282",
-      "02284"
+      "02285"
+    ],
+    [
+      "02282",
+      "02286"
+    ],
+    [
+      "02282",
+      "02287"
+    ],
+    [
+      "02282",
+      "02288"
     ],
     [
       "02283",
       "02284"
+    ],
+    [
+      "02283",
+      "02289"
+    ],
+    [
+      "02283",
+      "02290"
+    ],
+    [
+      "02283",
+      "02291"
+    ],
+    [
+      "02283",
+      "02292"
     ]
   ],
   "oneWay": [],
   "layout": {
-    "02282": [
-      0,
-      0
-    ],
-    "02283": [
-      1,
-      0
-    ],
     "02284": [
       2,
       0
+    ],
+    "02289": [
+      0,
+      1
+    ],
+    "02291": [
+      1,
+      1
+    ],
+    "02292": [
+      3,
+      1
+    ],
+    "02290": [
+      4,
+      1
+    ],
+    "02283": [
+      2,
+      2
+    ],
+    "02285": [
+      0,
+      3
+    ],
+    "02286": [
+      1,
+      3
+    ],
+    "02288": [
+      3,
+      3
+    ],
+    "02287": [
+      4,
+      3
+    ],
+    "02282": [
+      2,
+      4
     ]
   }
 }

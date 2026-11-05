@@ -56,6 +56,9 @@ function targets(c: CampaignState, who: string | undefined, input: Input): InvId
       return input.inv ? [input.inv] : [];
     case "choice":
       return list.slice(0, 1);
+    // each investigator the scenario just played defeated (The Essex County Express's Investigator Defeat)
+    case "defeated":
+      return list.filter((i) => c.flow.scenario?.defeated?.includes(i));
     default:
       return list;
   }
@@ -67,13 +70,16 @@ interface Input {
   code?: string;
 }
 
-const basicWeaknesses = (db: ContentDb, trait?: string) =>
-  Object.values(db.cards).filter(
+/** the basic weaknesses of the content, with any one of the traits (all of them with none) */
+const basicWeaknesses = (db: ContentDb, trait: string | string[]) => {
+  const traits = [trait].flat().filter(Boolean);
+  return Object.values(db.cards).filter(
     (c) =>
       c.subtype === "basicweakness" &&
       c.type !== "investigator" &&
-      (!trait || c.traits.includes(trait)),
+      (!traits.length || traits.some((t) => c.traits.includes(t))),
   );
+};
 
 // ---------- conditions ----------
 
@@ -83,10 +89,12 @@ export function test(
   cond: FlowCondition,
   input: Input = {},
 ): boolean {
-  const inv = (who: "any" | "input" | "lead") =>
+  const inv = (who: "any" | "input" | "lead" | "defeated") =>
     who === "any"
       ? active(c)
-      : active(c).filter((i) => (who === "lead" ? i.code === c.lead : i.code === input.inv));
+      : who === "defeated"
+        ? active(c).filter((i) => c.flow.scenario?.defeated?.includes(i.code))
+        : active(c).filter((i) => (who === "lead" ? i.code === c.lead : i.code === input.inv));
   const within = (n: number, min?: number, max?: number) =>
     n >= (min ?? -Infinity) && n <= (max ?? Infinity);
   switch (cond.kind) {
@@ -160,6 +168,23 @@ function kill(c: CampaignState, inv: InvId) {
   if (i && i.status === "active") i.status = "killed";
 }
 
+/**
+ * The campaign ends. A win still reads the epilogue the order has ahead (The Dunwich Legacy's): play goes there, and the
+ * order's end gives the win once it has been read, whoever is left.
+ */
+function endCampaign(db: ContentDb, c: CampaignState, result: "win" | "lose" | "survived") {
+  const flow = flowOf(db, c.campaignId);
+  const epilogue = flow.order
+    .slice(c.flow.pos + 1)
+    .find((id) => flow.interludes[id]?.kind === "epilogue" && !c.flow.skipped.includes(id));
+  if (result !== "win" || !epilogue) {
+    c.result = result;
+    return;
+  }
+  c.flow.override = epilogue;
+  c.flow.won = true;
+}
+
 function apply(
   db: ContentDb,
   c: CampaignState,
@@ -201,6 +226,11 @@ function apply(
     case "listCards":
       c.log = addCards(c.log, e.id, e.codes, e.remove, e.section ?? NOTES);
       return;
+    case "removeListed": {
+      const listed = c.log[e.section ?? NOTES]?.cards[e.id] ?? [];
+      for (const i of c.investigators) i.deck = i.deck.filter((x) => !listed.includes(x));
+      return;
+    }
     case "investigatorCount":
       for (const i of who(e.who))
         c.log = setInvestigatorCount(
@@ -218,7 +248,8 @@ function apply(
       const n = e.bonus + (e.victory ? (facts?.victory ?? 0) : 0);
       for (const i of who(e.who)) i.xp += n;
       const last = c.history.at(-1);
-      if (last && facts && last.scenarioId === facts.id && e.who !== "lead") last.xp += n;
+      if (last && facts && last.scenarioId === facts.id && e.who !== "lead" && e.who !== "defeated")
+        last.xp += n;
       return;
     }
     case "trauma":
@@ -229,7 +260,14 @@ function apply(
       return;
     case "kill":
       for (const i of active(c))
-        if (e.who === "each" || facts?.notResigned.includes(i.code) !== false) kill(c, i.code);
+        if (
+          e.who === "each" ||
+          // each investigator the scenario defeated (Lost in Time and Space's Investigator Defeat)
+          (e.who === "defeated"
+            ? !!facts?.defeated?.includes(i.code)
+            : facts?.notResigned.includes(i.code) !== false)
+        )
+          kill(c, i.code);
       return;
     case "earnCard":
       for (const i of who(e.who === "choice" ? "lead" : e.who)) i.deck.push(e.code);
@@ -242,7 +280,7 @@ function apply(
       for (const i of who(e.who)) i.deck = i.deck.map((x) => (x === e.old ? e.new : x));
       return;
     case "addWeakness": {
-      const pool = basicWeaknesses(db, e.trait || undefined);
+      const pool = basicWeaknesses(db, e.trait);
       for (const i of who(e.who))
         if (pool.length) i.deck.push(pool[randInt(rng, pool.length)].code);
       return;
@@ -256,7 +294,7 @@ function apply(
       return;
     }
     case "end":
-      c.result = e.result;
+      endCampaign(db, c, e.result);
       return;
     case "nextScenario":
       c.flow.override = e.scenario;
@@ -376,15 +414,16 @@ function run(db: ContentDb, c: CampaignState) {
   try {
     for (let guard = 0; guard < 20000; guard++) {
       if (c.result || f.waiting || f.playing) return;
-      if (!active(c).length && c.investigators.length) {
-        c.result ??= "lose";
-        return;
-      }
       const item = f.queue.shift();
       if (item === undefined) {
         // everything here has run: the stories read wait for a "Continue", then the next item of the order
         if (f.shown.some((s) => "story" in s)) {
           f.waiting = { id: "continue", step: { kind: "continue" } };
+          return;
+        }
+        // no one left to go on, unless the guide has already called the campaign won (Lost in Time and Space's R3)
+        if (!active(c).length && c.investigators.length && !f.won) {
+          c.result ??= "lose";
           return;
         }
         f.scenario = null;
@@ -432,8 +471,7 @@ function run(db: ContentDb, c: CampaignState) {
           f.queue.unshift(...(test(db, c, st.condition) ? st.then : st.else));
           break;
         case "end":
-          if (st.result) c.result = st.result;
-          else c.result ??= "win";
+          endCampaign(db, c, st.result ?? c.result ?? "win");
           break;
         default:
           // a checkpoint between two parts runs no upgrade

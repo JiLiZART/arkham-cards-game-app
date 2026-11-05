@@ -1,5 +1,5 @@
-import { peril } from "../world/flags";
-import type { Boost, Effect, Skill, SymbolToken } from "../../content/schema";
+import { deckDiscarded, peril } from "../world/flags";
+import type { Boost, ChaosToken, Effect, Skill, SymbolToken } from "../../content/schema";
 import { randInt } from "../world/rng";
 import {
   abilitiesOf,
@@ -16,6 +16,7 @@ import {
   tokenHolder,
 } from "../queries";
 import {
+  addCounter,
   allCards,
   ask,
   card,
@@ -170,9 +171,18 @@ export function testedSkill(game: GameContext, t: SkillTestState): Skill {
 const ownSkill = (game: GameContext, i: InvId, s: Skill) =>
   Math.max(0, baseSkill(game, i, s) + modSum(game, i, s));
 
+/** a skill card committed to the current test whose effects and icons a token cancelled (Where Doom Awaits' cultist) */
+const cancelledSkill = (game: GameContext, cardId: InstId) => {
+  const t = game.s.skillTest;
+  return (
+    !!t?.committedCancelled && t.committed.includes(cardId) && def(game, cardId).type === "skill"
+  );
+};
+
 /** icons a card contributes to a test */
 export function iconsFor(game: GameContext, cardId: InstId, skill: Skill): number {
   const d = def(game, cardId);
+  if (cancelledSkill(game, cardId)) return 0;
   const extra = scriptOf(game.db, d.code)?.icons?.(game, cardId) ?? {};
   return (d.icons[skill] ?? 0) + (d.icons.wild ?? 0) + (extra[skill] ?? 0) + (extra.wild ?? 0);
 }
@@ -432,17 +442,112 @@ function revealStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
   });
 }
 
-function afterRevealStage(game: GameContext) {
+function afterRevealStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
   const t = test(game);
   const idx = t.tokens.length - 1;
   if (t.tokenKey && game.s.cancelled.includes(t.tokenKey)) {
     const [tok] = t.tokens.splice(idx, 1);
     game.s.chaosBag.push(tok);
+    if (t.treatAs) delete t.treatAs[idx];
     emit(game, EVENT.TokenCancelled, `${tok} is cancelled and returned to the bag`, { inv: t.inv });
     push(game, { t: STEP.Test, stage: TEST_STAGE.Reveal });
     return;
   }
+  // "You may spend N resources to treat this token as a 0, instead" (The House Always Wins' skull)
+  const token = t.treatAs?.[idx] ?? t.tokens[idx];
+  const eff =
+    game.db.scenarios[game.s.scenarioId]?.tokens[game.s.difficulty]?.[token as SymbolToken];
+  const n = eff?.payToZero;
+  if (n && t.paidToZero?.[idx] === undefined && inv(game, t.inv).resources >= n) {
+    const pay = ask<boolean>(
+      game,
+      step,
+      t.inv,
+      CHOICE.Generic,
+      `Spend ${n} resources to treat ${token} as a 0?`,
+      [
+        { id: "keep", label: `Keep ${token}`, value: false, key: "option.keepToken" },
+        {
+          id: "pay",
+          label: `Spend ${n} resources: treat it as a 0`,
+          value: true,
+          key: "option.payToZero",
+        },
+      ],
+      { key: "payToZero", vars: { n, token } },
+    );
+    if (pay === undefined) return;
+    (t.paidToZero ??= {})[idx] = pay;
+    if (pay) {
+      addCounter(game, t.inv, "resources", -n);
+      emit(game, EVENT.Resource, `${invName(game, t.inv)} spends ${n} resources: ${token} is a 0`, {
+        inv: t.inv,
+        data: { n, lost: true },
+      });
+    }
+  }
+  // "You must either remove all clues from a Brood…, or this token's modifier is −4 instead" (Undimensioned and Unseen)
+  const either = eff?.either;
+  if (either && t.paidToZero?.[idx] !== true && t.eitherDone?.[idx] === undefined) {
+    const ctx: EffCtx = {
+      ...t.ctx,
+      you: t.inv,
+      inv: t.inv,
+      testId: t.id,
+      enemy: t.kind !== "investigate" ? t.target : t.ctx.enemy,
+      token,
+    };
+    const can = !either.can || checkCondition(game, either.can, ctx);
+    const done = can
+      ? ask<boolean>(
+          game,
+          step,
+          t.inv,
+          CHOICE.Generic,
+          `${token}: choose one`,
+          [
+            { id: "do", label: either.label, value: true, key: `option.${either.key}` },
+            either.autoFail
+              ? {
+                  id: "penalty",
+                  label: "The test automatically fails",
+                  value: false,
+                  key: "option.tokenAutoFail",
+                }
+              : {
+                  id: "penalty",
+                  label: `${token} is ${either.modifier ?? 0} instead`,
+                  value: false,
+                  key: "option.tokenModifierInstead",
+                  vars: { n: either.modifier ?? 0 },
+                },
+          ],
+          { key: "tokenEither", vars: { token } },
+        )
+      : false;
+    if (done === undefined) return;
+    (t.eitherDone ??= {})[idx] = done;
+    if (done) {
+      push(
+        game,
+        { t: STEP.Effects, effects: either.do, ctx },
+        { t: STEP.Test, stage: TEST_STAGE.ResolveTokens },
+      );
+      return;
+    }
+  }
   push(game, { t: STEP.Test, stage: TEST_STAGE.ResolveTokens });
+}
+
+/** the token just revealed is treated as another one of the bag (Beginner's Luck) */
+export function treatTokenAs(game: GameContext, token: ChaosToken) {
+  const t = game.s.skillTest;
+  if (!t || !t.tokens.length) return;
+  (t.treatAs ??= {})[t.tokens.length - 1] = token;
+  emit(game, EVENT.Token, `${t.tokens[t.tokens.length - 1]} is treated as ${token}`, {
+    inv: t.inv,
+    data: { token },
+  });
 }
 
 function resolveTokensStage(game: GameContext) {
@@ -457,9 +562,11 @@ function resolveTokensStage(game: GameContext) {
   };
   let revealAnother = false;
   while (t.resolvedTokens < t.tokens.length) {
-    const token = t.tokens[t.resolvedTokens++];
+    const at = t.resolvedTokens++;
+    const token = t.treatAs?.[at] ?? t.tokens[at];
     let mod = 0;
-    if (/^[+-]?\d+$/.test(token)) mod = Number(token);
+    if (t.paidToZero?.[at]) mod = 0;
+    else if (/^[+-]?\d+$/.test(token)) mod = Number(token);
     else if (token === "autoFail") t.autoFail = true;
     else if (token === "elderSign" && hasFlag(game, t.inv, "elderSignIsAutoFail"))
       t.autoFail = true;
@@ -487,20 +594,59 @@ function resolveTokensStage(game: GameContext) {
       }
     } else {
       const eff = scen.tokens[game.s.difficulty]?.[token as SymbolToken];
+      // "−X. Discard the top 2 cards of your deck. X is …": what it reveals resolves first, then the token comes back here
+      const idx = t.resolvedTokens - 1;
+      const first = eff?.x === "discardedPrintedCost" && !!eff.onReveal?.length;
+      if (first && !t.revealedFirst?.includes(idx)) {
+        t.revealedFirst = [...(t.revealedFirst ?? []), idx];
+        t.resolvedTokens--;
+        push(
+          game,
+          { t: STEP.Effects, effects: eff.onReveal!, ctx: { ...ctx, token } },
+          { t: STEP.Test, stage: TEST_STAGE.ResolveTokens },
+        );
+        return;
+      }
       if (eff) {
+        let xv: number | undefined;
         const xOf = () =>
-          eff.x === "tokensOn" && eff.xTokens
-            ? tokensOn(game, tokenHolder(game, eff.xTokens.on, ctx) ?? "", eff.xTokens.name)
-            : tokenX(game, eff.x!, t.inv);
-        const x = () => -(xOf() * (eff.xTimes ?? 1) + (eff.xPlus ?? 0));
+          (xv ??=
+            eff.x === "tokensOn" && eff.xTokens
+              ? tokensOn(game, tokenHolder(game, eff.xTokens.on, ctx) ?? "", eff.xTokens.name)
+              : eff.x === "discardedPrintedCost"
+                ? (deckDiscarded.take(game, String(t.id)) ?? []).reduce((n, id) => {
+                    const cost = def(game, id).cost;
+                    return n + (typeof cost === "number" ? cost : 0);
+                  }, 0)
+                : tokenX(game, eff.x!, t.inv));
+        const x = () =>
+          -(Math.min(xOf(), eff.xMax ?? Infinity) * (eff.xTimes ?? 1) + (eff.xPlus ?? 0));
         mod = eff.modifier === "X" ? x() : eff.modifier;
         // "−3 instead if …": the other modifier while its condition holds for the investigator testing
-        if (eff.instead && checkCondition(game, eff.instead.when, ctx))
-          mod = typeof eff.instead.modifier === "number" ? eff.instead.modifier : x();
+        // "If it is Agenda 2, you automatically fail instead"
+        if (eff.instead && checkCondition(game, eff.instead.when, ctx)) {
+          if (eff.instead.autoFail) t.autoFail = true;
+          else
+            mod =
+              eff.instead.modifier === undefined || typeof eff.instead.modifier === "number"
+                ? (eff.instead.modifier ?? mod)
+                : x();
+        }
+        // "…, or this token's modifier is −4 instead / this test automatically fails": the penalty was taken
+        if (eff.either && t.eitherDone?.[at] === false) {
+          if (eff.either.modifier !== undefined) mod = eff.either.modifier;
+          if (eff.either.autoFail) t.autoFail = true;
+        }
         const condOk = !eff.condition || checkCondition(game, eff.condition, ctx);
-        if (condOk && eff.onReveal)
+        if (condOk && eff.onReveal && !first)
           push(game, { t: STEP.Effects, effects: eff.onReveal, ctx: { ...ctx, token } });
         if (condOk && eff.onFail) t.tokenOnFail.push(...eff.onFail);
+        if (condOk && eff.onSuccess) t.tokenOnSuccess.push(...eff.onSuccess);
+        // "after this skill test, …" (Lost in Time and Space): once the test is over, or only if it failed
+        if (condOk && eff.afterTest?.ifFailed)
+          t.tokenAfterFail = [...(t.tokenAfterFail ?? []), ...eff.afterTest.effects];
+        else if (condOk && eff.afterTest) t.tokenAfter.push(...eff.afterTest.effects);
+        if (condOk && eff.cancelCommitted) t.committedCancelled = true;
         if (eff.revealAnother === true) revealAnother = true;
         if (
           typeof eff.revealAnother === "object" &&
@@ -643,7 +789,7 @@ function applyStage(game: GameContext) {
   const steps: Step[] = [];
   // committed skill cards' own text; a committed asset or event only lends its icons (Grimoire, Skill Icons)
   for (const c of t.committed) {
-    if (def(game, c).type !== "skill") continue;
+    if (def(game, c).type !== "skill" || cancelledSkill(game, c)) continue;
     for (const a of abilitiesOf(game, c)) {
       if (a.kind !== "onPlay") continue;
       const cctx = { ...ctx, source: c, you: card(game, c).owner ?? t.inv };
@@ -679,6 +825,9 @@ function applyStage(game: GameContext) {
     steps.push(win("skillTestSucceeded", { inv: t.inv, margin: t.margin, testId: t.id }));
   } else steps.push(win("skillTestFailed", { inv: t.inv, margin: t.margin, testId: t.id }));
   steps.push({ t: STEP.Test, stage: TEST_STAGE.End });
+  if (t.tokenAfter.length) steps.push({ t: STEP.Effects, effects: t.tokenAfter, ctx });
+  if (!ok && t.tokenAfterFail?.length)
+    steps.push({ t: STEP.Effects, effects: t.tokenAfterFail, ctx });
   push(game, ...steps);
 }
 
@@ -857,7 +1006,21 @@ function endStage(game: GameContext) {
   expireMods(game, "test");
   game.s.skillTest = game.s.testStack.pop() ?? null;
   peril.clear(game);
-  push(game, win("skillTestEnds", { inv: t.inv, testId: t.id }));
+  push(
+    game,
+    // "after you perform an attack against it using a [[Melee]] card" (Conglomeration of Spheres)
+    ...(t.kind === "fight" && t.target
+      ? [
+          win("enemyFought", {
+            inv: t.inv,
+            enemy: t.target,
+            ...(t.source ? { card: t.source } : {}),
+            testId: t.id,
+          }),
+        ]
+      : []),
+    win("skillTestEnds", { inv: t.inv, testId: t.id }),
+  );
 }
 
 export const testHandler: Handler<"Test"> = (game, step) => {
@@ -867,7 +1030,7 @@ export const testHandler: Handler<"Test"> = (game, step) => {
     case "reveal":
       return revealStage(game, step);
     case "afterReveal":
-      return afterRevealStage(game);
+      return afterRevealStage(game, step);
     case "resolveTokens":
       return resolveTokensStage(game);
     case "result":

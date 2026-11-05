@@ -1,6 +1,15 @@
-import { aside as asideFlag, dying, prevented as preventedFlag, vehicleUsed } from "../world/flags";
+import {
+  aside as asideFlag,
+  dying,
+  killed as killedFlag,
+  prevented as preventedFlag,
+  resignedWith,
+  vehicleUsed,
+} from "../world/flags";
 import {
   abilitiesOf,
+  allMods,
+  canPlaceClues,
   cardsIn,
   connections,
   controlled,
@@ -8,10 +17,12 @@ import {
   engagedWith,
   hasFlag,
   invsAt,
+  isAloof,
   isMassive,
   maxHealth,
   maxSanity,
   modSum,
+  modsFor,
   spendableGroupClues,
   isHidden,
 } from "../queries";
@@ -35,6 +46,7 @@ import {
   nextKey,
   placeInvestigator,
   currentRound,
+  currentTest,
   setVehicle,
   playerCount,
   push,
@@ -106,6 +118,8 @@ export const drawHandler: Handler<"Draw"> = (game, step) => {
     });
   const rest: Step[] =
     step.n > 1 ? [{ t: STEP.Draw, inv: step.inv, n: step.n - 1, tapped: true }] : [];
+  // the last card drawn leaves the deck empty (Beyond the Veil)
+  if (!inv(game, step.inv).deck.length) rest.unshift(win("deckEmptied", { inv: step.inv }));
   // "after you draw X" (Detective's Intuition)
   if (!weakness) rest.unshift(win("cardDrawn", { inv: step.inv, card: id }));
   if (weakness) {
@@ -206,7 +220,10 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (game, step) => {
   }
   while (damage > 0 || horror > 0) {
     const kind: 0 | 1 = damage > 0 ? 0 : 1;
-    const assets = step.direct ? [] : soakers(game, step.inv, kind, assigned);
+    const direct = step.direct || hasFlag(game, step.inv, "directDamage");
+    const assets = direct ? [] : soakers(game, step.inv, kind, assigned);
+    // "must be assigned to your assets first, if able": the investigator takes none while an asset can
+    const onlyAssets = !!step.assetsFirst && kind === 0 && assets.length > 0;
     if (assets.length === 0) {
       const cur = assigned[step.inv] ?? [0, 0];
       assigned[step.inv] = kind === 0 ? [cur[0] + damage, cur[1]] : [cur[0], cur[1] + horror];
@@ -219,14 +236,18 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (game, step) => {
     const word = kind === 0 ? "damage" : "horror";
     const key = kind === 0 ? "option.assignDamage" : "option.assignHorror";
     const opts = [
-      {
-        id: step.inv,
-        label: `Assign 1 ${word} to ${me.name}`,
-        card: me.cardId,
-        value: step.inv,
-        key,
-        vars: { code: card(game, me.cardId).code, defeated: 0 },
-      },
+      ...(onlyAssets
+        ? []
+        : [
+            {
+              id: step.inv,
+              label: `Assign 1 ${word} to ${me.name}`,
+              card: me.cardId,
+              value: step.inv,
+              key,
+              vars: { code: card(game, me.cardId).code, defeated: 0 },
+            },
+          ]),
       ...assets.map((a) => {
         const cap = (kind === 0 ? def(game, a.id).health : def(game, a.id).sanity) ?? 0;
         const defeated =
@@ -311,7 +332,9 @@ export const afterDamageHandler: Handler<"AfterDamage"> = (game, step) => {
   if (step.horror > 0) steps.push(win("horrorTaken", { inv: step.inv, amount: step.horror }));
   if (step.damage > 0 || step.horror > 0)
     steps.push(win("damageOrHorrorTaken", { inv: step.inv, enemy }));
-  steps.push({ t: STEP.CheckDefeat, inv: step.inv });
+  // an attack by an enemy that kills whom it would defeat (Crazed Shoggoth)
+  const killer = enemy && def(game, enemy).killsOnDefeat ? enemy : undefined;
+  steps.push({ t: STEP.CheckDefeat, inv: step.inv, ...(killer ? { killer } : {}) });
   push(game, ...steps);
 };
 
@@ -348,10 +371,11 @@ export const checkDefeatHandler: Handler<"CheckDefeat"> = (game, step) => {
   if (!byDamage && !byHorror) return;
   const by = byDamage ? "damage" : "horror";
   const cause = byDamage && byHorror ? "both" : by;
+  const killed = step.killer ? ({ killed: true } as const) : {};
   // the scenario may replace the defeat (Dim Carcosa); a card may, in a window before it (St. Hubert's Key)
   if (fireScenarioHook(game, "wouldBeDefeated", step.inv, cause) === true) return;
   if (!hasReplacement(game)) {
-    push(game, { t: STEP.Defeated, inv: step.inv, by });
+    push(game, { t: STEP.Defeated, inv: step.inv, by, ...killed });
     return;
   }
   const key = nextKey(game, "defeat:");
@@ -360,6 +384,7 @@ export const checkDefeatHandler: Handler<"CheckDefeat"> = (game, step) => {
     inv: step.inv,
     by,
     key,
+    ...killed,
   });
 };
 
@@ -386,6 +411,7 @@ export const defeatedHandler: Handler<"Defeated"> = (game, step) => {
     if (step.by === "damage") addCounter(game, me.id, "physicalTrauma", 1);
     else addCounter(game, me.id, "mentalTrauma", 1);
   }
+  if (step.killed) killedFlag.set(game, me.id, true);
   emit(
     game,
     step.by === "resign" ? EVENT.Resign : EVENT.Defeated,
@@ -411,6 +437,17 @@ export const defeatedHandler: Handler<"Defeated"> = (game, step) => {
         def(game, c.id).subtype,
     ),
   );
+  // the story assets they resigned with ("if an investigator resigned with Peter Clover under his or her control")
+  const story = controlled(game, me.id).filter((c) => !c.owner);
+  if (step.by === "resign" && story.length)
+    resignedWith.set(
+      game,
+      me.id,
+      story.map((c) => c.code),
+    );
+  // queued first, so what the cards leaving play set off ("when Adam Lynch leaves play") resolves before it
+  if (activeInvs(game).length === 0) push(game, { t: STEP.AllEliminated });
+  else if (leadInvestigator(game) === step.inv) push(game, { t: STEP.ChooseLead });
   // cards leave play: owned cards out of the game, encounter cards to encounter discard
   for (const c of allCards(game)) {
     if (c.owner === step.inv && c.zone !== "removed" && c.zone !== "investigator")
@@ -420,8 +457,6 @@ export const defeatedHandler: Handler<"Defeated"> = (game, step) => {
   }
   placeInvestigator(game, me.id, null);
   if (activeInvestigator(game) === step.inv) setActive(game, null);
-  if (activeInvs(game).length === 0) push(game, { t: STEP.AllEliminated });
-  else if (leadInvestigator(game) === step.inv) push(game, { t: STEP.ChooseLead });
 };
 
 /** the remaining investigators choose a new lead when the lead is eliminated (Grimoire, Elimination) */
@@ -448,8 +483,21 @@ export function canMoveTo(game: GameContext, i: InvId, to: InstId) {
   return (
     !!from &&
     connections(game, from).includes(to) &&
-    !hasFlag(game, to, "cannotMoveInto") &&
-    spendableGroupClues(game) >= enterCost(game, to)
+    !hasFlag(game, to, "cannotMoveInto", modsFor(game, i)) &&
+    !hasFlag(game, from, "cannotLeave") &&
+    !cannotMove(game, i) &&
+    spendableGroupClues(game) >= enterCost(game, to) &&
+    // "You must have at least 2 clues in order to move to The Edge of the Universe"
+    inv(game, i).clues >= (def(game, to).moveInClues ?? 0)
+  );
+}
+
+/** the investigator can't move at all: by an effect on them (Claws of Steam), or held by an engaged enemy (Grappling Horror) */
+export function cannotMove(game: GameContext, i: InvId): boolean {
+  const mods = allMods(game);
+  return (
+    hasFlag(game, i, "cannotMove", mods) ||
+    engagedWith(game, i).some((e) => hasFlag(game, e.id, "cannotMoveWhileEngaged", mods))
   );
 }
 
@@ -469,6 +517,8 @@ export const moveHandler: Handler<"Move"> = (game, step) => {
     ...(from
       ? [
           win("wouldMoveOut", { inv: step.inv, location: from, key }),
+          // what it costs to move into a location (Arcane Barrier): cancelling the key cancels the move
+          win("wouldMoveIn", { inv: step.inv, location: step.to, key }),
           win("leaveLocation", { inv: step.inv, location: from, key }),
         ]
       : []),
@@ -524,6 +574,8 @@ export const arriveHandler: Handler<"Arrive"> = (game, step) => {
   const steps: Step[] = [];
   const loc = card(game, step.to);
   if (!loc.revealed) steps.push({ t: STEP.RevealLocation, location: step.to, by: step.inv });
+  // "after an investigator leaves …" (Endless Bridge), once they are gone
+  if (from && from !== step.to) steps.push(win("leftLocation", { inv: step.inv, location: from }));
   steps.push(win("enterLocation", { inv: step.inv, location: step.to, from }));
   steps.push({ t: STEP.CheckEngagement, inv: step.inv });
   steps.push({ t: STEP.CheckObjectives });
@@ -535,12 +587,13 @@ export function revealLocation(game: GameContext, loc: InstId) {
   if (c.revealed) return;
   reveal(game, c.id);
   const d = def(game, loc);
-  addCounter(
-    game,
-    c.id,
-    "clues",
-    (d.clues ?? 0) * (d.cluesPerInvestigator ? playerCount(game) : 1),
-  );
+  if (canPlaceClues(game, c.id))
+    addCounter(
+      game,
+      c.id,
+      "clues",
+      (d.clues ?? 0) * (d.cluesPerInvestigator ? playerCount(game) : 1),
+    );
   emit(game, EVENT.Reveal, `${d.name} is revealed (${c.clues} clues)`, {
     card: loc,
     data: { n: c.clues },
@@ -561,7 +614,7 @@ export function checkEngagement(game: GameContext, i: InvId) {
   if (me.status !== "playing") return;
   for (const e of enemies(game)) {
     if (e.location !== me.location || e.engagedWith || e.exhausted) continue;
-    if (def(game, e.id).keywords.includes("aloof") || isMassive(game, e.id)) continue;
+    if (isAloof(game, e.id) || isMassive(game, e.id)) continue;
     const prey = preyCandidates(game, e.id, invsAt(game, me.location));
     const to = prey.includes(i) ? i : prey[0];
     if (!to) continue; // Prey - bearer only with no bearer here
@@ -579,6 +632,13 @@ export const discoverCluesHandler: Handler<"DiscoverClues"> = (game, step) => {
   const loc = card(game, step.location);
   const n = Math.min(step.n, loc.clues);
   if (n <= 0 || hasFlag(game, step.inv, "cannotDiscoverClues")) return;
+  // "you cannot discover clues here except by investigating" (Schoolhouse)
+  const t = currentTest(game);
+  if (
+    hasFlag(game, step.location, "cluesOnlyByInvestigating") &&
+    !(t?.kind === "investigate" && t.target === step.location)
+  )
+    return;
   const key = nextKey(game, "clues");
   push(
     game,
@@ -600,7 +660,12 @@ export const gainCluesHandler: Handler<"GainClues"> = (game, step) => {
   addCounter(game, loc.id, "clues", -n);
   addCounter(game, step.inv, "clues", n);
   if (n > 0)
-    push(game, win("cluesDiscovered", { inv: step.inv, location: step.location, amount: n }));
+    push(
+      game,
+      win("cluesDiscovered", { inv: step.inv, location: step.location, amount: n }),
+      // discovering is one way of gaining (Clover Club Pit Boss)
+      win("cluesGained", { inv: step.inv, amount: n }),
+    );
   emit(
     game,
     EVENT.Clues,

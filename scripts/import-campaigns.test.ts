@@ -256,13 +256,14 @@ describe("the generated flows (campaign-flow-compiler-fixes)", () => {
     ]);
   });
 
+  // The Dunwich Legacy is hand-written now; its Return-to box compiles the same guide entry
   it("The House Always Wins with no resolution runs Resolution 1's steps", () => {
-    const f = flowOf("the-dunwich-legacy");
+    const f = flowOf("return-to-the-dunwich-legacy");
     const keys = (ids: string[]) =>
       effects(f, ids)
         .filter((e) => e.do === "record")
         .map((e) => e.key);
-    const r = f.resolutions["the-house-always-wins"];
+    const r = f.resolutions["return-to-the-house-always-wins"];
     expect(keys(r.none)).toEqual(keys(r.R1));
     expect(keys(r.none)).toContain("boneToPick");
   });

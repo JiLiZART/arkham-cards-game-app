@@ -1,5 +1,5 @@
 import { logEntry, peril, surge as surgeFlag } from "../world/flags";
-import { abilitiesOf, actClueCost, enemies, hasFlag, hasKeyword, invsAt } from "../queries";
+import { abilitiesOf, actClueCost, actSpenders, enemies, hasKeyword, invsAt } from "../queries";
 import {
   activeInvs,
   addCounter,
@@ -61,8 +61,9 @@ export const drawEncounterHandler: Handler<"DrawEncounter"> = (game, step) => {
     inv: step.inv,
     card: id,
   });
-  if (d.type === "location") {
-    // a location drawn as an encounter card enters play connected to the drawer's location (Lost in Time and Space)
+  // a location that prints its own revelation ("Put … into play") resolves it as a treachery does (Lost in Time and Space)
+  if (d.type === "location" && !abilitiesOf(game, id).some((a) => a.kind === "revelation")) {
+    // a location drawn as an encounter card enters play connected to the drawer's location
     const here = inv(game, step.inv).location;
     moveCard(game, id, ZONE.Location);
     if (here) link(game, id, here);
@@ -200,7 +201,13 @@ export const checkDoomHandler: Handler<"CheckDoom"> = (game) => {
   if (currentPhase(game) === "ended") return;
   // each agenda deck whose threshold is met advances, in deck order
   const due = agendaDecks(game).filter(
-    ([, id]) => doomFor(game, id) >= (def(game, id).doom ?? Infinity),
+    ([, id]) =>
+      doomFor(game, id) >= (def(game, id).doom ?? Infinity) &&
+      // "when this agenda would advance by reaching its doom threshold: instead, …"
+      !fireCardHook(game, card(game, id).code, "doomThreshold", {
+        source: id,
+        you: leadInvestigator(game),
+      }),
   );
   push(
     game,
@@ -310,10 +317,12 @@ export const advanceActHandler: Handler<"AdvanceAct"> = (game, step) => {
   if (!id) return;
   if (step.spend) {
     let n = actClueCost(game, deck);
+    // the lead's first, then the others' (only those who may spend them)
+    const spenders = actSpenders(game, deck);
     const order = [
       leadInvestigator(game),
       ...activeInvs(game).filter((x) => x !== leadInvestigator(game)),
-    ].filter((x) => !hasFlag(game, x, "cannotSpendClues"));
+    ].filter((x) => spenders.includes(x));
     for (const i of order) {
       const take = Math.min(n, inv(game, i).clues);
       addCounter(game, i, "clues", -take);
@@ -376,7 +385,8 @@ export const resolveStoryHandler: Handler<"ResolveStory"> = (game, step) => {
 /**
  * A location leaves play (Grimoire: the card says so; Essex County Express, Lost in Time and Space): the scenario is told
  * first; the investigators there are defeated unless the card moves them; its enemies are discarded; it goes to the
- * victory display when it has Victory X and no clues, else to the encounter discard (its attachments with it).
+ * victory display when it has Victory X and no clues, else to the encounter discard (its attachments with it), or out of
+ * the game when the card says "remove".
  */
 export const removeLocationHandler: Handler<"RemoveLocation"> = (game, step) => {
   const loc = cardIf(game, step.location);
@@ -393,7 +403,11 @@ export const removeLocationHandler: Handler<"RemoveLocation"> = (game, step) => 
   moveCard(
     game,
     loc.id,
-    d.victory !== undefined && loc.clues === 0 ? ZONE.Victory : ZONE.EncounterDiscard,
+    d.victory !== undefined && loc.clues === 0
+      ? ZONE.Victory
+      : step.outOfGame
+        ? ZONE.Removed
+        : ZONE.EncounterDiscard,
   );
 };
 

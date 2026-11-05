@@ -52,9 +52,11 @@ const campaignDirs = ["content/campaigns", "content/campaigns-generated"]
   .filter((d) => existsSync(join(d, "campaign.json")));
 for (const dirPath of campaignDirs) {
   const campaign = read(join(dirPath, "campaign.json"));
-  // a generated campaign keeps its (English) log labels with its text, not in campaign.json
+  // a generated campaign keeps its (English) log labels with its text, not in campaign.json; so does a hand-written one
+  // that was generated once (The Dunwich Legacy), its text file kept
   const enText = join("content/i18n/en/campaign-texts", `${campaign.id}.json`);
-  if (campaign.generated && existsSync(enText))
+  const textFile = campaign.generated || existsSync(enText);
+  if (textFile && existsSync(enText))
     campaign.logLabels = read(enText).campaigns[campaign.id].logLabels;
   const ac = acCampaigns.find((c) => c.campaign.id === campaign.i18nId);
   if (!ac) {
@@ -73,7 +75,7 @@ for (const dirPath of campaignDirs) {
     for (const step of s.steps ?? [])
       for (const e of step.effects ?? [])
         if (e.type === "campaign_log" && e.id && e.text) addLog(e.id, e.text);
-  const out = campaign.generated
+  const out = textFile
     ? (perCampaign[campaign.id] = {
         campaigns: { [campaign.id]: { logLabels } },
         scenarios: {},
@@ -90,12 +92,12 @@ for (const dirPath of campaignDirs) {
       )
       .filter(Boolean),
   };
-  campaignsOut.campaigns[campaign.id] = campaign.generated
+  campaignsOut.campaigns[campaign.id] = textFile
     ? { name: ac.campaign.name, ...blurb }
     : { name: ac.campaign.name, ...blurb, logLabels };
 
   // the flow's words: the same compile of this language's guide gives the same step ids
-  if (campaign.generated && existsSync(join(dirPath, "flow.json"))) {
+  if (textFile && existsSync(join(dirPath, "flow.json"))) {
     const ids = new Map<string, string>(
       campaign.scenarios.map((id: string) => [
         read(join(dirPath, "scenarios", `${id}.json`)).i18nId,
@@ -114,8 +116,23 @@ for (const dirPath of campaignDirs) {
       Object.entries(flowText.steps).filter(([k]) => k in ours),
     );
     out.campaigns[campaign.id].interludeNames = flowText.interludes;
-    // steps with words in English and none in this language fall back to English: say how many
     const wordsOf = stepTexts(read(join(dirPath, "flow.json"))).steps;
+    // a hand-fixed story step the compile doesn't give (`<scenario>:<id>:text`): the words of the guide's step or
+    // resolution of that id in this language (`resolution_2` is the guide's R2), as the English step took them
+    const guideOf = new Map([...ids].map(([theirs, mine]) => [mine, scenarios.get(theirs)]));
+    for (const [k, en] of Object.entries(wordsOf)) {
+      const m = k.match(/^([^:]+):(.+):text$/);
+      if (k in out.campaigns[campaign.id].steps || !m || !en.text) continue;
+      const id = m[2].replace(/^resolution_(\d+)$/, "R$1");
+      const g = guideOf.get(m[1]);
+      const src = [...(g?.steps ?? []), ...(g?.resolutions ?? [])].find((x: Raw) => x.id === id);
+      if (src?.text)
+        out.campaigns[campaign.id].steps[k] = {
+          ...(en.title && src.title ? { title: src.title } : {}),
+          text: clean(src.text),
+        };
+    }
+    // steps with words in English and none in this language fall back to English: say how many
     const missing = Object.keys(wordsOf).filter((k) => !(k in out.campaigns[campaign.id].steps));
     if (missing.length) missingSteps.push(`${campaign.id} ${missing.length}`);
   }

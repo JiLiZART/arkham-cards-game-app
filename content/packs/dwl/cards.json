@@ -76,5 +76,509 @@
   "02020": { "abilities": [
     { "kind": "constant", "modifiers": [{ "stat": "handSize", "value": 2 }] },
     { "kind": "reaction", "trigger": "enterPlay", "label": "Laboratory Assistant: draw 2 cards", "effects": [{ "op": "drawCards", "amount": 2 }] }
-  ] }
+  ] },
+
+  "02042": { "script": true },
+  "02043": { "script": true },
+  "02044": { "script": true },
+  "02045": { "script": true },
+  "02046": { "script": true },
+  "02047": { "script": true },
+  "02048": { "abilities": [
+    { "kind": "action", "designator": "resign", "label": "Miskatonic Quad: resign", "effects": [{ "op": "resign" }] }
+  ] },
+  "02049": { "abilities": [
+    { "kind": "forced", "trigger": "turnEnds", "condition": { "eventAtThisLocation": true }, "effects": [{ "op": "discardDeckTop", "amount": { "onYou": "horror" } }] }
+  ] },
+  "02050": { "script": true },
+  "02051": { "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "putSetAsideIntoPlay", "code": "02052" }] },
+    { "kind": "action", "actionCost": 2, "label": "Student Union: heal 1 damage and 1 horror", "effects": [{ "op": "heal", "damage": 1, "horror": 1 }] }
+  ] },
+  "02052": { "script": true },
+  "02053": { "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "putSetAsideIntoPlay", "code": "02054" }, { "op": "putSetAsideIntoPlay", "code": "02055" }] },
+    { "kind": "forced", "trigger": "turnEnds", "condition": { "eventAtThisLocation": true }, "effects": [{ "op": "discardDeckTop", "amount": 1 }] }
+  ] },
+  "02054": { "script": true },
+  "02055": { "script": true },
+  "02056": { "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "putSetAsideIntoPlay", "code": "02057" }] },
+    { "kind": "forced", "trigger": "skillTestFailed", "condition": { "all": [{ "testSkill": "willpower" }, { "eventAtThisLocation": true }] }, "effects": [{ "op": "takeDamage", "amount": 1 }] }
+  ] },
+  "02057": { "script": true },
+  "02058": { "script": true, "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "enemyHealth", "value": 3, "perInvestigator": true, "scope": "self" }] }
+  ] },
+  "02059": { "abilities": [
+    { "kind": "action", "designator": "fight", "label": "Alchemical Concoction: fight (intellect)", "effects": [{ "op": "fight", "skill": "intellect", "extraDamageIf": { "eventEnemy": { "code": "02058" } }, "extraDamage": 6, "onSuccess": [{ "op": "removeSelf" }] }] }
+  ] },
+  "02060": { "script": true },
+  "02061": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "intellect", "value": 1 }] },
+    { "kind": "reaction", "trigger": "cluesDiscovered", "label": "Professor Warren Rice: draw 1 card", "cost": { "exhaust": true }, "condition": { "all": [{ "eventInvestigatorIsYou": true }, { "cluesOnYourLocation": "none" }] }, "effects": [{ "op": "drawCards", "amount": 1 }] }
+  ] },
+
+  "02063": { "script": true },
+  "02064": { "script": true },
+  "02065": { "script": true },
+  "02066": { "script": true },
+  "02067": { "script": true, "actAdvance": "script" },
+  "02068": { "script": true },
+  "02069": { "script": true },
+  "02070": { "abilities": [
+    { "kind": "action", "designator": "resign", "label": "La Bella Luna: resign", "effects": [{ "op": "resign" }] }
+  ] },
+  "02071": { "script": true },
+  "02072": { "script": true },
+  "02073": { "script": true },
+  "02074": { "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "putSetAsideIntoPlay", "code": "02075" }, { "op": "putSetAsideIntoPlay", "code": "02076" }, { "op": "putSetAsideIntoPlay", "code": "02077" }] }
+  ] },
+  "02075": { "abilities": [
+    { "kind": "forced", "trigger": "skillTestFailed", "condition": { "all": [{ "testKind": "investigate" }, { "eventAtThisLocation": true }] }, "effects": [{ "op": "loseResources", "amount": 2 }] }
+  ] },
+  "02076": { "abilities": [
+    { "kind": "constant", "modifiers": [
+      { "flag": "noUpkeepDraw", "scope": "investigatorsAtLocation" },
+      { "flag": "noUpkeepResources", "scope": "investigatorsAtLocation" }
+    ] }
+  ] },
+  "02077": { "abilities": [
+    { "kind": "action", "designator": "resign", "label": "Back Alley: resign", "effects": [{ "op": "resign" }] }
+  ] },
+  "02078": { "prey": { "highest": "intellect" }, "abilities": [
+    { "kind": "forced", "trigger": "cluesGained", "condition": { "eventAtThisLocation": true }, "effects": [{ "op": "enemyAttack", "ready": true, "engage": true, "target": "eventInvestigator" }] }
+  ] },
+  "02079": { "abilities": [
+    { "kind": "forced", "trigger": "phaseBegins", "condition": { "all": [{ "phase": "enemy" }, { "controlled": false }] }, "effects": [{ "op": "placeTokens", "on": "self", "damage": 1 }] },
+    { "kind": "fast", "label": "Peter Clover: evade a Criminal enemy", "cost": { "exhaust": true }, "condition": { "controlled": true }, "effects": [{ "op": "evade", "auto": true, "filter": { "trait": "Criminal" } }] }
+  ] },
+  "02080": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "combat", "value": 1 }] },
+    { "kind": "reaction", "trigger": "enemyDefeated", "label": "Dr. Francis Morgan: draw 1 card", "cost": { "exhaust": true }, "effects": [{ "op": "drawCards", "amount": 1 }] }
+  ] },
+  "02081": { "script": true },
+  "02082": { "script": true },
+
+  "02083": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": 5, "onFail": [{ "op": "discardDeckTop", "amount": "failBy" }] }] }
+  ] },
+  "02084": { "script": true },
+  "02085": { "script": true },
+  "02086": { "spawn": { "mostClues": true } },
+  "02087": { "script": true, "prey": { "lowest": "cardsInHand" } },
+  "02088": { "script": true, "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "putInThreatArea" }] },
+    { "kind": "constant", "modifiers": [{ "flag": "cannotPlayAssets", "filter": { "trait": "Ally" } }] },
+    { "kind": "forced", "trigger": "turnEnds", "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": 3, "onSuccess": [{ "op": "discardSelf" }] }] }
+  ] },
+  "02089": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "attachToLocation", "where": "yours" }] },
+    { "kind": "forced", "trigger": "roundEnds", "effects": [{ "op": "takeHorror", "amount": 1, "target": "eachAtAttachedLocation" }] },
+    { "kind": "forced", "trigger": "agendaAdvances", "effects": [{ "op": "discardSelf" }] }
+  ] },
+  "02090": { "abilities": [
+    { "kind": "constant", "modifiers": [
+      { "stat": "willpower", "value": -1, "scope": "investigatorsAtLocation" },
+      { "stat": "intellect", "value": -1, "scope": "investigatorsAtLocation" },
+      { "stat": "combat", "value": -1, "scope": "investigatorsAtLocation" },
+      { "stat": "agility", "value": -1, "scope": "investigatorsAtLocation" }
+    ] }
+  ] },
+  "02091": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": { "onYou": "damage", "plus": 2 }, "onFail": [{ "op": "takeHorror", "amount": 2 }] }] }
+  ] },
+  "02092": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "putInThreatArea" }] },
+    { "kind": "constant", "modifiers": [{ "stat": "testValue", "value": -1 }] },
+    { "kind": "forced", "trigger": "skillTestSucceeded", "condition": { "succeededBy": { "min": 1 } }, "effects": [{ "op": "discardSelf" }] }
+  ] },
+  "02093": { "script": true },
+  "02094": { "prey": { "lowest": "intellect" }, "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "fight", "value": -3, "scope": "self", "filter": { "type": "asset", "trait": ["Ranged", "Firearm", "Spell"] } }] }
+  ] },
+  "02095": { "spawn": { "farthest": true, "to": "you" }, "prey": { "lowest": "agility" } },
+  "02096": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "enterLocation", "effects": [{ "op": "takeHorror", "amount": 1, "target": "eventInvestigator" }] },
+    { "kind": "forced", "trigger": "enemyEntersLocation", "effects": [{ "op": "takeHorror", "amount": 1, "target": "eachAtAttachedLocation" }] }
+  ] },
+  "02097": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "cannotGainResourcesWhileEngaged", "scope": "self" }] }
+  ] },
+  "02098": { "abilities": [
+    { "kind": "forced", "trigger": "enemyAttacked", "effects": [{ "op": "loseResources", "amount": 1, "target": "eventInvestigator" }] }
+  ] },
+  "02099": { "script": true },
+  "02100": { "script": true },
+  "02101": { "script": true },
+  "02102": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "attachToLocation", "where": "yours" }] },
+    { "kind": "forced", "trigger": "wouldMoveOut", "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": 4, "onSuccess": [{ "op": "discardSelf" }], "onFail": [{ "op": "chooseOne", "options": [{ "label": "Cancel the move", "effects": [{ "op": "cancel" }] }, { "label": "Discard the top 5 cards of your deck", "effects": [{ "op": "discardDeckTop", "amount": 5 }] }] }] }] },
+    { "kind": "forced", "trigger": "wouldMoveIn", "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": 4, "onSuccess": [{ "op": "discardSelf" }], "onFail": [{ "op": "chooseOne", "options": [{ "label": "Cancel the move", "effects": [{ "op": "cancel" }] }, { "label": "Discard the top 5 cards of your deck", "effects": [{ "op": "discardDeckTop", "amount": 5 }] }] }] }] }
+  ] },
+  "02103": { "prey": { "lowest": "willpower" }, "abilities": [
+    { "kind": "forced", "trigger": "enemyFought", "condition": { "eventCard": { "trait": "Melee" } }, "effects": [{ "op": "discardEventCard" }] }
+  ] },
+  "02104": { "prey": { "lowest": "agility" }, "abilities": [
+    { "kind": "forced", "trigger": "enemyAttacks", "effects": [{ "op": "discardDeckTop", "amount": 2, "target": "eventInvestigator" }] }
+  ] },
+
+  "02119": { "script": true },
+  "02120": { "script": true },
+  "02121": { "script": true },
+  "02122": { "script": true },
+  "02123": { "script": true },
+  "02124": { "script": true },
+  "02125": { "script": true },
+  "02126": { "script": true, "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "cannotGainResources", "scope": "investigatorsAtLocation" }] },
+    { "kind": "action", "designator": "resign", "label": "Museum Entrance: resign", "effects": [{ "op": "resign" }] }
+  ] },
+  "02127": { "script": true },
+  "02128": { "abilities": [
+    { "kind": "action", "actionCost": 2, "label": "Security Office: search the top 6 cards of your deck for a card", "limit": { "per": "turn" }, "effects": [{ "op": "searchDeck", "top": 6, "filter": {} }] }
+  ] },
+  "02129": { "script": true },
+  "02130": { "script": true },
+  "02131": { "script": true },
+  "02132": { "abilities": [
+    { "kind": "forced", "trigger": "enterLocation", "effects": [{ "op": "loseActions", "amount": "all", "target": "eventInvestigator" }, { "op": "endTurn" }] },
+    { "kind": "constant", "modifiers": [{ "stat": "agility", "value": 2, "scope": "investigatorsAtLocation" }] }
+  ] },
+  "02133": { "abilities": [
+    { "kind": "forced", "trigger": "skillTestFailed", "condition": { "all": [{ "testKind": "investigate" }, { "eventAtThisLocation": true }] }, "effects": [{ "op": "discardAsset" }] }
+  ] },
+  "02134": { "abilities": [
+    { "kind": "forced", "trigger": "enterLocation", "effects": [{ "op": "discardFromHand", "amount": 2, "random": true, "target": "eventInvestigator" }] }
+  ] },
+  "02135": { "abilities": [
+    { "kind": "forced", "trigger": "skillTestFailed", "condition": { "all": [{ "testKind": "investigate" }, { "eventAtThisLocation": true }] }, "effects": [{ "op": "loseActions", "amount": 1 }] }
+  ] },
+  "02136": { "abilities": [
+    { "kind": "forced", "trigger": "skillTestFailed", "condition": { "all": [{ "testKind": "investigate" }, { "eventAtThisLocation": true }] }, "effects": [{ "op": "takeHorror", "amount": 1 }] }
+  ] },
+  "02137": { "script": true },
+  "02138": { "script": true, "leavesPlay": { "to": "removed", "effects": [{ "op": "addChaosTokens", "tokens": ["tablet"], "forCampaign": true }] } },
+  "02139": { "script": true, "leavesPlay": { "to": "removed", "effects": [{ "op": "addChaosTokens", "tokens": ["tablet"], "forCampaign": true }] } },
+  "02140": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "intellect", "value": 1 }] },
+    { "kind": "action", "label": "The Necronomicon: gain 2 resources", "effects": [{ "op": "gainResources", "amount": 2 }] }
+  ] },
+  "02141": { "script": true, "leavesPlay": { "to": "void" } },
+  "02142": { "script": true },
+  "02143": { "script": true },
+  "02144": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": { "base": 3, "plus": 2, "if": { "enemyAtYourLocation": { "code": "02141" } } }, "onFail": [{ "op": "chooseOne", "options": [
+      { "label": "Discard the top 5 cards of your deck", "effects": [{ "op": "discardDeckTop", "amount": 5 }] },
+      { "label": "Take 1 direct damage and deal 1 damage to each of your Ally assets", "effects": [{ "op": "takeDamage", "amount": 1, "direct": true }, { "op": "damageAssets", "amount": 1, "filter": { "trait": "Ally" } }] }
+    ] }] }] }
+  ] },
+  "02145": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "skillTest", "skill": "intellect", "difficulty": 3, "onFail": [{ "op": "loseActions", "amount": "failBy" }] }] }
+  ] },
+  "02146": { "script": true },
+  "02160": { "script": true },
+  "02161": { "script": true },
+  "02162": { "script": true },
+  "02163": { "script": true },
+  "02164": { "script": true },
+  "02165": { "script": true },
+  "02166": { "script": true },
+  "02167": { "script": true },
+  "02168": { "script": true },
+  "02169": { "script": true },
+  "02170": { "script": true },
+  "02171": { "script": true },
+  "02172": { "script": true },
+  "02173": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "searchEncounterDraw", "filter": { "code": "02182" } }] }
+  ] },
+  "02174": { "script": true, "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "cannotBeInvestigated", "scope": "self" }] },
+    { "kind": "action", "label": "Parlor Car: spend 3 resources to discover 1 clue", "cost": { "resources": 3 }, "effects": [{ "op": "discoverClues", "amount": 1 }] }
+  ] },
+  "02175": { "script": true },
+  "02176": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "searchEncounterDraw", "filter": { "code": "02182" } }] }
+  ] },
+  "02177": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "drawEncounterCard" }, { "op": "drawEncounterCard" }, { "op": "drawEncounterCard" }] }
+  ] },
+  "02178": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "discardDeckTop", "amount": 3 }] }
+  ] },
+  "02179": { "script": true, "leavesPlay": { "effects": [{ "op": "takeHorror", "amount": 1, "target": "each" }] } },
+  "02180": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": 3, "onFail": [
+      { "op": "takeDamage", "amount": 2, "assetsFirst": true },
+      { "op": "modify", "mod": { "flag": "cannotMove" }, "until": "round" }
+    ] }] }
+  ] },
+  "02181": { "script": true },
+  "02182": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "cannotMoveWhileEngaged", "scope": "self" }] }
+  ] },
+  "02183": { "spawn": "toYourRight", "entersExhausted": true },
+
+  "02196": { "script": true },
+  "02197": { "script": true },
+  "02198": { "script": true },
+  "02199": { "script": true },
+  "02200": { "script": true },
+  "02201": { "abilities": [
+    { "kind": "action", "designator": "resign", "label": "Village Commons: resign", "effects": [{ "op": "resign" }] }
+  ] },
+  "02202": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "enemyHorror", "value": 1, "scope": "enemiesAtLocation" }] },
+    { "kind": "fast", "label": "Bishop's Brook: draw the encounter card underneath", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "all": [{ "cluesOnYourLocation": "none" }, { "beneath": { "of": "self", "min": 1 } }] }, "effects": [{ "op": "drawBeneath", "from": "self" }] }
+  ] },
+  "02203": { "script": true, "abilities": [
+    { "kind": "fast", "label": "Bishop's Brook: draw the encounter card underneath", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "all": [{ "cluesOnYourLocation": "none" }, { "beneath": { "of": "self", "min": 1 } }] }, "effects": [{ "op": "drawBeneath", "from": "self" }] }
+  ] },
+  "02204": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "evade", "value": 1, "scope": "enemiesAtLocation" }] },
+    { "kind": "fast", "label": "Burned Ruins: draw the encounter card underneath", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "all": [{ "cluesOnYourLocation": "none" }, { "beneath": { "of": "self", "min": 1 } }] }, "effects": [{ "op": "drawBeneath", "from": "self" }] }
+  ] },
+  "02205": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "skillTestFailed", "condition": { "all": [{ "testKind": "investigate" }, { "eventAtThisLocation": true }] }, "effects": [{ "op": "script", "fn": "flip" }] },
+    { "kind": "fast", "label": "Burned Ruins: draw the encounter card underneath", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "all": [{ "cluesOnYourLocation": "none" }, { "beneath": { "of": "self", "min": 1 } }] }, "effects": [{ "op": "drawBeneath", "from": "self" }] }
+  ] },
+  "02206": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "cannotGainResources", "scope": "investigatorsAtLocation" }] },
+    { "kind": "fast", "label": "Osborn's General Store: draw the encounter card underneath", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "all": [{ "cluesOnYourLocation": "none" }, { "beneath": { "of": "self", "min": 1 } }] }, "effects": [{ "op": "drawBeneath", "from": "self" }] }
+  ] },
+  "02207": { "abilities": [
+    { "kind": "action", "label": "Osborn's General Store: spend 1 resource to search the top 3 cards of your deck for an Item", "cost": { "resources": 1 }, "effects": [{ "op": "searchDeck", "top": 3, "filter": { "trait": "Item" } }] },
+    { "kind": "fast", "label": "Osborn's General Store: draw the encounter card underneath", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "all": [{ "cluesOnYourLocation": "none" }, { "beneath": { "of": "self", "min": 1 } }] }, "effects": [{ "op": "drawBeneath", "from": "self" }] }
+  ] },
+  "02208": { "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "searchEncounterDraw", "filter": { "type": "enemy", "trait": "Humanoid" }, "zones": ["deck"], "at": "02201" }] },
+    { "kind": "fast", "label": "Congregational Church: draw the encounter card underneath", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "all": [{ "cluesOnYourLocation": "none" }, { "beneath": { "of": "self", "min": 1 } }] }, "effects": [{ "op": "drawBeneath", "from": "self" }] }
+  ] },
+  "02209": { "abilities": [
+    { "kind": "action", "label": "Congregational Church: discard a card from your hand to gain 2 resources", "cost": { "discardFromHand": 1 }, "effects": [{ "op": "gainResources", "amount": 2 }] },
+    { "kind": "fast", "label": "Congregational Church: draw the encounter card underneath", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "all": [{ "cluesOnYourLocation": "none" }, { "beneath": { "of": "self", "min": 1 } }] }, "effects": [{ "op": "drawBeneath", "from": "self" }] }
+  ] },
+  "02210": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "cannotPlayEvents", "scope": "investigatorsAtLocation" }] },
+    { "kind": "fast", "label": "House in the Reeds: draw the encounter card underneath", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "all": [{ "cluesOnYourLocation": "none" }, { "beneath": { "of": "self", "min": 1 } }] }, "effects": [{ "op": "drawBeneath", "from": "self" }] }
+  ] },
+  "02211": { "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "searchEncounterDraw", "filter": { "type": "enemy", "trait": "Nightgaunt" }, "zones": ["deck"], "at": "02201" }] },
+    { "kind": "fast", "label": "House in the Reeds: draw the encounter card underneath", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "all": [{ "cluesOnYourLocation": "none" }, { "beneath": { "of": "self", "min": 1 } }] }, "effects": [{ "op": "drawBeneath", "from": "self" }] }
+  ] },
+  "02212": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "cannotPlayOrCommit", "filter": { "type": "skill" }, "scope": "investigatorsAtLocation" }] },
+    { "kind": "fast", "label": "Schoolhouse: draw the encounter card underneath", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "all": [{ "cluesOnYourLocation": "none" }, { "beneath": { "of": "self", "min": 1 } }] }, "effects": [{ "op": "drawBeneath", "from": "self" }] }
+  ] },
+  "02213": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "cluesOnlyByInvestigating", "scope": "self" }] },
+    { "kind": "fast", "label": "Schoolhouse: draw the encounter card underneath", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "all": [{ "cluesOnYourLocation": "none" }, { "beneath": { "of": "self", "min": 1 } }] }, "effects": [{ "op": "drawBeneath", "from": "self" }] }
+  ] },
+  "02214": { "script": true },
+  "02215": { "script": true },
+  "02216": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "noAttacksOfOpportunity", "scope": "self" }] }
+  ] },
+  "02217": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "willpower", "value": 1 }] },
+    { "kind": "reaction", "trigger": "skillTestSucceeded", "label": "Zebulon Whateley: draw 1 card", "cost": { "exhaust": true }, "condition": { "all": [{ "eventInvestigatorIsYou": true }, { "testSkill": "willpower" }, { "testSource": { "type": "treachery" } }] }, "effects": [{ "op": "drawCards", "amount": 1 }] }
+  ] },
+  "02218": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "agility", "value": 1 }] },
+    { "kind": "reaction", "trigger": "enemyEvaded", "label": "Earl Sawyer: draw 1 card", "cost": { "exhaust": true }, "effects": [{ "op": "drawCards", "amount": 1 }] }
+  ] },
+  "02219": { "script": true },
+  "02220": { "script": true },
+  "02221": { "script": true },
+  "02222": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "skillTest", "skill": "intellect", "difficulty": 3, "onFail": [
+      { "op": "placeTokens", "on": "yourLocation", "clues": { "base": 1, "plus": 1, "if": { "players": { "min": 3 } } } }
+    ] }] }
+  ] },
+  "02223": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": 3, "onFail": [{ "op": "takeHorror", "amount": "failBy" }] }] }
+  ] },
+  "02224": { "abilities": [
+    { "kind": "reaction", "trigger": "enemyDefeatedSelf", "label": "Servant of Many Mouths: discover 1 clue at any location", "usableBy": "anyone", "condition": { "eventInvestigatorIsYou": true }, "effects": [{ "op": "discoverClues", "amount": 1, "at": "anyLocation" }] }
+  ] },
+  "02237": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "enemyPhaseEnds", "effects": [{ "op": "script", "fn": "uauRampage" }] }
+  ] },
+  "02238": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "enemyPhaseEnds", "effects": [{ "op": "script", "fn": "uauRampage" }] }
+  ] },
+  "02239": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "enemyPhaseEnds", "effects": [{ "op": "script", "fn": "uauRampage" }] }
+  ] },
+  "02240": { "actSpendAt": "Whateley Ruins", "script": true },
+  "02241": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "resolution", "id": "R2" }] }
+  ] },
+  "02242": { "script": true, "abilities": [
+    { "kind": "action", "designator": "resign", "label": "Dunwich Village: resign", "effects": [{ "op": "resign" }] },
+    { "kind": "fast", "label": "Dunwich Village: place 1 of your clues on an Abomination in play", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "script": "uauLureAnywhere" }, "effects": [{ "op": "script", "fn": "uauLure", "args": { "from": "you", "max": 1, "anywhere": true } }] }
+  ] },
+  "02243": { "script": true, "abilities": [
+    { "kind": "action", "designator": "resign", "label": "Dunwich Village: resign", "effects": [{ "op": "resign" }] },
+    { "kind": "action", "label": "Dunwich Village: move a Brood of Yog-Sothoth once toward Dunwich Village", "condition": { "enemyInPlay": { "code": "02255" } }, "effects": [{ "op": "script", "fn": "uauPullBrood" }] }
+  ] },
+  "02244": { "script": true, "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "evade", "value": -1, "scope": "enemiesAtLocation" }] },
+    { "kind": "fast", "label": "Cold Spring Glen: place up to 2 clues, as a group, on an Abomination here", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "script": "uauLureOurs" }, "effects": [{ "op": "script", "fn": "uauLure", "args": { "from": "group", "max": 2 } }] }
+  ] },
+  "02245": { "script": true, "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "evade", "value": -1, "scope": "enemiesAtLocation" }] }
+  ] },
+  "02246": { "script": true, "abilities": [
+    { "kind": "fast", "label": "Ten-Acre Meadow: place 1 clue from the token bank on an Abomination here", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "enemyAtYourLocation": { "trait": "Abomination" } }, "effects": [{ "op": "script", "fn": "uauLure", "args": { "from": "bank", "max": 1, "rain": true } }] },
+    { "kind": "forced", "trigger": "roundEnds", "effects": [{ "op": "script", "fn": "uauRainEnds" }] }
+  ] },
+  "02247": { "script": true, "abilities": [
+    { "kind": "fast", "label": "Ten-Acre Meadow: each investigator here may place 1 clue on an Abomination here", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "script": "uauLureOurs" }, "effects": [{ "op": "script", "fn": "uauLure", "args": { "from": "each", "max": 4 } }] }
+  ] },
+  "02248": { "script": true, "abilities": [
+    { "kind": "fast", "label": "Blasted Heath: place up to 2 clues, as a group, on an Abomination here", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "script": "uauLureOurs" }, "effects": [{ "op": "script", "fn": "uauLure", "args": { "from": "group", "max": 2 } }] }
+  ] },
+  "02249": { "abilities": [
+    { "kind": "forced", "trigger": "turnEnds", "condition": { "eventAtThisLocation": true }, "effects": [{ "op": "takeDamage", "amount": 1 }] }
+  ] },
+  "02250": { "script": true, "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "willpower", "value": -1, "scope": "investigatorsAtLocation" }] },
+    { "kind": "fast", "label": "Whateley Ruins: place up to 3 of your clues on an Abomination here", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "script": "uauLureMine" }, "effects": [{ "op": "script", "fn": "uauLure", "args": { "from": "you", "max": 3 } }] }
+  ] },
+  "02251": { "script": true, "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "willpower", "value": -1, "scope": "investigatorsAtLocation" }] },
+    { "kind": "action", "label": "Whateley Ruins: test intellect (4) to move a Brood of Yog-Sothoth 1 location", "effects": [{ "op": "skillTest", "skill": "intellect", "difficulty": 4, "onSuccess": [{ "op": "script", "fn": "uauShoveBrood" }] }] }
+  ] },
+  "02252": { "script": true, "abilities": [
+    { "kind": "fast", "label": "Devil's Hop Yard: place up to 2 of your clues on an Abomination here", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "script": "uauLureMine" }, "effects": [{ "op": "script", "fn": "uauLure", "args": { "from": "you", "max": 2 } }] }
+  ] },
+  "02253": { "script": true, "abilities": [
+    { "kind": "fast", "label": "Devil's Hop Yard: each investigator here may place 1 clue on an Abomination here", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "script": "uauLureOurs" }, "effects": [{ "op": "script", "fn": "uauLure", "args": { "from": "each", "max": 4 } }] }
+  ] },
+  "02254": { "abilities": [
+    { "kind": "action", "designator": "fight", "label": "Esoteric Formula: fight with willpower, +2 per clue on the Abomination", "condition": { "enemyAtYourLocation": { "trait": "Abomination" } }, "effects": [{ "op": "fight", "skill": "willpower", "bonus": { "cluesOnEnemy": 2 }, "filter": { "trait": "Abomination" } }] }
+  ] },
+  "02255": { "onlyAttackableBy": "02254", "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "enemyHealth", "value": 1, "perInvestigator": true, "scope": "self" }] }
+  ] },
+  "02256": { "script": true },
+  "02257": { "script": true },
+  "02258": { "script": true },
+  "02259": { "script": true },
+  "02275": { "script": true },
+  "02276": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "resolution", "id": "R2" }] }
+  ] },
+  "02277": { "script": true },
+  "02278": { "script": true },
+  "02279": { "script": true },
+  "02280": { "script": true },
+  "02281": { "actSpendAt": "Sentinel Peak", "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "resolution", "id": "R1" }] }
+  ] },
+  "02282": { "script": true, "abilities": [
+    { "kind": "action", "designator": "investigate", "label": "Base of the Hill: investigate; if you succeed, put a random set-aside Diverging Path into play instead of discovering clues", "limit": { "per": "round", "count": 1, "group": true }, "effects": [{ "op": "investigate", "insteadOfClues": [{ "op": "script", "fn": "wdaPutPath", "args": { "codes": ["02285", "02286", "02287", "02288"] } }] }] },
+    { "kind": "action", "designator": "resign", "label": "Base of the Hill: resign", "effects": [{ "op": "resign" }] }
+  ] },
+  "02283": { "script": true, "abilities": [
+    { "kind": "action", "designator": "investigate", "label": "Ascending Path: investigate; if you succeed, put a random set-aside Altered Path into play instead of discovering clues", "limit": { "per": "round", "count": 1, "group": true }, "effects": [{ "op": "investigate", "insteadOfClues": [{ "op": "script", "fn": "wdaPutPath", "args": { "codes": ["02289", "02290", "02291", "02292"] } }] }] }
+  ] },
+  "02284": { "enterCluesPerInvestigator": 2, "abilities": [
+    { "kind": "forced", "trigger": "treacheryDrawn", "condition": { "all": [{ "eventAtThisLocation": true }, { "eventCard": { "trait": "Hex" } }] }, "effects": [{ "op": "takeDamage", "amount": 1, "target": "eventInvestigator" }] }
+  ] },
+  "02285": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "script", "fn": "wdaRelink" }, { "op": "takeHorror", "amount": { "base": 0, "plus": 2, "if": { "actionsLeft": { "max": 0 } } } }] }
+  ] },
+  "02286": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "script", "fn": "wdaRelink" }, { "op": "discardDeckTop", "amount": { "actionsLeft": 2 } }] }
+  ] },
+  "02287": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "script", "fn": "wdaRelink" }, { "op": "placeDoom", "amount": { "perInvestigator": 1 }, "on": "self" }] },
+    { "kind": "action", "designator": "investigate", "label": "Destroyed Path: investigate; if you succeed, remove 1 doom from it instead of discovering clues", "effects": [{ "op": "investigate", "insteadOfClues": [{ "op": "removeDoom", "amount": 1, "on": "self" }] }] }
+  ] },
+  "02288": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "script", "fn": "wdaRelink" }, { "op": "loseActions", "amount": "all" }, { "op": "endTurn" }] }
+  ] },
+  "02289": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "script", "fn": "wdaRelink" }, { "op": "discardEncounterUntil", "filter": { "type": "enemy" }, "then": "spawnAt", "at": "02289" }] }
+  ] },
+  "02290": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "script", "fn": "wdaRelink" }, { "op": "takeDamage", "amount": { "base": 0, "plus": 2, "if": { "actionsLeft": { "max": 0 } } } }] }
+  ] },
+  "02291": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "script", "fn": "wdaRelink" }, { "op": "discardDeckTop", "amount": { "base": 0, "plus": 5, "if": { "actionsLeft": { "max": 0 } } } }] }
+  ] },
+  "02292": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "script", "fn": "wdaRelink" }, { "op": "takeHorror", "amount": { "actionsLeft": 1 } }] }
+  ] },
+  "02294": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "enemyPhaseEnds", "effects": [{ "op": "script", "fn": "towardPeak" }] }
+  ] },
+  "02295": { "spawn": { "trait": "Altered", "nearest": true }, "killsOnDefeat": true },
+  "02296": { "script": true, "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "discardDeckTop", "amount": 3, "target": "each" }, { "op": "script", "fn": "weaknessesBack" }] }
+  ] },
+  "02297": { "script": true },
+  "02298": { "script": true },
+  "02312": { "script": true },
+  "02313": { "script": true },
+  "02314": { "script": true },
+  "02315": { "script": true },
+  "02316": { "script": true, "abilities": [
+    { "kind": "action", "label": "Out of this World: discard the top 3 encounter cards; a location among them resolves its revelation", "effects": [{ "op": "script", "fn": "litasExplore" }] }
+  ] },
+  "02317": { "script": true, "abilities": [
+    { "kind": "action", "label": "Into the Beyond: discard the top 3 encounter cards; a location among them resolves its revelation", "effects": [{ "op": "script", "fn": "litasExplore" }] }
+  ] },
+  "02318": { "script": true, "actSpendAt": "The Edge of the Universe", "abilities": [
+    { "kind": "action", "label": "Close the Rift: discard the top 3 encounter cards; a location among them resolves its revelation", "effects": [{ "op": "script", "fn": "litasExplore" }] }
+  ] },
+  "02319": { "script": true, "abilities": [
+    { "kind": "action", "label": "Finding a New Way: discard the top 3 encounter cards; a location among them resolves its revelation", "effects": [{ "op": "script", "fn": "litasExplore" }] },
+    { "kind": "revelation", "effects": [{ "op": "resolution", "id": "R1" }] }
+  ] },
+  "02320": { "script": true },
+  "02321": { "moveInClues": 2, "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "noUpkeepDraw", "scope": "investigatorsAtLocation" }] }
+  ] },
+  "02322": { "abilities": [
+    { "kind": "action", "designator": "resign", "label": "Tear Through Time: spend 2 clues to resign", "cost": { "clues": 2 }, "effects": [{ "op": "resign" }] }
+  ] },
+  "02323": { "script": true, "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "enemyHealth", "value": 6, "perInvestigator": true, "scope": "self" }, { "flag": "noAttacksOfOpportunity", "scope": "self" }] }
+  ] },
+  "02324": { "script": true, "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "script", "fn": "litasEnter" }] },
+    { "kind": "forced", "trigger": "roundEnds", "effects": [{ "op": "chooseOne", "chooser": "lead", "options": [{ "label": "Place 1 doom on Tear Through Space", "effects": [{ "op": "placeDoom", "amount": 1, "on": "self" }] }, { "label": "Discard Tear Through Space", "effects": [{ "op": "removeLocation", "location": "self" }] }] }] }
+  ] },
+  "02325": { "script": true, "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "script", "fn": "litasEnter" }, { "op": "discardFromHand", "amount": 1, "random": true }] },
+    { "kind": "forced", "trigger": "cluesDiscovered", "condition": { "not": { "selfHasClues": true } }, "effects": [{ "op": "removeLocation", "location": "self" }] }
+  ] },
+  "02326": { "script": true, "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "script", "fn": "litasEnter" }, { "op": "loseResources", "amount": 2 }] },
+    { "kind": "forced", "trigger": "leftLocation", "effects": [{ "op": "chooseOne", "options": [{ "label": "Place 1 doom on Endless Bridge", "effects": [{ "op": "placeDoom", "amount": 1, "on": "self" }] }, { "label": "Discard Endless Bridge", "effects": [{ "op": "removeLocation", "location": "self" }] }] }] }
+  ] },
+  "02327": { "script": true, "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "script", "fn": "litasEnter" }, { "op": "script", "fn": "stepsMadness" }] },
+    { "kind": "forced", "trigger": "wouldMoveOut", "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": 2, "onFail": [{ "op": "cancel" }, { "op": "script", "fn": "litasShuffleBack" }] }] }
+  ] },
+  "02328": { "script": true, "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "script", "fn": "litasEnter" }, { "op": "script", "fn": "doorwayHex" }] },
+    { "kind": "forced", "trigger": "turnEnds", "condition": { "eventAtThisLocation": true }, "effects": [{ "op": "chooseOne", "options": [{ "label": "Spend 2 resources", "condition": { "resources": { "min": 2 } }, "effects": [{ "op": "payCost", "cost": { "resources": 2 } }] }, { "label": "Shuffle Dimensional Doorway into the encounter deck", "effects": [{ "op": "script", "fn": "litasShuffleBack" }] }] }] }
+  ] },
+  "02329": { "script": true, "spawn": { "trait": "Extradimensional" }, "abilities": [
+    { "kind": "forced", "trigger": "enemyEntersLocation", "effects": [{ "op": "script", "fn": "travelerFeeds" }] }
+  ] },
+  "02330": { "script": true, "abilities": [
+    { "kind": "forced", "trigger": "enemyAttacks", "effects": [{ "op": "script", "fn": "starseekerDoom" }] }
+  ] },
+  "02331": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "chooseOne", "options": [{ "label": "Discard your Extradimensional location and take 1 damage", "condition": { "yourLocationIs": { "trait": "Extradimensional" } }, "effects": [{ "op": "removeLocation", "location": "yourLocation" }, { "op": "takeDamage", "amount": 1 }] }, { "label": "Take 2 damage", "condition": { "not": { "yourLocationIs": { "trait": "Extradimensional" } } }, "effects": [{ "op": "takeDamage", "amount": 2 }] }] }] }
+  ] },
+  "02332": { "script": true },
+  "02333": { "script": true }
 }

@@ -84,6 +84,7 @@ describe("the script registry", () => {
         "fns",
         "hooks",
         "icons",
+        "ignores",
         "modifiers",
         "wouldPlaceDoom",
       ].sort(),

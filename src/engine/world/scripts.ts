@@ -52,6 +52,7 @@ const MEMBERS: Record<keyof CardScript, true> = {
   wouldPlaceDoom: true,
   hooks: true,
   cancelsSearch: true,
+  ignores: true,
 };
 /** every member a script may have (a new one fails the typecheck until it is listed) */
 export const SCRIPT_MEMBERS = Object.keys(MEMBERS) as (keyof CardScript)[];

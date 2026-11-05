@@ -9,8 +9,9 @@ import {
   putCardIn,
 } from "./world/store";
 import type { CardInst, GameContext, InstId, InvId, PileName, Zone } from "./world/types";
-import { card, clearTokens, def, emit, invName, nextId, shuffleDeck } from "./context";
+import { card, clearTokens, def, emit, inv, invName, nextId, push, shuffleDeck } from "./context";
 import { EVENT } from "./events/event";
+import { STEP } from "./steps/step";
 import { ZONE, PILE } from "./world/constants";
 
 /** Creating cards and moving them between zones and piles (ADR-0023, ADR-0025). */
@@ -105,17 +106,31 @@ export const isInPlay = (c: CardInst) => IN_PLAY.includes(c.zone);
 export function moveCard(
   game: GameContext,
   id: InstId,
-  zone: Zone,
+  dest: Zone,
   opts: {
     inv?: InvId | null;
     top?: boolean;
     location?: InstId | null;
+    /** the act or agenda deck, or the side deck, it goes into */
     deck?: string;
-    /** the same card changing place, not leaving play: its tokens and attachments stay (a flip, the void) */
+    /** the same card changing place, not leaving play: its tokens and attachments stay (a flip) */
     keep?: boolean;
   } = {},
 ) {
   const c = cardRec(game, id);
+  // "Forced - When this leaves play": it goes where its card says (the void, out of the game), and what follows is queued
+  const leaves = def(game, id).leavesPlay;
+  const redirected =
+    !!leaves && isInPlay(c) && !IN_PLAY.includes(dest) && dest !== ZONE.Limbo && !opts.keep;
+  // for its controller while they play on; one leaving with an eliminated investigator resolves still (the lead's)
+  const you = c.controller && inv(game, c.controller).status === "playing" ? c.controller : null;
+  if (redirected && leaves.effects)
+    push(game, {
+      t: STEP.Effects,
+      effects: leaves.effects,
+      ctx: { source: id, ...(you ? { you } : {}) },
+    });
+  const zone = (redirected && leaves.to) || dest;
   const kind =
     zone === "act" || zone === "actDeck"
       ? "act"
@@ -123,8 +138,7 @@ export function moveCard(
         ? "agenda"
         : null;
   const deck = kind ? (opts.deck ?? deckOf(game, id, kind)) : "a";
-  // to the void a card keeps its attachments and tokens (the Hunting Horror)
-  const leavingPlay = isInPlay(c) && !IN_PLAY.includes(zone) && !opts.keep && zone !== ZONE.Void;
+  const leavingPlay = isInPlay(c) && !IN_PLAY.includes(zone) && !opts.keep;
   removeFromPile(game, id);
   // what lies beneath it is discarded when it goes for good (not while it resolves, nor to the void)
   if (
@@ -147,11 +161,12 @@ export function moveCard(
         { inv: card(game, under).owner },
       );
   if (leavingPlay) {
-    // discard attachments
+    // discard attachments; to the void a card keeps them (Shadow-spawned stays on the Hunting Horror), its tokens go
     for (const other of allCardRecs(game)) {
       if (
-        other.attachedTo === id ||
-        (other.zone === "attached" && other.location === id && c.zone === "location")
+        zone !== ZONE.Void &&
+        (other.attachedTo === id ||
+          (other.zone === "attached" && other.location === id && c.zone === "location"))
       ) {
         moveCard(game, other.id, other.owner ? ZONE.Discard : ZONE.EncounterDiscard, {
           inv: other.owner,
@@ -210,6 +225,10 @@ export function moveCard(
     case "agendaDeck":
       at(pileRec(game, deckPile(kind!, deck)));
       break;
+    case "sideDeck":
+      if (!opts.deck) throw new Error(`card ${id} put in no side deck`);
+      at(pileRec(game, `sideDeck:${opts.deck}`));
+      break;
     case "beneath":
       if (!opts.location) throw new Error(`card ${id} put beneath no card`);
       at(pileRec(game, `beneath:${opts.location}`));
@@ -252,6 +271,22 @@ export function reshuffleDiscard(game: GameContext, owner: InvId | "encounter") 
   for (const id of p.discard.slice())
     moveCard(game, id, p.zone, owner === "encounter" ? {} : { inv: owner });
   shuffleDeck(game, owner);
+}
+
+/** the top `n` cards of an investigator's deck (or the encounter deck) to its discard pile, as many as it holds; returns them */
+export function discardTop(game: GameContext, owner: InvId | "encounter", n: number): InstId[] {
+  const p = pilesOf(game, owner);
+  const ids = p.deck.slice(0, Math.max(0, n));
+  for (const id of ids) {
+    moveCard(game, id, owner === "encounter" ? ZONE.EncounterDiscard : ZONE.Discard, {
+      inv: owner === "encounter" ? null : owner,
+    });
+    emit(game, EVENT.Discard, `${def(game, id).name} is discarded`, {
+      card: id,
+      ...(owner === "encounter" ? {} : { inv: owner }),
+    });
+  }
+  return ids;
 }
 
 /** put cards on top of an investigator's deck from wherever they are, `ids[0]` ending on top */

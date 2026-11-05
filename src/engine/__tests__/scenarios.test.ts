@@ -256,32 +256,33 @@ describe("The Devourer Below", () => {
 });
 
 describe("a generated scenario ends at its last act or agenda", () => {
+  // The Dunwich Legacy is hand-written now: Echoes of the Past is still generated, its last act and agenda unscripted
   beforeAll(async () => {
-    await loadPack("dwl");
-    await loadCampaign("the-dunwich-legacy");
+    await loadPack("ptc");
+    await loadCampaign("the-path-to-carcosa");
   });
   const dunwich = (seed = 3) =>
     skipMulligans(
-      start("extracurricular-activity", [ROLAND], seed, {
-        campaignId: "the-dunwich-legacy",
+      start("echoes-of-the-past", [ROLAND], seed, {
+        campaignId: "the-path-to-carcosa",
         chaosBag: ["+1"] as never,
       }),
     );
 
-  it("advancing the act when no act is left ends the scenario: After Hours, made the last, names none and gives Resolution 1", () => {
+  it("advancing the act when no act is left ends the scenario: Race for Answers, made the last, names none and gives Resolution 1", () => {
     let r = dunwich();
     r = mutate(r, (game) => {
       for (const id of pileRecIn(game.s, PILE.ActDeck).splice(0)) moveCard(game, id, ZONE.Removed);
       invStateIn(game.s, game.s.lead).clues = 20;
     });
-    expect(act(r)).toBe("After Hours");
+    expect(act(r)).toBe("Race for Answers");
     r = pick(r, /^Advance act/);
     r = settle(r);
     expect(r.state.phase).toBe("ended");
     expect(r.state.resolution).toBe("R1");
   });
 
-  it("the last agenda's back names the resolution: The Beast Unleashed gives Resolution 4", () => {
+  it("the last agenda's back names the resolution: Secrets Better Left Hidden gives Resolution 4", () => {
     let r = dunwich();
     r = mutate(r, (game) => {
       const last = pileRecIn(game.s, PILE.AgendaDeck).pop()!;

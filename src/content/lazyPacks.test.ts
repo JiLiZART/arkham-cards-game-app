@@ -77,22 +77,26 @@ describe("packs in the content database", () => {
   });
 
   it("the browser's content has no errors although the generated campaigns' scenarios and cards are not loaded yet", () => {
-    expect(content.campaigns["the-dunwich-legacy"]).toMatchObject({
+    expect(content.campaigns["the-path-to-carcosa"]).toMatchObject({
       generated: true,
-      packs: ["core", "dwl"],
-      card: "02041",
+      packs: ["core", "ptc"],
+      card: "03043",
     });
-    expect(content.scenarios["extracurricular-activity"]).toBeUndefined();
-    expect(campaignLoaded("the-dunwich-legacy")).toBe(false);
+    expect(content.scenarios["curtain-call"]).toBeUndefined();
+    expect(campaignLoaded("the-path-to-carcosa")).toBe(false);
     expect(campaignLoaded("night-of-the-zealot")).toBe(true);
+    // a once-generated campaign written by hand now: its scenarios and text are there at once
+    expect(campaignLoaded("the-dunwich-legacy")).toBe(true);
+    expect(content.scenarios["extracurricular-activity"].card).toBe("02041");
+    expect(content.i18n.ru.campaigns.scenarios["extracurricular-activity"].name).toMatch(/[а-я]/i);
     expect(contentErrors).toEqual([]);
   });
 
   it("loadCampaign brings a generated campaign's scenarios and Russian text in", async () => {
-    expect(await loadCampaign("the-dunwich-legacy")).toEqual([]);
-    expect(campaignLoaded("the-dunwich-legacy")).toBe(true);
-    expect(content.scenarios["extracurricular-activity"].card).toBe("02041");
-    expect(content.i18n.ru.campaigns.scenarios["extracurricular-activity"].name).toMatch(/[а-я]/i);
+    expect(await loadCampaign("the-path-to-carcosa")).toEqual([]);
+    expect(campaignLoaded("the-path-to-carcosa")).toBe(true);
+    expect(content.scenarios["curtain-call"].card).toBe("03043");
+    expect(content.i18n.ru.campaigns.scenarios["curtain-call"].name).toMatch(/[а-я]/i);
     await expect(loadCampaign("nowhere")).rejects.toThrow(/unknown campaign nowhere/);
   });
 

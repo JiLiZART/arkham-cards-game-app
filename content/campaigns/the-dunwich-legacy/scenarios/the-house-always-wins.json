@@ -15,7 +15,22 @@
   "acts": [
     "02066",
     "02067",
-    "02068"
+    {
+      "oneOf": [
+        "02069",
+        "02068"
+      ],
+      "when": {
+        "any": [
+          {
+            "logHas": "warrenRiceKidnapped"
+          },
+          {
+            "logHas": "warrenRiceRescued"
+          }
+        ]
+      }
+    }
   ],
   "agendas": [
     "02063",
@@ -27,17 +42,27 @@
     {
       "do": "putIntoPlay",
       "codes": [
-        "02073",
-        "02070",
         "02071",
-        "02072"
+        "02072",
+        "02073",
+        "02070"
       ]
+    },
+    {
+      "do": "spawn",
+      "code": "02078",
+      "at": "02071"
     },
     {
       "do": "setAside",
       "codes": [
-        "02074",
-        "02079"
+        "02079",
+        "02080",
+        "02103",
+        "02104",
+        "01163",
+        "01164",
+        "01165"
       ]
     },
     {
@@ -48,58 +73,120 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -2
+        "modifier": -2,
+        "payToZero": 2
       },
       "cultist": {
-        "modifier": -3
+        "modifier": -3,
+        "onSuccess": [
+          {
+            "op": "gainResources",
+            "amount": 3
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "loseResources",
+            "amount": 3
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -2
+        "modifier": -2,
+        "payToZero": 2
       },
       "cultist": {
-        "modifier": -3
+        "modifier": -3,
+        "onSuccess": [
+          {
+            "op": "gainResources",
+            "amount": 3
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "loseResources",
+            "amount": 3
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -3
+        "modifier": -3,
+        "payToZero": 3
       },
       "cultist": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "loseResources",
+            "amount": 3
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "onReveal": [
+          {
+            "op": "loseResources",
+            "amount": 3
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -3
+        "modifier": -3,
+        "payToZero": 3
       },
       "cultist": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "loseResources",
+            "amount": 3
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "onReveal": [
+          {
+            "op": "loseResources",
+            "amount": 3
+          }
+        ]
       }
     }
   },
   "resolutions": {
     "none": {
       "title": "No resolution was reached",
-      "text": "You barely made it out of the club alive.",
+      "text": "You barely made it out of the club alive. Go to Resolution 1.",
       "effects": [
+        {
+          "do": "record",
+          "key": "boneToPick",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "francisMorganKidnapped",
+          "value": true
+        },
         {
           "do": "xp",
           "victory": true,
-          "bonus": 0,
+          "bonus": 1,
           "who": "each"
         }
       ]
@@ -212,43 +299,71 @@
   "i18nId": "the_house_always_wins",
   "connections": [
     [
-      "02074",
-      "02073"
-    ],
-    [
-      "02074",
-      "02070"
-    ],
-    [
-      "02074",
+      "02070",
       "02071"
     ],
     [
-      "02074",
+      "02071",
       "02072"
+    ],
+    [
+      "02071",
+      "02073"
+    ],
+    [
+      "02072",
+      "02073"
+    ],
+    [
+      "02073",
+      "02074"
+    ],
+    [
+      "02074",
+      "02075"
+    ],
+    [
+      "02074",
+      "02076"
+    ],
+    [
+      "02074",
+      "02077"
     ]
   ],
   "oneWay": [],
   "layout": {
-    "02073": [
-      3,
-      0
-    ],
     "02070": [
       0,
       1
     ],
     "02071": [
-      2,
+      1,
       1
     ],
     "02072": [
+      2,
+      0
+    ],
+    "02073": [
+      2,
+      2
+    ],
+    "02074": [
+      3,
+      2
+    ],
+    "02075": [
       4,
       1
     ],
-    "02074": [
-      0,
+    "02076": [
+      4,
       2
+    ],
+    "02077": [
+      4,
+      3
     ]
   }
 }

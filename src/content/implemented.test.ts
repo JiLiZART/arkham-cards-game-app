@@ -152,6 +152,13 @@ describe("a scenario reference card works when its token lines are real", () => 
     ).toBe(true);
   });
 
+  it("a conditional line is covered only by an X the engine computes, not by any declared X", () => {
+    const unknownX = { ...easyStd, skull: { modifier: "X", x: "notAnEngineValue" } };
+    const tokens = { easy: unknownX, standard: unknownX, hard: hardExp, expert: hardExp };
+    expect(tokensReal(scenario(FRONT, BACK, tokens), "s")).toBe(false);
+    expect(tokensReal(scenario(FRONT, BACK, all), "s")).toBe(true);
+  });
+
   it("only Easy and Standard written: the back's lines are not covered", () => {
     expect(implemented(scenario(FRONT, BACK, { easy: easyStd, standard: easyStd }), "r")).toBe(
       false,
@@ -247,7 +254,35 @@ describe("on the real content", () => {
   });
 
   it("a generated scenario's tokens are placeholders", () => {
-    expect(tokensReal(real, "extracurricular-activity")).toBe(false);
+    expect(tokensReal(real, "curtain-call")).toBe(false);
+  });
+
+  it("over every scenario: Night of the Zealot's and The Dunwich Legacy's tokens are real, the generated placeholders are not", () => {
+    const hand = (id: string) => real.campaigns[id].scenarios;
+    for (const id of [...hand("night-of-the-zealot"), ...hand("the-dunwich-legacy")])
+      expect(tokensReal(real, id), id).toBe(true);
+    // a generated scenario plays with the hand-written token tables only on a hand-written scenario's card (Return to)
+    const handCards = new Set(
+      Object.values(real.campaigns)
+        .filter((c) => !c.generated)
+        .flatMap((c) => c.scenarios.map((id) => real.scenarios[id].card)),
+    );
+    const generated = Object.values(real.campaigns)
+      .filter((c) => c.generated)
+      .flatMap((c) => c.scenarios)
+      .filter((id) => real.scenarios[id] && !handCards.has(real.scenarios[id].card));
+    expect(generated.length).toBeGreaterThan(100);
+    for (const id of generated) expect(tokensReal(real, id), id).toBe(false);
+  });
+
+  it("Crazed Shoggoth works by its data: a spawn expression and killsOnDefeat; without killsOnDefeat its Forced line is not covered", () => {
+    expect(implemented(real, "02295")).toBe(true);
+    const bare = { ...real.cards["02295"], killsOnDefeat: undefined };
+    expect(implemented({ ...real, cards: { ...real.cards, "02295": bare } }, "02295")).toBe(false);
+  });
+
+  it("Where Doom Awaits' tokens are real: the tablet's automatic failure instead and the cultist's cancelled skill cards", () => {
+    expect(tokensReal(real, "where-doom-awaits")).toBe(true);
   });
 
   it("a card with a Forced line and no behaviour does not work", () => {

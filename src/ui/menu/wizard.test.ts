@@ -245,7 +245,7 @@ describe("filtering the campaign list", () => {
       filterCampaigns(db, "en", DEFAULT_CAMPAIGN_FILTER)
         .map((c) => c.id)
         .sort(),
-    ).toEqual(["brethren-of-ash", "night-of-the-zealot"]);
+    ).toEqual(["brethren-of-ash", "night-of-the-zealot", "the-dunwich-legacy"]);
   });
 
   it("by kind: campaigns, Return-to boxes, side scenarios", () => {
@@ -269,18 +269,23 @@ describe("filtering the campaign list", () => {
     expect(ids({ rules: "complete" }).length + ids({ rules: "partial" }).length).toBe(ids().length);
   });
 
-  it("Night of the Zealot and Brethren of Ash are the campaigns the Complete filter shows", () => {
-    expect(ids({ rules: "complete" }).sort()).toEqual(["brethren-of-ash", "night-of-the-zealot"]);
+  it("Night of the Zealot, Brethren of Ash and The Dunwich Legacy are the campaigns the Complete filter shows", () => {
+    expect(ids({ rules: "complete" }).sort()).toEqual([
+      "brethren-of-ash",
+      "night-of-the-zealot",
+      "the-dunwich-legacy",
+    ]);
     expect(campaignComplete(db, "night-of-the-zealot")).toBe(true);
   });
 
-  it("the mark follows the numbers: Night of the Zealot until its cards all work, Dunwich is partial", () => {
+  it("the mark follows the numbers: Night of the Zealot until its cards all work, Dunwich complete, Carcosa partial", () => {
     const zealot = db.coverage!.campaigns["night-of-the-zealot"];
     expect(campaignComplete(db, "night-of-the-zealot")).toBe(
       zealot.cards.works === zealot.cards.total && !zealot.unscripted.length,
     );
-    expect(campaignComplete(db, "the-dunwich-legacy")).toBe(false);
-    expect(ids({ rules: "partial" })).toContain("the-dunwich-legacy");
+    expect(campaignComplete(db, "the-dunwich-legacy")).toBe(true);
+    expect(campaignComplete(db, "the-path-to-carcosa")).toBe(false);
+    expect(ids({ rules: "partial" })).toContain("the-path-to-carcosa");
   });
 
   it("says how far a campaign is: the cards that work, and the scenarios without a script", () => {
@@ -288,7 +293,7 @@ describe("filtering the campaign list", () => {
     expect(campaignProgress(db, "the-dunwich-legacy")).toEqual({
       works: dunwich.cards.works,
       total: dunwich.cards.total,
-      unscripted: 8,
+      unscripted: 0,
     });
     expect(campaignProgress(db, "night-of-the-zealot")?.unscripted).toBe(0);
     expect(campaignProgress({ ...db, coverage: undefined }, "the-dunwich-legacy")).toBeUndefined();
@@ -359,7 +364,7 @@ describe("filtering the campaign list", () => {
     expect(ids({ kind: "side", rules: "complete" }).every((id) => id.startsWith("side-"))).toBe(
       true,
     );
-    expect(ids({ kind: "campaign", rules: "partial" })).toContain("the-dunwich-legacy");
+    expect(ids({ kind: "campaign", rules: "partial" })).toContain("the-path-to-carcosa");
   });
 });
 

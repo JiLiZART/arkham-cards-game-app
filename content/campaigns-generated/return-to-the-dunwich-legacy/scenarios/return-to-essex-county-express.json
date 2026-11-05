@@ -47,58 +47,154 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "agendaStage"
       },
       "cultist": {
-        "modifier": -1
+        "modifier": -1,
+        "onFail": [
+          {
+            "op": "loseActions",
+            "amount": "all"
+          },
+          {
+            "op": "endTurn"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "onReveal": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "nearestCultist"
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "discardFromHand",
+            "amount": 1
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "agendaStage"
       },
       "cultist": {
-        "modifier": -1
+        "modifier": -1,
+        "onFail": [
+          {
+            "op": "loseActions",
+            "amount": "all"
+          },
+          {
+            "op": "endTurn"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "onReveal": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "nearestCultist"
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "discardFromHand",
+            "amount": 1
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "agendaStage",
+        "xPlus": 1
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "loseActions",
+            "amount": "all"
+          },
+          {
+            "op": "endTurn"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -4
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "eachCultist"
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "discardFromHand",
+            "amount": "failBy"
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -2
+        "modifier": "X",
+        "x": "agendaStage",
+        "xPlus": 1
       },
       "cultist": {
-        "modifier": -2
+        "modifier": 0,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "loseActions",
+            "amount": "all"
+          },
+          {
+            "op": "endTurn"
+          }
+        ]
       },
       "tablet": {
-        "modifier": -4
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "eachCultist"
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "discardFromHand",
+            "amount": "failBy"
+          }
+        ]
       }
     }
   },

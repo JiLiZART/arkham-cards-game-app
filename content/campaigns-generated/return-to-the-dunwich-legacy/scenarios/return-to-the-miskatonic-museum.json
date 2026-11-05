@@ -63,58 +63,196 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -1
+        "modifier": -1,
+        "instead": {
+          "when": {
+            "enemyAtYourLocation": {
+              "code": "02141"
+            }
+          },
+          "modifier": -3
+        }
       },
       "cultist": {
-        "modifier": -1
+        "modifier": -1,
+        "onFail": [
+          {
+            "op": "searchEncounterDraw",
+            "filter": {
+              "code": "02141"
+            },
+            "zones": [
+              "deck",
+              "discard",
+              "void"
+            ]
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "onReveal": [
+          {
+            "op": "dropClues",
+            "amount": 1
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "discardAsset"
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -1
+        "modifier": -1,
+        "instead": {
+          "when": {
+            "enemyAtYourLocation": {
+              "code": "02141"
+            }
+          },
+          "modifier": -3
+        }
       },
       "cultist": {
-        "modifier": -1
+        "modifier": -1,
+        "onFail": [
+          {
+            "op": "searchEncounterDraw",
+            "filter": {
+              "code": "02141"
+            },
+            "zones": [
+              "deck",
+              "discard",
+              "void"
+            ]
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "onReveal": [
+          {
+            "op": "dropClues",
+            "amount": 1
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "discardAsset"
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -2
+        "modifier": -2,
+        "instead": {
+          "when": {
+            "enemyAtYourLocation": {
+              "code": "02141"
+            }
+          },
+          "modifier": -4
+        }
       },
       "cultist": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "searchEncounterDraw",
+            "filter": {
+              "code": "02141"
+            },
+            "zones": [
+              "deck",
+              "discard",
+              "void"
+            ]
+          }
+        ]
       },
       "tablet": {
-        "modifier": -4
+        "modifier": -4,
+        "condition": {
+          "enemyAtYourLocation": {
+            "code": "02141"
+          }
+        },
+        "onReveal": [
+          {
+            "op": "enemyAttack",
+            "named": "02141"
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -5
+        "modifier": -5,
+        "onFail": [
+          {
+            "op": "discardAsset"
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -2
+        "modifier": -2,
+        "instead": {
+          "when": {
+            "enemyAtYourLocation": {
+              "code": "02141"
+            }
+          },
+          "modifier": -4
+        }
       },
       "cultist": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "searchEncounterDraw",
+            "filter": {
+              "code": "02141"
+            },
+            "zones": [
+              "deck",
+              "discard",
+              "void"
+            ]
+          }
+        ]
       },
       "tablet": {
-        "modifier": -4
+        "modifier": -4,
+        "condition": {
+          "enemyAtYourLocation": {
+            "code": "02141"
+          }
+        },
+        "onReveal": [
+          {
+            "op": "enemyAttack",
+            "named": "02141"
+          }
+        ]
       },
       "elderThing": {
-        "modifier": -5
+        "modifier": -5,
+        "onFail": [
+          {
+            "op": "discardAsset"
+          }
+        ]
       }
     }
   },

@@ -56,58 +56,136 @@
   "tokens": {
     "easy": {
       "skull": {
-        "modifier": -1
+        "modifier": "X",
+        "x": "locationsWithoutCardBeneath",
+        "xMax": 4
       },
       "cultist": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "placeTokens",
+            "on": "yourLocation",
+            "clues": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "revealAnother": {
+          "if": {
+            "yourLocationIs": {
+              "code": "02214"
+            }
+          }
+        }
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "agenda"
+          }
+        ]
       }
     },
     "standard": {
       "skull": {
-        "modifier": -1
+        "modifier": "X",
+        "x": "locationsWithoutCardBeneath",
+        "xMax": 4
       },
       "cultist": {
-        "modifier": -2
+        "modifier": -2,
+        "onFail": [
+          {
+            "op": "placeTokens",
+            "on": "yourLocation",
+            "clues": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": -2
+        "modifier": -2,
+        "revealAnother": {
+          "if": {
+            "yourLocationIs": {
+              "code": "02214"
+            }
+          }
+        }
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "agenda"
+          }
+        ]
       }
     },
     "hard": {
       "skull": {
-        "modifier": -1
+        "modifier": "X",
+        "x": "locationsWithoutCardBeneath"
       },
       "cultist": {
-        "modifier": -4
+        "modifier": -4,
+        "onFail": [
+          {
+            "op": "placeTokens",
+            "on": "yourLocation",
+            "clues": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": -3
+        "modifier": -3,
+        "revealAnother": true
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onReveal": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "agenda"
+          }
+        ]
       }
     },
     "expert": {
       "skull": {
-        "modifier": -1
+        "modifier": "X",
+        "x": "locationsWithoutCardBeneath"
       },
       "cultist": {
-        "modifier": -4
+        "modifier": -4,
+        "onFail": [
+          {
+            "op": "placeTokens",
+            "on": "yourLocation",
+            "clues": 1
+          }
+        ]
       },
       "tablet": {
-        "modifier": -3
+        "modifier": -3,
+        "revealAnother": true
       },
       "elderThing": {
-        "modifier": -3
+        "modifier": -3,
+        "onReveal": [
+          {
+            "op": "placeDoom",
+            "amount": 1,
+            "on": "agenda"
+          }
+        ]
       }
     }
   },

@@ -1,5 +1,5 @@
 import type { ContentDb } from "../engine/world/types";
-import { keywordName, type CardDef, type Spawn } from "./schema";
+import { keywordName, TokenEffect, type CardDef, type Spawn } from "./schema";
 import { hasScript } from "../engine/world/scripts";
 
 /** the keywords the engine acts on by themselves (CardDef.keywords) */
@@ -20,7 +20,8 @@ function spawnResolves(db: ContentDb, spawn: Spawn | undefined): boolean {
   if (
     spawn === "emptyLocation" ||
     spawn === "farthestEmptyLocation" ||
-    spawn === "Engaged with Prey"
+    spawn === "Engaged with Prey" ||
+    spawn === "toYourRight"
   )
     return true;
   return Object.values(db.cards).some((c) => c.type === "location" && c.name === spawn);
@@ -30,6 +31,11 @@ function spawnResolves(db: ContentDb, spawn: Spawn | undefined): boolean {
 const LINE_RULES: [RegExp, (c: CardDef, db: ContentDb) => boolean][] = [
   [/^Spawn - /, (c, db) => spawnResolves(db, c.spawn)],
   [/^Prey - /, (c) => !!c.prey],
+  [/ enters play exhausted\.$/, (c) => !!c.entersExhausted],
+  [
+    /would defeat an investigator, that investigator is instead killed\.$/,
+    (c) => !!c.killsOnDefeat,
+  ],
   [/investigated using \[\w+\] instead/i, (c) => !!c.investigateSkill],
   [/^Uses \(/, (c) => !!c.uses],
   [/^Max \d+ committed per skill test/i, (c) => c.maxCommitted !== undefined],
@@ -78,7 +84,15 @@ const SYMBOLS: Record<string, string> = {
 };
 
 /** what a printed token line needs from the scenario's token entry, read off its sentences */
-type TokenNeed = "x" | "instead" | "onFail" | "revealAnother" | "effect";
+type TokenNeed =
+  | "x"
+  | "instead"
+  | "onFail"
+  | "onSuccess"
+  | "payToZero"
+  | "either"
+  | "revealAnother"
+  | "effect";
 function tokenNeeds(rest: string): TokenNeed[] {
   const needs = new Set<TokenNeed>();
   let failing = false; // the sentences after "If you fail, …" that don't start a new condition go on being the failure effect
@@ -92,7 +106,14 @@ function tokenNeeds(rest: string): TokenNeed[] {
     else if (/^-\d+ \(-\d+ instead/.test(sentence) || /^-\d+ instead if/.test(sentence))
       needs.add("instead");
     else if (sentence.startsWith("X is ")) continue;
-    else if (/^If you fail/i.test(sentence)) {
+    else if (/^You may spend \d+ resources to treat this token as a 0/i.test(sentence))
+      needs.add("payToZero");
+    // "You must either …, or this token's modifier is −4 instead / this test automatically fails"
+    else if (/^You must either /i.test(sentence)) needs.add("either");
+    else if (/^If you succeed/i.test(sentence)) {
+      needs.add("onSuccess");
+      failing = false;
+    } else if (/^If you fail/i.test(sentence)) {
       needs.add("onFail");
       failing = true;
     } else if (
@@ -106,6 +127,11 @@ function tokenNeeds(rest: string): TokenNeed[] {
   }
   return [...needs];
 }
+
+/** the X values the engine computes (`tokenX` in engine/rules/tokens.ts handles every one of them) */
+const ENGINE_X: readonly string[] = TokenEffect.shape.x.unwrap().options;
+/** a token entry's X is one the engine computes; a line the printed card makes conditional needs one */
+const engineX = (x: unknown) => typeof x === "string" && ENGINE_X.includes(x);
 
 /**
  * A scenario's token effects are real when every symbol token line on its reference card's front (Easy, Standard) and back
@@ -135,14 +161,28 @@ export function tokensReal(db: ContentDb, scenarioId: string): boolean {
         for (const need of tokenNeeds(m[2])) {
           const ok =
             need === "x"
-              ? e.x !== undefined
+              ? engineX(e.x)
               : need === "instead"
-                ? e.instead !== undefined || e.x !== undefined
+                ? e.instead !== undefined || engineX(e.x)
                 : need === "onFail"
-                  ? !!e.onFail?.length
-                  : need === "revealAnother"
-                    ? !!e.revealAnother
-                    : !!(e.onReveal?.length || e.condition);
+                  ? !!e.onFail?.length || !!e.afterTest?.ifFailed
+                  : need === "onSuccess"
+                    ? !!e.onSuccess?.length
+                    : need === "payToZero"
+                      ? !!e.payToZero
+                      : need === "either"
+                        ? !!e.either
+                        : need === "revealAnother"
+                          ? !!e.revealAnother
+                          : !!(
+                              e.onReveal?.length ||
+                              e.condition ||
+                              e.cancelCommitted ||
+                              // "After this skill test, …"
+                              e.afterTest ||
+                              // "If it is Agenda 2, you automatically fail instead"
+                              e.instead?.autoFail
+                            );
           if (!ok) return false;
         }
       }

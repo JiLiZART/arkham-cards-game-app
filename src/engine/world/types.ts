@@ -194,6 +194,8 @@ export interface SkillTestState {
   target: InstId | null;
   committed: InstId[];
   committers: InvId[];
+  /** a token cancelled the effects and icons of the committed skill cards (Where Doom Awaits' cultist) */
+  committedCancelled?: boolean;
   tokens: ChaosToken[];
   /** resolved token modifiers, one per token */
   tokenMods: number[];
@@ -228,11 +230,21 @@ export interface SkillTestState {
   after?: { code: string; fn: string };
   ctx: EffCtx;
   tokenOnFail: Effect[];
+  /** a token's effects once the test is over ("after this skill test"); `tokenAfterFail` only if it failed */
   tokenAfter: Effect[];
+  tokenAfterFail?: Effect[];
   tokenOnSuccess: Effect[];
   failWindowDone: boolean;
   /** number of tokens whose effects were resolved */
   resolvedTokens: number;
+  /** the tokens (by index) whose `onReveal` resolved before their modifier, which it decides (an X of discarded costs) */
+  revealedFirst?: number[];
+  /** a revealed token (by index) treated as another token of the bag (Beginner's Luck's "cheat") */
+  treatAs?: Record<number, ChaosToken>;
+  /** the tokens (by index) whose "spend N resources to treat this token as a 0" was answered: paid (0) or not */
+  paidToZero?: Record<number, boolean>;
+  /** the tokens (by index) whose "you must either …, or …" was settled: done (true) or the penalty taken (false) */
+  eitherDone?: Record<number, boolean>;
   flipNegative: boolean;
   /** tokens revealed when the "would reveal" window was last opened (it opens once per reveal) */
   revealAsked?: number;
@@ -394,6 +406,8 @@ export type Step = { choice?: any } & (
       damage: number;
       horror: number;
       direct: boolean;
+      /** damage goes to the investigator's assets while any can take it (Claws of Steam) */
+      assetsFirst?: boolean;
       source: InstId | null;
       enemy?: InstId | null;
       /** the attack's key: what its window prevented waits under it */ key?: string;
@@ -439,9 +453,17 @@ export type Step = { choice?: any } & (
   | { t: "AdvanceAgenda"; fired?: boolean; deck?: string }
   | { t: "AdvanceAct"; spend?: boolean; deck?: string }
   | { t: "Resolution"; id: string }
-  | { t: "CheckDefeat"; inv: InvId }
+  /** `killer`: the attacking enemy kills whom it would defeat (Crazed Shoggoth) */
+  | { t: "CheckDefeat"; inv: InvId; killer?: InstId }
   /** `effect`: a card or the scenario defeats them (a location removed with them in it): no trauma */
-  | { t: "Defeated"; inv: InvId; by: "damage" | "horror" | "resign" | "effect"; key?: string }
+  | {
+      t: "Defeated";
+      inv: InvId;
+      by: "damage" | "horror" | "resign" | "effect";
+      key?: string;
+      /** the investigator is killed instead (Crazed Shoggoth's attack) */
+      killed?: true;
+    }
   | {
       t: "Test";
       stage: TestStage;
@@ -457,7 +479,14 @@ export type Step = { choice?: any } & (
   /** a story face: shown, its abilities run, then what the card says (flip back, leave the game, stay) */
   | { t: "ResolveStory"; card: InstId; you: InvId; shown?: boolean }
   /** a location leaves play: the investigators there defeated (or moved `to`), its enemies discarded, the scenario told */
-  | { t: "RemoveLocation"; location: InstId; investigators?: "defeat" | "move"; to?: InstId }
+  /** `outOfGame`: removed from the game rather than discarded (The Essex County Express's train cars) */
+  | {
+      t: "RemoveLocation";
+      location: InstId;
+      investigators?: "defeat" | "move";
+      to?: InstId;
+      outOfGame?: boolean;
+    }
   | { t: "EnterVehicle"; inv: InvId; vehicle: InstId }
   | { t: "LeaveVehicle"; inv: InvId }
   /** a vehicle moves, the investigators in it with it (arriving, without a move action) */
@@ -478,6 +507,8 @@ export type StepOf<K extends Step["t"]> = Extract<Step, { t: K }>;
 
 export interface EventData {
   inv?: InvId | null;
+  /** who defeated the enemy (an enemyDefeatedSelf window): the event's investigator for its effects */
+  defeatedBy?: InvId | null;
   /** the card whose effect caused the event (horrorHealed) */
   by?: InstId | null;
   /** the keyword an enemy was defeated through (a predator's attack) */
@@ -585,6 +616,8 @@ export interface CardScript {
   hooks?: Partial<ScriptHooks>;
   /** a search that finds this card ends there: the rest of the search is not resolved (Dead Ends) */
   cancelsSearch?: true;
+  /** cards whose text an investigator ignores while this card is in play ("Jazz" Mulligan: unrevealed locations) */
+  ignores?: (game: GameContext, cardId: InstId, inv: InvId) => InstId[];
 }
 
 /** what a choice verb shows: the English prompt and the UI's translation key and values */
@@ -650,6 +683,8 @@ export interface ScriptHooks {
   eventFinished(game: GameContext, run: HookRun, event: InstId): void;
   /** card: a heal of `n` horror from `target` is about to happen; returns what may still be healed (Rational Thought) */
   healHorror(game: GameContext, run: HookRun, target: InstId, n: number): number;
+  /** agenda: its doom threshold is reached; `true` replaces the advance ("Instead, …": The Beast Unleashed) */
+  doomThreshold(game: GameContext, run: HookRun): boolean;
   /** card: its story face was resolved, after its abilities and before what the card says to do next */
   storyResolved(game: GameContext, run: HookRun, card: InstId): void;
   /** scenario: a location is leaving play (removed), before it goes */
