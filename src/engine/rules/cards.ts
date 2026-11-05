@@ -392,6 +392,7 @@ export const windowHandler: Handler<"Window"> = (game, step) => {
         card: r.card,
         index: r.index,
         ctx: ctxFor(step.data, r.card, who(r)),
+        from: card(game, r.card).zone,
       })),
       { ...step, forcedDone: true, choice: undefined },
     );
@@ -487,6 +488,9 @@ export const win = (trigger: Trigger, data: EventData): Step => ({ t: STEP.Windo
 export const useAbilityHandler: Handler<"UseAbility"> = (game, step) => {
   const a = abilitiesOf(game, step.card)[step.index];
   if (!a) return;
+  // a forced ability whose card left before its turn came (two Psychopomp's Songs: the first one's damage made the
+  // second resolve and discard itself) no longer resolves
+  if (step.from && card(game, step.card).zone !== step.from) return;
   let take: Step[] = [];
   if (!step.paid) {
     const need = a.cost?.discardFromHand ?? 0;

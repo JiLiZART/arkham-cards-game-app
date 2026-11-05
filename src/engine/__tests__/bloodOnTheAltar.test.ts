@@ -498,6 +498,21 @@ describe("encounter cards", () => {
     expect(findByCode(gOf(r), "02221", [ZONE.EncounterDiscard])).toBeTruthy();
   });
 
+  it("two Psychopomp's Songs: 1 damage becomes 5, each Song once (a Song discarded before its turn doesn't resolve)", () => {
+    let r = bota({
+      prep: (g) => {
+        for (let k = 0; k < 2; k++) {
+          const id = createCard(g, "02221", ZONE.Limbo);
+          moveCard(g, id, ZONE.Threat);
+          setController(g, id, R);
+        }
+      },
+    });
+    r = run(r, { t: STEP.AssignDamage, inv: R, damage: 1, horror: 0 } as Step);
+    expect(inv(gOf(r), R).damage).toBe(5);
+    expect(cardsIn(gOf(r), ZONE.Threat).some((c) => c.code === "02221")).toBe(false);
+  });
+
   it("Strange Signs: failing adds a clue to your location, 2 with 3 or 4 investigators", () => {
     const one = toTurn(drawNew(bota({ bag: ["autoFail"] }), "02222"), R);
     expect(card(gOf(one), at(one)!).clues).toBe(1);

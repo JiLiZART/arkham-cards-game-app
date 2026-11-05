@@ -389,6 +389,8 @@ export type Step = { choice?: any } & (
       ctx?: EffCtx;
       paid?: boolean;
       discards?: InstId[];
+      /** a forced ability waiting in its window: the zone its card was in; it doesn't resolve once the card has moved */
+      from?: Zone;
     }
   | { t: "PlayCard"; inv: InvId; card: InstId; ctx?: EffCtx; free?: boolean; viaTrigger?: boolean }
   /** `tapped`: the draw was asked for by tapping the deck already (the Draw action, or the second card of a draw of several) */
