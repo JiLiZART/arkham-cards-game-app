@@ -1,15 +1,11 @@
 [
   {
-    "template": "the-gathering-01002-01004",
-    "seed": 11
-  },
-  {
     "template": "the-gathering-01002-01004-mixed",
     "seed": 1
   },
   {
     "template": "the-gathering-01002-01004-mixed",
-    "seed": 2
+    "seed": 3
   },
   {
     "template": "the-gathering-01002-01004-mixed",
@@ -17,11 +13,7 @@
   },
   {
     "template": "the-gathering-01002-01004-mixed",
-    "seed": 29
-  },
-  {
-    "template": "the-gathering-01005-01001-01003",
-    "seed": 24
+    "seed": 11
   },
   {
     "template": "the-midnight-masks-01002-01004",
@@ -32,40 +24,32 @@
     "seed": 4
   },
   {
-    "template": "the-devourer-below-01002-01004",
-    "seed": 6
-  },
-  {
     "template": "the-devourer-below-01002-01004-mixed",
-    "seed": 13
-  },
-  {
-    "template": "the-devourer-below-01002-01004-mixed",
-    "seed": 30
-  },
-  {
-    "template": "the-devourer-below-01005-01001-01003-mixed",
     "seed": 12
   },
   {
-    "template": "spreading-flames-01002-01004-mixed",
-    "seed": 5
+    "template": "the-devourer-below-01005-01001-01003",
+    "seed": 20
   },
   {
     "template": "spreading-flames-01002-01004-mixed",
-    "seed": 6
+    "seed": 1
   },
   {
     "template": "spreading-flames-01002-01004-mixed",
-    "seed": 9
+    "seed": 2
   },
   {
     "template": "spreading-flames-01002-01004-mixed",
-    "seed": 19
+    "seed": 4
   },
   {
-    "template": "spreading-flames-01002-01004-mixed",
-    "seed": 30
+    "template": "spreading-flames-01005-01001-01003-mixed",
+    "seed": 1
+  },
+  {
+    "template": "spreading-flames-01005-01001-01003-mixed",
+    "seed": 2
   },
   {
     "template": "smoke-and-mirrors-01002-01004",
@@ -73,23 +57,7 @@
   },
   {
     "template": "smoke-and-mirrors-01002-01004-mixed",
-    "seed": 7
-  },
-  {
-    "template": "queen-of-ash-01002-01004",
-    "seed": 2
-  },
-  {
-    "template": "queen-of-ash-01002-01004",
-    "seed": 5
-  },
-  {
-    "template": "queen-of-ash-01002-01004-mixed",
-    "seed": 2
-  },
-  {
-    "template": "queen-of-ash-01002-01004-mixed",
-    "seed": 12
+    "seed": 10
   },
   {
     "template": "the-gathering-05001-05002",
@@ -100,16 +68,12 @@
     "seed": 18
   },
   {
-    "template": "the-devourer-below-05001-05002-mixed",
-    "seed": 30
+    "template": "the-gathering-05001-05002",
+    "seed": 29
   },
   {
-    "template": "spreading-flames-05001-05002-mixed",
-    "seed": 24
-  },
-  {
-    "template": "the-gathering-12001-12004",
-    "seed": 2
+    "template": "the-gathering-05001-05002-mixed",
+    "seed": 1
   },
   {
     "template": "the-gathering-12001-12004",
@@ -117,11 +81,11 @@
   },
   {
     "template": "the-gathering-12007-12010-12013",
-    "seed": 2
+    "seed": 3
   },
   {
     "template": "the-gathering-12007-12010-12013",
-    "seed": 3
+    "seed": 10
   },
   {
     "template": "the-gathering-12007-12010-12013",
@@ -129,6 +93,10 @@
   },
   {
     "template": "queen-of-ash-12007-12010-12013-mixed",
-    "seed": 25
+    "seed": 15
+  },
+  {
+    "template": "queen-of-ash-12007-12010-12013-mixed",
+    "seed": 21
   }
 ]

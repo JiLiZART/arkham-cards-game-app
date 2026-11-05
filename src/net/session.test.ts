@@ -440,6 +440,8 @@ describe("rejoin", () => {
   it("brings a browser that crashed back to the same game, from its save", async () => {
     const { ana, ben, join, crash } = await started();
     await playBot([ana, ben], 6);
+    // on to a choice of Roland's, so there is one to make while Ben is away
+    await playBot([ana, ben], 60, { until: (inv) => inv === ROLAND });
     const storage = ben.storage;
     const had = ben.store.getState().room!.n;
     crash(ben);
