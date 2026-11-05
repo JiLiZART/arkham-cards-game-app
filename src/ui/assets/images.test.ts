@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { db } from "../../engine/kits/testkit";
-import { cardImage, classBackground, faceLines } from "./images";
+import { cardFrame, cardImage, classBackground, faceLines } from "./images";
 
 describe("card images", () => {
   it("resolves front and back URLs", () => {
@@ -48,6 +48,15 @@ describe("card images", () => {
     expect(classBackground({ faction: "neutral" })).toBe("/art/investigator-bg/neutral.webp");
     expect(classBackground({ faction: "rogue", factions: ["rogue", "survivor"] })).toBe(
       "/art/investigator-bg/neutral.webp",
+    );
+  });
+
+  it("picks the card frame of the investigator's class", () => {
+    expect(cardFrame(db.cards["01001"], "title")).toBe(
+      "/art/investigator-card/title-guardian.webp",
+    );
+    expect(cardFrame({ faction: "rogue", factions: ["rogue", "survivor"] }, "skills")).toBe(
+      "/art/investigator-card/skills-neutral.webp",
     );
   });
 });

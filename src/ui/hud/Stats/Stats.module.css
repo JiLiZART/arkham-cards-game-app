@@ -70,60 +70,141 @@
   box-shadow: var(--ring-playable);
 }
 
-/* stat bar: the portrait on the left; the name, health and sanity, and the ability; the skills in a column on the right */
+/* stat bar, laid out like the investigator card: the title band across the top; the portrait with health and sanity
+   under it on the left; the skills strip and the notebook with the ability on the right */
 .stat-bar {
-  background: var(--panel);
-  border: 1px solid var(--accent);
-  border-radius: 16px;
-  padding: 10px 12px;
+  border-radius: 26px;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  grid-template-areas: "portrait who skills";
-  column-gap: 12px;
+  grid-template-columns: 140px minmax(0, 1fr);
+  grid-template-areas:
+    "title title"
+    "portrait skills"
+    "portrait notes"
+    "vitals notes";
+  grid-template-rows: auto auto auto 1fr;
+  column-gap: 10px;
+  row-gap: 4px;
 }
-/* the portrait and the name block are cells of the bar's grid */
-.stat-head {
-  display: contents;
+/* the class's title band: the shield is printed on it; the name on the band, the subtitle on the bar under it */
+.title {
+  grid-area: title;
+  position: relative;
+  aspect-ratio: 618 / 107;
+  margin: 2px 4px 0;
+  background: var(--frame-title) center / 100% 100% no-repeat;
+  filter: drop-shadow(0 2px 4px #000a);
+}
+.stat-name {
+  position: absolute;
+  left: 17%;
+  right: 3%;
+  top: 6%;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  font-size: 30px;
+  line-height: 1;
+  color: #1c1710;
+  text-shadow: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.subname {
+  position: absolute;
+  left: 20%;
+  right: 17%;
+  top: 64%;
+  height: 30%;
+  display: grid;
+  place-items: center;
+  font: 17px/1 var(--f-body);
+  color: #2b2418;
+  text-shadow: none;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .portrait-btn {
   grid-area: portrait;
-  align-self: center;
+  justify-self: center;
+  align-self: start;
+  margin-top: 4px;
 }
-:global(.stat-who) {
-  grid-area: who;
+/* health and sanity over the printed heart and brain */
+.vitals {
+  grid-area: vitals;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  gap: 6px;
+}
+.vital {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: center / contain no-repeat;
+  color: #fff;
+  text-shadow:
+    0 0 3px #000,
+    0 1px 2px #000;
+}
+.vital b {
+  font-size: 32px;
+  line-height: 1;
+}
+.vital small {
+  font-size: 14px;
+  align-self: flex-end;
+  margin-bottom: 14px;
+  color: #f1efe4;
+}
+.vital:global(.flash) b {
+  animation: flash 0.6s ease-out;
+}
+/* the four skills in the ovals of the class's strip */
+.skills {
+  grid-area: skills;
+  aspect-ratio: 510 / 110;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 0 3.5%;
+  column-gap: 5.5%;
+  background: var(--frame-skills) center / 100% 100% no-repeat;
+  filter: drop-shadow(0 2px 4px #000a);
+}
+.skills :global(.stat) {
+  justify-content: center;
+  gap: 2px;
+  color: #1c1710;
+  text-shadow: none;
+}
+.skills :global(.stat) b {
+  font-size: 30px;
+  line-height: 1;
+}
+/* the class's notebook: its rings and torn edges keep their size, the lined page stretches to the text */
+:global(.stat-who).notes {
+  grid-area: notes;
   display: flex;
   flex-direction: column;
   gap: 4px;
   min-width: 0;
+  min-height: 120px;
+  border-style: solid;
+  border-width: 30px 18px 18px 22px;
+  border-image: var(--frame-notes) 54 34 34 40 fill / 30px 18px 18px 22px stretch;
+  padding: 0 4px;
+  color: #1c1710;
+  text-shadow: none;
 }
-.stat-head .stat-name {
-  font-size: 36px;
-  line-height: 1.05;
+.traits {
+  font: italic bold 16px/1.2 var(--f-body);
+  text-align: center;
 }
 .stat-ability {
-  font: 18px/1.3 var(--f-body);
-  color: var(--ink);
-}
-.stat-row {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-}
-.stat-bar :global(.stat) b {
-  font-size: 38px;
-  line-height: 1;
-}
-.stat-bar :global(.stat) small {
-  font-size: 22px;
-}
-.stat-row.skills {
-  grid-area: skills;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 4px;
-  border-left: 1px solid var(--rule-dim);
-  padding-left: 12px;
+  font: 17px/1.3 var(--f-body);
 }
 :global(.stat-dock) b {
   font-variant-numeric: lining-nums;
@@ -132,7 +213,7 @@
   align-self: flex-start;
   background: var(--panel);
   border: 1px solid var(--rule);
-  border-radius: 14px;
+  border-radius: 20px;
   padding: 4px 12px 4px 8px;
 }
 /* Alegreya's figures sit high in their line box: nudge the totals down to centre them on the tokens */

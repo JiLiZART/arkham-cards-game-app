@@ -6,9 +6,8 @@ import { maxHealth, maxSanity, skillValue } from "../../../engine/queries";
 import { handLimit } from "../../../engine/rules/investigators";
 import type { ChoiceOption, GameState, InvId } from "../../../engine/world/types";
 import { db, gameStore, useGame } from "../../state/context";
-import { Icon, Stat } from "../../components/Icon";
-import { isIcon } from "../../assets/icons";
-import { backUrl, classBackground } from "../../assets/images";
+import { Stat } from "../../components/Icon";
+import { backUrl, cardFrame, classBackground, vitalArt } from "../../assets/images";
 import { Portrait } from "../../components/Portrait";
 import { TokenPile } from "../../components/TokenPile";
 import { abilityOptionsOf } from "../../state/players";
@@ -116,7 +115,25 @@ export function HandCount({ value, limit }: { value: number; limit: number }) {
   );
 }
 
-/** stats shared by the viewer's bar and the investigator modal */
+/** health or sanity as on the card: the value (and the maximum) over the printed heart or brain */
+function Vital({ kind, value, max }: { kind: "health" | "sanity"; value: number; max: number }) {
+  const flash = useFlash(value);
+  const tip = `${tr(`stat.${kind}`)} ${value} / ${max}`;
+  return (
+    <span
+      className={cx(styles.vital, flash ? "flash" : "")}
+      data-kind={kind}
+      style={{ backgroundImage: `url(${vitalArt(kind)})` }}
+      title={tip}
+      aria-label={tip}
+    >
+      <b>{value}</b>
+      <small>/{max}</small>
+    </span>
+  );
+}
+
+/** stats shared by the viewer's bar and the investigator modal, laid out like the investigator card */
 export function StatBody({
   inv,
   onPortrait,
@@ -142,54 +159,51 @@ export function StatBody({
         <TokenStack kind="clue" value={n.clues} />
         <HandCount value={n.hand} limit={n.handLimit} />
       </div>
-      {/* the panel sits on the investigator's class painting */}
+      {/* the card frame of the investigator's class over the class painting */}
       <div
         className={styles.statBar}
         data-testid="stat-bar"
-        style={{ "--class-bg": `url(${classBackground(d)})` } as CSSProperties}
+        style={
+          {
+            "--class-bg": `url(${classBackground(d)})`,
+            "--frame-title": `url(${cardFrame(d, "title")})`,
+            "--frame-skills": `url(${cardFrame(d, "skills")})`,
+            "--frame-notes": `url(${cardFrame(d, "description")})`,
+          } as CSSProperties
+        }
       >
-        <div className={styles.statHead}>
-          <button
-            data-tip="portrait"
-            className={cx(styles.portraitBtn, legal ? "legal" : "", dimmed ? "dimmed" : "")}
-            onClick={onPortrait}
-            title={tx.name}
-            disabled={!onPortrait}
-          >
-            <Portrait code={inv} size={120} active={game.active === inv} />
-          </button>
-          <div className="stat-who">
-            <div className={styles.statName}>
-              {isIcon(d.faction) && <Icon name={d.faction} size={36} />} {tx.name}
-            </div>
-            <div className={cx(styles.statRow, "vitals")}>
-              <FlashStat
-                icon="health"
-                value={n.health}
-                max={n.maxHealth}
-                size={44}
-                label={tr("stat.health")}
-              />
-              <FlashStat
-                icon="sanity"
-                value={n.sanity}
-                max={n.maxSanity}
-                size={44}
-                label={tr("stat.sanity")}
-              />
-            </div>
-            {/* the investigator's ability, and its options when it can be used right now */}
-            <div
-              className={cx(styles.statAbility, "card-text")}
-              dangerouslySetInnerHTML={{ __html: formatText(tx.text) }}
-            />
-            {options && options.length > 0 && <OptionButtons options={options} />}
-          </div>
+        <div className={styles.title}>
+          <span className={cx(styles.statName, "card-name")}>{tx.name}</span>
+          {tx.subname && <span className={styles.subname}>{tx.subname}</span>}
         </div>
-        <div className={cx(styles.statRow, styles.skills)}>
+        <button
+          data-tip="portrait"
+          className={cx(styles.portraitBtn, legal ? "legal" : "", dimmed ? "dimmed" : "")}
+          onClick={onPortrait}
+          title={tx.name}
+          disabled={!onPortrait}
+        >
+          <Portrait code={inv} size={120} active={game.active === inv} />
+        </button>
+        <div className={styles.vitals}>
+          <Vital kind="health" value={n.health} max={n.maxHealth} />
+          <Vital kind="sanity" value={n.sanity} max={n.maxSanity} />
+        </div>
+        <div className={styles.skills}>
           {n.skills.map(([s, v]) => (
-            <FlashStat key={s} icon={s} value={v} size={40} label={tr(`stat.${s}`)} />
+            <FlashStat key={s} icon={s} value={v} size={32} label={tr(`stat.${s}`)} />
           ))}
+        </div>
+        {/* the traits and the ability on the notebook, with its options when it can be used right now */}
+        <div className={cx(styles.notes, "stat-who")}>
+          {!!tx.traits?.length && (
+            <i className={styles.traits}>{tx.traits.map((t) => `${t}.`).join(" ")}</i>
+          )}
+          <div
+            className={cx(styles.statAbility, "card-text")}
+            dangerouslySetInnerHTML={{ __html: formatText(tx.text) }}
+          />
+          {options && options.length > 0 && <OptionButtons options={options} />}
         </div>
       </div>
     </>
@@ -197,9 +211,9 @@ export function StatBody({
 }
 
 /**
- * The investigator on screen (the one being looked at, else the decider), bottom-left at 75 %: the portrait on the left,
- * the name, then health and sanity, then the ability, the skills in a column on the right; resources and clues as token stacks
- * and the hand count above. The investigator's own ability options
+ * The investigator on screen (the one being looked at, else the decider), bottom-left at 75 %, drawn like the card:
+ * the title band, the portrait with health and sanity under it, the skills strip and the ability on the notebook;
+ * resources and clues as token stacks and the hand count above. The investigator's own ability options
  * are buttons under the ability text (and in the avatar sheet, which the phone uses); answers among investigators stay on
  * the avatars. The portrait opens the card.
  */

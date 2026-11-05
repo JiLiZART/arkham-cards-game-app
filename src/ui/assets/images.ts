@@ -46,11 +46,19 @@ export const backUrl = (kind: "player" | "encounter") =>
   asset(kind === "encounter" ? "table/back-encounter.png" : "table/back-player.png");
 
 const PAINTED = new Set(["guardian", "seeker", "rogue", "mystic", "survivor"]);
-/** the class painting behind an investigator panel (public/art/investigator-bg, the author's art): neutral for neutral or multi-class */
+/** the class whose art a panel uses: neutral for neutral or multi-class */
+const artClass = (c: Pick<CardDef, "faction" | "factions">) =>
+  (c.factions?.length ?? 1) <= 1 && PAINTED.has(c.faction) ? c.faction : "neutral";
+/** the class painting behind an investigator panel (public/art/investigator-bg, the author's art) */
 export const classBackground = (c: Pick<CardDef, "faction" | "factions">) =>
-  asset(
-    `art/investigator-bg/${(c.factions?.length ?? 1) <= 1 && PAINTED.has(c.faction) ? c.faction : "neutral"}.webp`,
-  );
+  asset(`art/investigator-bg/${artClass(c)}.webp`);
+/** a piece of the investigator card frame in the class's colours (public/art/investigator-card) */
+export const cardFrame = (
+  c: Pick<CardDef, "faction" | "factions">,
+  part: "title" | "skills" | "description",
+) => asset(`art/investigator-card/${part}-${artClass(c)}.webp`);
+/** the health heart or the sanity brain printed on investigator cards */
+export const vitalArt = (kind: "health" | "sanity") => asset(`art/investigator-card/${kind}.webp`);
 
 /** cards that use the generic encounter back; the others use the player back */
 export const isEncounterCard = (c: Pick<CardDef, "faction" | "subtype">) =>
