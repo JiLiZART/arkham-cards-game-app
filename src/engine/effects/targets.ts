@@ -24,6 +24,7 @@ import {
   enemiesAt,
   engagedWith,
   enemyStat,
+  immuneTo,
   invsAt,
   skillValue,
 } from "../queries";
@@ -152,14 +153,19 @@ export function nearest(
   return cands.filter((e) => (d.get(e.location!) ?? Infinity) === best).map((e) => e.id);
 }
 
-/** resolve enemy targets; undefined = waiting */
+/** an attack is still made on an enemy immune to its card's effects: the test is a game action (Grimoire, Immune) */
+export const ATTACK_OPS: ReadonlySet<string> = new Set(["fight", "evade"]);
+
+/** resolve enemy targets; undefined = waiting. An enemy immune to the effect's card is never one. */
 export function enemyTargets(
   game: GameContext,
   step: EffStep,
   t: EnemyTarget,
   ctx: EffCtx,
-  ok: (id: InstId) => boolean = () => true,
+  allowed: (id: InstId) => boolean = () => true,
 ): InstId[] | undefined {
+  const ok = (id: InstId) =>
+    allowed(id) && (ATTACK_OPS.has(step.effect.op) || !immuneTo(game, id, ctx.source));
   const you = ctx.you;
   const loc = you ? inv(game, you).location : null;
   const choose = (all: InstId[], prompt: string) => {

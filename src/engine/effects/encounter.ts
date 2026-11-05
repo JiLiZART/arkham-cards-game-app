@@ -155,11 +155,14 @@ function searchEncounterDrawEffect(
     const at = e.at
       ? (locationByName(game, e.at) ?? findByCode(game, e.at, [ZONE.Location]))
       : undefined;
+    // a treachery found (Congregational Church: Kidnapped!) is drawn and resolved, not spawned
     push(
       game,
-      at
-        ? { t: STEP.Spawn, enemy: id, inv: null, at: at.id }
-        : { t: STEP.Spawn, enemy: id, inv: you },
+      def(game, id).type !== "enemy"
+        ? { t: STEP.DrawEncounter, inv: you, card: id }
+        : at
+          ? { t: STEP.Spawn, enemy: id, inv: null, at: at.id }
+          : { t: STEP.Spawn, enemy: id, inv: you },
     );
   }
   shuffleDeck(game, "encounter");

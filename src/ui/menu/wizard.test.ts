@@ -223,7 +223,14 @@ describe("the campaign list", () => {
       ids.indexOf("return-to-the-night-of-the-zealot"),
     );
     expect(ids.indexOf("return-to-the-night-of-the-zealot")).toBeLessThan(
+      ids.indexOf("return-to-the-path-to-carcosa"),
+    );
+    // a hand-written Return-to box after the hand-written cycles, before the generated ones
+    expect(ids.indexOf("the-dunwich-legacy")).toBeLessThan(
       ids.indexOf("return-to-the-dunwich-legacy"),
+    );
+    expect(ids.indexOf("return-to-the-dunwich-legacy")).toBeLessThan(
+      ids.indexOf("the-path-to-carcosa"),
     );
     const firstSide = ids.findIndex((id) => id.startsWith("side-"));
     expect(ids.slice(firstSide).every((id) => id.startsWith("side-"))).toBe(true);
@@ -245,7 +252,12 @@ describe("filtering the campaign list", () => {
       filterCampaigns(db, "en", DEFAULT_CAMPAIGN_FILTER)
         .map((c) => c.id)
         .sort(),
-    ).toEqual(["brethren-of-ash", "night-of-the-zealot", "the-dunwich-legacy"]);
+    ).toEqual([
+      "brethren-of-ash",
+      "night-of-the-zealot",
+      "return-to-the-dunwich-legacy",
+      "the-dunwich-legacy",
+    ]);
   });
 
   it("by kind: campaigns, Return-to boxes, side scenarios", () => {
@@ -269,10 +281,11 @@ describe("filtering the campaign list", () => {
     expect(ids({ rules: "complete" }).length + ids({ rules: "partial" }).length).toBe(ids().length);
   });
 
-  it("Night of the Zealot, Brethren of Ash and The Dunwich Legacy are the campaigns the Complete filter shows", () => {
+  it("Night of the Zealot, Brethren of Ash, The Dunwich Legacy and its Return are the campaigns the Complete filter shows", () => {
     expect(ids({ rules: "complete" }).sort()).toEqual([
       "brethren-of-ash",
       "night-of-the-zealot",
+      "return-to-the-dunwich-legacy",
       "the-dunwich-legacy",
     ]);
     expect(campaignComplete(db, "night-of-the-zealot")).toBe(true);

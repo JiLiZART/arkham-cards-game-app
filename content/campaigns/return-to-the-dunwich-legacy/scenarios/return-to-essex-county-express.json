@@ -17,31 +17,28 @@
     "02166"
   ],
   "agendas": [
-    "02160",
+    "51026",
+    "51027",
     "02161",
     "02162",
     "02163",
     "02164"
   ],
-  "setupCards": [],
+  "setupCards": [
+    "51025"
+  ],
   "setup": [
     {
-      "do": "putIntoPlay",
-      "codes": [
-        "02167",
-        "02177"
-      ]
+      "do": "script",
+      "fn": "train"
     },
     {
       "do": "setAside",
       "codes": [
-        "51031",
-        "02178"
+        "02178",
+        "51026b",
+        "51031"
       ]
-    },
-    {
-      "do": "startAt",
-      "code": "02167"
     }
   ],
   "tokens": {
@@ -204,6 +201,11 @@
       "text": "Each investigator was defeated",
       "effects": [
         {
+          "do": "record",
+          "key": "investigatorsDelayed",
+          "value": true
+        },
+        {
           "do": "xp",
           "victory": true,
           "bonus": 0,
@@ -242,21 +244,6 @@
     }
   },
   "i18nId": "return_to_essex_county_express",
-  "connections": [
-    [
-      "02167",
-      "02177"
-    ]
-  ],
-  "oneWay": [],
-  "layout": {
-    "02167": [
-      0,
-      0
-    ],
-    "02177": [
-      6,
-      0
-    ]
-  }
+  "connections": [],
+  "oneWay": []
 }

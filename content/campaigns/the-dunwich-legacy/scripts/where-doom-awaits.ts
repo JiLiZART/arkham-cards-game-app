@@ -47,6 +47,7 @@ const ACT_2 = ["02278", "02279", "02280"];
  * The links the revealed paths print by symbol (the card scans): Slaughtered Woods and Frozen Spring (+) ↔ Eerie Glade
  * (hourglass), Destroyed Path ↔ A Tear in the Path, Dimensional Gap and Lost Memories (T) ↔ Uprooted Woods (moon). Base
  * of the Hill and Ascending Path link to every copy of their paths by their text, in the scenario's `connections`.
+ * Return to Where Doom Awaits adds Abandoned Camp (comma) ↔ Fathomless Lake (trefoil), each printing the other.
  */
 const SYMBOL_LINKS: [string, string][] = [
   ["02285", "02286"],
@@ -54,6 +55,7 @@ const SYMBOL_LINKS: [string, string][] = [
   ["02287", "02290"],
   ["02289", "02291"],
   ["02292", "02291"],
+  ["51050", "51051"],
 ];
 
 const inPlay = (game: GameContext, code: string) => findByCode(game, code, [ZONE.Location])?.id;
@@ -77,6 +79,15 @@ export function onlyAltered(game: GameContext, id: InstId) {
     .map((l) => ({ target: l.id, mod: { flag: "cannotPlaceClues" as const } }));
 }
 
+/** a random set-aside path of these codes into play */
+export function putPath(game: GameContext, codes: string[]) {
+  const pool = cardsIn(game, ZONE.SetAside).filter((c) => codes.includes(c.code));
+  if (!pool.length) return;
+  const path = pool[randomInt(game, pool.length)].id;
+  moveCard(game, path, ZONE.Location);
+  emit(game, EVENT.Location, `${def(game, path).name} is put into play`, { card: path });
+}
+
 /** What the scenario's cards run by name: given to their card scripts too (a Return-to scenario plays them). */
 export const SHARED = {
   fns: {
@@ -85,12 +96,7 @@ export const SHARED = {
     },
     /** a random set-aside path of these codes into play (Base of the Hill, Ascending Path) */
     wdaPutPath(game: GameContext, run: ScriptRun) {
-      const codes = asStrings(argField(run.args, "codes"));
-      const pool = cardsIn(game, ZONE.SetAside).filter((c) => codes.includes(c.code));
-      if (!pool.length) return;
-      const path = pool[randomInt(game, pool.length)].id;
-      moveCard(game, path, ZONE.Location);
-      emit(game, EVENT.Location, `${def(game, path).name} is put into play`, { card: path });
+      putPath(game, asStrings(argField(run.args, "codes")));
     },
   },
 } satisfies CardScript;

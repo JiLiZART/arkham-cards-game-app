@@ -10,6 +10,7 @@ import {
   findByCode,
   type GameContext,
   invsAt,
+  locationByName,
   moveCard,
   placeInvestigator,
   randomInt,
@@ -22,13 +23,15 @@ import {
 } from "../../../../src/engine/api";
 
 const ABOMINATIONS = ["02103", "02104"];
-const STRIKING_FEAR = ["01163", "01164", "01165"];
+/** Striking Fear, or Erratic Fear in its place (Return to The House Always Wins): whichever was set aside */
+const STRIKING_FEAR = ["01163", "01164", "01165", "51068", "51069", "51070"];
 
 export default {
   abilities: [{ kind: "revelation", run: "back" }],
   fns: {
     back(game: GameContext) {
-      const lounge = findByCode(game, "02071", [ZONE.Location]);
+      // either version of the Lounge (Return to The House Always Wins has two)
+      const lounge = locationByName(game, "Clover Club Lounge");
       const aside = (codes: string[]) =>
         allCards(game).filter((c) => c.zone === ZONE.SetAside && codes.includes(c.code));
       const pool = aside(ABOMINATIONS);

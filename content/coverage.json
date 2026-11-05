@@ -1193,22 +1193,13 @@
   "rtdwl": {
    "encounter": {
     "total": 60,
-    "works": 7,
-    "rest": {
-     "act": 1,
-     "agenda": 2,
-     "enemy": 9,
-     "location": 23,
-     "scenario": 2,
-     "treachery": 16
-    }
+    "works": 60,
+    "rest": {}
    },
    "player": {
     "total": 13,
-    "works": 11,
-    "rest": {
-     "asset": 2
-    }
+    "works": 13,
+    "rest": {}
    }
   },
   "rtnotz": {
@@ -2153,29 +2144,12 @@
   },
   "return-to-the-dunwich-legacy": {
    "cards": {
-    "total": 285,
-    "works": 230,
-    "rest": {
-     "act": 1,
-     "agenda": 2,
-     "asset": 2,
-     "enemy": 9,
-     "location": 23,
-     "scenario": 2,
-     "treachery": 16
-    }
+    "total": 282,
+    "works": 282,
+    "rest": {}
    },
-   "unscripted": [
-    "return-to-extracurricular-activity",
-    "return-to-the-house-always-wins",
-    "return-to-the-miskatonic-museum",
-    "return-to-essex-county-express",
-    "return-to-blood-on-the-altar",
-    "return-to-undimensioned-and-unseen",
-    "return-to-where-doom-awaits",
-    "return-to-lost-in-time-and-space"
-   ],
-   "complete": false
+   "unscripted": [],
+   "complete": true
   },
   "return-to-the-forgotten-age": {
    "cards": {
@@ -2256,14 +2230,12 @@
   "side-all-or-nothing": {
    "cards": {
     "total": 41,
-    "works": 31,
+    "works": 35,
     "rest": {
      "act": 2,
      "agenda": 1,
      "enemy": 2,
-     "location": 2,
-     "scenario": 1,
-     "treachery": 2
+     "scenario": 1
     }
    },
    "unscripted": [
@@ -2934,14 +2906,12 @@
    "campaign": "side-all-or-nothing",
    "cards": {
     "total": 41,
-    "works": 31,
+    "works": 35,
     "rest": {
      "act": 2,
      "agenda": 1,
      "enemy": 2,
-     "location": 2,
-     "scenario": 1,
-     "treachery": 2
+     "scenario": 1
     }
    },
    "tokens": false,
@@ -4233,17 +4203,13 @@
   "return-to-blood-on-the-altar": {
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
-    "total": 49,
-    "works": 40,
-    "rest": {
-     "enemy": 1,
-     "location": 7,
-     "treachery": 1
-    }
+    "total": 48,
+    "works": 48,
+    "rest": {}
    },
    "tokens": true,
-   "scripted": false,
-   "complete": false
+   "scripted": true,
+   "complete": true
   },
   "return-to-curtain-call": {
    "campaign": "return-to-the-path-to-carcosa",
@@ -4306,35 +4272,23 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 43,
-    "works": 29,
-    "rest": {
-     "agenda": 1,
-     "asset": 1,
-     "enemy": 1,
-     "location": 3,
-     "scenario": 1,
-     "treachery": 7
-    }
+    "works": 43,
+    "rest": {}
    },
    "tokens": true,
-   "scripted": false,
-   "complete": false
+   "scripted": true,
+   "complete": true
   },
   "return-to-extracurricular-activity": {
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 38,
-    "works": 28,
-    "rest": {
-     "enemy": 2,
-     "location": 1,
-     "scenario": 1,
-     "treachery": 6
-    }
+    "works": 38,
+    "rest": {}
    },
    "tokens": true,
-   "scripted": false,
-   "complete": false
+   "scripted": true,
+   "complete": true
   },
   "return-to-for-the-greater-good": {
    "campaign": "return-to-the-circle-undone",
@@ -4413,18 +4367,12 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 40,
-    "works": 28,
-    "rest": {
-     "act": 1,
-     "agenda": 1,
-     "enemy": 2,
-     "location": 4,
-     "treachery": 4
-    }
+    "works": 40,
+    "rest": {}
    },
    "tokens": true,
-   "scripted": false,
-   "complete": false
+   "scripted": true,
+   "complete": true
   },
   "return-to-shattered-aeons": {
    "campaign": "return-to-the-forgotten-age",
@@ -4557,15 +4505,12 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 37,
-    "works": 30,
-    "rest": {
-     "location": 2,
-     "treachery": 5
-    }
+    "works": 37,
+    "rest": {}
    },
    "tokens": true,
-   "scripted": false,
-   "complete": false
+   "scripted": true,
+   "complete": true
   },
   "return-to-the-last-king": {
    "campaign": "return-to-the-path-to-carcosa",
@@ -4607,15 +4552,12 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 44,
-    "works": 34,
-    "rest": {
-     "location": 2,
-     "treachery": 8
-    }
+    "works": 44,
+    "rest": {}
    },
    "tokens": true,
-   "scripted": false,
-   "complete": false
+   "scripted": true,
+   "complete": true
   },
   "return-to-the-pallid-mask": {
    "campaign": "return-to-the-path-to-carcosa",
@@ -4771,15 +4713,12 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 40,
-    "works": 32,
-    "rest": {
-     "enemy": 4,
-     "treachery": 4
-    }
+    "works": 40,
+    "rest": {}
    },
    "tokens": true,
-   "scripted": false,
-   "complete": false
+   "scripted": true,
+   "complete": true
   },
   "return-to-union-and-disillusion": {
    "campaign": "return-to-the-circle-undone",
@@ -4804,17 +4743,13 @@
   "return-to-where-doom-awaits": {
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
-    "total": 47,
-    "works": 36,
-    "rest": {
-     "asset": 1,
-     "location": 4,
-     "treachery": 6
-    }
+    "total": 45,
+    "works": 45,
+    "rest": {}
    },
    "tokens": true,
-   "scripted": false,
-   "complete": false
+   "scripted": true,
+   "complete": true
   },
   "riddles-and-rain": {
    "campaign": "the-scarlet-keys",

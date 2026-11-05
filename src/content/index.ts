@@ -32,11 +32,11 @@ const files = import.meta.glob(
   ],
   { eager: true, import: "default" },
 ) as Record<string, unknown>;
-// the text of a campaign once generated, now hand-written: there is no loadCampaign to bring it, so it comes at once
-const handTexts = import.meta.glob("/content/i18n/*/campaign-texts/the-dunwich-legacy.json", {
-  eager: true,
-  import: "default",
-}) as Record<string, unknown>;
+// the text of the campaigns once generated, now hand-written: there is no loadCampaign to bring it, so it comes at once
+const handTexts = import.meta.glob(
+  "/content/i18n/*/campaign-texts/{the-dunwich-legacy,return-to-the-dunwich-legacy}.json",
+  { eager: true, import: "default" },
+) as Record<string, unknown>;
 const eagerPacks = import.meta.glob("/content/packs/core/cards*.json", {
   eager: true,
   import: "default",
@@ -56,7 +56,7 @@ const lazyCampaignFiles = import.meta.glob(
     "/content/campaigns-generated/*/scenarios/*.json",
     "/content/campaigns-generated/*/flow.json",
     "/content/i18n/*/campaign-texts/*.json",
-    "!/content/i18n/*/campaign-texts/the-dunwich-legacy.json",
+    "!/content/i18n/*/campaign-texts/{the-dunwich-legacy,return-to-the-dunwich-legacy}.json",
   ],
   { import: "default" },
 ) as Record<string, () => Promise<unknown>>;

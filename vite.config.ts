@@ -55,7 +55,9 @@ export default defineConfig({
   preview: { proxy: { ...cardProxy, ...netProxy } },
   test: {
     include: ["src/**/*.test.ts", "scripts/**/*.test.ts", "worker/**/*.test.ts"],
-    // several tests load every pack from disk: under a full parallel run that takes longer than the 5s default
+    // several tests load every pack from disk, most in a beforeAll: about 4s alone, but under a full parallel run every
+    // worker does it at once and it takes far longer than the 5s and 10s defaults; the hooks get the tests' allowance
     testTimeout: 30_000,
+    hookTimeout: 30_000,
   },
 });

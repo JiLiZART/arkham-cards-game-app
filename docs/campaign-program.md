@@ -68,7 +68,7 @@ Status comes from `openspec/changes/` (and `archive/`): *not written*, *being wr
 | `campaign-return-to-the-night-of-the-zealot` | ready (0/24) | campaign `return-to-the-night-of-the-zealot`: its encounter cards, scenario scripts, token effects, flow |
 | `campaign-side-by-the-book` | being written | campaign `side-by-the-book`: its encounter cards, scenario scripts, token effects, flow |
 | `campaign-the-dunwich-legacy` | in progress (66/67) | campaign `the-dunwich-legacy`: its encounter cards, scenario scripts, token effects, flow |
-| `campaign-return-to-the-dunwich-legacy` | ready (0/35) | campaign `return-to-the-dunwich-legacy`: its encounter cards, scenario scripts, token effects, flow |
+| `campaign-return-to-the-dunwich-legacy` | implemented (35/35) | campaign `return-to-the-dunwich-legacy`: its encounter cards, scenario scripts, token effects, flow |
 | `campaign-side-all-or-nothing` | being written | campaign `side-all-or-nothing`: its encounter cards, scenario scripts, token effects, flow |
 | `campaign-side-read-or-die` | being written | campaign `side-read-or-die`: its encounter cards, scenario scripts, token effects, flow |
 | `campaign-the-path-to-carcosa` | ready (0/63) | campaign `the-path-to-carcosa`: its encounter cards, scenario scripts, token effects, flow |
@@ -141,7 +141,7 @@ Status comes from `openspec/changes/` (and `archive/`): *not written*, *being wr
 | [x] | `uau` | return-to-the-dunwich-legacy, the-dunwich-legacy | 0 of 23 | 0 of 12 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
 | [x] | `wda` | return-to-the-dunwich-legacy, the-dunwich-legacy | 0 of 25 | 0 of 14 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
 | [x] | `litas` | return-to-the-dunwich-legacy, the-dunwich-legacy | 0 of 23 | 0 of 12 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
-| [ ] | `rtdwl` | return-to-the-dunwich-legacy, side-all-or-nothing | 53 of 60 | 2 of 13 | `campaign-return-to-the-dunwich-legacy`, `player-cards-dwl` |
+| [x] | `rtdwl` | return-to-the-dunwich-legacy, side-all-or-nothing | 0 of 60 | 0 of 13 | `campaign-return-to-the-dunwich-legacy`, `player-cards-dwl` |
 | [ ] | `ptc` | return-to-the-path-to-carcosa, side-enthralling-encore, the-path-to-carcosa | 67 of 68 | 45 of 47 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
 | [ ] | `eotp` | return-to-the-path-to-carcosa, the-path-to-carcosa | 24 of 24 | 16 of 17 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
 | [ ] | `tuo` | return-to-the-path-to-carcosa, the-path-to-carcosa | 30 of 30 | 13 of 13 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |

@@ -98,11 +98,12 @@ export function musicFor(
   // a silent track keeps its slot but is never chosen: the music that was on goes on
   const has = (id: string) => (m.music[id] && !m.music[id].silent ? id : null);
   const codeOf = (id: InstId | null) => (id ? cardOfIf(game, id)?.code : undefined);
-  // a scenario without a bed of its own (a generated one, ADR-0007) plays the default bed
+  // a Return-to scenario plays its base scenario's bed (ADR-0038); one without a bed (a generated one, ADR-0007) the default
   const chapter =
     has(`card:${codeOf(game.agendas.a)}`) ??
     has(`card:${codeOf(game.acts.a)}`) ??
     has(`bed:${game.scenarioId}`) ??
+    has(`bed:${game.scenarioId.replace(/^return-to-/, "")}`) ??
     has("bed:default");
   if (!chapter) return null;
   if (has("fight") && cardsOf(game).some((c) => c.zone === "enemy" && c.engagedWith))

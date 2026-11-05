@@ -6,7 +6,7 @@ import {
   noVehicles,
   vehicleUsed,
 } from "../world/flags";
-import type { Ability, Boost, Effect, OnTokens, Skill } from "../../content/schema";
+import type { Ability, Boost, Effect, ModFlag, OnTokens, Skill } from "../../content/schema";
 import {
   abilitiesOf as abilitiesOfCard,
   allMods,
@@ -294,13 +294,33 @@ export function actionCost(game: GameContext, i: InvId, a: TurnAction): number {
   }
 }
 
+/** the kinds of action an effect can forbid (A Baleful Welcome) */
+const FORBIDDEN_BY: Partial<Record<string, ModFlag>> = {
+  investigate: "cannotInvestigate",
+  fight: "cannotFight",
+  evade: "cannotEvade",
+  move: "cannotMoveAction",
+  play: "cannotPlayAction",
+  [EVENT.Draw]: "cannotDrawAction",
+  [EVENT.Resource]: "cannotResourceAction",
+};
+/** an action of a forbidden kind: a play action with a designator is of both kinds (Grimoire, Play Action) */
+function forbiddenAction(game: GameContext, i: InvId, a: TurnAction, designator: string) {
+  return (a.kind === EVENT.Play ? [EVENT.Play, designator] : [designator]).some((k) => {
+    const flag = FORBIDDEN_BY[k];
+    return !!flag && hasFlag(game, i, flag);
+  });
+}
+
 /** every legal choice for the investigator whose turn it is */
 export function legalTurnActions(game: GameContext, i: InvId): ChoiceOption[] {
   const me = inv(game, i);
   const out: ChoiceOption[] = [];
   const add = (a: TurnAction, label: string, cardId?: string, key?: string) => {
     const cost = actionCost(game, i, a);
-    if (cost > actionsFor(game, i, a, designatorOf(game, a))) return;
+    const designator = designatorOf(game, a);
+    if (cost > actionsFor(game, i, a, designator)) return;
+    if (cost > 0 && forbiddenAction(game, i, a, designator)) return;
     const id = JSON.stringify(a);
     out.push({
       id,

@@ -85,11 +85,26 @@
       "elderSign"
     ]
   },
-  "options": [],
+  "options": [
+    {
+      "id": "rtdwl-replacement-sets",
+      "labelKey": "campaign.option.rtdwl-replacement-sets",
+      "replaceSets": {
+        "beyond_the_threshold": "the_beyond",
+        "resurgent_evils": "ancient_evils",
+        "erratic_fear": "striking_fear",
+        "creeping_cold": "chilling_cold",
+        "secret_doors": "locked_doors",
+        "yog_sothoths_emissaries": "agents_of_yog"
+      },
+      "addSets": []
+    }
+  ],
   "logLabels": {},
   "packs": [
     "core",
-    "dwl"
+    "dwl",
+    "return"
   ],
   "generated": false,
   "card": "02041",

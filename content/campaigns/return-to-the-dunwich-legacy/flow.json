@@ -136,19 +136,16 @@
     },
     "return-to-the-miskatonic-museum": {
       "none": [
-        "return-to-the-miskatonic-museum:maybe_note_about_chaos_token",
         "return-to-the-miskatonic-museum:failed_to_recover_necronomicon",
         "return-to-the-miskatonic-museum:earn_xp",
         "return-to-the-miskatonic-museum:upgradeDecks"
       ],
       "R1": [
-        "return-to-the-miskatonic-museum:maybe_note_about_chaos_token",
         "return-to-the-miskatonic-museum:destroyed_necronomicon",
         "return-to-the-miskatonic-museum:earn_xp",
         "return-to-the-miskatonic-museum:upgradeDecks"
       ],
       "R2": [
-        "return-to-the-miskatonic-museum:maybe_note_about_chaos_token",
         "return-to-the-miskatonic-museum:took_necronomicon",
         "return-to-the-miskatonic-museum:earned_necronomicon:text",
         "return-to-the-miskatonic-museum:earned_necronomicon",
@@ -160,15 +157,18 @@
     },
     "return-to-essex-county-express": {
       "none": [
+        "return-to-essex-county-express:investigator_defeat",
         "return-to-essex-county-express:investigators_delayed",
         "return-to-essex-county-express:earn_xp",
         "return-to-essex-county-express:upgradeDecks"
       ],
       "R1": [
+        "return-to-essex-county-express:investigator_defeat",
         "return-to-essex-county-express:earn_xp",
         "return-to-essex-county-express:upgradeDecks"
       ],
       "R2": [
+        "return-to-essex-county-express:investigator_defeat",
         "return-to-essex-county-express:investigators_delayed",
         "return-to-essex-county-express:earn_xp",
         "return-to-essex-county-express:upgradeDecks"
@@ -205,14 +205,12 @@
     },
     "return-to-undimensioned-and-unseen": {
       "none": [
-        "return-to-undimensioned-and-unseen:brood_escaped",
         "return-to-undimensioned-and-unseen:remove_powder:text",
         "return-to-undimensioned-and-unseen:remove_powder",
         "return-to-undimensioned-and-unseen:earn_xp",
         "return-to-undimensioned-and-unseen:upgradeDecks"
       ],
       "R1": [
-        "return-to-undimensioned-and-unseen:brood_escaped",
         "return-to-undimensioned-and-unseen:remove_powder:text",
         "return-to-undimensioned-and-unseen:remove_powder",
         "return-to-undimensioned-and-unseen:earn_xp",
@@ -247,9 +245,11 @@
     },
     "return-to-lost-in-time-and-space": {
       "none": [
-        "return-to-lost-in-time-and-space:check_final_act"
+        "return-to-lost-in-time-and-space:investigator_defeat",
+        "return-to-lost-in-time-and-space:act_reached"
       ],
       "R1": [
+        "return-to-lost-in-time-and-space:investigator_defeat",
         "return-to-lost-in-time-and-space:closed_tear",
         "return-to-lost-in-time-and-space:trauma:text",
         "return-to-lost-in-time-and-space:trauma",
@@ -259,6 +259,7 @@
         "return-to-lost-in-time-and-space:win_campaign"
       ],
       "R3": [
+        "return-to-lost-in-time-and-space:investigator_defeat",
         "return-to-lost-in-time-and-space:yog_sothoth_fled",
         "return-to-lost-in-time-and-space:all_killed:text",
         "return-to-lost-in-time-and-space:all_killed",
@@ -471,18 +472,17 @@
       ]
     },
     "return-to-the-house-always-wins:cheated": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "cheat",
-          "text": "Did any player “cheat”?",
-          "effects": [],
-          "steps": [
-            "return-to-the-house-always-wins:add_elder_thing:text",
-            "return-to-the-house-always-wins:add_elder_thing"
-          ]
-        }
-      ]
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "cheated",
+        "section": "hidden"
+      },
+      "then": [
+        "return-to-the-house-always-wins:add_elder_thing:text",
+        "return-to-the-house-always-wins:add_elder_thing"
+      ],
+      "else": []
     },
     "return-to-the-house-always-wins:earn_1_xp": {
       "kind": "effects",
@@ -589,23 +589,6 @@
         }
       ]
     },
-    "return-to-the-miskatonic-museum:note_about_chaos_token:text": {
-      "kind": "story",
-      "text": "If you need to add a [tablet] token to the chaos bag, use \"undo\" and select \"Adjust chaos bag\".",
-      "bullets": []
-    },
-    "return-to-the-miskatonic-museum:maybe_note_about_chaos_token": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "tmmAddChaosToken",
-        "section": "hidden"
-      },
-      "then": [],
-      "else": [
-        "return-to-the-miskatonic-museum:note_about_chaos_token:text"
-      ]
-    },
     "return-to-the-miskatonic-museum:failed_to_recover_necronomicon": {
       "kind": "effects",
       "effects": [
@@ -706,6 +689,221 @@
     },
     "return-to-essex-county-express:upgradeDecks": {
       "kind": "upgradeDecks"
+    },
+    "return-to-essex-county-express:investigator_defeat": {
+      "kind": "branch",
+      "condition": {
+        "kind": "anyDefeated"
+      },
+      "then": [
+        "return-to-essex-county-express:investigator_defeat:text",
+        "return-to-essex-county-express:across_space_and_time:text",
+        "return-to-essex-county-express:across_space_and_time",
+        "return-to-essex-county-express:bonus_xp:text",
+        "return-to-essex-county-express:bonus_xp",
+        "return-to-essex-county-express:lose_necronomicon",
+        "return-to-essex-county-express:lose_henry_armitage",
+        "return-to-essex-county-express:lose_francis_morgan",
+        "return-to-essex-county-express:lose_warren_rice"
+      ],
+      "else": []
+    },
+    "return-to-essex-county-express:investigator_defeat:text": {
+      "kind": "story",
+      "title": "Investigator Defeat",
+      "text": "Your experience beyond the gate is simultaneously terrifying and impossible to recall with clarity. A hypnotic spectacle of lights, otherworldly sensations, and altered geometry dances at the tattered edges of your mind. An unearthly voice from beyond rings in your ears, its significance an enigma. When you awaken, you find yourself in the woods, several miles from the Miskatonic River. Destroyed train cars surround you. They are crumpled as if from a severe impact; they are also decayed as if years of rust and squalor have claimed them. There is no sign of the other passengers.",
+      "bullets": []
+    },
+    "return-to-essex-county-express:across_space_and_time:text": {
+      "kind": "story",
+      "text": "Each investigator who was defeated has acquired the Across Space and Time weakness and must add 1 copy of it to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "return-to-essex-county-express:across_space_and_time": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "02178",
+          "who": "defeated"
+        }
+      ]
+    },
+    "return-to-essex-county-express:bonus_xp:text": {
+      "kind": "story",
+      "text": "Each investigator who was defeated earns 1 bonus experience as their experience beyond the gate grants them insight into the cosmos.",
+      "bullets": []
+    },
+    "return-to-essex-county-express:bonus_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "defeated",
+          "victory": false
+        }
+      ]
+    },
+    "return-to-essex-county-express:lose_necronomicon": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "02140",
+        "inv": "defeated"
+      },
+      "then": [
+        "return-to-essex-county-express:necronomicon_stolen",
+        "return-to-essex-county-express:remove_necronomicon:text",
+        "return-to-essex-county-express:remove_necronomicon"
+      ],
+      "else": []
+    },
+    "return-to-essex-county-express:necronomicon_stolen": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "necronomiconStolen",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-essex-county-express:remove_necronomicon:text": {
+      "kind": "story",
+      "text": "The Necronomicon <i>(Olaus Wormius Translation)</i> must be removed from that investigator’s deck.",
+      "bullets": []
+    },
+    "return-to-essex-county-express:remove_necronomicon": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "02140",
+          "who": "defeated"
+        }
+      ]
+    },
+    "return-to-essex-county-express:lose_henry_armitage": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "02040",
+        "inv": "defeated"
+      },
+      "then": [
+        "return-to-essex-county-express:henry_armitage_kidnapped",
+        "return-to-essex-county-express:remove_henry_armitage:text",
+        "return-to-essex-county-express:remove_henry_armitage"
+      ],
+      "else": []
+    },
+    "return-to-essex-county-express:henry_armitage_kidnapped": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "henryArmitageKidnapped",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-essex-county-express:remove_henry_armitage:text": {
+      "kind": "story",
+      "text": "Dr. Henry Armitage must be removed from that investigator’s deck.",
+      "bullets": []
+    },
+    "return-to-essex-county-express:remove_henry_armitage": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "02040",
+          "who": "defeated"
+        }
+      ]
+    },
+    "return-to-essex-county-express:lose_francis_morgan": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "02080",
+        "inv": "defeated"
+      },
+      "then": [
+        "return-to-essex-county-express:francis_morgan_kidnapped",
+        "return-to-essex-county-express:remove_francis_morgan:text",
+        "return-to-essex-county-express:remove_francis_morgan"
+      ],
+      "else": []
+    },
+    "return-to-essex-county-express:francis_morgan_kidnapped": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "francisMorganKidnapped",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-essex-county-express:remove_francis_morgan:text": {
+      "kind": "story",
+      "text": "Dr. Francis Morgan must be removed from that investigator’s deck.",
+      "bullets": []
+    },
+    "return-to-essex-county-express:remove_francis_morgan": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "02080",
+          "who": "defeated"
+        }
+      ]
+    },
+    "return-to-essex-county-express:lose_warren_rice": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "02061",
+        "inv": "defeated"
+      },
+      "then": [
+        "return-to-essex-county-express:warren_rice_kidnapped",
+        "return-to-essex-county-express:remove_warren_rice:text",
+        "return-to-essex-county-express:remove_warren_rice"
+      ],
+      "else": []
+    },
+    "return-to-essex-county-express:warren_rice_kidnapped": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "warrenRiceKidnapped",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-essex-county-express:remove_warren_rice:text": {
+      "kind": "story",
+      "text": "Professor Warren Rice must be removed from that investigator’s deck.",
+      "bullets": []
+    },
+    "return-to-essex-county-express:remove_warren_rice": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "02061",
+          "who": "defeated"
+        }
+      ]
     },
     "return-to-essex-county-express:add_chaos_token:easy:fx": {
       "kind": "effects",
@@ -818,33 +1016,14 @@
       "bullets": []
     },
     "return-to-blood-on-the-altar:record_sacrificed": {
-      "kind": "cardChoice",
-      "text": "In your Campaign Log, under “Sacrificed to Yog‐Sothoth,” record the names of each unique card that is underneath the agenda deck.\nEach of these cards are removed from all players’ decks and can no longer be included in any players’ decks for the remainder of the campaign.",
-      "codes": [
-        "02080",
-        "02061",
-        "02040",
-        "02217",
-        "02218"
-      ],
-      "min": 1,
-      "max": 1,
+      "kind": "effects",
       "effects": [
         {
-          "do": "listCards",
+          "do": "removeListed",
           "id": "sacrificed",
-          "section": "sacrificed",
-          "codes": [
-            "$input"
-          ],
-          "remove": false
-        },
-        {
-          "do": "removeCard",
-          "code": "$input"
+          "section": "sacrificed"
         }
-      ],
-      "steps": []
+      ]
     },
     "return-to-blood-on-the-altar:henry_armitage_survived": {
       "kind": "effects",
@@ -860,9 +1039,10 @@
     "return-to-blood-on-the-altar:check_henry_armitage": {
       "kind": "branch",
       "condition": {
-        "kind": "logHas",
-        "id": "02040",
-        "section": "sacrificed"
+        "kind": "logCards",
+        "id": "sacrificed",
+        "section": "sacrificed",
+        "card": "02040"
       },
       "then": [],
       "else": [
@@ -899,7 +1079,7 @@
       "condition": {
         "kind": "hasCard",
         "card": "02140",
-        "inv": "any"
+        "inv": "defeated"
       },
       "then": [
         "return-to-blood-on-the-altar:necronomicon_stolen",
@@ -963,21 +1143,6 @@
           "value": true
         }
       ]
-    },
-    "return-to-undimensioned-and-unseen:brood_escaped": {
-      "kind": "counter",
-      "text": "In your Campaign Log, record that <i>X brood escaped into the wild</i>. X is the total number of Brood of Yog‐Sothoth still in play or set aside.",
-      "min": 0,
-      "effects": [
-        {
-          "do": "count",
-          "id": "broodEscaped",
-          "section": "campaign_notes",
-          "op": "set",
-          "value": "input"
-        }
-      ],
-      "steps": []
     },
     "return-to-undimensioned-and-unseen:remove_powder:text": {
       "kind": "story",
@@ -1078,7 +1243,11 @@
       "effects": [
         {
           "do": "addWeakness",
-          "trait": "Madness"
+          "trait": [
+            "Madness",
+            "Injury",
+            "Pact"
+          ]
         }
       ]
     },
@@ -1140,40 +1309,6 @@
     },
     "return-to-where-doom-awaits:upgradeDecks": {
       "kind": "upgradeDecks"
-    },
-    "return-to-where-doom-awaits:part1": {
-      "kind": "story",
-      "text": "The path leading up Sentinel Hill is narrow and too torn up for Zebulon’s truck, so you park at the base of the hill and prepare to make the rest of the trip on foot. Just then, you notice that you are not alone. Several men and women emerge from the woods behind you, brandishing firearms and lining you up in their sights. You raise your hands and brace for the worst. “Wait,” one of them says, raising his hand to the others. “I recognize you from the Clover Club.” He grins toothily and lowers his weapon. “Naomi sends her regards.”\nCurious, you ask what the gangsters are doing here. “Ms. O’Bannion had us investigate the attack on her fiancé’s club,” he explains. “Turns out there were some men in Arkham behind the whole thing. Some Bishop fellow and his lackeys. We tailed them all the way to this dump.” Before he can explain further, the all-too-familiar ratta‐tat of a tommy gun echoes across the hill. “That’ll be Vinny. Come on, boys!” He beckons to the others to follow and runs up the hill. Shaking your head, you do the same. These mobsters don’t know what they’re getting into.",
-      "bullets": []
-    },
-    "return-to-where-doom-awaits:gain_naomi_award:text": {
-      "kind": "story",
-      "text": "The lead investigator may choose an investigator to add the Naomi O'Bannion asset to their deck. This card does not count toward that investigator's deck size.",
-      "bullets": []
-    },
-    "return-to-where-doom-awaits:gain_naomi_award": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "51052",
-          "who": "choice"
-        }
-      ]
-    },
-    "return-to-where-doom-awaits:check_naomi_has_back": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "naomiHasBack",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "return-to-where-doom-awaits:part1",
-        "return-to-where-doom-awaits:gain_naomi_award:text",
-        "return-to-where-doom-awaits:gain_naomi_award"
-      ],
-      "else": []
     },
     "return-to-where-doom-awaits:add_chaos_token:easy:fx": {
       "kind": "effects",
@@ -1314,54 +1449,6 @@
         {
           "do": "end",
           "result": "win"
-        }
-      ]
-    },
-    "return-to-lost-in-time-and-space:check_final_act": {
-      "kind": "chooseOne",
-      "text": "What act were the investigators on when the scenario ended?",
-      "choices": [
-        {
-          "id": "act_1",
-          "text": "Act 1",
-          "effects": [],
-          "steps": [
-            "return-to-lost-in-time-and-space:yog_sothoth_became_one_with_reality",
-            "return-to-lost-in-time-and-space:all_insane:text",
-            "return-to-lost-in-time-and-space:lose_campaign:text",
-            "return-to-lost-in-time-and-space:lose_campaign"
-          ]
-        },
-        {
-          "id": "act_2",
-          "text": "Act 2",
-          "effects": [],
-          "steps": [
-            "return-to-lost-in-time-and-space:yog_sothoth_became_one_with_reality",
-            "return-to-lost-in-time-and-space:all_insane:text",
-            "return-to-lost-in-time-and-space:lose_campaign:text",
-            "return-to-lost-in-time-and-space:lose_campaign"
-          ]
-        },
-        {
-          "id": "act_3",
-          "text": "Act 3",
-          "effects": [],
-          "steps": [
-            "return-to-lost-in-time-and-space:yog_sothoth_became_one_with_reality",
-            "return-to-lost-in-time-and-space:all_insane:text",
-            "return-to-lost-in-time-and-space:lose_campaign:text",
-            "return-to-lost-in-time-and-space:lose_campaign"
-          ]
-        },
-        {
-          "id": "act_4",
-          "text": "Act 4",
-          "effects": [],
-          "steps": [
-            "return-to-lost-in-time-and-space:win_and_lost_forever:text",
-            "return-to-lost-in-time-and-space:win_and_lost_forever"
-          ]
         }
       ]
     },
@@ -1667,9 +1754,10 @@
     "dwl-interlude2:check_henry_armitage": {
       "kind": "branch",
       "condition": {
-        "kind": "logHas",
-        "id": "02040",
-        "section": "sacrificed"
+        "kind": "logCards",
+        "id": "sacrificed",
+        "section": "sacrificed",
+        "card": "02040"
       },
       "then": [],
       "else": [
@@ -1726,9 +1814,10 @@
     "dwl-interlude2:check_warren_rice": {
       "kind": "branch",
       "condition": {
-        "kind": "logHas",
-        "id": "02061",
-        "section": "sacrificed"
+        "kind": "logCards",
+        "id": "sacrificed",
+        "section": "sacrificed",
+        "card": "02061"
       },
       "then": [],
       "else": [
@@ -1785,9 +1874,10 @@
     "dwl-interlude2:check_francis_morgan": {
       "kind": "branch",
       "condition": {
-        "kind": "logHas",
-        "id": "02080",
-        "section": "sacrificed"
+        "kind": "logCards",
+        "id": "sacrificed",
+        "section": "sacrificed",
+        "card": "02080"
       },
       "then": [],
       "else": [
@@ -1831,9 +1921,10 @@
     "dwl-interlude2:check_zebulon_whateley": {
       "kind": "branch",
       "condition": {
-        "kind": "logHas",
-        "id": "02217",
-        "section": "sacrificed"
+        "kind": "logCards",
+        "id": "sacrificed",
+        "section": "sacrificed",
+        "card": "02217"
       },
       "then": [],
       "else": [
@@ -1877,9 +1968,10 @@
     "dwl-interlude2:check_earl_sawyer": {
       "kind": "branch",
       "condition": {
-        "kind": "logHas",
-        "id": "02218",
-        "section": "sacrificed"
+        "kind": "logCards",
+        "id": "sacrificed",
+        "section": "sacrificed",
+        "card": "02218"
       },
       "then": [],
       "else": [
@@ -1891,6 +1983,107 @@
     },
     "dwl-interlude2:upgradeDecks": {
       "kind": "upgradeDecks"
+    },
+    "return-to-lost-in-time-and-space:investigator_defeat": {
+      "kind": "branch",
+      "condition": {
+        "kind": "anyDefeated"
+      },
+      "then": [
+        "return-to-lost-in-time-and-space:investigator_defeat:text",
+        "return-to-lost-in-time-and-space:defeated_killed:text",
+        "return-to-lost-in-time-and-space:defeated_killed"
+      ],
+      "else": []
+    },
+    "return-to-lost-in-time-and-space:investigator_defeat:text": {
+      "kind": "story",
+      "title": "Investigator Defeat",
+      "text": "Where did you come from? Why are you here? Are you dreaming, or is this place real? Now that you think about it, haven’t you been here before? Or perhaps you’ve been here all along. Now you remember. This is your real home. The path you now walk is but one ledge, with many more below. You only have to fall and you will be where you belong. One more step…",
+      "bullets": []
+    },
+    "return-to-lost-in-time-and-space:defeated_killed:text": {
+      "kind": "story",
+      "text": "Each defeated investigator is <b>killed</b>.",
+      "bullets": []
+    },
+    "return-to-lost-in-time-and-space:defeated_killed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "kill",
+          "who": "defeated"
+        }
+      ]
+    },
+    "return-to-lost-in-time-and-space:act_reached": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "actReached",
+        "section": "hidden",
+        "min": 4
+      },
+      "then": [
+        "return-to-lost-in-time-and-space:resolution_2:text",
+        "return-to-lost-in-time-and-space:win_and_lost_forever:text",
+        "return-to-lost-in-time-and-space:win_and_lost_forever"
+      ],
+      "else": [
+        "return-to-lost-in-time-and-space:resolution_4:text",
+        "return-to-lost-in-time-and-space:yog_sothoth_became_one_with_reality",
+        "return-to-lost-in-time-and-space:all_insane:text",
+        "return-to-lost-in-time-and-space:lose_campaign:text",
+        "return-to-lost-in-time-and-space:lose_campaign"
+      ]
+    },
+    "return-to-lost-in-time-and-space:resolution_2:text": {
+      "kind": "story",
+      "title": "Resolution 2",
+      "text": "Several of the villagers from Dunwich heard the ruckus on Sentinel Hill and went to investigate. What they found there answered none of their questions.\n“What d’you think happened?” a frightened Curtis Whateley asks as they examine the hilltop. The other villagers shake their heads, unable to say. “Last thing I saw, the sky’d open’d up an’ there was a bright flash,” one of them says, looking up at the starry sky from the top of Sentinel Hill.\n“Those Arkham fellas ain’t nowhere to be seen,” Curtis adds, looking down at the cracked stone altar. “Not even of a hint of ‘em. Mr. Bishop and his pals, now, that’s a diff’rent story.” The young man motions toward several corpses on the ground.\n“Think we should get ahold of those coppers outta Aylesbury?”\n“Why, so they can laugh at us again?” Curtis spits. “They ain’t never gonna believe us ‘bout all this anyway.” He glances at the stone altar, fidgeting nervously. “Better t’ forget about the whole thing. C’mon, let’s bury the dead and get outta here.”",
+      "bullets": []
+    },
+    "return-to-lost-in-time-and-space:resolution_4:text": {
+      "kind": "story",
+      "title": "Resolution 4",
+      "text": "The sorcerers from Dunwich, seeking arcane power from beyond this realm, have accomplished what Wilbur and Old Whateley could not. Through blood sacrifice and indescribable experiments, the dark power the sorcerers sought is now within their reach. However, they will never get the chance to truly wield this power. In beseeching Wilbur’s father for knowledge, they have drawn the creature forth from its extradimensional realm. Yog-Sothoth emerges from the open rift above Sentinel Hill, blotting out the sky and enveloping the world. Now it has come to Earth, and it rules where humanity once tread.",
+      "bullets": []
+    },
+    "return-to-where-doom-awaits:check_naomi_has_back": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "naomiHasBack",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-where-doom-awaits:part1",
+        "return-to-where-doom-awaits:gain_naomi_award:text",
+        "return-to-where-doom-awaits:gain_naomi_award"
+      ],
+      "else": []
+    },
+    "return-to-where-doom-awaits:part1": {
+      "kind": "story",
+      "text": "The path leading up Sentinel Hill is narrow and too torn up for Zebulon’s truck, so you park at the base of the hill and prepare to make the rest of the trip on foot. Just then, you notice that you are not alone. Several men and women emerge from the woods behind you, brandishing firearms and lining you up in their sights. You raise your hands and brace for the worst. “Wait,” one of them says, raising his hand to the others. “I recognize you from the Clover Club.” He grins toothily and lowers his weapon. “Naomi sends her regards.”\nCurious, you ask what the gangsters are doing here. “Ms. O’Bannion had us investigate the attack on her fiancé’s club,” he explains. “Turns out there were some men in Arkham behind the whole thing. Some Bishop fellow and his lackeys. We tailed them all the way to this dump.” Before he can explain further, the all-too-familiar ratta‐tat of a tommy gun echoes across the hill. “That’ll be Vinny. Come on, boys!” He beckons to the others to follow and runs up the hill. Shaking your head, you do the same. These mobsters don’t know what they’re getting into.",
+      "bullets": []
+    },
+    "return-to-where-doom-awaits:gain_naomi_award:text": {
+      "kind": "story",
+      "text": "The lead investigator may choose an investigator to add the Naomi O'Bannion asset to their deck. This card does not count toward that investigator's deck size.",
+      "bullets": []
+    },
+    "return-to-where-doom-awaits:gain_naomi_award": {
+      "kind": "investigatorChoice",
+      "optional": true,
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "51052",
+          "who": "input"
+        }
+      ],
+      "steps": []
     }
   }
 }

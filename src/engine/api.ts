@@ -7,7 +7,15 @@ import { push, type GameContext } from "./context";
 import { afterTest as afterTestSteps } from "./rules/skillTest";
 import { STEP } from "./steps/step";
 import type { BeneathOf, Effect, Placement, TokenHolder, Trigger } from "../content/schema";
-import type { EffCtx, EventData, InstId, InvId, ScriptHooks, Step } from "./world/types";
+import type {
+  CardScript,
+  EffCtx,
+  EventData,
+  InstId,
+  InvId,
+  ScriptHooks,
+  Step,
+} from "./world/types";
 
 // ---------- reading the game ----------
 export {
@@ -79,6 +87,7 @@ export {
   attachTo,
   cancelEvent,
   emit,
+  exhaust,
   placeInvestigator,
   randomInt,
   ready,
@@ -291,3 +300,15 @@ export function compose(
     out.healHorror = (game, run, target, n) => xh(game, run, target, bh(game, run, target, n));
   return out;
 }
+
+/**
+ * A Return-to scenario's script over its base's: the extra's functions and conditions beside the base's (the extra's
+ * win on a shared name), the other members the extra's where it has them, and the hooks through `compose`.
+ */
+export const composeScript = (base: CardScript, extra: CardScript): CardScript => ({
+  ...base,
+  ...extra,
+  fns: { ...base.fns, ...extra.fns },
+  conditions: { ...base.conditions, ...extra.conditions },
+  hooks: compose(base.hooks ?? {}, extra.hooks ?? {}),
+});

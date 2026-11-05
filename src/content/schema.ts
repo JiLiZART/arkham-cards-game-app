@@ -229,6 +229,13 @@ export const ModFlag = z.enum([
   "cannotPlayOrCommit",
   "noAttacksOfOpportunity",
   "cannotBeDamaged",
+  /** on an enemy: player card effects can't target or affect it; attacks on it are still made (Realms Beyond's
+   * Yog-Sothoth) */
+  "immuneToPlayerCards",
+  /** on an enemy: it gains the Elite trait (Imperceptible Creature) */
+  "elite",
+  /** on an enemy: it loses Aloof, its own or granted (Raise the Stakes) */
+  "notAloof",
   /** investigators can't move out of this location */
   "cannotLeave",
   /** on an enemy: the investigator engaged with it can't gain resources (O'Bannion's Thug) */
@@ -243,9 +250,18 @@ export const ModFlag = z.enum([
   "cannotGainResources",
   /** the investigator can't investigate (Administration Office, while they have too little) */
   "cannotInvestigate",
+  /** the investigator can't take a fight, evade, move or play action (A Baleful Welcome); `cannotInvestigate` is the fourth */
+  "cannotFight",
+  "cannotEvade",
+  "cannotMoveAction",
+  "cannotPlayAction",
+  /** the investigator can't take a draw or a resource action (Village Commons, Silent Decay) */
+  "cannotDrawAction",
+  "cannotResourceAction",
   /** on an enemy: the investigator engaged with it can't move (Grappling Horror) */
   "cannotMoveWhileEngaged",
-  /** the investigator can't move (Claws of Steam: "you cannot move from this location this round") */
+  /** the investigator can't move (Claws of Steam: "you cannot move from this location this round"); on an enemy, it
+   * enters no location (Yog-Sothoth "cannot leave Realms Beyond") */
   "cannotMove",
   /** the investigator can't play events (House in the Reeds) */
   "cannotPlayEvents",
@@ -286,6 +302,40 @@ export const ModScope = z.enum([
   "enemiesAtLocation", // each enemy at the source location (or at the controller's)
 ]);
 
+/** an enemy's prey instruction */
+export const Prey = z.union([
+  z.object({
+    highest: z.enum([
+      "willpower",
+      "intellect",
+      "combat",
+      "agility",
+      EVENT.Clues,
+      "remainingHealth",
+      "remainingSanity",
+      "cardsInHand",
+      "resources",
+    ]),
+  }),
+  z.object({
+    lowest: z.enum([
+      "willpower",
+      "intellect",
+      "combat",
+      "agility",
+      EVENT.Clues,
+      "remainingHealth",
+      "remainingSanity",
+      "cardsInHand",
+    ]),
+  }),
+  z.literal("bearer"),
+  /** only this investigator (by card code) is prey: Tommy Malloy */
+  z.object({ only: z.string() }),
+  /** the investigator nearest to a card in play matching the filter */
+  z.object({ nearestTo: CardFilter }),
+]);
+
 export const Modifier = z
   .object({
     stat: ModStat.optional(),
@@ -300,6 +350,8 @@ export const Modifier = z
     useSkill: Skill.optional(),
     /** the targets gain this keyword (an agenda's "each enemy gains Patrol (…)") */
     keyword: z.lazy(() => Keyword).optional(),
+    /** an enemy target gains this prey instruction when it has none of its own (Hired Gun: "Prey - Most resources") */
+    prey: Prey.optional(),
   })
   .strict();
 export type Modifier = z.infer<typeof Modifier>;
@@ -583,7 +635,12 @@ export type Effect =
       amount?: Amount;
     }
   | { op: "putInThreatArea" }
-  | { op: "attachToLocation"; where: "yours" | "mostClues"; limitOnePerLocation?: boolean }
+  /** `mostInvestigators`: a location with the most investigators (Secret Door); the lead breaks a tie */
+  | {
+      op: "attachToLocation";
+      where: "yours" | "mostClues" | "mostInvestigators";
+      limitOnePerLocation?: boolean;
+    }
   | { op: "discardSelf" }
   | { op: "addSelfToVictory" }
   | { op: "removeSelf" }
@@ -1013,7 +1070,7 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
     z
       .object({
         op: z.literal("attachToLocation"),
-        where: z.enum(["yours", "mostClues"]),
+        where: z.enum(["yours", "mostClues", "mostInvestigators"]),
         limitOnePerLocation: z.boolean().optional(),
       })
       .strict(),
@@ -1537,6 +1594,8 @@ export const TRIGGERS = [
   "skillTestEnds",
   "wouldRevealToken",
   "cardDrawn",
+  /** after an investigator draws 1 or more cards by one effect (`amount`: how many) */
+  "cardsDrawn",
   /** an enemy moved into or spawned at a location (`location`) */
   "enemyEntersLocation",
   /** an asset is defeated: it is still in play while the window is open */
@@ -1816,40 +1875,7 @@ export const CardDef = z
     onlyAttackableBy: z.string().optional(),
     /** an investigator its attack would defeat is killed instead (Crazed Shoggoth) */
     killsOnDefeat: z.literal(true).optional(),
-    prey: z
-      .union([
-        z.object({
-          highest: z.enum([
-            "willpower",
-            "intellect",
-            "combat",
-            "agility",
-            EVENT.Clues,
-            "remainingHealth",
-            "remainingSanity",
-            "cardsInHand",
-            "resources",
-          ]),
-        }),
-        z.object({
-          lowest: z.enum([
-            "willpower",
-            "intellect",
-            "combat",
-            "agility",
-            EVENT.Clues,
-            "remainingHealth",
-            "remainingSanity",
-            "cardsInHand",
-          ]),
-        }),
-        z.literal("bearer"),
-        /** only this investigator (by card code) is prey: Tommy Malloy */
-        z.object({ only: z.string() }),
-        /** the investigator nearest to a card in play matching the filter */
-        z.object({ nearestTo: CardFilter }),
-      ])
-      .optional(),
+    prey: Prey.optional(),
     // location (shroud null: the text defines it; the location can't be investigated)
     shroud: z.number().nullable().optional(),
     clues: z.number().optional(),

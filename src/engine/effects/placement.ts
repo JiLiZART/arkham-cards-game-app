@@ -24,6 +24,7 @@ import {
   controlled,
   distances,
   enemiesAt,
+  invsAt,
   locations,
   matchesFilter,
   isHidden,
@@ -64,9 +65,11 @@ function attachToLocationEffect(game: GameContext, run: EffectRun<EffectOf<"atta
     cands = cands.filter(
       (l) => !cardsIn(game, ZONE.Attached).some((a) => a.location === l && a.code === src.code),
     );
-  if (e.where === "mostClues" && cands.length) {
-    const most = Math.max(...cands.map((l) => card(game, l).clues));
-    cands = cands.filter((l) => card(game, l).clues === most);
+  if (e.where !== "yours" && cands.length) {
+    const count = (l: InstId) =>
+      e.where === "mostClues" ? card(game, l).clues : invsAt(game, l).length;
+    const most = Math.max(...cands.map(count));
+    cands = cands.filter((l) => count(l) === most);
   }
   if (!cands.length) {
     discard(game, src.id);

@@ -92,7 +92,7 @@
     "dwl",
     "return"
   ],
-  "generated": true,
+  "generated": false,
   "card": "02041",
   "cover": "02042",
   "prologue": "“I’m going to burn his accursed diary, and if you men are wise you’ll dynamite that altar-stone up there, and pull down all the rings of standing stones on the other hills. Things like that brought down the beings those Whateleys were so fond of…”\n–H. P. Lovecraft, “The Dunwich Horror”",
@@ -154,7 +154,7 @@
       "scenario": "return-to-essex-county-express",
       "name": "Return to The Essex County Express",
       "code": "02159",
-      "agenda": "02160",
+      "agenda": "51026",
       "act": "02165"
     },
     {
@@ -187,8 +187,8 @@
       "scenario": "return-to-lost-in-time-and-space",
       "name": "Return to Lost in Time and Space",
       "code": "02311",
-      "agenda": "51054",
-      "act": "51055"
+      "agenda": "02312",
+      "act": "02316"
     },
     {
       "scenario": "dwl-epilogue",

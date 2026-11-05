@@ -20,7 +20,8 @@ import { testsEffects } from "./tests";
 import { choicesEffects } from "./choices";
 import { structureEffects } from "./structure";
 import type { EffectHandlers, EffectRun, EffStep } from "./types";
-import { opt } from "./targets";
+import { ATTACK_OPS, opt } from "./targets";
+import { immuneTo } from "../queries";
 import { CHOICE } from "../world/constants";
 import { STEP } from "../steps/step";
 
@@ -69,7 +70,12 @@ export const EFFECT_HANDLERS: EffectHandlers = {
 export const effHandler = (game: GameContext, step: EffStep) => {
   if (currentPhase(game) === "ended") return;
   const e = step.effect;
-  const ctx = step.ctx;
+  // the event's enemy, immune to the effects of this card, is out of its reach (Realms Beyond's Yog-Sothoth); an attack
+  // on it is still made
+  const ctx =
+    step.ctx.enemy && !ATTACK_OPS.has(e.op) && immuneTo(game, step.ctx.enemy, step.ctx.source)
+      ? { ...step.ctx, enemy: undefined }
+      : step.ctx;
   if (!resolvesFor(game, ctx)) return;
   const you = ctx.you ?? leadInvestigator(game);
   const src = ctx.source ? cardIf(game, ctx.source) : undefined;

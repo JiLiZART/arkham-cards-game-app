@@ -6,6 +6,8 @@
   "cultists": "cult_of_umordoth",
   "essex_county_express": "the_essex_county_express",
   "pentagram": "dark_cult",
+  "return_to_essex_county_express": "return_to_the_essex_county_express",
+  "return_to_extracurricular_activity": "return_to_extracurricular_activities",
   "tentacles": "the_devourer_below",
   "the_midnight_masks": "midnight_masks",
   "torch": "the_gathering"
@@ -1407,12 +1409,16 @@
    "file": "return_to_echoes_of_the_past.svg",
    "set": "extra"
   },
+  "return_to_essex_county_express": {
+   "file": "return_to_the_essex_county_express.svg",
+   "set": "extra"
+  },
   "return_to_extracurricular_activities": {
    "file": "return_to_extracurricular_activities.svg",
    "set": "extra"
   },
   "return_to_extracurricular_activity": {
-   "file": "extracurricular_activity.svg",
+   "file": "return_to_extracurricular_activities.svg",
    "set": "extra"
   },
   "return_to_for_the_greater_good": {

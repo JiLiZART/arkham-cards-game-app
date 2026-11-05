@@ -8,6 +8,8 @@ import {
   EVENT,
   type GameContext,
   inv,
+  openWindow,
+  queue,
   setCardLocation,
   stepsToward,
   type ScriptRun,
@@ -35,6 +37,7 @@ export default {
             data: { from, to },
           },
         );
+        queue(game, openWindow("enemyEntersLocation", { enemy: id, location: to }));
       }
     },
   },

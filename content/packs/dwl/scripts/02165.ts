@@ -6,20 +6,19 @@ import {
   type CardScript,
   type GameContext,
   inv,
-  locations,
   type ScriptRun,
   turnOrder,
   queue,
   resolveEffect,
   runScript,
 } from "../../../../src/engine/api";
-import { ENGINE_CARS } from "../../../campaigns/the-dunwich-legacy/scripts/essex-county-express";
+import { engineCar } from "../../../campaigns/the-dunwich-legacy/scripts/essex-county-express";
 
 export default {
   abilities: [{ kind: "revelation", run: "back" }],
   fns: {
     back(game: GameContext, run: ScriptRun) {
-      const engine = locations(game).find((l) => ENGINE_CARS.includes(l.code))?.id;
+      const engine = engineCar(game)?.id;
       const there = turnOrder(game).filter((i) => engine && inv(game, i).location === engine);
       const who = run.chooseInvestigator(there.length ? there : [run.you], {
         text: "Choose the investigator who entered the Engine Car",

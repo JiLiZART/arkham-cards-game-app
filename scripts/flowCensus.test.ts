@@ -33,25 +33,25 @@ const unsupportedTests = (c: FlowCondition): number =>
 
 describe("the generated flows", () => {
   it("are one per generated campaign, each valid", () => {
-    expect(ids.length).toBe(36); // Curse of the Rougarou now imports (its setup names no location); The Dunwich Legacy is hand-written
-    expect(flows.length).toBe(36);
+    expect(ids.length).toBe(35); // Curse of the Rougarou now imports (its setup names no location); The Dunwich Legacy and its Return-to box are hand-written
+    expect(flows.length).toBe(35);
   });
 
   it("hold the interludes, the resolutions and the prompts the guides give, and as many as can't be offered as the census says", () => {
     const steps = flows.flatMap((f) => Object.values(f.flow.steps));
-    expect(flows.reduce((n, f) => n + Object.keys(f.flow.interludes).length, 0)).toBe(75); // only the interludes a flow reaches (no side flow carries another campaign's)
+    expect(flows.reduce((n, f) => n + Object.keys(f.flow.interludes).length, 0)).toBe(71); // only the interludes a flow reaches (no side flow carries another campaign's)
     expect(
       flows.reduce(
         (n, f) =>
           n + Object.values(f.flow.resolutions).reduce((m, r) => m + Object.keys(r).length, 0),
         0,
       ),
-    ).toBe(506); // hidden resolutions are tails, not endings; a defeated/resigned pair is one none
+    ).toBe(477); // hidden resolutions are tails, not endings; a defeated/resigned pair is one none
     expect(steps.filter((s) => s.kind === "unsupported").length).toBe(154); // guide inputs the engine lacks: campaign links, supplies, partners, investigator choices
     expect(
       steps.reduce((n, s) => n + (s.kind === "branch" ? unsupportedTests(s.condition) : 0), 0),
     ).toBe(392); // The Scarlet Keys' $embark compiled per scenario (127); with the scenarios' own setup steps (flow.before) and the version check (always true)
-    expect(steps.filter((s) => s.kind === "upgradeDecks").length).toBe(156);
+    expect(steps.filter((s) => s.kind === "upgradeDecks").length).toBe(146);
   });
 
   it("list their scenario reference cards in the campaign's order, the interludes marked, as the picker needs", () => {

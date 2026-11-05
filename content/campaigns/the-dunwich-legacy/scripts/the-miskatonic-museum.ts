@@ -21,19 +21,21 @@ import { RESTRICTED_HALL } from "../../../packs/dwl/scripts/02123";
 
 const HALLS = ["02132", "02133", "02134", "02135", "02136"];
 
+/** the Restricted Hall shuffled with 2 random of these halls as the bottom 3, the other 3 on top in random order */
+export function buildExhibitDeck(game: GameContext, halls: readonly string[]) {
+  const others = [...halls];
+  shuffleList(game, others);
+  const bottom = [RESTRICTED_HALL, ...others.slice(0, 2)];
+  shuffleList(game, bottom);
+  for (const code of [...others.slice(2), ...bottom]) {
+    const hall = findByCode(game, code, [ZONE.SetAside]);
+    if (hall) moveCard(game, hall.id, ZONE.SideDeck, { deck: EXHIBIT_DECK });
+  }
+}
+
 export default {
   fns: {
-    /** the Restricted Hall shuffled with 2 random halls as the bottom 3, the other 3 on top in random order */
-    exhibitDeck(game: GameContext) {
-      const others = [...HALLS];
-      shuffleList(game, others);
-      const bottom = [RESTRICTED_HALL, ...others.slice(0, 2)];
-      shuffleList(game, bottom);
-      for (const code of [...others.slice(2), ...bottom]) {
-        const hall = findByCode(game, code, [ZONE.SetAside]);
-        if (hall) moveCard(game, hall.id, ZONE.SideDeck, { deck: EXHIBIT_DECK });
-      }
-    },
+    exhibitDeck: (game: GameContext) => buildExhibitDeck(game, HALLS),
   },
   hooks: {
     checkObjectives(game: GameContext) {

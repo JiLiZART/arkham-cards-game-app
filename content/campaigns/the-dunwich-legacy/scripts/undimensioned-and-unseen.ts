@@ -30,6 +30,7 @@ import {
   leadInvestigator,
   locations,
   moveCard,
+  openWindow,
   queue,
   randomLocation,
   resolveEffect,
@@ -67,7 +68,9 @@ const PAIRS = [
 /** the campaign log count the flow reads: the Brood in play or set aside as the scenario ends */
 export const BROOD_ESCAPED = ["campaign_notes", "broodEscaped"] as const;
 
-const isBrood = (game: GameContext, id: InstId) => card(game, id).code === BROOD;
+/** a Brood of Yog-Sothoth by its name: any version (Return to Undimensioned and Unseen has four more) */
+export const BROOD_NAME = "Brood of Yog-Sothoth";
+const isBrood = (game: GameContext, id: InstId) => def(game, id).name === BROOD_NAME;
 const isAbomination = (game: GameContext, id: InstId) =>
   def(game, id).traits.includes("Abomination");
 /** the Brood in play */
@@ -78,8 +81,16 @@ export const broods = (game: GameContext): InstId[] =>
 /** the Brood set aside, out of play */
 export const broodsAside = (game: GameContext): InstId[] =>
   cardsIn(game, ZONE.SetAside)
-    .filter((c) => c.code === BROOD)
+    .filter((c) => isBrood(game, c.id))
     .map((c) => c.id);
+/** the set-aside Brood in the order they're put into play: at random among different versions, else as they lie */
+export function broodsAsideAtRandom(game: GameContext): InstId[] {
+  const all = broodsAside(game);
+  if (new Set(all.map((id) => card(game, id).code)).size > 1) shuffleList(game, all);
+  return all;
+}
+/** the set-aside Brood put into play next: "chosen at random from among the set-aside versions" (Return) */
+export const nextBrood = (game: GameContext): InstId | undefined => broodsAsideAtRandom(game)[0];
 const locationNamed = (game: GameContext, name: string) =>
   locations(game).find((l) => def(game, l.id).name === name)?.id;
 
@@ -110,6 +121,7 @@ function moveToward(game: GameContext, enemy: InstId, to: InstId, why: string) {
     card: enemy,
     data: { from, to: step },
   });
+  queue(game, openWindow("enemyEntersLocation", { enemy, location: step }));
 }
 
 /** whose clues an Abomination gets: theirs who used the ability, then the others' here; 1 each with `each` */
@@ -211,7 +223,7 @@ export const SHARED = {
     },
     /** a set-aside Brood spawns at `at`, if one is left */
     uauSpawnBrood(game: GameContext, run: ScriptRun) {
-      const brood = broodsAside(game)[0];
+      const brood = nextBrood(game);
       const at = asString(argField(run.args, "at"));
       if (!brood || !at) return;
       moveCard(game, brood, ZONE.Limbo);
@@ -308,9 +320,12 @@ export const SHARED = {
         card: enemy,
         data: { from, to },
       });
+      queue(game, openWindow("enemyEntersLocation", { enemy, location: to }));
     },
   },
   conditions: {
+    /** a Brood in play, any version (Dunwich Village's pull) */
+    uauBroodInPlay: (game: GameContext) => broods(game).length > 0,
     /** a Brood in play with clues on it (the tablet's "remove all clues" can be done) */
     uauBroodWithClues: (game: GameContext) => broods(game).some((id) => card(game, id).clues > 0),
     /** an Abomination here and clues of yours */
@@ -343,7 +358,7 @@ export default {
       const sacrificed = asStrings(campaignLogOf(game).sacrificed).length;
       const [inPlay, aside] =
         sacrificed <= 1 ? [2, 3] : sacrificed === 2 ? [1, 3] : sacrificed === 3 ? [1, 2] : [0, 2];
-      const all = broodsAside(game);
+      const all = broodsAsideAtRandom(game);
       const at = [locationNamed(game, "Cold Spring Glen"), locationNamed(game, "Blasted Heath")];
       all.slice(0, inPlay).forEach((id, k) => {
         moveCard(game, id, ZONE.Limbo);
@@ -377,7 +392,7 @@ export default {
 
 /** Biding Its Time's back: a set-aside Brood spawns at the lead's location; those there test agility (4) or it attacks */
 export function noPlaceToHide(game: GameContext) {
-  const brood = broodsAside(game)[0];
+  const brood = nextBrood(game);
   const at = inv(game, leadInvestigator(game)).location;
   if (!brood || !at) return;
   moveCard(game, brood, ZONE.Limbo);

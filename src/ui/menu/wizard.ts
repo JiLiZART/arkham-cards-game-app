@@ -38,12 +38,13 @@ export const invalidDecksFor = (db: ContentDb, code: string, storage?: Storage):
 
 /**
  * The campaigns as the new-game screen lists them: the hand-written ones first (fully implemented), then the
- * generated ones (ADR-0007) by cycle, read from their first scenario's reference card, then the Return-to boxes in the
- * same order, and the side scenarios last.
+ * generated ones (ADR-0007); in each, the cycles by their first scenario's reference card, then the Return-to boxes in
+ * the same order, and the side scenarios last.
  */
 export function campaignOrder(db: ContentDb): CampaignDef[] {
-  const group = (c: CampaignDef) =>
-    !c.generated ? 0 : c.id.startsWith("side-") ? 3 : c.id.startsWith("return-to-") ? 2 : 1;
+  const kind = (c: CampaignDef) =>
+    c.id.startsWith("side-") ? 2 : c.id.startsWith("return-to-") ? 1 : 0;
+  const group = (c: CampaignDef) => (c.generated ? 3 : 0) + kind(c);
   const card = (c: CampaignDef) => db.scenarios[c.scenarios[0]]?.card ?? c.card ?? "";
   return Object.values(db.campaigns).sort(
     (a, b) =>

@@ -81,7 +81,9 @@ export const locationByName = (game: GameContext, nm: string) =>
   locations(game).find((l) => def(game, l.id).name === nm);
 export const hasTrait = (game: GameContext, id: InstId, trait: string) =>
   def(game, id).traits.includes(trait);
-export const isElite = (game: GameContext, id: InstId) => hasTrait(game, id, "Elite");
+/** Elite by its traits, or a constant ability makes it gain Elite (Imperceptible Creature) */
+export const isElite = (game: GameContext, id: InstId) =>
+  hasTrait(game, id, "Elite") || hasFlag(game, id, "elite");
 /** whether the card's own keywords hold this one (a plain keyword, or the name of one with an argument) */
 export const hasKeyword = (game: GameContext, id: InstId, kw: string) =>
   def(game, id).keywords.some((k) => keywordName(k) === kw);
@@ -115,10 +117,14 @@ export function keywordArg<K extends keyof KeywordArgs>(
     }
   return undefined;
 }
-/** aloof by its own keywords, or a constant ability grants it (The Clover Club: "each [[Criminal]] enemy gains Aloof") */
+/**
+ * aloof by its own keywords, or a constant ability grants it (The Clover Club: "each [[Criminal]] enemy gains Aloof"),
+ * unless one takes it away (Raise the Stakes: "loses aloof")
+ */
 export const isAloof = (game: GameContext, id: InstId) =>
-  hasKeyword(game, id, "aloof") ||
-  allMods(game).some((m) => m.target === id && m.mod.keyword === "aloof");
+  (hasKeyword(game, id, "aloof") ||
+    allMods(game).some((m) => m.target === id && m.mod.keyword === "aloof")) &&
+  !hasFlag(game, id, "notAloof");
 /** an aloof enemy can only be attacked while it is engaged with an investigator; some only with one card (`by`) */
 export const attackable = (game: GameContext, id: InstId, by?: InstId | null) =>
   attackableBy(game, id, by) && (!isAloof(game, id) || !!cardRecIf(game, id)?.engagedWith);
@@ -177,9 +183,13 @@ export const advanceableActs = (game: GameContext): string[] =>
 /** the group can advance an act by spending clues, in any player window */
 export const canAdvanceAct = (game: GameContext) => advanceableActs(game).length > 0;
 /** massive by its own keywords, or a constant ability grants it (Shadow-spawned with 3 resources) */
-export const isMassive = (game: GameContext, id: InstId) =>
-  hasKeyword(game, id, "massive") ||
-  allMods(game).some((m) => m.target === id && m.mod.keyword === "massive");
+export const isMassive = (game: GameContext, id: InstId) => gainsKeyword(game, id, "massive");
+/** a keyword by the card's own keywords, or one a constant ability grants it (Hired Gun: Hunter, peril, surge) */
+export const gainsKeyword = (game: GameContext, id: InstId, kw: string) =>
+  hasKeyword(game, id, kw) || allMods(game).some((m) => m.target === id && m.mod.keyword === kw);
+/** an enemy's prey instruction: its own, else one a constant ability grants it (Hired Gun: "Prey - Most resources") */
+export const preyOf = (game: GameContext, enemy: InstId) =>
+  def(game, enemy).prey ?? allMods(game).find((m) => m.target === enemy && m.mod.prey)?.mod.prey;
 export const controlled = (game: GameContext, i: InvId) =>
   cardsIn(game, ZONE.Play).filter((c) => c.controller === i);
 export const threatArea = (game: GameContext, i: InvId) =>
@@ -397,8 +407,24 @@ export function allMods(game: GameContext): AppliedMod[] {
       for (const m of script.modifiers(game, c.id)) out.push({ ...m, source: c.id });
   }
   for (const t of game.s.tempMods) out.push({ target: t.target, mod: t.mod, source: t.source });
-  return out;
+  // a card immune to player card effects takes no modifier from one (Grimoire, Immune)
+  const immune = new Set(
+    out.filter((m) => m.mod.flag === "immuneToPlayerCards").map((m) => m.target),
+  );
+  return immune.size
+    ? out.filter((m) => !immune.has(m.target) || !isPlayerCard(game, m.source))
+    : out;
 }
+
+/** an asset, event, skill or investigator: a player card, by its type (Grimoire, Card Types) */
+export function isPlayerCard(game: GameContext, id: string | null | undefined): boolean {
+  if (!id || !cardRecIf(game, id)) return false;
+  return isOneOf(def(game, id).type, "asset", "event", "skill", "investigator");
+}
+
+/** the card is immune to the effects of `source` (Realms Beyond: Yog-Sothoth is immune to player card effects) */
+export const immuneTo = (game: GameContext, target: string, source: string | null | undefined) =>
+  isPlayerCard(game, source) && hasFlag(game, target, "immuneToPlayerCards");
 
 /** where a modifier's source is: its controller's location, the location itself, or where the enemy or attachment is */
 const sourceLocation = (game: GameContext, c: CardInst): InstId | null =>

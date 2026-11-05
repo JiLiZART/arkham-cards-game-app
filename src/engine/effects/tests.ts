@@ -18,6 +18,7 @@ import {
   connections,
   enemiesAt,
   engagedWith,
+  immuneTo,
   isElite,
   committedSkillsOf,
   matchesFilter,
@@ -175,8 +176,9 @@ function evadeEffect(game: GameContext, run: EffectRun<EffectOf<"evade">>) {
 
   const loc = inv(game, you).location;
   if (e.all || e.auto) {
+    // evading automatically is the card's effect, not a test: an enemy immune to it stays
     let ts = (e.all === "engaged" ? engagedWith(game, you) : enemiesAt(game, loc))
-      .filter((x) => evadable(game, x.id))
+      .filter((x) => evadable(game, x.id) && !immuneTo(game, x.id, ctx.source))
       .filter((x) => !e.filter || matchesFilter(game, x.code, e.filter))
       .map((x) => x.id)
       .filter((id) => !e.nonElite || !isElite(game, id));

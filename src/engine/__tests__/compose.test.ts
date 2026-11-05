@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { compose } from "../api";
+import { compose, composeScript } from "../api";
 import type { GameContext, HookRun, ScriptHooks } from "../world/types";
 
 const game = {} as GameContext;
@@ -57,5 +57,25 @@ describe("compose(base, extra): a Return-to scenario's hooks over its base's", (
       "gameEnd",
       "setup",
     ]);
+  });
+
+  it("composeScript keeps the base's functions and conditions beside the extra's, and composes the hooks", () => {
+    const order: string[] = [];
+    const s = composeScript(
+      {
+        fns: { a: () => {}, shared: () => void order.push("base.fn") },
+        conditions: { c: () => true },
+        hooks: { setup: () => void order.push("base.setup") },
+      },
+      {
+        fns: { b: () => {}, shared: () => void order.push("extra.fn") },
+        hooks: { setup: () => void order.push("extra.setup") },
+      },
+    );
+    expect(Object.keys(s.fns!).sort()).toEqual(["a", "b", "shared"]);
+    expect(Object.keys(s.conditions!)).toEqual(["c"]);
+    s.fns!.shared(game, run as never);
+    s.hooks!.setup!(game, run);
+    expect(order).toEqual(["extra.fn", "base.setup", "extra.setup"]);
   });
 });

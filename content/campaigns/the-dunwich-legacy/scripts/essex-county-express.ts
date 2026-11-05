@@ -8,6 +8,7 @@ import {
   type CardScript,
   cellOf,
   currentAct,
+  def,
   findByCode,
   flags,
   type GameContext,
@@ -28,7 +29,7 @@ import {
 } from "../../../../src/engine/api";
 
 export const ENGINE_CARS = ["02175", "02176", "02177"];
-const TRAIN_CARS = ["02167", "02168", "02169", "02170", "02171", "02172", "02173", "02174"];
+export const TRAIN_CARS = ["02167", "02168", "02169", "02170", "02171", "02172", "02173", "02174"];
 /** agenda 5's back has defeated everyone: the scenario ends in R2 */
 export const SUCKED_IN = "essexSuckedIn";
 
@@ -45,6 +46,10 @@ export const train = (game: GameContext): InstId[] =>
     .sort((a, b) => cellOf(game, a.id)![0] - cellOf(game, b.id)![0])
     .map((l) => l.id);
 
+/** the Engine Car in play, by name: Return to The Essex County Express has a fourth */
+export const engineCar = (game: GameContext) =>
+  locations(game).find((l) => def(game, l.id).name === "Engine Car");
+
 /** an unrevealed car can't be entered while the location to its left has clues on it */
 export function lockedBehind(game: GameContext, id: InstId) {
   const c = card(game, id);
@@ -55,32 +60,36 @@ export function lockedBehind(game: GameContext, id: InstId) {
     : [];
 }
 
+/** one Engine Car at random, six of the Train Cars at random to its left, the rest out of the game; everyone starts in
+ * the leftmost (revealed by the setup, its forced effect not triggered). Return to The Essex County Express adds cars */
+export function buildTrain(game: GameContext, trainCars: string[], engineCars: string[]) {
+  const engines = [...engineCars];
+  const cars = [...trainCars];
+  shuffleList(game, engines);
+  shuffleList(game, cars);
+  const line = [...cars.slice(0, 6), engines[0]].map(
+    (code) => findByCode(game, code, [ZONE.SetAside])!.id,
+  );
+  line.forEach((id, col) => {
+    moveCard(game, id, ZONE.Location);
+    setCell(game, id, [col, 0]);
+    if (col) link(game, line[col - 1], id);
+  });
+  for (const code of [...cars.slice(6), ...engines.slice(1)])
+    moveCard(game, findByCode(game, code, [ZONE.SetAside])!.id, ZONE.Removed);
+  for (const i of turnOrder(game)) placeInvestigator(game, i, line[0]);
+}
+
 export default {
   fns: {
-    /** one Engine Car at random, six of the eight Train Cars at random to its left, the rest out of the game; everyone
-     * starts in the leftmost (revealed by the setup, its forced effect not triggered) */
     train(game: GameContext) {
-      const engines = [...ENGINE_CARS];
-      const cars = [...TRAIN_CARS];
-      shuffleList(game, engines);
-      shuffleList(game, cars);
-      const line = [...cars.slice(0, 6), engines[0]].map(
-        (code) => findByCode(game, code, [ZONE.SetAside])!.id,
-      );
-      line.forEach((id, col) => {
-        moveCard(game, id, ZONE.Location);
-        setCell(game, id, [col, 0]);
-        if (col) link(game, line[col - 1], id);
-      });
-      for (const code of [...cars.slice(6), ...engines.slice(1)])
-        moveCard(game, findByCode(game, code, [ZONE.SetAside])!.id, ZONE.Removed);
-      for (const i of turnOrder(game)) placeInvestigator(game, i, line[0]);
+      buildTrain(game, TRAIN_CARS, ENGINE_CARS);
     },
   },
   hooks: {
     checkObjectives(game: GameContext) {
       const act = cardIf(game, currentAct(game))?.code;
-      const engine = locations(game).find((l) => ENGINE_CARS.includes(l.code));
+      const engine = engineCar(game);
       if (!engine) return;
       // act 1: "if an investigator enters the Engine Car, immediately advance"
       if (act === "02165" && turnOrder(game).some((i) => inv(game, i).location === engine.id))

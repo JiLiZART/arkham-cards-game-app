@@ -437,7 +437,8 @@ export type Step = { choice?: any } & (
       x?: number;
     }
   /** `tapped`: the draw was asked for by tapping the deck already (the Draw action, or the second card of a draw of several) */
-  | { t: "Draw"; inv: InvId; n: number; tapped?: boolean }
+  /** `of`: how many cards the draw began with, when more than one */
+  | { t: "Draw"; inv: InvId; n: number; tapped?: boolean; of?: number }
   /** `card`: that card is drawn as the encounter card (from beneath a card), not the deck's top */
   /** `key`: the card came from the encounter deck and its encounterDrawn window was opened (cancelled: it is discarded) */
   | { t: "DrawEncounter"; inv: InvId; card?: InstId; key?: string }
@@ -449,6 +450,8 @@ export type Step = { choice?: any } & (
       enemy: InstId;
       inv: InvId | null;
       at?: InstId | null;
+      /** the locations it may spawn at, the drawer (else the lead) choosing ("one of the locations not connected to …") */
+      among?: InstId[];
       redirect?: boolean;
       asked?: boolean;
       engage?: InvId | null;

@@ -1,4 +1,11 @@
-import { attackBonus, attacked, damageBonus, defeated, noAttack } from "../world/flags";
+import {
+  attackBonus,
+  attackDamageBonus,
+  attacked,
+  damageBonus,
+  defeated,
+  noAttack,
+} from "../world/flags";
 import {
   activeInvs,
   addCounter,
@@ -46,6 +53,8 @@ import {
   invsAt,
   isElite,
   isMassive,
+  gainsKeyword,
+  preyOf,
   locationAt,
   locationByName,
   locations,
@@ -68,7 +77,7 @@ type Handler<T extends Step["t"]> = (game: GameContext, step: Extract<Step, { t:
 
 /** investigators among candidates that match the enemy's prey instruction */
 export function preyCandidates(game: GameContext, enemy: InstId, candidates: InvId[]): InvId[] {
-  const prey = def(game, enemy).prey;
+  const prey = preyOf(game, enemy);
   if (!prey) return candidates;
   // "only" prey never falls back to others: with nobody matching it engages and hunts no one
   if (prey === "bearer") return candidates.filter((i) => i === card(game, enemy).owner);
@@ -99,7 +108,7 @@ export function preyCandidates(game: GameContext, enemy: InstId, candidates: Inv
 
 /** Prey - bearer only / Prey - X only: the enemy ignores every other investigator */
 export function onlyPrey(game: GameContext, enemy: InstId) {
-  const prey = def(game, enemy).prey;
+  const prey = preyOf(game, enemy);
   return prey === "bearer" || (!!prey && "only" in prey);
 }
 
@@ -111,9 +120,12 @@ export const spawnHandler: Handler<"Spawn"> = (game, step) => {
   let engage: InvId | null = null;
   const drawerLoc = step.inv ? inv(game, step.inv).location : null;
   if (!at) at = fireScenarioHook(game, "spawnRedirect", step.enemy) ?? null;
-  if (!at && d.spawn && typeof d.spawn === "object") {
-    // a spawn expression: the drawer chooses among the locations it names; none in play, the enemy is discarded
-    const cands = spawnTargets(game, d.spawn, drawerLoc);
+  if (!at && (step.among || (d.spawn && typeof d.spawn === "object"))) {
+    // a spawn expression, or the locations the step names (Hired Gun): the drawer chooses among them; with none in play,
+    // the enemy is discarded
+    const cands =
+      step.among ??
+      (d.spawn && typeof d.spawn === "object" ? spawnTargets(game, d.spawn, drawerLoc) : []);
     if (!cands.length) {
       emit(game, EVENT.SpawnFail, `${d.name} has no spawn location in play and is discarded`, {
         card: step.enemy,
@@ -339,7 +351,8 @@ export const resolveAttackHandler: Handler<"ResolveAttack"> = (game, step) => {
   const bonus = attackBonus.take(game, step.key) ?? 0;
   // "if this enemy attacked you this round" (Daniela's Wrench)
   attacked.set(game, [step.enemy, step.inv], currentRound(game));
-  const damage = enemyStat(game, step.enemy, "damage") + bonus;
+  const damage =
+    enemyStat(game, step.enemy, "damage") + bonus + (attackDamageBonus.take(game, step.key) ?? 0);
   const horror = enemyStat(game, step.enemy, "horror") + bonus;
   emit(
     game,
@@ -635,7 +648,7 @@ export const hunterMovesHandler: Handler<"HunterMoves"> = (game, step) => {
       !done.includes(e.id) &&
       !e.exhausted &&
       !e.engagedWith &&
-      def(game, e.id).keywords.includes("hunter") &&
+      gainsKeyword(game, e.id, "hunter") &&
       preyCandidates(game, e.id, invsAt(game, e.location)).length === 0, // stays only with someone it may engage
   );
   if (hunters.length === 0) return;
@@ -850,7 +863,11 @@ export const handlers = {
   EnemyEngage: enemyEngageHandler,
 };
 
-/** can the enemy move into the location: Barricade keeps non-Elite enemies out; "cannotMoveInto" (the unrevealed Parlor) binds investigators only */
+/**
+ * can the enemy move into the location: Barricade keeps non-Elite enemies out; "cannotMoveInto" (the unrevealed Parlor)
+ * binds investigators only; an enemy that "cannot move" (Yog-Sothoth in Realms Beyond) enters nowhere
+ */
 export function canEnemyEnter(game: GameContext, enemy: InstId, loc: InstId): boolean {
+  if (hasFlag(game, enemy, "cannotMove")) return false;
   return !(hasFlag(game, loc, "nonEliteCannotMoveInto") && !isElite(game, enemy));
 }

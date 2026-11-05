@@ -256,9 +256,11 @@ describe("the generated flows (campaign-flow-compiler-fixes)", () => {
     ]);
   });
 
-  // The Dunwich Legacy is hand-written now; its Return-to box compiles the same guide entry
+  // The Dunwich Legacy and its Return-to box are hand-written now: the box's flow there is still the importer's output
   it("The House Always Wins with no resolution runs Resolution 1's steps", () => {
-    const f = flowOf("return-to-the-dunwich-legacy");
+    const f: Flow = JSON.parse(
+      readFileSync("content/campaigns/return-to-the-dunwich-legacy/flow.json", "utf8"),
+    );
     const keys = (ids: string[]) =>
       effects(f, ids)
         .filter((e) => e.do === "record")

@@ -1,5 +1,13 @@
 import { logEntry, peril, surge as surgeFlag } from "../world/flags";
-import { abilitiesOf, actClueCost, actSpenders, enemies, hasKeyword, invsAt } from "../queries";
+import {
+  abilitiesOf,
+  actClueCost,
+  actSpenders,
+  enemies,
+  gainsKeyword,
+  hasKeyword,
+  invsAt,
+} from "../queries";
 import {
   activeInvs,
   addCounter,
@@ -113,7 +121,6 @@ export const revelationHandler: Handler<"Revelation"> = (game, step) => {
     moveCard(game, step.card, c.owner ? ZONE.Discard : ZONE.EncounterDiscard);
     return;
   }
-  const d = def(game, step.card);
   // Hidden: into the drawer's hand, secretly; it works from there as if in their threat area
   if (hasKeyword(game, step.card, "hidden")) {
     moveCard(game, step.card, ZONE.Hand, { inv: step.inv });
@@ -125,7 +132,7 @@ export const revelationHandler: Handler<"Revelation"> = (game, step) => {
     return;
   }
   moveCard(game, step.card, ZONE.Resolving);
-  if (d.keywords.includes("peril")) peril.set(game, true);
+  if (gainsKeyword(game, step.card, "peril")) peril.set(game, true);
   const ctx = { source: step.card, you: step.inv, inv: step.inv };
   const steps: Step[] = [];
   for (const a of abilitiesOf(game, step.card)) {
@@ -140,7 +147,7 @@ export const revelationHandler: Handler<"Revelation"> = (game, step) => {
 export function finishRevelation(game: GameContext, cardId: InstId, invId: string) {
   const c = cardIf(game, cardId);
   peril.clear(game);
-  const surges = surgeFlag.take(game, cardId) || def(game, cardId).keywords.includes("surge");
+  const surges = surgeFlag.take(game, cardId) || gainsKeyword(game, cardId, "surge");
   // a treachery with Victory X is added to the victory display instead (Grimoire, Victory X)
   const d = def(game, cardId);
   const playerType = d.type === "asset" || d.type === "event" || d.type === "skill";

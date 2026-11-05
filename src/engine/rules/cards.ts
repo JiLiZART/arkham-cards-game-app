@@ -256,6 +256,9 @@ function triggerMatches(
     // "the engaged investigator draws …" (Wizard of Yog-Sothoth): an enemy's forced ability about whom it engages
     if (a.usableBy === "engaged")
       return !!data.inv && cardIf(game, cardId)?.engagedWith === data.inv;
+    // an enemy waits on an investigator entering its location (Amorphous Terror: "or vice versa")
+    if (a.trigger === "enterLocation" && card(game, cardId).zone === ZONE.Enemy)
+      return !!data.location && card(game, cardId).location === data.location;
     // an act or agenda is about the whole game ("if an investigator deals damage to a [[Criminal]] enemy")
     const zone = card(game, cardId).zone;
     return (

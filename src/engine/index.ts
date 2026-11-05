@@ -24,6 +24,7 @@ import {
 } from "./context";
 import { createCard, link, linkOneWay, moveCard, putBeneath, setCell } from "./movement";
 import {
+  cardsIn,
   findByCode,
   locationAt,
   locationByName,
@@ -54,7 +55,7 @@ import { ZONE, PHASE, INV_STATUS, PILE, SCENARIO_CARD, isOneOf } from "./world/c
 import { STEP } from "./steps/step";
 import { scriptOf } from "./world/scripts";
 
-export const ENGINE_VERSION = 14;
+export const ENGINE_VERSION = 15;
 
 /**
  * Whether a save written by this engine version replays to the same game on this one. Version 8 changed the setup (a
@@ -511,6 +512,9 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
   shuffleDeck(game, "encounter");
   // reveal starting locations where investigators are
   for (const i of s.order) if (inv(game, i).location) revealLocation(game, inv(game, i).location!);
+  // a single-sided location has only its revealed side (Realms Beyond put into play at setup)
+  for (const l of cardsIn(game, ZONE.Location))
+    if (!l.revealed && !db.cards[l.code].doubleSided) revealLocation(game, l.id);
   // decks & opening hands
   for (const i of s.order) {
     // the investigator's own setup, before the deck is shuffled (Joe Diamond's hunch deck)

@@ -178,6 +178,11 @@ describe("musicFor", () => {
     ).toBe("fight");
   });
 
+  it("a Return-to scenario plays its base scenario's bed", () => {
+    const ret = with_((s) => (s.scenarioId = "return-to-extracurricular-activity"));
+    expect(musicFor(ret, m)).toBe("bed:extracurricular-activity");
+  });
+
   it("fight while an enemy is engaged, the bed again once it is gone", () => {
     const ghoul = codeOf("01160");
     const engaged = with_((s) =>

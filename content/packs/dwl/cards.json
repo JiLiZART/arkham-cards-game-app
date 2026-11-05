@@ -714,7 +714,7 @@
     { "kind": "fast", "label": "Osborn's General Store: draw the encounter card underneath", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "all": [{ "cluesOnYourLocation": "none" }, { "beneath": { "of": "self", "min": 1 } }] }, "effects": [{ "op": "drawBeneath", "from": "self" }] }
   ] },
   "02208": { "abilities": [
-    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "searchEncounterDraw", "filter": { "type": "enemy", "trait": "Humanoid" }, "zones": ["deck"], "at": "02201" }] },
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "searchEncounterDraw", "filter": { "type": "enemy", "trait": "Humanoid" }, "zones": ["deck"], "at": "Village Commons" }] },
     { "kind": "fast", "label": "Congregational Church: draw the encounter card underneath", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "all": [{ "cluesOnYourLocation": "none" }, { "beneath": { "of": "self", "min": 1 } }] }, "effects": [{ "op": "drawBeneath", "from": "self" }] }
   ] },
   "02209": { "abilities": [
@@ -726,7 +726,7 @@
     { "kind": "fast", "label": "House in the Reeds: draw the encounter card underneath", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "all": [{ "cluesOnYourLocation": "none" }, { "beneath": { "of": "self", "min": 1 } }] }, "effects": [{ "op": "drawBeneath", "from": "self" }] }
   ] },
   "02211": { "abilities": [
-    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "searchEncounterDraw", "filter": { "type": "enemy", "trait": "Nightgaunt" }, "zones": ["deck"], "at": "02201" }] },
+    { "kind": "forced", "trigger": "revealed", "effects": [{ "op": "searchEncounterDraw", "filter": { "type": "enemy", "trait": "Nightgaunt" }, "zones": ["deck"], "at": "Village Commons" }] },
     { "kind": "fast", "label": "House in the Reeds: draw the encounter card underneath", "usableBy": "atLocation", "limit": { "per": "game", "count": 1, "group": true }, "condition": { "all": [{ "cluesOnYourLocation": "none" }, { "beneath": { "of": "self", "min": 1 } }] }, "effects": [{ "op": "drawBeneath", "from": "self" }] }
   ] },
   "02212": { "abilities": [
@@ -783,7 +783,7 @@
   ] },
   "02243": { "script": true, "abilities": [
     { "kind": "action", "designator": "resign", "label": "Dunwich Village: resign", "effects": [{ "op": "resign" }] },
-    { "kind": "action", "label": "Dunwich Village: move a Brood of Yog-Sothoth once toward Dunwich Village", "condition": { "enemyInPlay": { "code": "02255" } }, "effects": [{ "op": "script", "fn": "uauPullBrood" }] }
+    { "kind": "action", "label": "Dunwich Village: move a Brood of Yog-Sothoth once toward Dunwich Village", "condition": { "script": "uauBroodInPlay" }, "effects": [{ "op": "script", "fn": "uauPullBrood" }] }
   ] },
   "02244": { "script": true, "abilities": [
     { "kind": "constant", "modifiers": [{ "stat": "evade", "value": -1, "scope": "enemiesAtLocation" }] },

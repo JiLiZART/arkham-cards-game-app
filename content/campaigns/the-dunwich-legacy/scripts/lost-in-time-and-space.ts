@@ -56,8 +56,9 @@ export const ANOTHER_DIMENSION = "02320";
 export const EDGE = "02321";
 export const TEAR_THROUGH_TIME = "02322";
 export const YOG = "02323";
-/** every agenda's "Forced - After you are moved to a location by an encounter card effect: Take 1 horror" */
-export const AGENDAS = ["02312", "02313", "02314", "02315"];
+/** every agenda's "Forced - After you are moved to a location by an encounter card effect: Take 1 horror" (51054:
+ * Return to Lost in Time and Space's Breaking Through (v. II)) */
+export const AGENDAS = ["02312", "02313", "02314", "02315", "51054"];
 const ACT_2 = "02317";
 const ACT_4 = "02319";
 /** the act reached, for the flow's Resolution 2 (act 4) or 4 (acts 1–3) with no resolution */
@@ -209,27 +210,7 @@ export default {
     /** Another Dimension: "When a location leaves play: Move each investigator and unengaged enemy at that location to Another Dimension" */
     locationLeavesPlay(game: GameContext, loc: InstId) {
       const to = inPlay(game, ANOTHER_DIMENSION);
-      if (!to || to === loc) return;
-      const moved = invsAt(game, loc);
-      for (const i of moved) {
-        placeInvestigator(game, i, to);
-        emit(game, EVENT.Move, `${inv(game, i).name} moves to ${def(game, to).name}`, {
-          inv: i,
-          card: to,
-          data: { from: loc },
-        });
-      }
-      // the engaged enemies go with their investigators, the others are moved: all of them end up there
-      for (const e of enemies(game).filter((x) => x.location === loc))
-        setCardLocation(game, e.id, to);
-      const ag = horrorAgenda(game);
-      if (ag)
-        queue(
-          game,
-          ...moved.map((i) =>
-            dealDamage({ inv: i, damage: 0, horror: 1, direct: false, source: ag }),
-          ),
-        );
+      if (to) sweep(game, loc, to);
     },
     checkObjectives(game: GameContext) {
       // The End of All Things: "If Yog-Sothoth is defeated, (→R3)"
@@ -254,6 +235,31 @@ export default {
     },
   },
 } satisfies CardScript;
+
+/**
+ * Another Dimension's forced, sending to `to`: each investigator and unengaged enemy at the location leaving play moves
+ * there (Return to Lost in Time and Space's Realms Beyond takes them instead)
+ */
+export function sweep(game: GameContext, loc: InstId, to: InstId) {
+  if (to === loc) return;
+  const moved = invsAt(game, loc);
+  for (const i of moved) {
+    placeInvestigator(game, i, to);
+    emit(game, EVENT.Move, `${inv(game, i).name} moves to ${def(game, to).name}`, {
+      inv: i,
+      card: to,
+      data: { from: loc },
+    });
+  }
+  // the engaged enemies go with their investigators, the others are moved: all of them end up there
+  for (const e of enemies(game).filter((x) => x.location === loc)) setCardLocation(game, e.id, to);
+  const ag = horrorAgenda(game);
+  if (ag)
+    queue(
+      game,
+      ...moved.map((i) => dealDamage({ inv: i, damage: 0, horror: 1, direct: false, source: ag })),
+    );
+}
 
 /** Yog-Sothoth's reaction: instead of taking up to X horror, discard the top X cards; an empty deck drives you insane */
 export function yogDiscards(game: GameContext, run: ScriptRun) {

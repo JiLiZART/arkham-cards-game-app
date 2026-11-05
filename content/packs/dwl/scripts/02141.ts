@@ -15,6 +15,7 @@ import {
   EVENT,
   ZONE,
   type ScriptRun,
+  type Queued,
   queue,
   resolveEffect,
   spawn,
@@ -26,8 +27,12 @@ export const HORROR = "02141";
 export const horrorInPlay = (game: GameContext) => findByCode(game, HORROR, [ZONE.Enemy]);
 
 /** "search the encounter deck, discard pile, and the void for Hunting Horror and spawn it" at a location (`at`), or
- * at `engage`'s location engaged with them; nothing when it is in play */
-export function spawnHorror(game: GameContext, where: { at: InstId } | { engage: InvId }) {
+ * at `engage`'s location engaged with them, then the `after` steps; nothing when it is in play */
+export function spawnHorror(
+  game: GameContext,
+  where: { at: InstId } | { engage: InvId },
+  ...after: Queued[]
+) {
   const h = findByCode(game, HORROR, [ZONE.EncounterDeck, ZONE.EncounterDiscard, ZONE.Void]);
   if (!h) return;
   const fromDeck = h.zone === ZONE.EncounterDeck;
@@ -38,6 +43,7 @@ export function spawnHorror(game: GameContext, where: { at: InstId } | { engage:
     "at" in where
       ? spawn({ enemy: h.id, inv: null, at: where.at })
       : spawn({ enemy: h.id, inv: where.engage }),
+    ...after,
   );
 }
 

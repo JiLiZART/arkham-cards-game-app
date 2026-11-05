@@ -40,7 +40,7 @@ export const SACRIFICES = "sacrifices";
 export const SACRIFICED = ["sacrificed", "sacrificed"] as const;
 
 /** the two copies of each location but the Village Commons */
-const PAIRS = [
+export const PAIRS = [
   ["02202", "02203"],
   ["02204", "02205"],
   ["02206", "02207"],
@@ -64,40 +64,51 @@ export function sacrifice(game: GameContext, agenda: InstId) {
   putBeneath(game, pool[0], agenda);
 }
 
+/**
+ * The village: one copy of each location at random, then one of those six out of the game too; the potential
+ * sacrifices; The Hidden Chamber, its Key and the top 3 encounter cards `dealable` beneath the five. Return to Blood on
+ * the Altar has three copies of each, and deals no Naomi's Crew card
+ */
+export function buildVillage(
+  game: GameContext,
+  copies: string[][] = PAIRS,
+  dealable: (id: InstId) => boolean = () => true,
+) {
+  const kept = copies.map((versions) => {
+    const p = [...versions];
+    shuffleList(game, p);
+    for (const code of p.slice(1))
+      moveCard(game, findByCode(game, code, [ZONE.SetAside])!.id, ZONE.Removed);
+    return p[0];
+  });
+  shuffleList(game, kept);
+  moveCard(game, findByCode(game, kept[0], [ZONE.SetAside])!.id, ZONE.Removed);
+  const five = kept.slice(1).map((code) => findByCode(game, code, [ZONE.SetAside])!.id);
+  for (const id of five) moveCard(game, id, ZONE.Location);
+  // the potential sacrifices: each character the log says was kidnapped, Zebulon Whateley and Earl Sawyer
+  const log = campaignLogOf(game);
+  const aside = (code: string) => findByCode(game, code, [ZONE.SetAside])?.id;
+  const pool = [
+    ...KIDNAPPED.filter(([key]) => log[key]).map(([, code]) => createCard(game, code, ZONE.Limbo)),
+    ...["02217", "02218"].map(aside).filter((id): id is InstId => !!id),
+  ];
+  shuffleList(game, pool);
+  for (const id of pool) moveCard(game, id, ZONE.SideDeck, { deck: SACRIFICES });
+  // The Hidden Chamber, its Key and the top 3 encounter cards, shuffled, one beneath each location but the Commons
+  shuffleDeck(game, "encounter");
+  const dealt = [
+    aside(HIDDEN_CHAMBER)!,
+    aside(KEY)!,
+    ...pile(game, ZONE.EncounterDeck).filter(dealable).slice(0, 3),
+  ];
+  shuffleList(game, dealt);
+  five.forEach((loc, k) => putBeneath(game, dealt[k], loc));
+}
+
 export default {
   fns: {
     village(game: GameContext) {
-      // one copy of each location at random; then one of those six out of the game too
-      const kept = PAIRS.map((pair) => {
-        const p = [...pair];
-        shuffleList(game, p);
-        moveCard(game, findByCode(game, p[1], [ZONE.SetAside])!.id, ZONE.Removed);
-        return p[0];
-      });
-      shuffleList(game, kept);
-      moveCard(game, findByCode(game, kept[0], [ZONE.SetAside])!.id, ZONE.Removed);
-      const five = kept.slice(1).map((code) => findByCode(game, code, [ZONE.SetAside])!.id);
-      for (const id of five) moveCard(game, id, ZONE.Location);
-      // the potential sacrifices: each character the log says was kidnapped, Zebulon Whateley and Earl Sawyer
-      const log = campaignLogOf(game);
-      const aside = (code: string) => findByCode(game, code, [ZONE.SetAside])?.id;
-      const pool = [
-        ...KIDNAPPED.filter(([key]) => log[key]).map(([, code]) =>
-          createCard(game, code, ZONE.Limbo),
-        ),
-        ...["02217", "02218"].map(aside).filter((id): id is InstId => !!id),
-      ];
-      shuffleList(game, pool);
-      for (const id of pool) moveCard(game, id, ZONE.SideDeck, { deck: SACRIFICES });
-      // The Hidden Chamber, its Key and the top 3 encounter cards, shuffled, one beneath each location but the Commons
-      shuffleDeck(game, "encounter");
-      const dealt = [
-        aside(HIDDEN_CHAMBER)!,
-        aside(KEY)!,
-        ...pile(game, ZONE.EncounterDeck).slice(0, 3),
-      ];
-      shuffleList(game, dealt);
-      five.forEach((loc, k) => putBeneath(game, dealt[k], loc));
+      buildVillage(game);
     },
   },
   hooks: {

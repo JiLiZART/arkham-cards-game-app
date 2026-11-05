@@ -161,5 +161,16 @@
   "wizard.filter.toggle": "Фильтры",
   "wizard.filter.rules": "Правила",
   "sheet.close": "Закрыть",
-  "deckEditor.addCards": "Добавить карты"
+  "deckEditor.addCards": "Добавить карты",
+  "option.symbol.skull": "Череп",
+  "option.symbol.cultist": "Культист",
+  "option.symbol.tablet": "Скрижаль",
+  "option.symbol.elderThing": "Старец",
+  "option.moveConnecting": "Переместиться",
+  "option.no": "Нет",
+  "option.action.investigate": "Исследование",
+  "option.action.fight": "Бой",
+  "option.action.evade": "Уход",
+  "option.action.move": "Переместиться",
+  "option.action.play": "Сыграть карту"
 }

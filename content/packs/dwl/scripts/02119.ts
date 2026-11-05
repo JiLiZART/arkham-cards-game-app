@@ -10,15 +10,17 @@ import {
   emit,
   type EffCtx,
   findByCode,
+  flags,
   type GameContext,
   type InstId,
   moveCard,
   reshuffleDiscard,
+  runScript,
   EVENT,
   ZONE,
   type ScriptRun,
 } from "../../../../src/engine/api";
-import { doomOnHorror, HORROR, spawnHorror } from "./02141";
+import { doomOnHorror, HORROR, horrorInPlay, spawnHorror } from "./02141";
 
 const SHADOW_SPAWNED = "02142";
 
@@ -47,11 +49,21 @@ export const horrorEntersPlay = {
   run: "empower",
 };
 
+/**
+ * Return to The Miskatonic Museum's rule, set by its setup: "while an investigator is resolving the text on agenda 1b
+ * and agenda 2b, the Forced ability on the next agenda in the agenda deck is considered to be active"
+ */
+export const NEXT_AGENDA_FORCED = "nextAgendaForcedOnBack";
+
 /** agendas 1 and 2's back */
 export function huntedBack(game: GameContext, run: ScriptRun) {
   if (!doomOnHorror(game, run)) {
     const halls = findByCode(game, "02127", [ZONE.Location]);
-    if (halls) spawnHorror(game, { at: halls.id });
+    // the next agenda's forced ability sees the Horror enter play only under the Return rule
+    const seen = flags.named(game, NEXT_AGENDA_FORCED)
+      ? [runScript({ code: "02119", fn: "empowerInPlay", ctx: run.ctx })]
+      : [];
+    if (halls) spawnHorror(game, { at: halls.id }, ...seen);
   }
   reshuffleDiscard(game, "encounter");
   emit(game, EVENT.Reshuffle, "The encounter discard pile is shuffled into the encounter deck");
@@ -64,5 +76,12 @@ export const empower = (game: GameContext, run: ScriptRun) => {
 
 export default {
   abilities: [horrorEntersPlay, { kind: "revelation", run: "back" }],
-  fns: { empower, back: huntedBack },
+  fns: {
+    empower,
+    back: huntedBack,
+    empowerInPlay(game: GameContext) {
+      const h = horrorInPlay(game);
+      if (h) empowerHorror(game, h.id);
+    },
+  },
 } satisfies CardScript;

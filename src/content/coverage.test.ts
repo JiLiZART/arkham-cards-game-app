@@ -11,6 +11,7 @@ import {
   investigatorCoverage,
   packCoverage,
 } from "./coverage";
+import { implemented } from "./implemented";
 import { loadContentFromDisk } from "./node";
 
 const card = (code: string, over: object = {}) => ({
@@ -355,6 +356,14 @@ describe("Return-to setup cards and removed cards in coverage", () => {
     } finally {
       disk.scenarios[RTG] = s;
     }
+  });
+
+  it("Return to Extracurricular Activity plays with 02041 and 51012: its tokens real from 02041's table, 51012 working", () => {
+    const s = disk.scenarios["return-to-extracurricular-activity"];
+    expect([s.card, s.setupCards]).toEqual(["02041", ["51012"]]);
+    expect(s.tokens).toEqual(disk.scenarios["extracurricular-activity"].tokens);
+    expect(scenarioCoverage(disk, s.id).tokens).toBe(true);
+    expect(implemented(disk, "51012")).toBe(true);
   });
 
   it("cards a remove step takes out of the scenario are not counted as used by it", () => {

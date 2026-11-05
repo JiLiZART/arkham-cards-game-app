@@ -124,6 +124,8 @@ export const copiesDrawn = counts<string>("copiesDrawn");
 export const deckDiscarded = family<InstId[], string>("deckDiscarded");
 /** extra damage an attack deals */
 export const attackBonus = counts<string>("attackBonus");
+/** extra damage, not horror, an attack deals (Seth Bishop, Thrall of Yog-Sothoth: "+2 damage for this attack") */
+export const attackDamageBonus = counts<string>("attackDamageBonus");
 /** extra damage dealt to an enemy */
 export const damageBonus = counts<string>("damageBonus");
 /** the card Isabelle Barnes chose for a test, by test id */
@@ -168,6 +170,10 @@ export const named = (game: HasState, name: string) => game.s.flags[name];
 /** a scenario flag a script sets by name, for its own cards and the `scenarioFlag` condition (the museum's broken door) */
 export function setNamed(game: HasState, name: string, value: true) {
   game.s.flags[name] = value;
+}
+/** a scenario flag a script set by name, cleared once it has served (Charging Beast: "its spawn is not a move") */
+export function clearNamed(game: HasState, name: string) {
+  delete game.s.flags[name];
 }
 
 /** the log, count and card-list entries a scenario left for the campaign log, in the order they were set */

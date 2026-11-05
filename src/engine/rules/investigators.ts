@@ -117,7 +117,10 @@ export const drawHandler: Handler<"Draw"> = (game, step) => {
       card: id,
     });
   const rest: Step[] =
-    step.n > 1 ? [{ t: STEP.Draw, inv: step.inv, n: step.n - 1, tapped: true }] : [];
+    step.n > 1
+      ? [{ t: STEP.Draw, inv: step.inv, n: step.n - 1, tapped: true, of: step.of ?? step.n }]
+      : // "after an investigator draws 1 or more cards": once, when the draw is done (Oppressive Mists)
+        [win("cardsDrawn", { inv: step.inv, amount: step.of ?? 1 })];
   // the last card drawn leaves the deck empty (Beyond the Veil)
   if (!inv(game, step.inv).deck.length) rest.unshift(win("deckEmptied", { inv: step.inv }));
   // "after you draw X" (Detective's Intuition)

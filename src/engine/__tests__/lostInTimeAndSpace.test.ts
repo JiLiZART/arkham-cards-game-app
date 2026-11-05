@@ -1,7 +1,7 @@
 /** Lost in Time and Space (campaign-the-dunwich-legacy, group 8): setup, tokens, the map, cards, acts and agendas, the campaign. */
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadPack } from "../../content";
-import type { ChaosToken, Difficulty } from "../../content/schema";
+import type { ChaosToken, Difficulty, Effect } from "../../content/schema";
 import { createGame, dispatch, type Result } from "../index";
 import { next } from "../world/rng";
 import { db, gOf, mutate, pick, skipMulligans } from "../kits/testkit";
@@ -451,6 +451,25 @@ describe("the locations", () => {
 });
 
 describe("the enemies", () => {
+  it("Yog-Sothoth here is not immune to player card effects (only Realms Beyond makes it so)", () => {
+    let gun = "";
+    const r = mutate(
+      litas({
+        prep: (g) => {
+          const yog = findByCode(g, YOG, [ZONE.SetAside])!.id;
+          moveCard(g, yog, ZONE.Enemy, { location: loc(g, AD)! });
+        },
+      }),
+      (g) => {
+        gun = createCard(g, "01016", ZONE.Limbo); // .45 Automatic, a player card
+      },
+    );
+    const yog = enemies(gOf(r)).find((e) => e.code === YOG)!.id;
+    const effect: Effect = { op: "placeDoom", amount: 1, on: "nearestEnemy" };
+    const after = run(r, { t: STEP.Eff, effect, ctx: { you: R, source: gun } } as Step);
+    expect(card(gOf(after), yog).doom).toBe(1);
+  });
+
   it("Yog-Sothoth: 4 + 6 health per investigator, cannot be evaded, no attacks of opportunity", () => {
     const r = litas({
       invs: [R, D],
