@@ -355,6 +355,26 @@ describe("the Brood and Esoteric Formula", () => {
     expect(card(gOf(other), brood.id).damage).toBe(0);
   });
 
+  it("the elder thing on a Formula attack that defeats the Brood: it attacks first, at reveal", () => {
+    // 4 clues: willpower 3 + 8 − 3 = 8 against fight 6; 1 damage already, the attack's 1 defeats it
+    const r = uau({
+      bag: ["elderThing"],
+      prep: (g) => {
+        const b = broodAt(g, inv(g, R).location!, 4);
+        setCounter(g, b, "damage", 1);
+        inPlay(g, R, FORMULA);
+      },
+    });
+    const fought = toTurn(use(r, FORMULA), R);
+    expect(lastTest(fought)?.success).toBe(true);
+    const types = fought.state.log.map((e) => e.type);
+    expect(types.indexOf("attack")).toBeGreaterThanOrEqual(0);
+    expect(types.indexOf("attack")).toBeLessThan(types.indexOf("testResult"));
+    expect(types.indexOf("attack")).toBeLessThan(types.indexOf("enemyDamage"));
+    expect(inv(gOf(fought), R).damage).toBe(2);
+    expect(inv(gOf(fought), R).horror).toBe(2);
+  });
+
   it("Massive, +1 health per investigator", () => {
     const g = gOf(uau({ invs: [R, D] }));
     expect(enemyStat(g, broodIn(g)[0].id, "health")).toBe(3);

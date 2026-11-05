@@ -561,6 +561,8 @@ function resolveTokensStage(game: GameContext) {
     enemy: t.kind !== "investigate" ? t.target : t.ctx.enemy,
   };
   let revealAnother = false;
+  // each token's unconditional effects, in reveal order: they resolve before the result (Grimoire, ST.4)
+  const onReveal: Step[] = [];
   while (t.resolvedTokens < t.tokens.length) {
     const at = t.resolvedTokens++;
     const token = t.treatAs?.[at] ?? t.tokens[at];
@@ -602,6 +604,7 @@ function resolveTokensStage(game: GameContext) {
         t.resolvedTokens--;
         push(
           game,
+          ...onReveal,
           { t: STEP.Effects, effects: eff.onReveal!, ctx: { ...ctx, token } },
           { t: STEP.Test, stage: TEST_STAGE.ResolveTokens },
         );
@@ -639,7 +642,7 @@ function resolveTokensStage(game: GameContext) {
         }
         const condOk = !eff.condition || checkCondition(game, eff.condition, ctx);
         if (condOk && eff.onReveal && !first)
-          push(game, { t: STEP.Effects, effects: eff.onReveal, ctx: { ...ctx, token } });
+          onReveal.push({ t: STEP.Effects, effects: eff.onReveal, ctx: { ...ctx, token } });
         if (condOk && eff.onFail) t.tokenOnFail.push(...eff.onFail);
         if (condOk && eff.onSuccess) t.tokenOnSuccess.push(...eff.onSuccess);
         // "after this skill test, …" (Lost in Time and Space): once the test is over, or only if it failed
@@ -664,11 +667,10 @@ function resolveTokensStage(game: GameContext) {
     }
     t.tokenMods.push(mod);
   }
-  if (revealAnother) {
-    push(game, { t: STEP.Test, stage: TEST_STAGE.Reveal });
-    return;
-  }
-  push(game, { t: STEP.Test, stage: TEST_STAGE.Result });
+  push(game, ...onReveal, {
+    t: STEP.Test,
+    stage: revealAnother ? TEST_STAGE.Reveal : TEST_STAGE.Result,
+  });
 }
 
 export function tokenTotal(game: GameContext, t: SkillTestState): number {

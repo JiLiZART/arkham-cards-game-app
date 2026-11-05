@@ -251,3 +251,15 @@ describe("a token X counting named tokens", () => {
     expect(t.total - t.base).toBe(-2);
   });
 });
+
+describe("a token's onReveal", () => {
+  it("resolves when the token is revealed, before the test's result (Grimoire, ST.4, before ST.6)", () => {
+    setSkull({ modifier: 0, onReveal: [{ op: "takeDamage", amount: 1 }] });
+    const r = failInvestigate();
+    const types = r.state.log.map((e) => e.type);
+    const damage = types.indexOf("damage");
+    expect(damage).toBeGreaterThanOrEqual(0);
+    expect(damage).toBeLessThan(types.indexOf("testResult"));
+    expect(inv(gOf(r), ROLAND).damage).toBe(1);
+  });
+});
