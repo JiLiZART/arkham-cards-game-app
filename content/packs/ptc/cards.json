@@ -29,6 +29,121 @@
     { "kind": "action", "actionCost": 2, "label": "Discard Drawing the Sign", "effects": [{ "op": "discardSelf" }] }
   ] },
 
+  "03001": { "script": true, "abilities": [
+    { "kind": "reaction", "trigger": "damagePlaced", "label": "Mark Harrigan: draw 1 card", "limit": { "per": "phase", "count": 1 }, "effects": [{ "op": "drawCards", "amount": 1 }] },
+    { "kind": "elderSign", "tokenValue": "damageOnYou" }
+  ] },
+  "03002": { "abilities": [
+    { "kind": "reaction", "trigger": "cardCommitted", "label": "Minh Thi Phan: the committed card gains a wild icon", "usableBy": "atLocation", "limit": { "per": "round", "count": 1, "eachInvestigator": true }, "effects": [{ "op": "cardGainsIcons", "icons": { "wild": 1 } }] },
+    { "kind": "elderSign", "tokenValue": 1, "onReveal": [{ "op": "returnCommittedSkill", "anyOwner": true, "afterTest": true, "optional": true }] }
+  ] },
+  "03003": { "script": true, "abilities": [
+    { "kind": "action", "label": "Sefina Rousseau: draw an event beneath her", "aoo": false, "condition": { "beneath": { "of": "self", "min": 1 } }, "effects": [{ "op": "script", "fn": "drawEvent" }] },
+    { "kind": "elderSign", "tokenValue": 3, "onReveal": [{ "op": "script", "fn": "mayDrawEvent" }] }
+  ] },
+  "03004": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "extraCharges", "value": 1 }] },
+    { "kind": "elderSign", "tokenValue": 1, "onReveal": [{ "op": "addUses", "amount": 1, "usesType": ["charges"], "filter": { "type": "asset" }, "yours": true }] }
+  ] },
+  "03005": { "abilities": [
+    { "kind": "reaction", "trigger": "enemyDefeated", "label": "William Yorick: play an asset from your discard pile", "limit": { "per": "round", "count": 1 }, "condition": { "eventInvestigatorIsYou": true }, "effects": [{ "op": "searchAndPlay", "filter": { "type": "asset" }, "discardOnly": true }] },
+    { "kind": "elderSign", "tokenValue": 2, "effects": [{ "op": "takeFromDiscard", "filter": {} }] }
+  ] },
+  "03006": { "script": true, "abilities": [
+    { "kind": "fast", "label": "Lola Hayes: switch your role", "limit": { "per": "round", "count": 1 }, "effects": [{ "op": "script", "fn": "switchRole" }] },
+    { "kind": "elderSign", "tokenValue": 2, "onReveal": [{ "op": "script", "fn": "maySwitchRole" }] }
+  ] },
+  "03007": { "abilities": [
+    { "kind": "onPlay", "condition": { "all": [{ "succeededBy": { "min": 0 } }, { "testKind": "fight" }, { "damage": { "min": 1 } }] }, "effects": [{ "op": "heal", "damage": 1 }, { "op": "dealDamage", "amount": 1, "to": "eventEnemy" }] }
+  ] },
+  "03008": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "takeHorror", "amount": { "onYou": "damage", "per": 2 } }] }
+  ] },
+  "03009": { "cannotLeavePlay": true, "abilities": [
+    { "kind": "fast", "label": "Sophie: take 1 direct damage for +2 skill value", "condition": { "yourSkillTest": true }, "effects": [{ "op": "takeDamage", "amount": 1, "direct": true }, { "op": "modify", "mod": { "stat": "testValue", "value": 2 }, "until": "test" }] },
+    { "kind": "forced", "trigger": "damageTaken", "condition": { "damage": { "min": 5 } }, "effects": [{ "op": "flip" }] }
+  ] },
+  "03009b": { "cannotLeavePlay": true, "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "willpower", "value": -1 }, { "stat": "intellect", "value": -1 }, { "stat": "combat", "value": -1 }, { "stat": "agility", "value": -1 }] },
+    { "kind": "forced", "trigger": "damageHealed", "condition": { "damage": { "max": 4 } }, "effects": [{ "op": "flip" }] }
+  ] },
+  "03010": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "commitFromAfar" }] },
+    { "kind": "reaction", "trigger": "cardsCommitted", "label": "Analytical Mind: draw 1 card", "cost": { "exhaust": true }, "condition": { "eventAmount": { "min": 1, "max": 1 } }, "effects": [{ "op": "drawCards", "amount": 1 }] }
+  ] },
+  "03011": { "script": true, "cannotLeavePlay": true, "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "putInThreatArea" }] },
+    { "kind": "constant", "modifiers": [{ "flag": "cannotCommitOneOrTwo" }] }
+  ] },
+  "03012": { "script": true },
+  "03013": { "script": true },
+  "03014": { "script": true },
+  "03015": { "script": true },
+  "03016": { "abilities": [
+    { "kind": "reaction", "fromHand": true, "trigger": "enemyDefeated", "label": "Bury Them Deep: add the enemy to the victory display", "usableBy": "anyone", "condition": { "all": [{ "eventEnemy": { "elite": false } }, { "eventFromYourLocation": true }] }, "effects": [{ "op": "toVictory" }, { "op": "addSelfToVictory" }] }
+  ] },
+  "03017": { "prey": { "only": "03005" }, "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "cardsCannotLeaveDiscard", "scope": "self" }] }
+  ] },
+  "03018": { "script": true },
+  "03019": { "script": true },
+  "03020": { "abilities": [
+    { "kind": "action", "designator": "fight", "label": ".32 Colt: fight (+1 damage)", "cost": { "uses": 1 }, "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "damageBonus": 1 }] }
+  ] },
+  "03021": { "soaksForLocation": true },
+  "03022": { "script": true },
+  "03023": { "script": true },
+  "03024": { "abilities": [
+    { "kind": "reaction", "trigger": "enterLocation", "label": "Fieldwork: +2 skill value on your next test this phase", "cost": { "exhaust": true }, "condition": { "cluesOnYourLocation": "some" }, "effects": [{ "op": "modify", "mod": { "stat": "testValue", "value": 2 }, "until": "phase", "next": "test" }] }
+  ] },
+  "03025": { "script": true },
+  "03026": { "abilities": [
+    { "kind": "onPlay", "effects": [{ "op": "searchDeck", "top": 6, "filter": {}, "target": "chooseAtLocation", "draw": true }] }
+  ] },
+  "03027": { "abilities": [
+    { "kind": "action", "designator": "investigate", "label": "In the Know: investigate any revealed location", "cost": { "uses": 1 }, "effects": [{ "op": "investigate", "at": "anyRevealed" }] }
+  ] },
+  "03028": { "abilities": [
+    { "kind": "action", "designator": "evade", "label": "Stealth: evade (enemy -2 evade); it stays ready and can't engage you this turn", "cost": { "exhaust": true }, "condition": { "engaged": true }, "effects": [{ "op": "evade", "bonus": 2, "noExhaust": true, "cannotEngageYou": true }] }
+  ] },
+  "03029": { "script": true },
+  "03030": { "abilities": [
+    { "kind": "reaction", "fromHand": true, "trigger": "wouldSucceedSkillTest", "label": "Daring Maneuver: +2 skill value", "condition": { "yourSkillTest": true }, "effects": [{ "op": "modify", "mod": { "stat": "testValue", "value": 2 }, "until": "test" }] }
+  ] },
+  "03031": { "discardWhenEmpty": true, "abilities": [
+    { "kind": "action", "designator": "investigate", "label": "Lockpicks: investigate (+ your agility)", "cost": { "exhaust": true }, "effects": [{ "op": "investigate", "bonus": { "yourSkill": "agility" }, "onSuccess": [{ "op": "chooseOne", "options": [{ "label": "Remove 1 supply", "condition": { "not": { "succeededBy": { "min": 2 } } }, "effects": [{ "op": "removeUses", "amount": 1 }] }] }], "onFail": [{ "op": "removeUses", "amount": 1 }] }] }
+  ] },
+  "03032": { "abilities": [
+    { "kind": "action", "label": "Alchemical Transmutation: test willpower (1) for resources", "cost": { "exhaust": true, "uses": 1 }, "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": 1, "onSuccess": [{ "op": "gainResources", "amount": { "atMost": 3, "of": "succeedBy" } }], "onTokens": { "tokens": ["skull", "cultist", "tablet", "elderThing", "autoFail"], "effects": [{ "op": "takeDamage", "amount": 1 }] } }] }
+  ] },
+  "03033": { "script": true },
+  "03034": { "abilities": [
+    { "kind": "onPlay", "designator": "move", "effects": [{ "op": "moveTo", "where": "anyRevealed" }, { "op": "revealToken", "on": [{ "tokens": ["skull", "cultist", "tablet", "elderThing", "autoFail"], "effects": [{ "op": "discardAsset", "filter": { "trait": ["Item", "Ally"] }, "orElse": [{ "op": "takeDamage", "amount": 1 }] }] }] }] }
+  ] },
+  "03035": { "abilities": [
+    { "kind": "fast", "label": "Spirit Athame: +2 skill value (a test on a Spell)", "cost": { "exhaust": true }, "condition": { "all": [{ "yourSkillTest": true }, { "testSource": { "trait": "Spell" } }] }, "effects": [{ "op": "modify", "mod": { "stat": "testValue", "value": 2 }, "until": "test" }] },
+    { "kind": "action", "designator": "fight", "label": "Spirit Athame: fight (+2 combat)", "cost": { "exhaust": true }, "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "bonus": 2 }] }
+  ] },
+  "03036": { "abilities": [
+    { "kind": "action", "designator": "investigate", "label": "Lantern: investigate (-1 shroud)", "effects": [{ "op": "investigate", "shroud": -1 }] },
+    { "kind": "action", "label": "Lantern: discard to deal 1 damage to an enemy at your location", "aoo": false, "cost": { "discardSelf": true }, "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "dealDamage", "amount": 1, "to": "chooseAtLocation" }] }
+  ] },
+  "03037": { "abilities": [
+    { "kind": "action", "designator": "fight", "label": "Gravedigger's Shovel: fight (+2 combat)", "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "bonus": 2 }] },
+    { "kind": "action", "label": "Gravedigger's Shovel: discard to discover 1 clue at your location", "cost": { "discardSelf": true }, "condition": { "cluesOnYourLocation": "some" }, "effects": [{ "op": "discoverClues", "amount": 1 }] }
+  ] },
+  "03038": { "abilities": [
+    { "kind": "onPlay", "anyWindow": true, "effects": [{ "op": "attachToLocation", "where": "any" }] },
+    { "kind": "constant", "modifiers": [{ "keyword": "aloof", "scope": "enemiesAtLocation", "filter": { "elite": false } }] },
+    { "kind": "forced", "trigger": "enemyPhaseEnds", "condition": { "enemyAtThisLocation": { "exhausted": false } }, "effects": [{ "op": "discardSelf" }] }
+  ] },
+  "03039": { "abilities": [
+    { "kind": "onPlay", "condition": { "succeededBy": { "min": 0 } }, "effects": [{ "op": "takeFromDiscard", "filter": { "faction": "survivor", "notName": "Resourceful" } }] }
+  ] },
+  "03042": { "spawn": { "farthest": true, "to": "you" }, "prey": "bearer", "abilities": [
+    { "kind": "forced", "trigger": "wouldBeDefeated", "effects": [{ "op": "cancel" }, { "op": "shuffleSelfIntoDeck" }] }
+  ] },
+
   "03044": { "abilities": [
     { "kind": "revelation", "effects": [{ "op": "spawnSetAside", "code": "03060", "at": "Theatre", "orVictory": true }] }
   ] },
@@ -203,6 +318,40 @@
   "03103": { "script": true, "enemy": { "fight": 0, "health": 2, "healthPerInvestigator": false, "evade": 3, "damage": 1, "horror": 0 } },
   "03104": { "script": true },
   "03105": { "script": true },
+  "03106": { "script": true },
+  "03107": { "abilities": [
+    { "kind": "fast", "label": "Combat Training: +1 combat", "cost": { "resources": 1 }, "condition": { "yourSkillTest": true }, "effects": [{ "op": "modify", "mod": { "stat": "combat", "value": 1 }, "until": "test" }] },
+    { "kind": "fast", "label": "Combat Training: +1 agility", "cost": { "resources": 1 }, "condition": { "yourSkillTest": true }, "effects": [{ "op": "modify", "mod": { "stat": "agility", "value": 1 }, "until": "test" }] }
+  ] },
+  "03108": { "abilities": [
+    { "kind": "onPlay", "anyWindow": true, "condition": { "all": [{ "phase": "investigation" }, { "remainingSanity": { "min": 5 } }, { "enemyAtYourLocation": { "elite": false } }] }, "effects": [{ "op": "forEnemy", "target": "chooseAtLocation", "filter": { "elite": false }, "effects": [{ "op": "modify", "mod": { "stat": "fight", "value": -2 }, "until": "turn", "on": "eventEnemy" }, { "op": "modify", "mod": { "stat": "evade", "value": -2 }, "until": "turn", "on": "eventEnemy" }] }] }
+  ] },
+  "03109": { "abilities": [
+    { "kind": "fast", "label": "Scientific Theory: +1 intellect", "cost": { "resources": 1 }, "condition": { "yourSkillTest": true }, "effects": [{ "op": "modify", "mod": { "stat": "intellect", "value": 1 }, "until": "test" }] },
+    { "kind": "fast", "label": "Scientific Theory: +1 combat", "cost": { "resources": 1 }, "condition": { "yourSkillTest": true }, "effects": [{ "op": "modify", "mod": { "stat": "combat", "value": 1 }, "until": "test" }] }
+  ] },
+  "03110": { "abilities": [
+    { "kind": "action", "designator": "fight", "label": "Knuckleduster: fight (+1 damage; the enemy gains retaliate)", "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "damageBonus": 1, "retaliate": "gain" }] }
+  ] },
+  "03111": { "abilities": [
+    { "kind": "fast", "label": "Moxie: +1 willpower", "cost": { "resources": 1 }, "condition": { "yourSkillTest": true }, "effects": [{ "op": "modify", "mod": { "stat": "willpower", "value": 1 }, "until": "test" }] },
+    { "kind": "fast", "label": "Moxie: +1 agility", "cost": { "resources": 1 }, "condition": { "yourSkillTest": true }, "effects": [{ "op": "modify", "mod": { "stat": "agility", "value": 1 }, "until": "test" }] }
+  ] },
+  "03112": { "abilities": [
+    { "kind": "constant", "condition": { "selfHasDoom": true }, "modifiers": [{ "stat": "willpower", "value": 1 }] },
+    { "kind": "fast", "label": "David Renfield: you may place 1 doom on him, then gain 1 resource per doom on him", "cost": { "exhaust": true }, "effects": [{ "op": "chooseOne", "options": [{ "label": "Place 1 doom on David Renfield", "effects": [{ "op": "placeDoom", "amount": 1, "on": "self" }] }, { "label": "Place no doom", "effects": [] }] }, { "op": "gainResources", "amount": { "onSelf": "doom" } }] }
+  ] },
+  "03113": { "abilities": [
+    { "kind": "fast", "label": "Grounded: +1 skill value (a test on a Spell)", "cost": { "resources": 1 }, "condition": { "all": [{ "yourSkillTest": true }, { "testSource": { "trait": "Spell" } }] }, "effects": [{ "op": "modify", "mod": { "stat": "testValue", "value": 1 }, "until": "test" }] }
+  ] },
+  "03115": { "abilities": [
+    { "kind": "fast", "label": "Plucky: +1 willpower", "cost": { "resources": 1 }, "condition": { "yourSkillTest": true }, "effects": [{ "op": "modify", "mod": { "stat": "willpower", "value": 1 }, "until": "test" }] },
+    { "kind": "fast", "label": "Plucky: +1 intellect", "cost": { "resources": 1 }, "condition": { "yourSkillTest": true }, "effects": [{ "op": "modify", "mod": { "stat": "intellect", "value": 1 }, "until": "test" }] }
+  ] },
+  "03116": { "maxCommitted": 1, "commitIf": { "remainingSanity": { "max": 3 } } },
+  "03117": { "maxCommitted": 1, "commitIf": { "remainingSanity": { "max": 3 } } },
+  "03118": { "maxCommitted": 1, "commitIf": { "remainingSanity": { "max": 3 } } },
+  "03119": { "maxCommitted": 1, "commitIf": { "remainingSanity": { "max": 3 } } },
   "03120": { "script": true },
   "03121": { "script": true, "noMythosDoom": true },
   "03122": { "script": true, "noMythosDoom": true },
@@ -259,6 +408,42 @@
   "03089": { "prey": { "highest": "horror" }, "abilities": [
     { "kind": "forced", "trigger": "successfulEvade", "condition": { "not": { "succeededBy": { "min": 3 } } }, "effects": [{ "op": "takeHorror", "amount": 1 }] }
   ] },
+  "03147": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "engageNoAoO" }] },
+    { "kind": "action", "designator": "fight", "label": "Trench Knife: fight (+1 combat per enemy engaged with you)", "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "bonus": "enemiesEngaged" }] }
+  ] },
+  "03148": { "abilities": [
+    { "kind": "onPlay", "effects": [{ "op": "attachToLocation", "where": "yours" }] },
+    { "kind": "forced", "trigger": "leftLocation", "condition": { "investigatorsAtThisLocation": { "max": 0 } }, "effects": [{ "op": "discardSelf" }] },
+    { "kind": "forced", "trigger": "enemySpawns", "effects": [{ "op": "dealDamage", "amount": 2, "to": "eventEnemy" }, { "op": "discardSelf" }] }
+  ] },
+  "03149": { "script": true },
+  "03150": { "abilities": [
+    { "kind": "reaction", "fromHand": true, "trigger": "treacheryDrawn", "condition": { "all": [{ "eventInvestigatorIsYou": true }, { "eventCard": { "weakness": false } }, { "youHaveClues": "some" }] }, "effects": [{ "op": "dropClues", "amount": 1 }, { "op": "cancel" }] }
+  ] },
+  "03151": { "abilities": [
+    { "kind": "constant", "condition": { "resources": { "min": 10 } }, "modifiers": [{ "stat": "willpower", "value": 1 }, { "stat": "intellect", "value": 1 }] },
+    { "kind": "action", "label": "Dario El-Amin: gain 2 resources", "cost": { "exhaust": true }, "condition": { "not": { "enemyAtYourLocation": true } }, "effects": [{ "op": "gainResources", "amount": 2 }] }
+  ] },
+  "03152": { "abilities": [
+    { "kind": "onPlay", "condition": { "enemyNotEngagedWithYou": true }, "effects": [{ "op": "dealDamage", "amount": 2, "to": "chooseNotEngagedWithYou" }] }
+  ] },
+  "03153": { "abilities": [
+    { "kind": "onPlay", "designator": "fight", "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "skill": "willpower", "damageBonus": 1, "onSuccess": [{ "op": "dealDamage", "amount": 2, "to": "eachOtherAtLocation" }], "onTokens": { "tokens": ["skull", "cultist", "tablet", "elderThing", "autoFail"], "effects": [{ "op": "takeDamage", "amount": 1, "target": "eachAtLocation" }] } }] }
+  ] },
+  "03154": { "abilities": [
+    { "kind": "action", "label": "Book of Shadows: add 1 charge to a Spell asset you control", "cost": { "exhaust": true, "resources": 1 }, "condition": { "assetInPlay": { "type": "asset", "trait": "Spell" } }, "effects": [{ "op": "addUses", "amount": 1, "usesType": ["charges"], "filter": { "type": "asset", "trait": "Spell" }, "yours": true }] }
+  ] },
+  "03155": { "abilities": [
+    { "kind": "onPlay", "condition": { "yourTurn": true }, "effects": [{ "op": "modify", "mod": { "stat": "combat" }, "amount": { "onYou": "horror" }, "until": "round" }, { "op": "modify", "mod": { "stat": "agility" }, "amount": { "onYou": "horror" }, "until": "round" }] }
+  ] },
+  "03156": { "abilities": [
+    { "kind": "reaction", "fromHand": true, "trigger": "treacheryDrawn", "usableBy": "atLocation", "condition": { "eventCard": { "weakness": false } }, "effects": [{ "op": "cancel" }, { "op": "exile" }] }
+  ] },
+  "03157": { "abilities": [
+    { "kind": "reaction", "fromHand": true, "trigger": "damageDealt", "condition": { "eventInvestigatorIsYou": true }, "effects": [{ "op": "preventDamage", "amount": 10, "kind": "both" }, { "op": "exile" }] }
+  ] },
+  "03158": { "script": true },
   "03159": { "script": true },
   "03160": { "script": true },
   "03161": { "script": true },
@@ -336,6 +521,34 @@
   "03188": { "script": true },
   "03086": { "prey": { "lowest": "remainingSanity" }, "script": true },
   "03087": { "script": true },
+  "03189": { "script": true },
+  "03190": { "abilities": [
+    { "kind": "action", "designator": "fight", "label": ".45 Automatic: fight (+2 combat, +1 damage, ignore retaliate)", "cost": { "uses": 1 }, "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "bonus": 2, "damageBonus": 1, "retaliate": "ignore" }] }
+  ] },
+  "03191": { "abilities": [
+    { "kind": "onPlay", "condition": { "youHaveClues": "some" }, "effects": [{ "op": "forInvestigator", "target": "chooseAtLocation", "effects": [{ "op": "chooseOne", "options": [{ "label": "Heal 2 horror", "effects": [{ "op": "heal", "horror": 2 }] }, { "label": "Discard a Terror card from your threat area", "condition": { "inThreatArea": { "trait": "Terror" } }, "effects": [{ "op": "discardThreat", "filter": { "trait": "Terror" } }] }] }] }] }
+  ] },
+  "03192": { "keywords": [{ "researched": { "log": "translatedTheGlyphs" } }], "abilities": [
+    { "kind": "action", "designator": "investigate", "label": "Archaic Glyphs: investigate (1 more clue per 2 points you succeed by)", "cost": { "uses": 1 }, "effects": [{ "op": "investigate", "onSuccess": [{ "op": "discoverClues", "amount": { "per": 2, "of": "succeedBy" }, "at": "testLocation" }] }] }
+  ] },
+  "03193": { "keywords": [{ "researched": { "log": "translatedTheGlyphs" } }], "abilities": [
+    { "kind": "action", "designator": "investigate", "label": "Archaic Glyphs: investigate (on a success, you may evade an engaged enemy)", "aoo": false, "cost": { "uses": 1 }, "effects": [{ "op": "investigate", "onSuccess": [{ "op": "chooseOne", "options": [{ "label": "Evade an enemy engaged with you", "condition": { "engaged": true }, "effects": [{ "op": "evade", "auto": true, "target": "chooseEngaged" }] }, { "label": "Don't evade", "condition": { "engaged": true }, "effects": [] }] }] }] }
+  ] },
+  "03194": { "abilities": [
+    { "kind": "onPlay", "designator": "fight", "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "bonus": { "yourSkill": "agility" }, "onSuccess": [{ "op": "chooseOne", "options": [{ "label": "", "condition": { "succeededBy": { "min": 2 } }, "effects": [{ "op": "evade", "auto": true, "target": "eventEnemy" }] }] }] }] }
+  ] },
+  "03195": { "abilities": [
+    { "kind": "reaction", "trigger": "enemyEvaded", "label": "Pickpocketing: draw 1 card or gain 1 resource (both if you succeeded by 2 or more)", "cost": { "exhaust": true }, "effects": [{ "op": "chooseOne", "options": [{ "label": "Draw 1 card", "condition": { "not": { "succeededBy": { "min": 2 } } }, "effects": [{ "op": "drawCards", "amount": 1 }] }, { "label": "Gain 1 resource", "condition": { "not": { "succeededBy": { "min": 2 } } }, "effects": [{ "op": "gainResources", "amount": 1 }] }, { "label": "Draw 1 card and gain 1 resource", "condition": { "succeededBy": { "min": 2 } }, "effects": [{ "op": "drawCards", "amount": 1 }, { "op": "gainResources", "amount": 1 }] }] }] }
+  ] },
+  "03196": { "abilities": [
+    { "kind": "onPlay", "effects": [{ "op": "shuffleDiscardIntoDeck" }, { "op": "drawCards", "amount": 1 }, { "op": "removeSelf" }] }
+  ] },
+  "03197": { "script": true },
+  "03198": { "abilities": [
+    { "kind": "fast", "label": "Madame Labranche: draw 1 card", "cost": { "exhaust": true }, "condition": { "cardsInHand": { "max": 0 } }, "effects": [{ "op": "drawCards", "amount": 1 }] },
+    { "kind": "fast", "label": "Madame Labranche: gain 1 resource", "cost": { "exhaust": true }, "condition": { "not": { "resources": { "min": 1 } } }, "effects": [{ "op": "gainResources", "amount": 1 }] }
+  ] },
+  "03199": { "script": true },
   "03201": { "script": true },
   "03202": { "script": true },
   "03203": { "script": true },
@@ -377,6 +590,36 @@
     { "kind": "forced", "trigger": "turnEnds", "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": 3, "onSuccess": [{ "op": "discardSelf" }] }] }
   ] },
   "03227": { "script": true },
+  "03228": { "abilities": [
+    { "kind": "onPlay", "condition": { "succeededBy": { "min": 0 } }, "effects": [{ "op": "readyCard", "filter": { "type": "asset", "trait": "Ally" }, "atLocation": true, "onIt": [{ "op": "healSelf", "damage": 1, "horror": 1 }] }] }
+  ] },
+  "03229": { "abilities": [
+    { "kind": "onPlay", "aoo": false, "condition": { "all": [{ "firstAction": true }, { "engaged": true }] }, "effects": [{ "op": "dealDamage", "amount": 1, "to": "chooseEngaged" }] }
+  ] },
+  "03231": { "abilities": [
+    { "kind": "onPlay", "condition": { "succeededBy": { "min": 0 } }, "effects": [{ "op": "searchDeck", "top": 3, "filter": {}, "draw": true, "target": "eventInvestigator" }] }
+  ] },
+  "03232": { "abilities": [
+    { "kind": "onPlay", "condition": { "yourTurn": true }, "effects": [{ "op": "attachToLocation", "where": "yours" }] },
+    { "kind": "fast", "label": "Shortcut: move to a connecting location", "usableBy": "atLocation", "cost": { "exhaust": true }, "effects": [{ "op": "moveTo", "where": "connecting" }] }
+  ] },
+  "03233": { "commitOnlyOwnTest": true, "commitSpend": { "of": "resources", "max": 3 }, "abilities": [
+    { "kind": "onPlay", "condition": { "succeededBy": { "min": 1 } }, "effects": [{ "op": "gainResources", "amount": { "commitSpent": 2 } }] }
+  ] },
+  "03234": { "abilities": [
+    { "kind": "action", "designator": "fight", "label": ".41 Derringer: fight (+2 combat)", "cost": { "uses": 1 }, "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "bonus": 2, "extraDamageIfSucceedBy": 1, "onSuccess": [{ "op": "chooseOne", "options": [{ "label": "Take an additional action this turn", "condition": { "succeededBy": { "min": 3 } }, "effects": [{ "op": "gainActions", "amount": 1, "oncePerTurn": true }] }] }] }] }
+  ] },
+  "03235": { "commitSpend": { "of": "charges", "max": 3, "icons": { "willpower": 1, "wild": 1 } } },
+  "03236": { "abilities": [
+    { "kind": "fast", "label": "Scrying: look at the top 3 cards of a deck", "cost": { "exhaust": true, "uses": 1 }, "effects": [{ "op": "lookAtTop", "amount": 3, "anyDeck": true, "ifAmong": { "filter": { "trait": ["Terror", "Omen"] }, "effects": [{ "op": "takeHorror", "amount": 1 }] } }] }
+  ] },
+  "03237": { "abilities": [
+    { "kind": "onPlay", "condition": { "exhaustedEnemyAtYourLocation": true }, "effects": [{ "op": "forEnemy", "target": "chooseExhaustedAtLocation", "filter": { "elite": false }, "effects": [{ "op": "skillTest", "skill": "agility", "difficulty": { "eventEnemyStat": "evade" }, "onSuccess": [{ "op": "defeatEnemy", "nonElite": true }] }] }] }
+  ] },
+  "03238": { "script": true, "costX": "script" },
+  "03239": { "abilities": [
+    { "kind": "onPlay", "effects": [{ "op": "distributeUses", "amount": 4, "usesType": "supplies" }] }
+  ] },
   "03240": { "script": true },
   "03241": { "script": true },
   "03241b": { "script": true },
@@ -401,6 +644,34 @@
   "03260": { "script": true },
   "03261": { "script": true },
   "03262": { "script": true },
+  "03263": { "script": true },
+  "03264": { "script": true },
+  "03265": { "script": true },
+  "03266": { "abilities": [
+    { "kind": "fast", "label": "Arcane Insight: your location gets -2 shroud this turn", "cost": { "uses": 1 }, "limit": { "per": "turn", "count": 1 }, "condition": { "anyTurn": true }, "effects": [{ "op": "modify", "mod": { "stat": "shroud", "value": -2 }, "until": "turn", "on": "yourLocation" }] }
+  ] },
+  "03267": { "abilities": [
+    { "kind": "reaction", "fromHand": true, "trigger": "enemyAttacks", "condition": { "all": [{ "eventInvestigatorIsYou": true }, { "attackOfOpportunity": true }] }, "effects": [{ "op": "cancel" }, { "op": "modify", "mod": { "stat": "testValue", "value": 2 }, "until": "turn", "next": "test" }] }
+  ] },
+  "03268": { "discardWhenEmpty": true, "abilities": [
+    { "kind": "action", "designator": "evade", "label": "Suggestion: evade (add your willpower)", "cost": { "exhaust": true }, "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "evade", "bonus": { "yourSkill": "willpower" }, "onSuccess": [{ "op": "chooseOne", "options": [{ "label": "Remove 1 charge from Suggestion", "condition": { "not": { "succeededBy": { "min": 2 } } }, "effects": [{ "op": "removeUses", "amount": 1 }] }] }], "onFail": [{ "op": "removeUses", "amount": 1 }] }] },
+    { "kind": "reaction", "trigger": "enemyAttacks", "label": "Suggestion: cancel the attack", "cost": { "uses": 1 }, "condition": { "all": [{ "eventInvestigatorIsYou": true }, { "eventEnemy": { "elite": false } }] }, "effects": [{ "op": "cancel" }] }
+  ] },
+  "03269": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "willpower", "value": 1, "scope": "controller" }, { "stat": "intellect", "value": 1, "scope": "controller" }, { "stat": "sanity", "value": -2, "scope": "controller" }] },
+    { "kind": "reaction", "trigger": "wouldBeDefeated", "label": "St. Hubert's Key: heal 2 horror", "cost": { "discardSelf": true }, "condition": { "all": [{ "eventInvestigatorIsYou": true }, { "defeatCause": ["horror", "both"] }] }, "effects": [{ "op": "cancel" }, { "op": "heal", "horror": 2 }] }
+  ] },
+  "03270": { "abilities": [
+    { "kind": "reaction", "fromHand": true, "trigger": "treacheryDrawn", "usableBy": "anyone", "condition": { "eventCard": { "weakness": false } }, "effects": [{ "op": "cancel" }, { "op": "takeHorror", "amount": 1 }] }
+  ] },
+  "03271": { "abilities": [
+    { "kind": "forced", "trigger": "enterPlay", "effects": [{ "op": "chooseOne", "options": [{ "label": "Place 1 doom on Arcane Initiate", "effects": [{ "op": "placeDoom", "amount": 1, "on": "self" }] }, { "label": "Place 2 horror on Arcane Initiate", "effects": [{ "op": "placeTokens", "on": "self", "horror": 2 }] }] }] },
+    { "kind": "fast", "label": "Arcane Initiate: search the top 3 cards for a Spell", "cost": { "exhaust": true }, "effects": [{ "op": "searchDeck", "draw": true, "top": 3, "filter": { "trait": "Spell" } }] }
+  ] },
+  "03272": { "script": true, "commitIf": { "engaged": true } },
+  "03273": { "abilities": [
+    { "kind": "onPlay", "effects": [{ "op": "takeFromDiscard", "filter": { "type": "skill", "trait": "Innate" } }, { "op": "takeFromDiscard", "filter": { "type": "skill", "trait": "Innate" } }, { "op": "takeFromDiscard", "filter": { "type": "skill", "trait": "Innate" } }] }
+  ] },
   "03274": { "script": true },
   "03275": { "script": true },
   "03276a": { "script": true },
@@ -441,6 +712,32 @@
   "03301": { "script": true },
   "03302": { "script": true },
   "03303": { "script": true },
+  "03304": { "script": true },
+  "03305": { "abilities": [
+    { "kind": "reaction", "trigger": "damageAssigned", "label": "Armor of Ardennes: cancel 1 of that damage", "cost": { "exhaust": true }, "condition": { "eventCardIsSelf": true }, "effects": [{ "op": "cancelAssignedDamage", "amount": 1 }] }
+  ] },
+  "03306": { "script": true },
+  "03307": { "abilities": [
+    { "kind": "onPlay", "anyWindow": true, "effects": [{ "op": "searchDeck", "filter": {}, "target": "chooseAtLocation", "draw": true }] }
+  ] },
+  "03308": { "scenarioEnd": { "xpIfNotDefeated": 2, "killedIfDefeated": true } },
+  "03309": { "abilities": [
+    { "kind": "onPlay", "aoo": false },
+    { "kind": "action", "designator": "fight", "label": "Lupara: fight (+1 combat, +1 damage)", "cost": { "uses": 1 }, "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "bonus": { "base": 1, "plus": 1, "if": { "enteredPlayThisTurn": true } }, "damageBonus": { "base": 1, "plus": 1, "if": { "enteredPlayThisTurn": true } } }] }
+  ] },
+  "03310": { "abilities": [
+    { "kind": "reaction", "fromHand": true, "trigger": "wouldBeDefeated", "condition": { "eventInvestigatorIsYou": true }, "effects": [{ "op": "cancel" }, { "op": "disengageAll" }, { "op": "discardThreat", "filter": {}, "all": true }, { "op": "heal", "damage": 2, "horror": 2 }, { "op": "moveTo", "where": "revealedNoEnemies" }, { "op": "removeSelf" }, { "op": "endTurn" }] }
+  ] },
+  "03311": { "script": true },
+  "03312": { "sealsToken": "elderSign" },
+  "03313": { "abilities": [
+    { "kind": "constant", "condition": { "youHaveClues": "none" }, "modifiers": [{ "stat": "intellect", "value": 2, "when": "investigating" }] },
+    { "kind": "reaction", "trigger": "wouldDiscoverClues", "label": "Newspaper: discover an additional clue", "condition": { "all": [{ "eventInvestigatorIsYou": true }, { "youHaveClues": "none" }, { "eventAtYourLocation": true }] }, "effects": [{ "op": "addClues", "amount": 1 }] }
+  ] },
+  "03314": { "abilities": [
+    { "kind": "reaction", "fromHand": true, "trigger": "phaseBegins", "condition": { "phase": "enemy" }, "effects": [{ "op": "modify", "mod": { "flag": "nonEliteCannotAttack" }, "until": "phase" }] }
+  ] },
+  "03315": { "script": true, "leavesPlay": { "effects": [{ "op": "discardDeckTop", "amount": 10 }] } },
   "03316": { "script": true },
   "03317": { "script": true },
   "03318": { "script": true },

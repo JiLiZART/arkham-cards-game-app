@@ -51,6 +51,22 @@ type Handler<T extends Step["t"]> = (game: GameContext, step: Extract<Step, { t:
 // ---------- encounter deck ----------
 export const drawEncounterHandler: Handler<"DrawEncounter"> = (game, step) => {
   if (inv(game, step.inv).status !== "playing") return;
+  // "when you would draw an encounter card during the mythos phase" (On the Hunt): only while a hand holds such a card
+  if (!step.card && !step.key && currentPhase(game) === "mythos") {
+    if (step.would && isCancelled(game, step.would)) return;
+    if (
+      !step.would &&
+      allCards(game).some(
+        (c) =>
+          c.zone === "hand" &&
+          abilitiesOf(game, c.id).some((a) => a.trigger === "wouldDrawEncounter"),
+      )
+    ) {
+      const would = `would:${step.inv}:${logLength(game)}`;
+      push(game, win("wouldDrawEncounter", { inv: step.inv, key: would }), { ...step, would });
+      return;
+    }
+  }
   if (!step.card) {
     if (!tapToDraw(game, step, step.inv, "encounter", 1)) return;
     if (pile(game, ZONE.EncounterDeck).length === 0) {

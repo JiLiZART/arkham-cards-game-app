@@ -261,8 +261,9 @@ export function validateDeck(
     t.card = (c.deckLimit ?? 2) < (t.card.deckLimit ?? 2) ? c : t.card;
     titles.set(title, t);
     if (c.subtype === "basicweakness") basicWeaknesses += n;
-    // a permanent card is part of the deck but doesn't count toward its size (Grimoire, Permanent)
-    if (required.has(code) || isWeakness(c) || PERMANENT.test(c.text)) continue;
+    // signatures, weaknesses, permanent cards and the story cards a campaign adds are part of the deck but don't count
+    // toward its size, and a story card ignores the deckbuilding restrictions (Grimoire, Deckbuilding; Permanent; Bearer)
+    if (required.has(code) || isWeakness(c) || PERMANENT.test(c.text) || c.encounterSet) continue;
     for (let k = 0; k < n; k++) counted.push(c);
   }
   for (const { card, n } of titles.values()) {

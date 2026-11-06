@@ -102,6 +102,7 @@ export {
   setCounter,
   setEngaged,
   setOwner,
+  setRewind,
   shuffleDeck,
   shuffleList,
   unreveal,
@@ -133,7 +134,7 @@ export {
   spawnTargets,
   swarmOf,
 } from "./queries";
-export { addTempMod } from "./queries";
+export { addTempMod, removeTempMods } from "./queries";
 export {
   addExtraReveal,
   flipNegativeTokens,

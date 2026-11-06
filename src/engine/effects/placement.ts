@@ -32,10 +32,19 @@ import {
   stepsToward,
   locations,
   matchesFilter,
+  discardLocked,
+  threatArea,
   isHidden,
   canReady,
 } from "../queries";
-import { discard, discardTop, isInPlay, moveCard, shuffleIntoDeck } from "../movement";
+import {
+  discard,
+  discardTop,
+  isInPlay,
+  moveCard,
+  reshuffleDiscard,
+  shuffleIntoDeck,
+} from "../movement";
 import { win } from "../rules/cards";
 import { canEnemyEnter, preyCandidates } from "../rules/enemies";
 import type { InstId } from "../world/types";
@@ -67,11 +76,13 @@ function attachToLocationEffect(game: GameContext, run: EffectRun<EffectOf<"atta
     e.where === "yours"
       ? [inv(game, you).location!].filter(Boolean)
       : locations(game).map((l) => l.id);
+  // "attach to any location": you choose (Hiding Spot)
+  const chooser = e.where === "any" ? you : leadInvestigator(game);
   if (e.limitOnePerLocation)
     cands = cands.filter(
       (l) => !cardsIn(game, ZONE.Attached).some((a) => a.location === l && a.code === src.code),
     );
-  if (e.where !== "yours" && cands.length) {
+  if ((e.where === "mostClues" || e.where === "mostInvestigators") && cands.length) {
     const count = (l: InstId) =>
       e.where === "mostClues" ? card(game, l).clues : invsAt(game, l).length;
     const most = Math.max(...cands.map(count));
@@ -84,7 +95,7 @@ function attachToLocationEffect(game: GameContext, run: EffectRun<EffectOf<"atta
   const pick = ask<InstId>(
     game,
     step,
-    leadInvestigator(game),
+    chooser,
     CHOICE.Target,
     `Attach ${def(game, src.id).name} to:`,
     cands.map((l) => opt(game, l)),
@@ -115,6 +126,17 @@ function addSelfToVictoryEffect(game: GameContext, run: EffectRun<EffectOf<"addS
   });
   push(game, { t: STEP.CheckObjectives });
   return;
+}
+
+/** the event's enemy, just defeated, to the victory display (Bury Them Deep) */
+function toVictoryEffect(game: GameContext, run: EffectRun<EffectOf<"toVictory">>) {
+  const e = run.ctx.enemy ? cardIf(game, run.ctx.enemy) : undefined;
+  if (!e || (e.zone !== ZONE.Discard && e.zone !== ZONE.EncounterDiscard)) return;
+  moveCard(game, e.id, ZONE.Victory);
+  emit(game, EVENT.Victory, `${def(game, e.id).name} is added to the victory display`, {
+    card: e.id,
+  });
+  push(game, { t: STEP.CheckObjectives });
 }
 
 function removeSelfEffect(game: GameContext, run: EffectRun<EffectOf<"removeSelf">>) {
@@ -180,7 +202,10 @@ function discardAssetEffect(game: GameContext, run: EffectRun<EffectOf<"discardA
   const e = run.effect;
 
   const assets = controlled(game, you).filter(
-    (c) => def(game, c.id).type === "asset" && !def(game, c.id).subtype,
+    (c) =>
+      def(game, c.id).type === "asset" &&
+      !def(game, c.id).subtype &&
+      (!e.filter || matchesFilter(game, c.code, e.filter)),
   );
   if (!assets.length) {
     if (e.orElse) push(game, { t: STEP.Effects, effects: e.orElse, ctx });
@@ -198,6 +223,46 @@ function discardAssetEffect(game: GameContext, run: EffectRun<EffectOf<"discardA
   if (pick === undefined) return;
   discard(game, pick);
   return;
+}
+
+/** a card matching the filter in your threat area discarded, you choose which (Logical Reasoning: a [[Terror]]) */
+function discardThreatEffect(game: GameContext, run: EffectRun<EffectOf<"discardThreat">>) {
+  const { step, you } = run;
+  const cards = threatArea(game, you).filter((c) => matchesFilter(game, c.code, run.effect.filter));
+  if (!cards.length) return;
+  // "discard all cards in your threat area" (Cheat Death)
+  if (run.effect.all) {
+    for (const c of cards) discard(game, c.id);
+    return;
+  }
+  const pick = ask<InstId>(
+    game,
+    step,
+    you,
+    CHOICE.Generic,
+    "Choose a card in your threat area to discard",
+    cards.map((c) => opt(game, c.id)),
+    { auto: true, key: "discardThreat" },
+  );
+  if (pick === undefined) return;
+  discard(game, pick);
+}
+
+/** your discard pile shuffled into your deck, unless no card may leave it (Quantum Flux) */
+function shuffleDiscardIntoDeckEffect(
+  game: GameContext,
+  run: EffectRun<EffectOf<"shuffleDiscardIntoDeck">>,
+) {
+  if (discardLocked(game, run.you)) return;
+  emit(
+    game,
+    EVENT.Shuffle,
+    `${invName(game, run.you)} shuffles their discard pile into their deck`,
+    {
+      inv: run.you,
+    },
+  );
+  reshuffleDiscard(game, run.you);
 }
 
 function discardAllButOneFromHandEffect(
@@ -285,6 +350,10 @@ function moveToEffect(game: GameContext, run: EffectRun<EffectOf<"moveTo">>) {
       .map((l) => l.id);
   if (e.where === "choose") cands = locations(game).map((l) => l.id);
   if (e.where === "eventLocation" && ctx.location) cands = [ctx.location];
+  if (e.where === "anyRevealed")
+    cands = locations(game)
+      .filter((l) => l.revealed)
+      .map((l) => l.id);
   cands = cands.filter((l) => l !== from);
   if (!cands.length) return;
   const pick = ask<InstId>(
@@ -418,7 +487,9 @@ function takeFromDiscardEffect(game: GameContext, run: EffectRun<EffectOf<"takeF
   const e = run.effect;
 
   const me = inv(game, you);
-  const pool = me.discard.filter((id) => matchesFilter(game, card(game, id).code, e.filter));
+  const pool = discardLocked(game, you)
+    ? []
+    : me.discard.filter((id) => matchesFilter(game, card(game, id).code, e.filter));
   if (!pool.length) return;
   const pick = ask<InstId>(
     game,
@@ -442,8 +513,12 @@ function readyCardEffect(game: GameContext, run: EffectRun<EffectOf<"readyCard">
   const { step, you } = run;
   const e = run.effect;
 
-  const ids = controlled(game, you)
-    .filter((c) => c.exhausted && matchesFilter(game, c.code, e.filter) && canReady(game, c.id))
+  // "an [[Ally]] asset at your location" (Inspiring Presence): anyone's there, exhausted or not
+  const pool = e.atLocation
+    ? invsAt(game, inv(game, you).location).flatMap((i) => controlled(game, i))
+    : controlled(game, you).filter((c) => c.exhausted);
+  const ids = pool
+    .filter((c) => matchesFilter(game, c.code, e.filter) && canReady(game, c.id))
     .map((c) => c.id);
   if (!ids.length) return;
   const pick = ask<InstId>(
@@ -458,7 +533,7 @@ function readyCardEffect(game: GameContext, run: EffectRun<EffectOf<"readyCard">
   if (pick === undefined) return;
   ready(game, pick);
   emit(game, EVENT.Ready, `${def(game, pick).name} is readied`, { inv: you, card: pick });
-  return;
+  if (e.onIt) push(game, { t: STEP.Effects, effects: e.onIt, ctx: { ...run.ctx, source: pick } });
 }
 
 function shuffleSelfIntoDeckEffect(
@@ -484,10 +559,13 @@ export const placementEffects = {
   attachToLocation: attachToLocationEffect,
   discardSelf: discardSelfEffect,
   addSelfToVictory: addSelfToVictoryEffect,
+  toVictory: toVictoryEffect,
   removeSelf: removeSelfEffect,
   returnSelfToHand: returnSelfToHandEffect,
   discardFromHand: discardFromHandEffect,
   discardAsset: discardAssetEffect,
+  discardThreat: discardThreatEffect,
+  shuffleDiscardIntoDeck: shuffleDiscardIntoDeckEffect,
   discardAllButOneFromHand: discardAllButOneFromHandEffect,
   removeDiscardFromGame: removeDiscardFromGameEffect,
   discardDeckTop: discardDeckTopEffect,

@@ -1,12 +1,15 @@
 import {
   attackBonus,
+  attackRedirect,
   attackDamageBonus,
   attacked,
   damageBonus,
   defeated,
   noAttack,
+  noEngage,
 } from "../world/flags";
 import {
+  activeInvestigator,
   activeInvs,
   addCounter,
   allCards,
@@ -26,6 +29,7 @@ import {
   leadInvestigator,
   logStep,
   nextKey,
+  periodCounter,
   push,
   randomInt,
   ready,
@@ -76,7 +80,15 @@ import { fireScenarioHook } from "./scripts";
 type Handler<T extends Step["t"]> = (game: GameContext, step: Extract<Step, { t: T }>) => void;
 
 /** investigators among candidates that match the enemy's prey instruction */
-export function preyCandidates(game: GameContext, enemy: InstId, candidates: InvId[]): InvId[] {
+export function preyCandidates(game: GameContext, enemy: InstId, all: InvId[]): InvId[] {
+  // an investigator it can't engage this turn is none of its candidates (Stealth)
+  const candidates = all.filter(
+    (i) =>
+      !(
+        activeInvestigator(game) === i &&
+        noEngage.get(game, [enemy, i]) === periodCounter(game, "turn")
+      ),
+  );
   const prey = preyOf(game, enemy);
   if (!prey) return candidates;
   // "only" prey never falls back to others: with nobody matching it engages and hunts no one
@@ -300,7 +312,12 @@ export const enemyAttackHandler: Handler<"EnemyAttack"> = (game, step) => {
   const e = cardIf(game, step.enemy);
   push(
     game,
-    win("enemyAttacks", { inv: step.inv, enemy: step.enemy, key: step.key }),
+    win("enemyAttacks", {
+      inv: step.inv,
+      enemy: step.enemy,
+      key: step.key,
+      ...(step.aoo ? { aoo: true } : {}),
+    }),
     { t: STEP.ResolveAttack, enemy: step.enemy, inv: step.inv, key: step.key },
     // a ready elusive enemy slips away after it attacks
     ...(e && !e.exhausted && hasKeyword(game, step.enemy, "elusive")
@@ -339,6 +356,22 @@ export function elusive(game: GameContext, id: InstId, step: Step) {
 
 export const resolveAttackHandler: Handler<"ResolveAttack"> = (game, step) => {
   const e = cardIf(game, step.enemy);
+  // resolved against another investigator instead, then the enemy takes damage (Heroic Rescue)
+  const redirect = attackRedirect.take(game, step.key);
+  if (redirect && e?.zone === "enemy" && inv(game, redirect.to).status === "playing") {
+    push(
+      game,
+      { ...step, inv: redirect.to },
+      {
+        t: STEP.DamageEnemy,
+        enemy: step.enemy,
+        amount: redirect.damage,
+        by: redirect.to,
+        source: redirect.source,
+      },
+    );
+    return;
+  }
   if (!e || e.zone !== "enemy" || inv(game, step.inv).status !== "playing") return;
   if (isCancelled(game, step.key) && !hasFlag(game, step.enemy, "attacksCannotBeCancelled")) {
     emit(game, EVENT.AttackCancelled, `${def(game, step.enemy).name}'s attack is cancelled`, {
@@ -539,6 +572,8 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (game, step) => {
       data: { by: step.by ?? null, ...(step.via ? { via: step.via } : {}) },
     },
   );
+  // where it was defeated ("after a non-[[Elite]] enemy at your location is defeated": Bury Them Deep)
+  const from = e.location;
   if (d.victory !== undefined) moveCard(game, step.enemy, ZONE.Victory);
   else moveCard(game, step.enemy, e.owner ? ZONE.Discard : ZONE.EncounterDiscard);
   defeated.set(game, e.code, true);
@@ -547,6 +582,7 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (game, step) => {
     win("enemyDefeated", {
       inv: step.by,
       defeated: step.enemy,
+      from,
       ...(step.via ? { via: step.via } : {}),
     }),
     {

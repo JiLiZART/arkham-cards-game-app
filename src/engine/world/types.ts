@@ -184,6 +184,8 @@ export interface TempMod {
   source: InstId | null;
   /** it ends sooner, with the next attack against its target enemy (Expose Weakness) */
   nextAttack?: true;
+  /** it ends sooner, with its target's next skill test, or the next card they play it applies to (Fieldwork, Improvisation) */
+  next?: "test" | "play";
 }
 
 export interface SkillTestState {
@@ -199,6 +201,8 @@ export interface SkillTestState {
   committers: InvId[];
   /** a token cancelled the effects and icons of the committed skill cards (Where Doom Awaits' cultist) */
   committedCancelled?: boolean;
+  /** the token a committed card revealed in place of the bag's (Seal of the Elder Sign): it never goes into the bag */
+  sealed?: ChaosToken;
   tokens: ChaosToken[];
   /** resolved token modifiers, one per token */
   tokenMods: number[];
@@ -273,6 +277,12 @@ export interface SkillTestState {
   extraClues?: number;
   /** a success doesn't evade the enemy (an Elite enemy against "if the enemy is non-[[Elite]], evade it") */
   noEvade?: boolean;
+  /** a success disengages the enemy without exhausting it (Stealth) */
+  evadeNoExhaust?: boolean;
+  /** after a success, the enemy can't engage the tester until the end of their turn (Stealth) */
+  noEngageAfterEvade?: boolean;
+  /** the attacked enemy gains Retaliate for this attack, or its Retaliate is ignored (Knuckleduster, .45 Automatic 2) */
+  retaliate?: "gain" | "ignore";
   /** the "would succeed" window was opened (Rex's Curse) */
   succeedWindowDone?: boolean;
   /** the revealed tokens go back and new ones are revealed before the result (Rex's Curse) */
@@ -321,6 +331,10 @@ export interface EffCtx {
   parley?: true;
   /** an act's back: what advanced it, clues spent or what the advance named (A Phantom of Truth's act 1) */
   actAdvancedBy?: "clues" | "objective" | "doom";
+  /** the event's attack is an attack of opportunity (Narrow Escape) */
+  aoo?: true;
+  /** what would defeat the investigator (a wouldBeDefeated window) */
+  cause?: "damage" | "horror" | "both" | "effect";
 }
 
 export interface ChoiceOption {
@@ -370,7 +384,8 @@ export type TurnAction =
 /** engine steps; resolved LIFO from state.queue */
 export type Step = { choice?: any } & (
   | { t: "Setup" }
-  | { t: "Mulligan"; inv: InvId; chosen?: InstId[] }
+  /** `draw`: the opening hand of that many cards is drawn first (it waited for a card's "before you draw your opening hand") */
+  | { t: "Mulligan"; inv: InvId; chosen?: InstId[]; draw?: number }
   | { t: "StartRound" }
   | { t: "PhasePause"; phase: "mythos" | "investigation" | "enemy" | "upkeep" }
   | { t: "MythosPhase" }
@@ -439,13 +454,16 @@ export type Step = { choice?: any } & (
       free?: boolean;
       viaTrigger?: boolean;
       x?: number;
+      /** the resources another investigator spends toward its cost (Charles Ross, Esq.) */
+      helped?: { inv: InvId; n: number };
     }
   /** `tapped`: the draw was asked for by tapping the deck already (the Draw action, or the second card of a draw of several) */
   /** `of`: how many cards the draw began with, when more than one */
   | { t: "Draw"; inv: InvId; n: number; tapped?: boolean; of?: number }
   /** `card`: that card is drawn as the encounter card (from beneath a card), not the deck's top */
   /** `key`: the card came from the encounter deck and its encounterDrawn window was opened (cancelled: it is discarded) */
-  | { t: "DrawEncounter"; inv: InvId; card?: InstId; key?: string }
+  /** `would`: the key of the wouldDrawEncounter window opened for it in the mythos phase (On the Hunt) */
+  | { t: "DrawEncounter"; inv: InvId; card?: InstId; key?: string; would?: string }
   | { t: "Revelation"; inv: InvId; card: InstId }
   /** `redirect`: the spawn was turned away from `at` (Barricade (3)) and the player chooses where instead */
   /** `asked`: the "would spawn" window was opened, `engage` who it engages as it spawns (if they are still there) */
@@ -478,6 +496,8 @@ export type Step = { choice?: any } & (
       assigned?: Record<string, [number, number]>;
       /** the damageDealt window has been opened for it */
       windowed?: boolean;
+      /** the damageAssigned windows of its assets have been opened (Armor of Ardennes) */
+      assignedWindowed?: boolean;
     }
   | {
       t: "AfterDamage";
@@ -485,6 +505,8 @@ export type Step = { choice?: any } & (
       damage: number;
       horror: number;
       assets: InstId[];
+      /** the assets among them that took damage, not only horror */
+      damaged?: InstId[];
       enemy: InstId | null;
     }
   | {
@@ -533,6 +555,8 @@ export type Step = { choice?: any } & (
       t: "Test";
       stage: TestStage;
       asked?: InvId[];
+      /** the committed card whose additional cost is being paid, one point a choice ("Watch this!") */
+      spending?: InstId;
     }
   | { t: "EnemyEngage"; enemy: InstId; inv: InvId }
   | { t: "CheckObjectives" }
@@ -582,6 +606,8 @@ export interface EventData {
   via?: "predator";
   /** what would defeat an investigator or enemy (a wouldBeDefeated window) */
   cause?: "damage" | "horror" | "both" | "effect";
+  /** an attack of opportunity (an enemyAttacks window) */
+  aoo?: boolean;
   enemy?: InstId | null;
   location?: InstId | null;
   card?: InstId | null;
@@ -622,6 +648,12 @@ export interface GameState {
   phase: Phase;
   /** `reveal`: bumped by every choice that brought hidden information into play (a random draw, a card leaving a deck, deck cards shown) */
   counters: { turn: number; phase: number; round: number; test: number; reveal: number };
+  /**
+   * set by Time Warp: the game goes back to how it was before the action noted under `action` began (`flags.actionStart`),
+   * Time Warp (`card`) in its owner's discard and its cost (`paid`) spent; `replay` resolves it (design decision 5 of
+   * player-cards-ptc)
+   */
+  rewind?: { action: string; card: InstId; paid: number };
   world: World;
   order: InvId[];
   lead: InvId;
@@ -671,6 +703,8 @@ export interface CardScript {
   modifiers?: (game: GameContext, cardId: InstId) => { target: string; mod: Modifier }[];
   /** modifiers while the card is in its owner's hand (Clasp of Black Onyx) */
   inHandModifiers?: (game: GameContext, cardId: InstId) => { target: string; mod: Modifier }[];
+  /** its controller may spend resources toward the cost of `card`, played by `inv` (Charles Ross, Esq.) */
+  paysFor?: (game: GameContext, cardId: InstId, inv: InvId, card: InstId) => boolean;
   /** cards (e.g. top event of discard) the controller may additionally play */
   extraPlayable?: (game: GameContext, cardId: InstId, inv: InvId) => InstId[];
   /** card instances whose text is treated as blank while this card is in play */
@@ -685,6 +719,16 @@ export interface CardScript {
   ) => number;
   /** when doom would be placed while this card is the agenda: true replaces it (Brethren of Ash) */
   wouldPlaceDoom?: (game: GameContext, cardId: InstId, n: number) => boolean;
+  /**
+   * an investigator's opening hand: `draw` cards instead of 5, then the script function `fn` (it may ask choices), in
+   * place of the mulligan when `noMulligan` (Sefina Rousseau), else after it (Lola Hayes's role)
+   */
+  openingHand?: { draw?: number; fn: string; noMulligan?: boolean };
+  /**
+   * a card in play at the start (Permanent) acting "before you draw your opening hand": the script function `fn` (it
+   * may ask choices) runs before its owner's opening hand is drawn (Stick to the Plan)
+   */
+  beforeOpeningHand?: { fn: string };
   /** called by the engine for special hooks */
   hooks?: Partial<ScriptHooks>;
   /** a search that finds this card ends there: the rest of the search is not resolved (Dead Ends) */

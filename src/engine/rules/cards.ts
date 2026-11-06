@@ -19,6 +19,9 @@ import {
   modSum,
   uniqueInPlay,
   isHidden,
+  offRole,
+  discardLocked,
+  endNextPlayMods,
 } from "../queries";
 import {
   activeInvestigator,
@@ -59,18 +62,38 @@ type Handler<T extends Step["t"]> = (game: GameContext, step: Extract<Step, { t:
 function periodKey(game: GameContext, per: "test" | "turn" | "phase" | "round" | "game") {
   return per === "game" ? "game" : `${per}${periodCounter(game, per)}`;
 }
-function limitKey(game: GameContext, cardId: InstId, index: number, a: Ability) {
+/** `forInv`: the event's investigator, for a limit counted apart per investigator ("once for each investigator") */
+function limitKey(
+  game: GameContext,
+  cardId: InstId,
+  index: number,
+  a: Ability,
+  forInv?: InvId | null,
+) {
   const c = card(game, cardId);
   const who = a.limit?.group ? c.code : cardId;
-  return `${who}:${index}:${periodKey(game, a.limit!.per)}`;
+  const each = a.limit?.eachInvestigator ? `:${forInv ?? ""}` : "";
+  return `${who}:${index}:${periodKey(game, a.limit!.per)}${each}`;
 }
-export function withinLimit(game: GameContext, cardId: InstId, index: number, a: Ability) {
+export function withinLimit(
+  game: GameContext,
+  cardId: InstId,
+  index: number,
+  a: Ability,
+  forInv?: InvId | null,
+) {
   if (!a.limit) return true;
-  return limitUses(game, limitKey(game, cardId, index, a)) < a.limit.count;
+  return limitUses(game, limitKey(game, cardId, index, a, forInv)) < a.limit.count;
 }
-function recordUse(game: GameContext, cardId: InstId, index: number, a: Ability) {
+function recordUse(
+  game: GameContext,
+  cardId: InstId,
+  index: number,
+  a: Ability,
+  forInv?: InvId | null,
+) {
   if (!a.limit) return;
-  recordLimitUse(game, limitKey(game, cardId, index, a));
+  recordLimitUse(game, limitKey(game, cardId, index, a, forInv));
 }
 
 // ---------- costs ----------
@@ -213,6 +236,8 @@ export function activatable(
       )
         return;
       if (!usersOf(game, c.id, a).includes(i)) return;
+      // Lola Hayes triggers abilities only on Neutral cards and cards of her role
+      if (offRole(game, i, c.id)) return;
       if (!withinLimit(game, c.id, index, a)) return;
       if (
         a.condition &&
@@ -322,6 +347,8 @@ export function ctxFor(data: EventData, source: InstId, you: InvId | null): EffC
       data.damage !== undefined || data.horror !== undefined
         ? [data.damage ?? 0, data.horror ?? 0]
         : undefined,
+    ...(data.aoo ? { aoo: true as const } : {}),
+    ...(data.cause ? { cause: data.cause } : {}),
   };
 }
 
@@ -330,7 +357,12 @@ export function playable(game: GameContext, i: InvId): InstId[] {
   const extra = [...controlled(game, i), card(game, inv(game, i).cardId)].flatMap(
     (c) => scriptOf(game.db, c.code)?.extraPlayable?.(game, c.id, i) ?? [],
   );
-  return [...inv(game, i).hand, ...extra];
+  // a card in a discard pile no card may leave stays there (Graveyard Ghouls)
+  const locked = extra.length > 0 && discardLocked(game, i);
+  return [
+    ...inv(game, i).hand,
+    ...(locked ? extra.filter((id) => card(game, id).zone !== ZONE.Discard) : extra),
+  ];
 }
 
 function triggered(game: GameContext, trigger: Trigger, data: EventData): AbilityRef[] {
@@ -352,8 +384,9 @@ function triggered(game: GameContext, trigger: Trigger, data: EventData): Abilit
       if (fromHand && card(game, cardId).zone !== "hand" && (a.revealOnly || a.kind !== "reaction"))
         return;
       if (!fromHand && assetBlocked(game, cardId)) return;
+      if (a.kind === "reaction" && you && offRole(game, you, cardId)) return;
       if (!triggerMatches(game, cardId, a, you, data)) return;
-      if (!withinLimit(game, cardId, index, a)) return;
+      if (!withinLimit(game, cardId, index, a, data.inv)) return;
       if (a.condition && !checkCondition(game, a.condition, ctxFor(data, cardId, you))) return;
       if (you && a.kind === "reaction" && !canPay(game, you, cardId, a.cost)) return;
       if (fromHand && you && a.kind === "reaction" && !a.revealOnly) {
@@ -530,7 +563,7 @@ export const useAbilityHandler: Handler<"UseAbility"> = (game, step) => {
       return;
     }
     for (const h of chosen) discard(game, h);
-    recordUse(game, step.card, step.index, a);
+    recordUse(game, step.card, step.index, a, step.ctx?.inv);
     take = payCost(game, step.inv, step.card, a.cost);
   }
   const c = cardIf(game, step.card);
@@ -610,6 +643,7 @@ export const playAbility = (game: GameContext, cardId: InstId) =>
 /** why an asset or event in hand can't be played whatever the timing, or null; `by` is the card that forbids it */
 /** no asset or event may be played now, or no event (House in the Reeds) */
 const playForbidden = (game: GameContext, i: InvId, cardId: InstId) =>
+  offRole(game, i, cardId) ||
   hasFlag(game, i, "cannotPlayAssetsOrEvents") ||
   (def(game, cardId).type === "event" && hasFlag(game, i, "cannotPlayEvents")) ||
   allMods(game).some(
@@ -618,6 +652,22 @@ const playForbidden = (game: GameContext, i: InvId, cardId: InstId) =>
       m.mod.flag === "cannotPlay" &&
       (!m.mod.filter || matchesFilter(game, card(game, cardId).code, m.mod.filter)),
   );
+
+/** the other investigators whose cards let them spend resources toward a card `i` plays (Charles Ross, Esq.) */
+export function payHelpers(game: GameContext, i: InvId, cardId: InstId): InvId[] {
+  const out = new Set<InvId>();
+  for (const c of cardsIn(game, ZONE.Play))
+    if (
+      c.controller &&
+      c.controller !== i &&
+      scriptOf(game.db, c.code)?.paysFor?.(game, c.id, i, cardId)
+    )
+      out.add(c.controller);
+  return [...out];
+}
+/** the resources that may go toward a card `i` plays: their own, and their helpers' */
+const purse = (game: GameContext, i: InvId, cardId: InstId) =>
+  payHelpers(game, i, cardId).reduce((n, h) => n + inv(game, h).resources, inv(game, i).resources);
 
 export type PlayBlock =
   | { reason: "forbidden"; by: InstId | null }
@@ -641,9 +691,11 @@ export function playBlock(game: GameContext, i: InvId, cardId: InstId): PlayBloc
   );
   if (ban)
     return { reason: "forbidden", by: ban.source && cardIf(game, ban.source) ? ban.source : null };
+  // not of Lola Hayes's role: her own card forbids it
+  if (offRole(game, i, cardId)) return { reason: "forbidden", by: inv(game, i).cardId };
   if (uniqueInPlay(game, cardId)) return { reason: "unique" };
   const cost = playCost(game, i, cardId);
-  if (inv(game, i).resources < cost) return { reason: "resources", cost };
+  if (purse(game, i, cardId) < cost) return { reason: "resources", cost };
   return null;
 }
 
@@ -672,6 +724,15 @@ export function canPlay(game: GameContext, i: InvId, cardId: InstId, asFast: boo
     controlled(game, i).some((c) => c.id !== cardId && def(game, c.id).name === d.name)
   )
     return false;
+  // "Limit 1 [[Composure]] in play": no second asset of the trait in your play area (limits are per player)
+  const traitLimit = d.type === "asset" ? /Limit 1 \[\[([\w ]+)\]\] in play\./.exec(d.text) : null;
+  if (
+    traitLimit &&
+    controlled(game, i).some(
+      (c) => c.id !== cardId && def(game, c.id).traits.includes(traitLimit[1]),
+    )
+  )
+    return false;
   const isFast = d.keywords.includes("fast");
   if (asFast !== isFast) return false;
   // events that are only playable in response to a trigger
@@ -681,7 +742,7 @@ export function canPlay(game: GameContext, i: InvId, cardId: InstId, asFast: boo
     return false;
   if (isFast && activeInvestigator(game) !== i && !(pa?.condition && "phase" in pa.condition))
     return false; // fast cards in own turn
-  return inv(game, i).resources >= playCost(game, i, cardId);
+  return purse(game, i, cardId) >= playCost(game, i, cardId);
 }
 
 export const playCardHandler: Handler<"PlayCard"> = (game, step) => {
@@ -689,7 +750,7 @@ export const playCardHandler: Handler<"PlayCard"> = (game, step) => {
   const me = inv(game, step.inv);
   const c = card(game, step.card);
   // an X cost: the player chooses X, up to their resources (Jenny's Twin .45s)
-  if (d.cost === "X" && d.costX && step.x === undefined) {
+  if (d.cost === "X" && d.costX === "uses" && step.x === undefined) {
     const x = ask<number>(
       game,
       step,
@@ -710,7 +771,41 @@ export const playCardHandler: Handler<"PlayCard"> = (game, step) => {
     return;
   }
   const paid = step.free ? 0 : (step.x ?? playCost(game, step.inv, step.card));
-  addCounter(game, me.id, "resources", -paid);
+  // another investigator may pay part of it, at least what the player can't (Charles Ross, Esq.)
+  const helper = paid > 0 && !step.helped ? payHelpers(game, step.inv, step.card)[0] : undefined;
+  if (helper) {
+    const lo = Math.max(0, paid - me.resources);
+    const hi = Math.min(paid, inv(game, helper).resources);
+    const n =
+      hi > lo
+        ? ask<number>(
+            game,
+            step,
+            helper,
+            CHOICE.Generic,
+            `${invName(game, helper)}: spend resources toward ${d.name}?`,
+            Array.from({ length: hi - lo + 1 }, (_, k) => ({
+              id: String(lo + k),
+              label: `Spend ${lo + k}`,
+              value: lo + k,
+              key: "option.spendN",
+              vars: { n: lo + k },
+            })),
+            { key: "helpPay", vars: { card: step.card } },
+          )
+        : lo;
+    if (n === undefined) return;
+    push(game, { ...step, choice: undefined, helped: { inv: helper, n } });
+    return;
+  }
+  // a card played from beneath a card in play: that card exhausts, the additional cost to play it (Stick to the Plan)
+  if (c.zone === ZONE.Beneath && c.location && cardIf(game, c.location)?.zone === ZONE.Play)
+    exhaust(game, c.location);
+  const helped = step.helped?.n ?? 0;
+  if (step.helped) addCounter(game, step.helped.inv, "resources", -helped);
+  addCounter(game, me.id, "resources", -(paid - helped));
+  // a reduction "of the next card you play" is spent by this one (Improvisation)
+  endNextPlayMods(game, step.inv, c.code);
   emit(game, EVENT.Play, `${me.name} plays ${d.name}`, { inv: step.inv, card: step.card });
   // after the card resolves (Syndicate Obligations)
   if (paid > 0) push(game, win("resourcesSpent", { inv: step.inv, card: step.card, amount: paid }));
@@ -769,8 +864,10 @@ export const enterPlayHandler: Handler<"EnterPlay"> = (game, step) => {
   const d = def(game, step.card);
   moveCard(game, step.card, ZONE.Play);
   setController(game, c.id, step.inv);
-  if (step.uses !== undefined) setCounter(game, c.id, "uses", step.uses);
-  else if (d.uses) setCounter(game, c.id, "uses", d.uses.count);
+  // charges beyond the printed count (Akachi Onyele)
+  const extra = d.uses?.type === "charges" ? modSum(game, step.inv, "extraCharges") : 0;
+  if (step.uses !== undefined) setCounter(game, c.id, "uses", step.uses + extra);
+  else if (d.uses) setCounter(game, c.id, "uses", d.uses.count + extra);
   push(game, win("enterPlay", { inv: step.inv, card: step.card }));
 };
 

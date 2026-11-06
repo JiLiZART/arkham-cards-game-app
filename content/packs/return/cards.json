@@ -558,5 +558,43 @@
   "51060": { "script": true, "abilities": [
     { "kind": "revelation", "effects": [{ "op": "script", "fn": "litasEnter" }, { "op": "script", "fn": "vortexTear" }] },
     { "kind": "forced", "trigger": "turnEnds", "condition": { "eventAtThisLocation": true }, "effects": [{ "op": "chooseOne", "options": [{ "label": "Draw the top card of the encounter deck", "effects": [{ "op": "drawEncounterCard" }] }, { "label": "Shuffle Unstable Vortex into the encounter deck", "effects": [{ "op": "script", "fn": "litasShuffleBack" }] }] }] }
-  ] }
+  ] },
+  "52001": { "abilities": [
+    { "kind": "action", "designator": "fight", "label": ".32 Colt: fight (+1 damage)", "cost": { "uses": 1 }, "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "damageBonus": 1 }] },
+    { "kind": "fast", "label": ".32 Colt: return it to your hand", "cost": { "resources": 1 }, "effects": [{ "op": "returnSelfToHand" }] }
+  ] },
+  "52002": { "script": true },
+  "52003": { "script": true },
+  "52004": { "script": true, "keywords": [{ "researched": { "log": "translatedTheGlyphs" } }], "abilities": [
+    { "kind": "action", "designator": "investigate", "label": "Archaic Glyphs: investigate (you may put an asset costing up to the margin into play)", "cost": { "uses": 1 }, "effects": [{ "op": "investigate", "onSuccess": [{ "op": "script", "fn": "foretold" }] }] }
+  ] },
+  "52005": { "abilities": [
+    { "kind": "fast", "designator": "evade", "label": "Stealth: evade (enemy -2 evade); it stays ready and can't engage you this turn", "cost": { "exhaust": true }, "condition": { "all": [{ "yourTurn": true }, { "engaged": true }] }, "effects": [{ "op": "evade", "bonus": 2, "noExhaust": true, "cannotEngageYou": true }] }
+  ] },
+  "52006": { "discardWhenEmpty": true, "abilities": [
+    { "kind": "action", "designator": "evade", "label": "Suggestion: evade (add your willpower)", "cost": { "exhaust": true }, "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "evade", "bonus": { "yourSkill": "willpower" }, "onSuccess": [{ "op": "chooseOne", "options": [{ "label": "Remove 1 charge from Suggestion", "condition": { "not": { "succeededBy": { "min": 2 } } }, "effects": [{ "op": "removeUses", "amount": 1 }] }] }], "onFail": [{ "op": "removeUses", "amount": 1 }] }] }
+  ] },
+  "52007": { "abilities": [
+    { "kind": "action", "label": "Alchemical Transmutation: test willpower (0) for resources", "cost": { "exhaust": true, "uses": 1 }, "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": 0, "onSuccess": [{ "op": "gainResources", "amount": { "atMost": 4, "of": "succeedBy" } }], "onTokens": { "tokens": ["skull", "cultist", "tablet", "elderThing", "autoFail"], "effects": [{ "op": "takeDamage", "amount": 1 }] } }] }
+  ] },
+  "52008": { "abilities": [
+    { "kind": "onPlay", "designator": "fight", "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "skill": "willpower", "bonus": 2, "damageBonus": 2, "onSuccess": [{ "op": "dealDamage", "amount": 3, "to": "eachOtherAtLocation" }], "onTokens": { "tokens": ["skull", "cultist", "tablet", "elderThing", "autoFail"], "effects": [{ "op": "takeDamage", "amount": 2, "target": "eachAtLocation" }] } }] }
+  ] },
+  "52009": { "abilities": [
+    { "kind": "action", "designator": "investigate", "label": "Lantern: investigate (-1 shroud)", "effects": [{ "op": "investigate", "shroud": -1 }] },
+    { "kind": "action", "label": "Lantern: discard it to deal 1 damage to an enemy at your location (2 if removed from the game)", "aoo": false, "cost": { "discardSelf": true }, "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "chooseOne", "options": [
+      { "label": "Deal 1 damage", "effects": [{ "op": "dealDamage", "amount": 1, "to": "chooseAtLocation" }] },
+      { "label": "Remove Lantern from the game to deal 2 damage", "effects": [{ "op": "removeSelf" }, { "op": "dealDamage", "amount": 2, "to": "chooseAtLocation" }] }
+    ] }] }
+  ] },
+  "52010": { "abilities": [
+    { "kind": "action", "designator": "fight", "label": "Gravedigger's Shovel: fight (+2 combat)", "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "bonus": 2 }] },
+    { "kind": "action", "label": "Gravedigger's Shovel: discard it to discover 1 clue at your location (2 if removed from the game)", "cost": { "discardSelf": true }, "condition": { "cluesOnYourLocation": "some" }, "effects": [{ "op": "chooseOne", "options": [
+      { "label": "Discover 1 clue", "effects": [{ "op": "discoverClues", "amount": 1 }] },
+      { "label": "Remove Gravedigger's Shovel from the game to discover 2 clues", "effects": [{ "op": "removeSelf" }, { "op": "discoverClues", "amount": 2 }] }
+    ] }] }
+  ] },
+  "52011": { "script": true },
+  "52012": { "script": true },
+  "52013": { "script": true }
 }

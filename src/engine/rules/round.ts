@@ -1,4 +1,5 @@
 import {
+  actionStart,
   actionsOwed,
   atTurnEnd,
   discardAtRoundEnd,
@@ -51,6 +52,7 @@ import {
   invName,
   leadInvestigator,
   logStep,
+  nextKey,
   noteAction,
   pacesPhases,
   push,
@@ -461,6 +463,7 @@ export function endTurnCleanup(game: GameContext, i: InvId) {
     push(game, ...due.map((d): Step => ({ t: STEP.Effects, effects: d.effects, ctx: d.ctx })));
   }
   expireMods(game, "turn");
+  actionStart.clear(game);
   if (activeInvestigator(game) === i) setActive(game, null);
 }
 
@@ -506,6 +509,17 @@ export const performActionHandler: Handler<"PerformAction"> = (game, step) => {
   });
   addCounter(game, me.id, "actionsLeft", -left);
   if (cost > 0) noteAction(game, i, designator);
+  // an action of the investigator's turn, noted while a hand holds a card that may undo it once it is done (Time Warp)
+  const undoable =
+    cost > 0 &&
+    !step.free &&
+    activeInvestigator(game) === i &&
+    allCards(game).some(
+      (c) =>
+        c.zone === ZONE.Hand &&
+        abilitiesOfCard(game, c.id).some((x) => x.trigger === "actionPerformed"),
+    );
+  if (undoable) actionStart.set(game, { inv: i, key: nextKey(game, "action:") });
   const steps: Step[] = [];
   // Dr. Henry Armitage: the first action each round provokes none
   const firstFree = hasFlag(game, i, "firstActionNoAoO") && me.actionsThisRound.length === 1;
@@ -513,7 +527,9 @@ export const performActionHandler: Handler<"PerformAction"> = (game, step) => {
     cost > 0 &&
     !firstFree &&
     !NO_AOO.includes(designator) &&
-    abilityOfAction(game, a)?.aoo !== false
+    abilityOfAction(game, a)?.aoo !== false &&
+    // "Engage actions you perform do not provoke attacks of opportunity" (Trench Knife)
+    !(a.kind === "engage" && hasFlag(game, i, "engageNoAoO"))
   )
     steps.push(...attacksOfOpportunity(game, i));
   const ctx = { you: i, inv: i };
@@ -579,6 +595,8 @@ export const performActionHandler: Handler<"PerformAction"> = (game, step) => {
       break;
   }
   steps.push({ t: STEP.CheckObjectives });
+  // "immediately after an investigator … finishes resolving an action during his or her turn" (Time Warp)
+  if (undoable) steps.push(win("actionPerformed", { inv: i }));
   push(game, ...steps);
 };
 

@@ -76,6 +76,7 @@ describe("the script registry", () => {
     expect([...SCRIPT_MEMBERS].sort()).toEqual(
       [
         "abilities",
+        "beforeOpeningHand",
         "blanks",
         "cancelsSearch",
         "conditions",
@@ -86,6 +87,8 @@ describe("the script registry", () => {
         "hooks",
         "icons",
         "ignores",
+        "openingHand",
+        "paysFor",
         "inHandModifiers",
         "modifiers",
         "wouldPlaceDoom",

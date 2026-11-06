@@ -10,7 +10,7 @@ import {
 import { type CampaignState, type NewCampaign } from "../../engine/campaign/types";
 import { advance } from "../../engine/campaign/flow";
 import { type FlowValue } from "../../engine/campaign/types";
-import { createGame, dispatch, ENGINE_VERSION, replay, replaysSave } from "../../engine";
+import { createGame, dispatch, ENGINE_VERSION, replay, replaysSave, rewound } from "../../engine";
 import { upgradeDeck, type UpgradeResult } from "../../engine/campaign/upgrade";
 import type { Move, RoomSave } from "../../net/moves";
 import { quietNextGame } from "../game/arrivals";
@@ -286,7 +286,8 @@ export function replayWithFloor(
     const r = dispatch(db, state, a);
     if (r.error) throw new Error(`replay failed at ${JSON.stringify(a)}: ${r.error}`);
     if (pastUndo(state, r.state)) undoFloor = k + 1;
-    state = r.state;
+    // a Time Warp: the game goes back, as `replay` takes it
+    state = r.state.rewind ? rewound(db, setup, actions, k + 1, r.state) : r.state;
   });
   return { state, undoFloor };
 }
@@ -318,14 +319,22 @@ export function createGameStore(
       const added: Action[] = [];
       let undoFloor = get().undoFloor;
       const actions = get().actions;
+      let warped = false;
       const step = (option: string): string | null => {
         const a: Action = { type: "choose", inv: state.pending!.inv, option };
         const r = dispatch(db, state, a);
         if (r.error) return r.error;
         if (pastUndo(state, r.state)) undoFloor = actions.length + added.length + 1;
         added.push(a);
-        state = r.state;
         events = [...events, ...r.events];
+        state = r.state;
+        // a Time Warp: the game rebuilt from its choices, as Undo does; what was waiting to animate is dropped
+        if (r.state.rewind && get().setup) {
+          const all = [...actions, ...added];
+          state = rewound(db, get().setup!, all, all.length, r.state);
+          events = [];
+          warped = true;
+        }
         return null;
       };
       if (first !== null) {
@@ -348,9 +357,12 @@ export function createGameStore(
       set({
         game: state,
         actions: [...actions, ...added],
-        logMarks: [...get().logMarks, start.log.length],
+        logMarks: warped
+          ? get().logMarks.filter((m) => m < state.log.length)
+          : [...get().logMarks, start.log.length],
         undoFloor,
         error: null,
+        ...(warped ? { queue: [], current: null } : {}),
       });
       enqueue(events);
       return true;
@@ -843,6 +855,10 @@ export function createGameStore(
           r = dispatch(db, r.state, a);
           added.push(a);
           if (pastUndo(prev, r.state)) undoFloor = actions.length + added.length;
+          if (r.state.rewind && get().setup) {
+            const all = [...actions, ...added];
+            r = { state: rewound(db, get().setup!, all, all.length, r.state), events: [] };
+          }
         }
         set({
           game: r.state,

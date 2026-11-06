@@ -37,7 +37,7 @@ import { legalTurnActions } from "./rules/round";
 import { drawOpeningCards, revealLocation } from "./rules/investigators";
 import { run } from "./steps/dispatch";
 import { fireCardHook, runScript } from "./rules/scripts";
-import { discardFromOpeningHands } from "./world/flags";
+import { actionStart, discardFromOpeningHands } from "./world/flags";
 import { randInt, shuffle } from "./world/rng";
 import { deckPile, newWorld, pileRec } from "./world/store";
 import type {
@@ -55,7 +55,7 @@ import { ZONE, PHASE, INV_STATUS, PILE, SCENARIO_CARD, isOneOf } from "./world/c
 import { STEP } from "./steps/step";
 import { scriptOf } from "./world/scripts";
 
-export const ENGINE_VERSION = 16;
+export const ENGINE_VERSION = 17;
 
 /**
  * Whether a save written by this engine version replays to the same game on this one. Version 8 changed the setup (a
@@ -521,12 +521,16 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
   // a single-sided location has only its revealed side (Realms Beyond put into play at setup)
   for (const l of cardsIn(game, ZONE.Location))
     if (!l.revealed && !db.cards[l.code].doubleSided) revealLocation(game, l.id);
-  // decks & opening hands
+  // decks & opening hands; a card in play that acts before its owner's opening hand (Stick to the Plan) defers it
+  const before = (i: string) =>
+    allCards(game).filter(
+      (c) => c.zone === ZONE.Play && c.owner === i && scriptOf(db, c.code)?.beforeOpeningHand,
+    );
   for (const i of s.order) {
     // the investigator's own setup, before the deck is shuffled (Joe Diamond's hunch deck)
     fireCardHook(game, i, "setup", { you: i, source: inv(game, i).cardId });
     shuffleDeck(game, i);
-    drawOpeningCards(game, i, 5);
+    if (!before(i).length) drawOpeningCards(game, i, scriptOf(db, i)?.openingHand?.draw ?? 5);
   }
   const discardN = discardFromOpeningHands.get(game) ?? 0;
   for (const i of s.order) {
@@ -537,7 +541,38 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
   emit(game, EVENT.Setup, `${scen.name} begins`, { data: { scenario: scen.id } });
   push(
     game,
-    ...s.order.map((i): Step => ({ t: STEP.Mulligan, inv: i })),
+    ...s.order.flatMap((i): Step[] => {
+      // an investigator whose opening hand works otherwise (Sefina Rousseau, Lola Hayes)
+      const oh = scriptOf(db, i)?.openingHand;
+      const first = before(i);
+      return [
+        ...first.map((c): Step => ({
+          t: STEP.Script,
+          code: c.code,
+          fn: scriptOf(db, c.code)!.beforeOpeningHand!.fn,
+          ctx: { you: i, source: c.id },
+        })),
+        ...(oh?.noMulligan && !first.length
+          ? []
+          : [
+              {
+                t: STEP.Mulligan,
+                inv: i,
+                ...(first.length ? { draw: oh?.draw ?? 5 } : {}),
+              } as Step,
+            ]),
+        ...(oh
+          ? [
+              {
+                t: STEP.Script,
+                code: i,
+                fn: oh.fn,
+                ctx: { you: i, source: inv(game, i).cardId },
+              } as Step,
+            ]
+          : []),
+      ];
+    }),
     { t: STEP.RoundCleanup },
     { t: STEP.StartRound },
   );
@@ -592,12 +627,48 @@ export function getLegalActions(db: ContentDb, s: GameState): ChoiceOption[] {
 export function replay(db: ContentDb, setup: GameSetup, actions: Action[]): Result {
   let r = createGame(db, setup);
   const events = [...r.events];
-  for (const a of actions) {
+  actions.forEach((a, k) => {
     r = dispatch(db, r.state, a);
     if (r.error) throw new Error(`replay failed at ${JSON.stringify(a)}: ${r.error}`);
     events.push(...r.events);
-  }
+    if (r.state.rewind) r = { state: rewound(db, setup, actions, k + 1, r.state), events: [] };
+  });
   return { state: r.state, events };
+}
+
+/**
+ * The game a Time Warp went back to (`after.rewind`, set by the choice that played it, the `done`th of `actions`): the
+ * choices replayed up to the one that began the undone action (the one after which its key is noted), then Time Warp in
+ * its owner's discard and its cost spent again. The random generator keeps its state from after the undone action, so
+ * redoing it draws new chaos tokens (design decision 5 of player-cards-ptc). Every path that rebuilds a game from its
+ * choices (a replay, a saved game, a room's move log) comes here, so they all reach the same state.
+ */
+export function rewound(
+  db: ContentDb,
+  setup: GameSetup,
+  actions: Action[],
+  done: number,
+  after: GameState,
+): GameState {
+  const { action, card, paid } = after.rewind!;
+  let s = createGame(db, setup).state;
+  for (let k = 0; k < done; k++) {
+    let next = dispatch(db, s, actions[k]).state;
+    if (next.rewind) next = rewound(db, setup, actions, k + 1, next);
+    if (actionStart.get({ s: next })?.key === action) break;
+    s = next;
+  }
+  const game: GameContext = { s, db, events: [] };
+  const owner = cardOf(s, card).owner!;
+  moveCard(game, card, ZONE.Discard);
+  addCounter(game, owner, "resources", -Math.min(paid, inv(game, owner).resources));
+  s.rng = after.rng;
+  s.counters.reveal = after.counters.reveal;
+  emit(game, EVENT.Cancelled, `${inv(game, owner).name}'s Time Warp undoes the action`, {
+    inv: owner,
+    card,
+  });
+  return s;
 }
 
 export const serialize = (s: GameState) => JSON.stringify(s);

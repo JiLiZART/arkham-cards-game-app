@@ -46,6 +46,17 @@ const LINE_RULES: [RegExp, (c: CardDef, db: ContentDb) => boolean][] = [
   [/^Max \d+ committed per skill test/i, (c) => c.maxCommitted !== undefined],
   [/^As an additional cost to commit .*, take \d+ horror/i, (c) => !!c.commitHorror],
   [/^You may commit .* after revealing chaos tokens/i, (c) => !!c.commitAfterReveal],
+  // a cost paid as it is committed, and what it gives (engine/rules/skillTest.ts): Torrent of Power
+  [
+    /^As an additional cost to commit .+, spend up to \d+ (resources|charges)/,
+    (c) => !!c.commitSpend,
+  ],
+  [/^For each charge spent in this way, .+ gains /, (c) => !!c.commitSpend?.icons],
+  // a token from the card, not the bag (engine/rules/skillTest.ts): Seal of the Elder Sign
+  [/^Do not reveal chaos tokens from the chaos bag for this test\./, (c) => !!c.sealsToken],
+  [/^When this test ends, remove .+ from the game\.$/, (c) => !!c.sealsToken],
+  // read as the scenario ends (engine/campaign/campaign.ts): Charon's Obol
+  [/^When earning experience during the resolution of a scenario/, (c) => !!c.scenarioEnd],
   // commit restrictions, read by canCommit (engine/rules/skillTest.ts)
   [/^Commit only to a skill test you are performing\.$/, (c) => !!c.commitOnlyOwnTest],
   [
@@ -53,13 +64,21 @@ const LINE_RULES: [RegExp, (c: CardDef, db: ContentDb) => boolean][] = [
     (c) => !!c.commitOnlyOwnTest && c.commitDifficultyOverBase !== undefined,
   ],
   [/^Commit to a skill test only if /, (c) => !!c.commitIf],
+  // an asset that soaks damage dealt at its location (engine/rules/investigators.ts): True Grit
+  [
+    /^.+ may be assigned damage dealt to other investigators at your location\.$/,
+    (c) => !!c.soaksForLocation,
+  ],
   // icons on another investigator's test, read by iconsFor (engine/rules/skillTest.ts)
   [
     /^While .+ is committed to a skill test being performed by another investigator, .+ gains /,
     (c) => !!c.iconsOnOthersTest,
   ],
   // deckbuilding lines, read by the deck validator (engine/decks.ts) and the setup (a permanent card starts in play)
-  [/^((Permanent|Reward|Limit \d+ per deck|Purchase only at deck creation)\.\s*)+$/, () => true],
+  [
+    /^((Permanent|Exceptional|Reward|Limit \d+ per deck|Purchase only at deck creation)\.\s*)+$/,
+    () => true,
+  ],
   [/^You get \+\d+ deck size\.$/, () => true],
   // Adaptable's swaps between scenarios, read by the upgrade (engine/campaign/upgrade.ts)
   [

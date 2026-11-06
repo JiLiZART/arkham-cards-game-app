@@ -108,7 +108,7 @@ Status comes from `openspec/changes/` (and `archive/`): *not written*, *being wr
 | --- | --- | --- |
 | `player-cards-notz-return` | implemented (8/8) | player cards: rtnotz |
 | `player-cards-dwl` | in progress (27/28) | player cards: The Dunwich Legacy packs and rtdwl |
-| `player-cards-ptc` | ready (0/28) | player cards: The Path to Carcosa packs and rtptc |
+| `player-cards-ptc` | implemented (28/28) | player cards: The Path to Carcosa packs and rtptc |
 | `player-cards-tfa` | ready (0/29) | player cards: The Forgotten Age packs and rttfa |
 | `player-cards-tcu` | being written | player cards: The Circle Undone packs and rttcu |
 | `player-cards-tde` | being written | player cards: The Dream-Eaters packs |
@@ -142,14 +142,14 @@ Status comes from `openspec/changes/` (and `archive/`): *not written*, *being wr
 | [x] | `wda` | return-to-the-dunwich-legacy, the-dunwich-legacy | 0 of 25 | 0 of 14 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
 | [x] | `litas` | return-to-the-dunwich-legacy, the-dunwich-legacy | 0 of 23 | 0 of 12 | `campaign-the-dunwich-legacy`, `player-cards-dwl` |
 | [x] | `rtdwl` | return-to-the-dunwich-legacy, side-all-or-nothing | 0 of 60 | 0 of 13 | `campaign-return-to-the-dunwich-legacy`, `player-cards-dwl` |
-| [x] | `ptc` | return-to-the-path-to-carcosa, side-enthralling-encore, the-path-to-carcosa | 0 of 68 | 45 of 47 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
-| [x] | `eotp` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 24 | 16 of 17 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
-| [x] | `tuo` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 30 | 13 of 13 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
-| [x] | `apot` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 28 | 12 of 12 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
-| [x] | `tpm` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 24 | 11 of 12 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
-| [x] | `bsr` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 32 | 11 of 11 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
-| [x] | `dca` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 46 | 13 of 13 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
-| [ ] | `rtptc` | return-to-the-path-to-carcosa | 61 of 69 | 15 of 15 | `campaign-return-to-the-path-to-carcosa`, `player-cards-ptc` |
+| [x] | `ptc` | return-to-the-path-to-carcosa, side-enthralling-encore, the-path-to-carcosa | 0 of 68 | 0 of 47 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
+| [x] | `eotp` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 24 | 0 of 17 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
+| [x] | `tuo` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 30 | 0 of 13 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
+| [x] | `apot` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 28 | 0 of 12 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
+| [x] | `tpm` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 24 | 0 of 12 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
+| [x] | `bsr` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 32 | 0 of 11 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
+| [x] | `dca` | return-to-the-path-to-carcosa, the-path-to-carcosa | 0 of 46 | 0 of 13 | `campaign-the-path-to-carcosa`, `player-cards-ptc` |
+| [ ] | `rtptc` | return-to-the-path-to-carcosa | 61 of 69 | 2 of 15 | `campaign-return-to-the-path-to-carcosa`, `player-cards-ptc` |
 | [ ] | `tfa` | return-to-the-forgotten-age, side-bad-blood, side-relics-of-the-past, the-forgotten-age | 57 of 57 | 39 of 40 | `campaign-the-forgotten-age`, `player-cards-tfa` |
 | [ ] | `tof` | return-to-the-forgotten-age, side-bad-blood, the-forgotten-age | 41 of 41 | 13 of 15 | `campaign-the-forgotten-age`, `player-cards-tfa` |
 | [ ] | `tbb` | return-to-the-forgotten-age, the-forgotten-age | 30 of 30 | 13 of 13 | `campaign-the-forgotten-age`, `player-cards-tfa` |

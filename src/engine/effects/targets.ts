@@ -29,6 +29,7 @@ import {
   skillValue,
 } from "../queries";
 import type { EffCtx, InstId, InvId } from "../world/types";
+import { commitSpent } from "../world/flags";
 import type { EffStep } from "./types";
 import { CHOICE } from "../world/constants";
 
@@ -55,19 +56,28 @@ export function amt(game: GameContext, a: Amount, ctx: EffCtx): number {
                     return h ? tokensOn(game, h, a.tokensOn.name) : 0;
                   })()
                 : "onYou" in a
-                  ? (ctx.you ? inv(game, ctx.you)[a.onYou] : 0) + (a.plus ?? 0)
-                  : "base" in a
-                    ? a.base + (checkCondition(game, a.if, ctx) ? a.plus : 0)
-                    : "actionsLeft" in a
-                      ? a.actionsLeft * actionsLeft(game, ctx.you ?? null)
-                      : "eventEnemyStat" in a
-                        ? ctx.enemy && cardIf(game, ctx.enemy)
-                          ? enemyStat(game, ctx.enemy, a.eventEnemyStat)
-                          : 0
-                        : a.perInvestigator * playerCount(game);
+                  ? Math.floor((ctx.you ? inv(game, ctx.you)[a.onYou] : 0) / (a.per ?? 1)) +
+                    (a.plus ?? 0)
+                  : "atMost" in a
+                    ? Math.min(a.atMost, amt(game, a.of, ctx))
+                    : "per" in a
+                      ? Math.floor(amt(game, a.of, ctx) / a.per)
+                      : "base" in a
+                        ? a.base + (checkCondition(game, a.if, ctx) ? a.plus : 0)
+                        : "actionsLeft" in a
+                          ? a.actionsLeft * actionsLeft(game, ctx.you ?? null)
+                          : "eventEnemyStat" in a
+                            ? ctx.enemy && cardIf(game, ctx.enemy)
+                              ? enemyStat(game, ctx.enemy, a.eventEnemyStat)
+                              : 0
+                            : "commitSpent" in a
+                              ? a.commitSpent *
+                                (ctx.source ? (commitSpent.get(game, ctx.source)?.length ?? 0) : 0)
+                              : a.perInvestigator * playerCount(game);
   if (a === "failBy") return ctx.failBy ?? 0;
   if (a === "succeedBy") return ctx.succeedBy ?? 0;
   if (a === "X") return ctx.x ?? 0;
+  if (a === "enemiesEngaged") return ctx.you ? engagedWith(game, ctx.you).length : 0;
   return Infinity; // "all"
 }
 
@@ -196,6 +206,18 @@ export function enemyTargets(
         enemiesAt(game, loc).map((e) => e.id),
         "Choose an enemy at your location",
       );
+    case "chooseNotEngagedWithYou":
+      return choose(
+        enemiesAt(game, loc)
+          .filter((e) => e.engagedWith !== you)
+          .map((e) => e.id),
+        "Choose an enemy not engaged with you",
+      );
+    case "eachOtherAtLocation":
+      return enemiesAt(game, loc)
+        .map((e) => e.id)
+        .filter((id) => id !== ctx.enemy)
+        .filter(ok);
     case "chooseEngaged":
       return choose(
         engagedWith(game, you!).map((e) => e.id),

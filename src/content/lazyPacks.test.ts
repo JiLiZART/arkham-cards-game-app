@@ -15,6 +15,10 @@ import { cardText } from "./i18n";
 import { addCardText, addPack, buildContent, cardsOf, packLoaded, packOfCode } from "./loader";
 import { loadContentFromDisk } from "./node";
 
+// every pack read from disk is the file's heaviest step: done once, shared by the tests that need it
+let fromDisk: ReturnType<typeof loadContentFromDisk> | undefined;
+const fromDiskOnce = () => (fromDisk ??= loadContentFromDisk());
+
 const card = (code: string, extra: object = {}) => ({
   code,
   name: `Card ${code}`,
@@ -187,7 +191,7 @@ describe("packs in the content database", () => {
   });
 
   it("check:content's loader builds every pack eagerly", async () => {
-    const { db, errors } = await loadContentFromDisk();
+    const { db, errors } = await fromDiskOnce();
     expect(errors).toEqual([]);
     expect(Object.values(db.packs).every((p) => p.loaded)).toBe(true);
     expect(Object.keys(db.cards).length).toBeGreaterThan(5800);
@@ -225,7 +229,7 @@ describe("the random basic weakness pool", () => {
 
   it("in the browser, once every pack is in (as before a campaign starts), it is the whole content's", async () => {
     expect(await loadAllPacks()).toEqual([]);
-    const all = (await loadContentFromDisk()).db;
+    const all = (await fromDiskOnce()).db;
     expect(codes(content, TRAITS)).toEqual(codes(all, TRAITS));
     expect(codes(content, TRAITS)).toEqual(expect.arrayContaining(PACT));
   });

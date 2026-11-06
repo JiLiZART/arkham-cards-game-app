@@ -120,6 +120,13 @@ export const noAttack = family<number, readonly [InstId, InvId]>("noAttack", "no
 // ---------- about an event (an attack's or a test's key) ----------
 /** damage and horror an attack's window has prevented, to take off when it is placed */
 export const prevented = family<[number, number], string>("prevented");
+/**
+ * an attack about to resolve against another investigator, by its key: it resolves against `to` instead, then deals its
+ * enemy `damage` from `source` (Heroic Rescue)
+ */
+export const attackRedirect = family<{ to: InvId; damage: number; source: InstId }, string>(
+  "attackRedirect",
+);
 /** how many copies of a card were drawn, by `code:round:phase` (Terror from Beyond: "not the first copy this phase") */
 export const copiesDrawn = counts<string>("copiesDrawn");
 /** the cards a test's token effects discarded from the deck, by test id (an elder thing's "X is their printed cost") */
@@ -170,6 +177,27 @@ export const catacombs = global<InstId[]>("catacombs");
 export const baseRaised = global<Record<InstId, { skills: Skill[]; to: number }>>("baseRaised");
 /** the cards put into play to be discarded at the end of the round, if still in play (A Chance Encounter) */
 export const discardAtRoundEnd = global<InstId[]>("discardAtRoundEnd");
+
+/** Lola Hayes's role: the class whose cards (and Neutral ones) she may play, commit and use; unset, any */
+export const role = family<string, InvId>("role");
+/** the turn (`counters.turn`) in which the enemy can't engage the investigator (Stealth), by `enemy:investigator` */
+export const noEngage = family<number, readonly [InstId, InvId]>("noEngage");
+/** icons a card gained until the end of the skill test it is committed to (Minh Thi Phan's wild icon) */
+export const gainedIcons = family<Partial<Record<Skill | "wild", number>>, InstId>("gainedIcons");
+/** committed cards that go back to their owner's hand when the test ends, not to the discard (Minh Thi Phan) */
+export const returnAfterTest = family<true, InstId>("returnAfterTest");
+/**
+ * what a committed card was paid with as its additional cost, one entry per point: `resources`, or the asset a charge
+ * came from ("Watch this!", Torrent of Power); refunded if the card is taken back, cleared when the test ends
+ */
+export const commitSpent = family<string[], InstId>("commitSpent");
+/** clues more to discover in the discovery under this key (Newspaper 2) */
+export const extraClues = counts<string>("extraClues");
+/**
+ * the action an investigator is taking during their turn, under a key of its own, while a hand holds a card that may
+ * undo it (Time Warp): `replay` finds the choice that began it by the key
+ */
+export const actionStart = global<{ inv: InvId; key: string }>("actionStart");
 
 /** a scenario flag a condition names (`scenarioFlag` in card data) */
 export const named = (game: HasState, name: string) => game.s.flags[name];

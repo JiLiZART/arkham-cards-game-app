@@ -1,7 +1,10 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadContentFromDisk } from "../../../content/node";
-import { startCampaign } from "../campaign";
+import { applyScenarioEnd, scenarioSetup, startCampaign } from "../campaign";
 import { deckChangeCost, upgradeDeck } from "../upgrade";
+import { createGame } from "../../index";
+import { mutate } from "../../kits/testkit";
+import { PHASE } from "../../world/constants";
 import type { ContentDb } from "../../world/types";
 
 let all: ContentDb;
@@ -125,6 +128,24 @@ describe("spending experience on a campaign's deck", () => {
     expect(r.campaign.investigators[0].xp).toBe(3);
     expect(r.campaign.investigators[0].deck).toContain(l2.code);
     expect(r.campaign.investigators[0].deck).not.toContain("01016");
+  });
+
+  it("accepts an upgrade after The Gathering's R1: Lita Chantler, a story asset, doesn't count toward deck size", () => {
+    const c = campaign(5);
+    const ended = mutate(createGame(all, scenarioSetup(all, c, 1)), (game) => {
+      game.s.phase = PHASE.Ended;
+      game.s.resolution = "R1";
+      game.s.pending = null;
+    }).state;
+    const after = applyScenarioEnd(all, c, ended);
+    const deck: Record<string, number> = {};
+    for (const code of after.investigators[0].deck) deck[code] = (deck[code] ?? 0) + 1;
+    expect(deck["01117"]).toBe(1);
+    after.investigators[0].xp = 5;
+    const l2 = byName(".45 Automatic", 2);
+    expect(
+      upgradeDeck(all, after, "01001", withCards(deck, { "01016": -1, [l2.code]: 1 })),
+    ).toMatchObject({ ok: true, cost: 2 });
   });
 
   it("refuses what the experience can't pay, naming what is needed", () => {

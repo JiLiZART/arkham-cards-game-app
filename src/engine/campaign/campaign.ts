@@ -255,6 +255,15 @@ export function applyScenarioEnd(db: ContentDb, c0: CampaignState, s: GameState)
     // killed during the scenario (Crazed Shoggoth's attack)
     if (killedFlag.get({ s }, i.id)) ci.status = "killed";
     else if (insaneFlag.get({ s }, i.id)) ci.status = "insane";
+    // a card in play with a rule for the scenario's end (Charon's Obol): 2 experience more if not defeated, else killed,
+    // whatever the resolution says; a checkpoint earns no experience yet
+    const rule = cardsOf(s).find(
+      (x) => x.owner === i.id && x.zone === "play" && db.cards[x.code]?.scenarioEnd,
+    );
+    const end = rule && db.cards[rule.code].scenarioEnd;
+    if (end && i.status === "defeated") ci.status = "killed";
+    else if (end && !db.scenarios[s.scenarioId].resolutions[s.resolution]?.checkpoint)
+      ci.xp += end.xpIfNotDefeated;
     // an exiled card leaves the campaign deck: one copy for each exile
     for (const code of exiledFlag.get({ s }, i.id) ?? []) {
       const at = ci.deck.indexOf(code);

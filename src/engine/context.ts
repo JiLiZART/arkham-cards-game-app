@@ -152,6 +152,11 @@ export const nextKey = (game: GameContext, prefix: string) => `${prefix}${game.s
 export const limitUses = (game: GameContext, key: string) => game.s.usage[key] ?? 0;
 export const recordLimitUse = (game: GameContext, key: string) =>
   void (game.s.usage[key] = limitUses(game, key) + 1);
+/** the game goes back to before the action noted under `action` began, but for `card` and what it cost (Time Warp) */
+export function setRewind(game: GameContext, action: string, card: InstId, paid: number) {
+  game.s.rewind = { action, card, paid };
+}
+
 /** the number of the current turn, phase, round or test, for a limit's period */
 export const periodCounter = (game: GameContext, per: "turn" | "phase" | "round" | "test") =>
   game.s.counters[per];

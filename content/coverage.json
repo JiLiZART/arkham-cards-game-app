@@ -60,11 +60,8 @@
    },
    "player": {
     "total": 12,
-    "works": 1,
-    "rest": {
-     "asset": 5,
-     "event": 6
-    }
+    "works": 12,
+    "rest": {}
    }
   },
   "bad": {
@@ -188,12 +185,8 @@
    },
    "player": {
     "total": 11,
-    "works": 0,
-    "rest": {
-     "asset": 5,
-     "event": 5,
-     "skill": 1
-    }
+    "works": 11,
+    "rest": {}
    }
   },
   "btb": {
@@ -331,12 +324,8 @@
    },
    "player": {
     "total": 13,
-    "works": 1,
-    "rest": {
-     "asset": 5,
-     "event": 6,
-     "skill": 1
-    }
+    "works": 13,
+    "rest": {}
    }
   },
   "def": {
@@ -483,12 +472,8 @@
    },
    "player": {
     "total": 17,
-    "works": 4,
-    "rest": {
-     "asset": 7,
-     "event": 2,
-     "skill": 4
-    }
+    "works": 17,
+    "rest": {}
    }
   },
   "fgg": {
@@ -1085,14 +1070,8 @@
    },
    "player": {
     "total": 47,
-    "works": 12,
-    "rest": {
-     "asset": 16,
-     "enemy": 2,
-     "event": 11,
-     "skill": 2,
-     "treachery": 4
-    }
+    "works": 47,
+    "rest": {}
    }
   },
   "ptr": {
@@ -1196,11 +1175,9 @@
    },
    "player": {
     "total": 15,
-    "works": 0,
+    "works": 13,
     "rest": {
-     "asset": 9,
-     "event": 3,
-     "treachery": 3
+     "asset": 2
     }
    }
   },
@@ -1683,12 +1660,8 @@
    },
    "player": {
     "total": 12,
-    "works": 1,
-    "rest": {
-     "asset": 2,
-     "event": 5,
-     "skill": 4
-    }
+    "works": 12,
+    "rest": {}
    }
   },
   "tsh": {
@@ -1787,11 +1760,8 @@
    },
    "player": {
     "total": 13,
-    "works": 1,
-    "rest": {
-     "asset": 4,
-     "event": 8
-    }
+    "works": 13,
+    "rest": {}
    }
   },
   "uad": {
@@ -5606,12 +5576,12 @@
   "02003": true,
   "02004": true,
   "02005": true,
-  "03001": false,
-  "03002": false,
-  "03003": false,
-  "03004": false,
-  "03005": false,
-  "03006": false,
+  "03001": true,
+  "03002": true,
+  "03003": true,
+  "03004": true,
+  "03005": true,
+  "03006": true,
   "04001": false,
   "04002": false,
   "04003": false,

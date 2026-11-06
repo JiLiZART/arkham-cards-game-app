@@ -3,15 +3,16 @@ import { atTurnEnd } from "../world/flags";
 import {
   ask,
   cancelEvent,
+  card,
   type GameContext,
   leadInvestigator,
   push,
   scenarioIdOf,
 } from "../context";
-import { checkCondition } from "../queries";
+import { checkCondition, matchesFilter } from "../queries";
 import type { EffectOf, EffectRun } from "./types";
 import type { Step } from "../world/types";
-import { invTargets } from "./targets";
+import { enemyTargets, invTargets } from "./targets";
 import { CHOICE } from "../world/constants";
 import { STEP } from "../steps/step";
 import { scriptFnFor } from "../world/scripts";
@@ -96,8 +97,31 @@ function forInvestigatorEffect(game: GameContext, run: EffectRun<EffectOf<"forIn
   );
 }
 
+/** effects with an enemy chosen by `target` (matching the filter) as the event's enemy (Anatomical Diagrams) */
+function forEnemyEffect(game: GameContext, run: EffectRun<EffectOf<"forEnemy">>) {
+  const { step, ctx } = run;
+  const f = run.effect.filter;
+  const ts = enemyTargets(
+    game,
+    step,
+    run.effect.target,
+    ctx,
+    (id) => !f || matchesFilter(game, card(game, id).code, f),
+  );
+  if (!ts) return;
+  push(
+    game,
+    ...ts.map((enemy): Step => ({
+      t: STEP.Effects,
+      effects: run.effect.effects,
+      ctx: { ...ctx, enemy },
+    })),
+  );
+}
+
 export const choicesEffects = {
   forInvestigator: forInvestigatorEffect,
+  forEnemy: forEnemyEffect,
   chooseOne: chooseOneEffect,
   cancel: cancelEffect,
   resolution: resolutionEffect,

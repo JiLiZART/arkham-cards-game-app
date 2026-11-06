@@ -14,7 +14,7 @@ import {
   setController,
   shuffleDeck,
 } from "../context";
-import { matchesFilter, uniqueInPlay } from "../queries";
+import { discardLocked, matchesFilter, uniqueInPlay } from "../queries";
 import { moveCard, putOnTop, shuffleThenTop } from "../movement";
 import { playCost } from "../rules/cards";
 import type { InstId, InvId } from "../world/types";
@@ -160,7 +160,10 @@ function lookAtTopEffect(game: GameContext, run: EffectRun<EffectOf<"lookAtTop">
     data: { n: cards.length },
   });
   push(game, { t: STEP.ArrangeTop, inv: you, deck, cards, placed: [] });
-  return;
+  // "If a [[Terror]] or [[Omen]] card is among the looked-at cards, take 1 horror" (Scrying 3)
+  const among = e.ifAmong;
+  if (among && cards.some((id) => matchesFilter(game, card(game, id).code, among.filter)))
+    push(game, { t: STEP.Effects, effects: among.effects, ctx: run.ctx });
 }
 
 function searchAndPlayEffect(game: GameContext, run: EffectRun<EffectOf<"searchAndPlay">>) {
@@ -169,7 +172,8 @@ function searchAndPlayEffect(game: GameContext, run: EffectRun<EffectOf<"searchA
 
   const me = inv(game, you);
   if (step.choice === undefined && searchBlocked(game, you, me.deck)) return;
-  const pool = [...(e.discardOnly ? [] : me.deck), ...(e.deckOnly ? [] : me.discard)].filter(
+  const fromDiscard = e.deckOnly || discardLocked(game, you) ? [] : me.discard;
+  const pool = [...(e.discardOnly ? [] : me.deck), ...fromDiscard].filter(
     (id) =>
       matchesFilter(game, card(game, id).code, e.filter) &&
       me.resources >= Math.max(0, playCost(game, you, id) + (e.costMod ?? 0)) &&
@@ -201,7 +205,8 @@ function searchAndPlayEffect(game: GameContext, run: EffectRun<EffectOf<"searchA
       push(game, { t: STEP.PlayCard, inv: you, card: pick, free: true });
     } else push(game, { t: STEP.PlayCard, inv: you, card: pick });
   }
-  shuffleDeck(game, me.id);
+  // the deck is shuffled when it was searched
+  if (!e.discardOnly) shuffleDeck(game, me.id);
   return;
 }
 

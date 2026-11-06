@@ -38,6 +38,8 @@ const plain = (text: string) => text.replace(/<[^>]+>/g, "");
 /** an action's label that gives the group clues, or may put places into play (a location drawn from beneath one) */
 const GIVES_CLUES = /(gain|discover) \d+ clues?/i;
 const GIVES_PLACES = /into play|underneath/i;
+/** Time Warp: its rewind is resolved by replaying the game's choices, which autoPlay does not do */
+const TIME_WARP = "03311";
 
 /** the clues an Objective's "spend N [per_investigator] clues" asks of the group (0 when it names none) */
 function cluesAsked(game: GameContext, text: string): number {
@@ -388,13 +390,14 @@ export function botChoice(db: ContentDb, r: Result): string {
   const p = r.state.pending!;
   // the bot plays no cards out of turn, but advances the act
   if (p.promptKey === "playerWindow") return p.options.find((o) => o.id === "act")?.id ?? "pass";
-  // any reaction but a weakness's own (Cover Up's would take the clues just found)
+  // any reaction but a weakness's own (Cover Up's would take the clues just found) and Time Warp's (its rewind needs
+  // the game's choices replayed, which autoPlay does not do)
   if (p.kind === "reaction")
     return (
-      p.options.find(
-        (o) =>
-          o.id !== "pass" && !(o.card && db.cards[cardOfIf(r.state, o.card)?.code ?? ""]?.subtype),
-      )?.id ?? "pass"
+      p.options.find((o) => {
+        const code = o.card ? (cardOfIf(r.state, o.card)?.code ?? "") : "";
+        return o.id !== "pass" && !db.cards[code]?.subtype && code !== TIME_WARP;
+      })?.id ?? "pass"
     );
   if (p.kind === "turn") {
     const o = turnChoice(db, r);

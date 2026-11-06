@@ -115,6 +115,8 @@ export function moveCard(
     deck?: string;
     /** the same card changing place, not leaving play: its tokens and attachments stay (a flip) */
     keep?: boolean;
+    /** a card that cannot leave play leaves by its own text's one way out (The King in Yellow) */
+    ownWay?: boolean;
   } = {},
 ) {
   const c = cardRec(game, id);
@@ -124,6 +126,7 @@ export function moveCard(
     isInPlay(c) &&
     !IN_PLAY.includes(dest) &&
     !opts.keep &&
+    !opts.ownWay &&
     (!c.controller || inv(game, c.controller).status === "playing")
   )
     return;

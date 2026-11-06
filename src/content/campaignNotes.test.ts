@@ -81,7 +81,8 @@ describe("the-path-to-carcosa's campaign notes", () => {
         const parts = /^\[\s*([^,\s]+),\s*([^\]\s]+)\s*\]$/.exec(def);
         if (!parts) throw new Error(`a note key the check cannot read: ${arg}`);
         const values = (p: string) => {
-          const literal = /^"([^"]+)"$/.exec(p);
+          // "" is the notes' own section (Archaic Glyphs: "you have translated the glyphs")
+          const literal = /^"([^"]*)"$/.exec(p);
           if (literal) return [literal[1]];
           const decl = new RegExp(`\\b${p}\\b\\s*[:=]([^;\\n{]*)`).exec(src)?.[1] ?? "";
           const strings = [...decl.matchAll(/"([^"]+)"/g)].map((x) => x[1]);

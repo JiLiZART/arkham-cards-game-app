@@ -36,7 +36,7 @@ import type { EffectOf, EffectRun } from "./types";
 import { EVENT } from "../events/event";
 import { ZONE, CHOICE } from "../world/constants";
 import { STEP } from "../steps/step";
-import { campaignTokens, rememberedFact } from "../world/flags";
+import { campaignTokens, extraClues, rememberedFact } from "../world/flags";
 import { win } from "../rules/cards";
 
 function discoverCluesEffect(game: GameContext, run: EffectRun<EffectOf<"discoverClues">>) {
@@ -173,7 +173,7 @@ function addUsesEffect(game: GameContext, run: EffectRun<EffectOf<"addUses">>) {
   const { step, you } = run;
   const e = run.effect;
 
-  const here = invsAt(game, inv(game, you).location);
+  const here = e.yours ? [you] : invsAt(game, inv(game, you).location);
   const cands = cardsIn(game, ZONE.Play).filter(
     (c) =>
       c.controller &&
@@ -234,6 +234,8 @@ function removeUsesEffect(game: GameContext, run: EffectRun<EffectOf<"removeUses
   if (src && src.uses >= e.amount) {
     addCounter(game, src.id, "uses", -e.amount);
     emit(game, EVENT.Uses, `${def(game, src.id).name} loses ${e.amount} use(s)`, { card: src.id });
+    // "If Lockpicks has no supplies, discard it"
+    if (card(game, src.id).uses === 0) push(game, { t: STEP.DiscardIfEmpty, card: src.id });
   } else if (e.orElse) push(game, { t: STEP.Effects, effects: e.orElse, ctx });
   return;
 }
@@ -400,7 +402,13 @@ function rememberEffect(game: GameContext, run: EffectRun<EffectOf<"remember">>)
   emit(game, EVENT.Remember, `Remembered: ${run.effect.key}`, { data: { key: run.effect.key } });
 }
 
+/** in a wouldDiscoverClues window: more clues discovered by that discovery (Newspaper 2) */
+function addCluesEffect(game: GameContext, run: EffectRun<EffectOf<"addClues">>) {
+  if (run.ctx.key) extraClues.add(game, run.ctx.key, run.effect.amount);
+}
+
 export const tokensEffects = {
+  addClues: addCluesEffect,
   addChaosTokens: addChaosTokensEffect,
   revealToken: revealTokenEffect,
   removeTokens: removeTokensEffect,

@@ -1,6 +1,7 @@
 import {
   aside as asideFlag,
   dying,
+  extraClues,
   killed as killedFlag,
   prevented as preventedFlag,
   resignedWith,
@@ -226,8 +227,14 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (game, step) => {
     const kind: 0 | 1 = damage > 0 ? 0 : 1;
     const direct = step.direct || hasFlag(game, step.inv, "directDamage");
     const assets = direct ? [] : soakers(game, step.inv, kind, assigned);
-    // "must be assigned to your assets first, if able": the investigator takes none while an asset can
-    const onlyAssets = !!step.assetsFirst && kind === 0 && assets.length > 0;
+    // "must be assigned to your assets first, if able": the investigator takes none while an asset can; non-direct
+    // horror goes to a [[Composure]] asset of theirs before them (Combat Training, Moxie, Plucky…)
+    const onlyAssets =
+      (!!step.assetsFirst && kind === 0 && assets.length > 0) ||
+      (kind === 1 &&
+        assets.some(
+          (a) => a.controller === step.inv && def(game, a.id).traits.includes("Composure"),
+        ));
     if (assets.length === 0) {
       const cur = assigned[step.inv] ?? [0, 0];
       assigned[step.inv] = kind === 0 ? [cur[0] + damage, cur[1]] : [cur[0], cur[1] + horror];
@@ -292,8 +299,35 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (game, step) => {
     );
     return;
   }
+  // "when damage is assigned to [this asset]" (Armor of Ardennes): a window for each asset that reacts, before placing
+  const reacting = Object.keys(assigned).filter(
+    (id) =>
+      id !== step.inv &&
+      assigned[id][0] > 0 &&
+      abilitiesOf(game, id).some((a) => a.trigger === "damageAssigned"),
+  );
+  if (!step.assignedWindowed && reacting.length) {
+    push(
+      game,
+      ...reacting.map((id) =>
+        win("damageAssigned", {
+          inv: step.inv,
+          card: id,
+          amount: assigned[id][0],
+          key: `${step.key}:${id}`,
+        }),
+      ),
+      { ...step, damage: 0, horror: 0, assigned, assignedWindowed: true, choice: undefined },
+    );
+    return;
+  }
+  for (const id of reacting) {
+    const cut = preventedFlag.take(game, `${step.key}:${id}`)?.[0] ?? 0;
+    assigned[id] = [Math.max(0, assigned[id][0] - cut), assigned[id][1]];
+  }
   // apply
   const touchedAssets: InstId[] = [];
+  const damaged: InstId[] = [];
   let invDamage = 0;
   let invHorror = 0;
   for (const [target, [d, h]] of Object.entries(assigned)) {
@@ -307,6 +341,7 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (game, step) => {
       addCounter(game, c.id, "damage", d);
       addCounter(game, c.id, "horror", h);
       if (d > 0 || h > 0) touchedAssets.push(target);
+      if (d > 0) damaged.push(target);
       emit(game, EVENT.AssetDamage, `${def(game, target).name} takes ${d} damage, ${h} horror`, {
         card: target,
         inv: step.inv,
@@ -326,6 +361,7 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (game, step) => {
     damage: invDamage,
     horror: invHorror,
     assets: touchedAssets,
+    ...(damaged.length ? { damaged } : {}),
     enemy: step.enemy ?? null,
   });
 };
@@ -339,6 +375,14 @@ export const afterDamageHandler: Handler<"AfterDamage"> = (game, step) => {
     if (enemy && c.damage > 0) steps.push(win("assetDamaged", { inv: step.inv, card: a, enemy }));
     if (c.horror > 0) steps.push(win("horrorOnAsset", { inv: c.controller, card: a }));
   }
+  // "after damage is placed on a card you control" (Mark Harrigan): him, or an asset of his
+  const owners = new Set(
+    (step.damaged ?? []).map((a) => cardIf(game, a)?.controller).filter((c): c is InvId => !!c),
+  );
+  if (step.damage > 0) owners.add(step.inv);
+  // narrow: only while a card reacts to it, so recorded games keep their windows
+  if (owners.size && hasDamagePlacedReaction(game))
+    for (const o of owners) steps.push(win("damagePlaced", { inv: o }));
   // asset defeat
   steps.push({ t: STEP.AssetDefeatCheck, inv: step.inv });
   if (step.horror > 0) steps.push(win("horrorPlaced", { inv: step.inv, amount: step.horror }));
@@ -403,6 +447,14 @@ export const checkDefeatHandler: Handler<"CheckDefeat"> = (game, step) => {
   });
 };
 
+/** an investigator card in play reacts to damage placed on its cards (Mark Harrigan) */
+const hasDamagePlacedReaction = (game: GameContext) =>
+  allCards(game).some(
+    (c) =>
+      c.zone === ZONE.Investigator &&
+      abilitiesOf(game, c.id).some((a) => a.trigger === "damagePlaced"),
+  );
+
 /** a card in play with a "would be defeated" replacement: only then is the window opened */
 export const hasReplacement = (game: GameContext) =>
   allCards(game).some(
@@ -414,8 +466,12 @@ export const hasReplacement = (game: GameContext) =>
 export const defeatedHandler: Handler<"Defeated"> = (game, step) => {
   const me = inv(game, step.inv);
   if (me.status !== "playing") return;
-  // a replacement took its place
-  if (step.key && isCancelled(game, step.key)) return;
+  // a replacement took its place; what it left is checked again (St. Hubert's Key heals only 2 horror)
+  if (step.key && isCancelled(game, step.key)) {
+    if (step.by === "damage" || step.by === "horror")
+      push(game, { t: STEP.CheckDefeat, inv: step.inv });
+    return;
+  }
   setStatus(
     game,
     me.id,
@@ -710,7 +766,8 @@ export const discoverCluesHandler: Handler<"DiscoverClues"> = (game, step) => {
 export const gainCluesHandler: Handler<"GainClues"> = (game, step) => {
   if (isCancelled(game, step.key)) return;
   const loc = card(game, step.location);
-  const n = Math.min(step.n, loc.clues);
+  // more than it said, added in its window (Newspaper 2)
+  const n = Math.min(step.n + (extraClues.take(game, step.key) ?? 0), loc.clues);
   addCounter(game, loc.id, "clues", -n);
   addCounter(game, step.inv, "clues", n);
   if (n > 0)
@@ -730,6 +787,11 @@ export const gainCluesHandler: Handler<"GainClues"> = (game, step) => {
 
 // ---------- setup helpers ----------
 export const mulliganHandler: Handler<"Mulligan"> = (game, step) => {
+  if (step.draw) {
+    drawOpeningCards(game, step.inv, step.draw);
+    push(game, { ...step, draw: undefined });
+    return;
+  }
   const me = inv(game, step.inv);
   const chosen = step.chosen ?? [];
   const opts = me.hand.filter((h) => !chosen.includes(h));

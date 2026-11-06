@@ -1,4 +1,4 @@
-import { attacked, baseRaised, named, rememberedFact } from "./world/flags";
+import { attacked, baseRaised, named, rememberedFact, role } from "./world/flags";
 import { keywordName, type Keyword } from "../content/schema";
 import type {
   Amount,
@@ -218,6 +218,7 @@ export function matchesFilter(game: GameContext, code: string, f: CardFilter): b
   if (f.faction && !arr(f.faction)!.includes(d.faction)) return false;
   if (f.maxXp !== undefined && (d.xp ?? 0) > f.maxXp) return false;
   if (f.keyword && !d.keywords.some((k) => keywordName(k) === f.keyword)) return false;
+  if (f.notName && d.name === f.notName) return false;
   return true;
 }
 
@@ -371,7 +372,20 @@ const MOD_ZONES: ReadonlySet<Zone> = new Set<Zone>([
 ]);
 
 /** a card the investigator can't play or commit now (Languor) */
+/**
+ * A player card of a class other than the investigator's role (Lola Hayes: "only … Neutral cards or cards of your
+ * role"); none while they have no role. Encounter cards have no class: their abilities stay open to her.
+ */
+export function offRole(game: GameContext, i: InvId, cardId: InstId): boolean {
+  const r = role.get(game, i);
+  const d = def(game, cardId);
+  if (!r || !isOneOf(d.type, "asset", "event", "skill")) return false;
+  const classes = d.factions ?? [d.faction];
+  return !classes.includes("neutral") && !classes.includes(r);
+}
+
 export function cardBlocked(game: GameContext, i: InvId, cardId: InstId): boolean {
+  if (offRole(game, i, cardId)) return true;
   return allMods(game).some(
     (m) =>
       m.target === i &&
@@ -405,13 +419,17 @@ export function abilitiesOf(
   return [...def(game, id).abilities, ...(scriptOf(game.db, c.code)?.abilities ?? [])];
 }
 
-/** a Hidden card in a hand: an encounter card held there, working as if in its holder's threat area */
+/**
+ * a Hidden card in a hand, working as if in its holder's threat area: an encounter card held there, or a player's own
+ * Hidden weakness (Unspeakable Oath)
+ */
 export const isHidden = (game: GameContext, id: InstId) => {
   const c = card(game, id);
-  return c.zone === ZONE.Hand && !c.owner;
+  return c.zone === ZONE.Hand && (!c.owner || hasKeyword(game, id, "hidden"));
 };
-/** the Hidden cards in hands: encounter cards held there */
-export const hiddenCards = (game: GameContext) => cardsIn(game, ZONE.Hand).filter((c) => !c.owner);
+/** the Hidden cards in hands */
+export const hiddenCards = (game: GameContext) =>
+  cardsIn(game, ZONE.Hand).filter((c) => isHidden(game, c.id));
 
 /** all modifiers currently in effect */
 export function allMods(game: GameContext): AppliedMod[] {
@@ -457,13 +475,16 @@ export const immuneTo = (game: GameContext, target: string, source: string | nul
 
 /** where a modifier's source is: its controller's location, the location itself, or where the enemy or attachment is */
 const sourceLocation = (game: GameContext, c: CardInst): InstId | null =>
-  (c.controller
-    ? invRecIf(game, c.controller)?.location
-    : c.zone === "location"
-      ? c.id
-      : c.zone === "enemy" || c.zone === "attached"
-        ? c.location
-        : null) ?? null;
+  // a player card attached to a location is there, wherever its controller goes (Hiding Spot)
+  (c.zone === "attached" && !c.attachedTo
+    ? c.location
+    : c.controller
+      ? invRecIf(game, c.controller)?.location
+      : c.zone === "location"
+        ? c.id
+        : c.zone === "enemy" || c.zone === "attached"
+          ? c.location
+          : null) ?? null;
 
 function scopeTargets(game: GameContext, c: CardInst, mod: Modifier): string[] {
   switch (mod.scope ?? "controller") {
@@ -472,7 +493,10 @@ function scopeTargets(game: GameContext, c: CardInst, mod: Modifier): string[] {
     case "investigatorsAtLocation":
       return invsAt(game, sourceLocation(game, c));
     case "enemiesAtLocation":
-      return enemiesAt(game, sourceLocation(game, c)).map((e) => e.id);
+      // a keyword granted to some of them only (Hiding Spot: "each non-[[Elite]] enemy … gains aloof")
+      return enemiesAt(game, sourceLocation(game, c))
+        .filter((e) => !mod.keyword || !mod.filter || matchesFilter(game, e.code, mod.filter))
+        .map((e) => e.id);
     case "attachedLocation":
       return c.location ? [c.location] : [];
     case "self":
@@ -546,6 +570,15 @@ export function cannotGainResources(game: GameContext, i: InvId): boolean {
   return (
     hasFlag(game, i, "cannotGainResources", mods) ||
     engagedWith(game, i).some((e) => hasFlag(game, e.id, "cannotGainResourcesWhileEngaged", mods))
+  );
+}
+
+/** no card may leave the investigator's discard pile: their own flag, or an enemy engaged with them (Graveyard Ghouls) */
+export function discardLocked(game: GameContext, i: InvId): boolean {
+  const mods = allMods(game);
+  return (
+    hasFlag(game, i, "cardsCannotLeaveDiscard", mods) ||
+    engagedWith(game, i).some((e) => hasFlag(game, e.id, "cardsCannotLeaveDiscard", mods))
   );
 }
 
@@ -637,6 +670,8 @@ export function addTempMod(
   source: InstId | null = null,
   /** it ends with the next attack against its target enemy, if that comes first (Expose Weakness) */
   nextAttack?: boolean,
+  /** it ends with its target's next skill test, or the next card they play it applies to (Fieldwork, Improvisation) */
+  next?: "test" | "play",
 ) {
   game.s.tempMods.push({
     id: game.s.seq++,
@@ -645,7 +680,23 @@ export function addTempMod(
     until,
     source,
     ...(nextAttack ? { nextAttack: true as const } : {}),
+    ...(next ? { next } : {}),
   });
+}
+/** the modifiers "of the next card you play" that this card, played by `i`, spends (Improvisation) */
+export function endNextPlayMods(game: GameContext, i: InvId, code: string) {
+  game.s.tempMods = game.s.tempMods.filter(
+    (m) =>
+      !(
+        m.next === "play" &&
+        m.target === i &&
+        (!m.mod.filter || matchesFilter(game, code, m.mod.filter))
+      ),
+  );
+}
+/** the temporary modifiers a card's effect gave end now ("while resolving that card's revelation": "Let me handle this!") */
+export function removeTempMods(game: GameContext, source: InstId) {
+  game.s.tempMods = game.s.tempMods.filter((m) => m.source !== source);
 }
 export function expireMods(game: GameContext, until: "test" | "turn" | "phase" | "round") {
   game.s.tempMods = game.s.tempMods.filter((t) => t.until !== until);
@@ -782,7 +833,20 @@ export function checkCondition(game: GameContext, c: Condition, ctx: EffCtx): bo
       !!src && !!cardRecIf(game, src) && matchesFilter(game, card(game, src).code, c.testSource)
     );
   }
-  if ("remainingSanity" in c) return !!you && remainingSanity(game, you) <= c.remainingSanity.max;
+  if ("remainingSanity" in c) {
+    const n = you ? remainingSanity(game, you) : 0;
+    return !!you && n >= (c.remainingSanity.min ?? 0) && n <= (c.remainingSanity.max ?? Infinity);
+  }
+  if ("selfHasDoom" in c) return !!ctx.source && card(game, ctx.source).doom > 0;
+  if ("investigatorsAtThisLocation" in c) {
+    const src = ctx.source ? cardRecIf(game, ctx.source) : undefined;
+    const here = src ? (src.zone === ZONE.Location ? src.id : src.location) : null;
+    const n = invsAt(game, here ?? null).length;
+    const want = c.investigatorsAtThisLocation;
+    return n >= (want.min ?? 0) && n <= (want.max ?? Infinity);
+  }
+  if ("inThreatArea" in c)
+    return !!you && threatArea(game, you).some((x) => matchesFilter(game, x.code, c.inThreatArea));
   if ("eventEnemyExhausted" in c) return !!ctx.enemy && !!cardRecIf(game, ctx.enemy)?.exhausted;
   if ("eventEnemyAttackedYouThisRound" in c)
     return !!ctx.enemy && !!you && attacked.get(game, [ctx.enemy, you]) === game.s.round;
@@ -797,6 +861,10 @@ export function checkCondition(game: GameContext, c: Condition, ctx: EffCtx): bo
   if ("horror" in c) {
     const n = you ? inv(game, you).horror : 0;
     return !!you && n >= (c.horror.min ?? 0) && n <= (c.horror.max ?? Infinity);
+  }
+  if ("damage" in c) {
+    const n = you ? inv(game, you).damage : 0;
+    return !!you && n >= (c.damage.min ?? 0) && n <= (c.damage.max ?? Infinity);
   }
   if ("beneath" in c) {
     const n = beneathCount(game, c.beneath.of, ctx);
@@ -862,6 +930,30 @@ export function checkCondition(game: GameContext, c: Condition, ctx: EffCtx): bo
     return c.enemyWithDoom === "testEnemy"
       ? !!ctx.enemy && (cardRecIf(game, ctx.enemy)?.doom ?? 0) > 0
       : enemiesAt(game, yourLoc).some((e) => e.doom > 0);
+  if ("eventAmount" in c)
+    return (
+      ctx.x !== undefined &&
+      ctx.x >= (c.eventAmount.min ?? 0) &&
+      ctx.x <= (c.eventAmount.max ?? Infinity)
+    );
+  if ("enemyAtThisLocation" in c) {
+    const src = ctx.source ? cardRecIf(game, ctx.source) : undefined;
+    const here = src ? (src.zone === ZONE.Location ? src.id : src.location) : null;
+    const want = c.enemyAtThisLocation.exhausted;
+    return !!here && enemiesAt(game, here).some((e) => want === undefined || e.exhausted === want);
+  }
+  if ("attackOfOpportunity" in c) return !!ctx.aoo;
+  if ("defeatCause" in c) return !!ctx.cause && c.defeatCause.includes(ctx.cause);
+  if ("anyTurn" in c) return !!game.s.active && game.s.phase === "investigation";
+  if ("enteredPlayThisTurn" in c) {
+    // the card was played (and so entered play) since the current turn began
+    const turn = game.s.log.findLastIndex((e) => e.type === "turn");
+    return (
+      !!game.s.active &&
+      turn >= 0 &&
+      game.s.log.slice(turn).some((e) => e.type === "play" && e.card === ctx.source)
+    );
+  }
   if ("script" in c) {
     const own = ctx.source ? cardRecIf(game, ctx.source)?.code : undefined;
     const fn = conditionFor(game.db, game.s.scenarioId, own, c.script);

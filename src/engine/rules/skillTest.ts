@@ -1,4 +1,11 @@
-import { deckDiscarded, peril } from "../world/flags";
+import {
+  commitSpent,
+  deckDiscarded,
+  gainedIcons,
+  noEngage,
+  peril,
+  returnAfterTest,
+} from "../world/flags";
 import type {
   Boost,
   ChaosToken,
@@ -14,6 +21,7 @@ import {
   baseSkill,
   cardBlocked,
   checkCondition,
+  controlled,
   enemyStat,
   expireMods,
   hasFlag,
@@ -24,6 +32,7 @@ import {
   tokenHolder,
 } from "../queries";
 import {
+  activeInvs,
   addCounter,
   allCards,
   ask,
@@ -83,6 +92,9 @@ export interface TestOpts {
   noDamageToOthersOnFail?: boolean;
   extraClues?: number;
   noEvade?: boolean;
+  evadeNoExhaust?: boolean;
+  noEngageAfterEvade?: boolean;
+  retaliate?: "gain" | "ignore";
   ctx: EffCtx;
 }
 
@@ -169,6 +181,9 @@ export function startTest(game: GameContext, o: TestOpts) {
     ...(o.noDamageToOthersOnFail ? { noDamageToOthersOnFail: true } : {}),
     ...(o.extraClues ? { extraClues: o.extraClues } : {}),
     ...(o.noEvade ? { noEvade: true } : {}),
+    ...(o.evadeNoExhaust ? { evadeNoExhaust: true } : {}),
+    ...(o.noEngageAfterEvade ? { noEngageAfterEvade: true } : {}),
+    ...(o.retaliate ? { retaliate: o.retaliate } : {}),
   };
   game.s.skillTest = t;
   emit(game, EVENT.TestStart, `${invName(game, o.inv)} tests ${o.skill} (${t.sourceLabel})`, {
@@ -237,13 +252,17 @@ export function iconsFor(game: GameContext, cardId: InstId, skill: Skill): numbe
   const t = game.s.skillTest;
   const other = d.iconsOnOthersTest && t && card(game, cardId).owner !== t.inv;
   const more = other ? d.iconsOnOthersTest! : {};
+  // icons an effect gave it until the end of the test (Minh Thi Phan)
+  const gained = gainedIcons.get(game, cardId) ?? {};
   return (
     (d.icons[skill] ?? 0) +
     (d.icons.wild ?? 0) +
     (extra[skill] ?? 0) +
     (extra.wild ?? 0) +
     (more[skill] ?? 0) +
-    (more.wild ?? 0)
+    (more.wild ?? 0) +
+    (gained[skill] ?? 0) +
+    (gained.wild ?? 0)
   );
 }
 
@@ -311,12 +330,86 @@ export function testParts(game: GameContext, t: SkillTestState) {
 /** current skill value without tokens */
 export const testValue = (game: GameContext, t: SkillTestState): number => testParts(game, t).total;
 
+/**
+ * a committed card's additional cost ("spend up to 3 resources": "Watch this!"; "up to 3 charges from among assets you
+ * control": Torrent of Power), one point a choice until the player is done or the most is spent
+ */
+function spendToCommit(game: GameContext, step: Extract<Step, { t: "Test" }>, id: InstId) {
+  const cost = def(game, id).commitSpend!;
+  const who = card(game, id).controller!;
+  const spent = commitSpent.get(game, id) ?? [];
+  const from =
+    spent.length >= cost.max
+      ? []
+      : cost.of === "resources"
+        ? inv(game, who).resources > 0
+          ? ["resources"]
+          : []
+        : controlled(game, who)
+            .filter((c) => def(game, c.id).uses?.type === "charges" && c.uses > 0)
+            .map((c) => c.id);
+  if (!from.length) return;
+  const pick = ask<string>(
+    game,
+    step,
+    who,
+    CHOICE.Generic,
+    `${def(game, id).name}: spend ${cost.of === "resources" ? "a resource" : "a charge"}? (${spent.length} spent)`,
+    [
+      { id: "done", label: "Done", value: "done", key: "option.done" },
+      ...from.map((f) =>
+        f === "resources"
+          ? { id: f, label: "Spend 1 resource", value: f, key: "option.spendResource" }
+          : {
+              id: f,
+              label: `Spend 1 charge from ${def(game, f).name}`,
+              card: f,
+              value: f,
+              key: "option.spendCharge",
+              vars: { card: f },
+            },
+      ),
+    ],
+    { key: "commitSpend", vars: { card: id, n: spent.length } },
+  );
+  if (pick === undefined || pick === "done") return;
+  addCounter(
+    game,
+    pick === "resources" ? who : pick,
+    pick === "resources" ? "resources" : "uses",
+    -1,
+  );
+  commitSpent.set(game, id, [...spent, pick]);
+  if (cost.icons) {
+    const has = gainedIcons.get(game, id) ?? {};
+    const more = { ...has };
+    for (const [k, n] of Object.entries(cost.icons) as [Skill | "wild", number][])
+      more[k] = (more[k] ?? 0) + n;
+    gainedIcons.set(game, id, more);
+  }
+  push(game, { ...step, choice: undefined });
+}
+
+/** what a card taken back was paid with goes back where it came from */
+function refundCommit(game: GameContext, id: InstId, who: InvId) {
+  for (const f of commitSpent.take(game, id) ?? [])
+    if (f === "resources") addCounter(game, who, "resources", 1);
+    else if (cardIf(game, f)?.zone === ZONE.Play) addCounter(game, f, "uses", 1);
+  gainedIcons.clear(game, id);
+}
+
 function commitStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
+  if (step.spending) return spendToCommit(game, step, step.spending);
   const t = test(game);
   const asked = step.asked ?? [];
   const perilous = !!peril.get(game);
   const loc = inv(game, t.inv).location;
-  const order = [t.inv, ...(perilous ? [] : invsAt(game, loc).filter((i) => i !== t.inv))];
+  const here = invsAt(game, loc);
+  // an investigator elsewhere who may commit to tests at other locations (Analytical Mind)
+  const afar = activeInvs(game).filter(
+    (i) => !here.includes(i) && hasFlag(game, i, "commitFromAfar"),
+  );
+  const order = [t.inv, ...(perilous ? [] : [...here, ...afar].filter((i) => i !== t.inv))];
   const who = order.find((i) => !asked.includes(i));
   if (!who) {
     push(game, { t: STEP.Test, stage: TEST_STAGE.Reveal });
@@ -324,9 +417,13 @@ function commitStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
   }
   const me = inv(game, who);
   const mine = t.committed.filter((c, k) => t.committers[k] === who);
+  // "you cannot commit exactly 1 or 2 cards to a skill test" (The King in Yellow)
+  const notOneOrTwo = hasFlag(game, who, "cannotCommitOneOrTwo");
   // another investigator at the location commits at most one card (Grimoire, ST.2); they may still take it back
   const cards =
-    who !== t.inv && mine.length >= 1 ? [] : me.hand.filter((h) => canCommit(game, who, h, t));
+    who !== t.inv && (mine.length >= 1 || notOneOrTwo)
+      ? []
+      : me.hand.filter((h) => canCommit(game, who, h, t));
   // a player window: any [fast] ability, and fast cards playable now (Grimoire, ST.1)
   const fast = activatable(game, who, ["fast"]);
   const plays = playable(game, who).filter((h) => canPlay(game, who, h, true));
@@ -334,13 +431,20 @@ function commitStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
     push(game, { ...step, choice: undefined, asked: [...asked, who] });
     return;
   }
+  const canFinish = !notOneOrTwo || mine.length === 0 || mine.length > 2;
   const opts = [
-    {
-      id: "done",
-      label:
-        who === t.inv ? `Done (value ${testValue(game, t)} vs ${difficultyOf(game, t)})` : "Done",
-      value: "done",
-    },
+    ...(canFinish
+      ? [
+          {
+            id: "done",
+            label:
+              who === t.inv
+                ? `Done (value ${testValue(game, t)} vs ${difficultyOf(game, t)})`
+                : "Done",
+            value: "done",
+          },
+        ]
+      : []),
     ...cards.map((h) => ({
       id: h,
       label: `Commit ${def(game, h).name} (+${iconsFor(game, h, testedSkill(game, t))})`,
@@ -384,7 +488,14 @@ function commitStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
   );
   if (pick === undefined) return;
   if (pick === "done") {
-    push(game, { ...step, choice: undefined, asked: [...asked, who] });
+    push(
+      game,
+      // "after you commit exactly 1 card to a skill test" (Analytical Mind)
+      ...(mine.length
+        ? [win("cardsCommitted", { inv: who, amount: mine.length, testId: t.id })]
+        : []),
+      { ...step, choice: undefined, asked: [...asked, who] },
+    );
     return;
   }
   if ("commit" in pick) {
@@ -396,27 +507,35 @@ function commitStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
       inv: who,
       card: pick.commit,
     });
-    // an additional cost to commit it (Soul Link)
+    // an additional cost to commit it (Soul Link; "Watch this!")
     const horror = def(game, pick.commit).commitHorror;
-    if (horror) {
-      push(
-        game,
-        {
-          t: STEP.AssignDamage,
-          inv: who,
-          damage: 0,
-          horror,
-          direct: false,
-          source: pick.commit,
-        },
-        { ...step, choice: undefined },
-      );
-      return;
-    }
+    push(
+      game,
+      ...(def(game, pick.commit).commitSpend
+        ? [{ t: STEP.Test, stage: TEST_STAGE.Commit, spending: pick.commit } as Step]
+        : []),
+      ...(horror
+        ? [
+            {
+              t: STEP.AssignDamage,
+              inv: who,
+              damage: 0,
+              horror,
+              direct: false,
+              source: pick.commit,
+            } as Step,
+          ]
+        : []),
+      // "after an investigator … commits a card to a skill test" (Minh Thi Phan)
+      win("cardCommitted", { inv: who, card: pick.commit, testId: t.id }),
+      { ...step, choice: undefined },
+    );
+    return;
   } else if ("uncommit" in pick) {
     const k = t.committed.indexOf(pick.uncommit);
     t.committed.splice(k, 1);
     t.committers.splice(k, 1);
+    refundCommit(game, pick.uncommit, who);
     moveCard(game, pick.uncommit, ZONE.Hand);
     emit(game, EVENT.Uncommit, `${me.name} takes back ${def(game, pick.uncommit).name}`, {
       inv: who,
@@ -450,6 +569,13 @@ function revealStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
     emit(game, EVENT.NoToken, "No chaos token is revealed", { inv: t.inv });
     push(game, { t: STEP.Test, stage: TEST_STAGE.Result });
     return;
+  }
+  // "Do not reveal chaos tokens from the chaos bag for this test. Treat the chaos token revealed … as an [elder_sign]"
+  // (Seal of the Elder Sign): the token comes from the card, not the bag, and never goes into it
+  const seal = t.committed.find((c) => def(game, c).sealsToken);
+  if (!t.drawn && seal && !t.sealed) {
+    t.sealed = def(game, seal).sealsToken!;
+    t.drawn = [t.sealed];
   }
   if (!t.drawn) {
     // "when you would reveal a chaos token" (Grotesque Statue): once per reveal
@@ -675,9 +801,11 @@ function resolveTokensStage(game: GameContext) {
             ? (cardIf(game, inv(game, t.inv).location)?.clues ?? 0)
             : v === "horrorOnYou"
               ? inv(game, t.inv).horror
-              : v === "resources"
-                ? inv(game, t.inv).resources
-                : v;
+              : v === "damageOnYou"
+                ? inv(game, t.inv).damage
+                : v === "resources"
+                  ? inv(game, t.inv).resources
+                  : v;
         if (es.effects) t.tokenOnSuccess.push(...es.effects);
         // effects of the elder sign itself, before the result (Pete readies Duke, Rex may fail to draw 3)
         if (es.onReveal)
@@ -1149,15 +1277,18 @@ function kindResultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) 
     if (t.kind === "evade" && t.target && !t.noEvade) {
       const e = cardOfIf(game.s, t.target);
       if (e?.zone === "enemy") {
-        exhaust(game, e.id);
+        if (!t.evadeNoExhaust) exhaust(game, e.id);
         setEngaged(game, e.id, null);
+        // "until the end of your turn, that enemy cannot engage you" (Stealth)
+        if (t.noEngageAfterEvade) noEngage.set(game, [e.id, t.inv], game.s.counters.turn);
         emit(game, EVENT.Evade, `${invName(game, t.inv)} evades ${def(game, t.target).name}`, {
           inv: t.inv,
           card: t.target,
         });
+        // the margin goes with them: "if you succeeded by 2 or more" (Pickpocketing)
         steps.push(
-          win("enemyEvaded", { inv: t.inv, enemy: t.target }),
-          win("successfulEvade", { inv: t.inv, enemy: t.target }),
+          win("enemyEvaded", { inv: t.inv, enemy: t.target, margin: t.margin }),
+          win("successfulEvade", { inv: t.inv, enemy: t.target, margin: t.margin }),
         );
       }
     }
@@ -1189,7 +1320,12 @@ function kindResultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) 
       });
     }
     const kw = t.kind === "fight" ? "retaliate" : "alert";
-    if (e?.zone === "enemy" && !e.exhausted && def(game, t.target).keywords.includes(kw)) {
+    // an attack can give the enemy Retaliate (Knuckleduster) or ignore it (.45 Automatic 2)
+    const has =
+      kw === "retaliate" && t.retaliate
+        ? t.retaliate === "gain"
+        : def(game, t.target).keywords.includes(kw);
+    if (e?.zone === "enemy" && !e.exhausted && has) {
       emit(
         game,
         kw,
@@ -1220,12 +1356,29 @@ function kindResultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) 
 
 function endStage(game: GameContext) {
   const t = test(game);
-  for (const c of t.committed)
+  for (const c of t.committed) {
+    gainedIcons.clear(game, c);
+    commitSpent.clear(game, c);
+    // "When this test ends, remove Seal of the Elder Sign from the game"
+    if (def(game, c).sealsToken && cardOfIf(game.s, c)?.zone === "commit")
+      moveCard(game, c, ZONE.Removed);
+    // a card an effect returns to its owner's hand once the test ends (Minh Thi Phan's elder sign)
+    const back = returnAfterTest.take(game, c) && !!cardOfIf(game.s, c)?.owner;
     if (cardOfIf(game.s, c)?.zone === "commit")
       // an encounter card committed (Possession (Traitorous)) goes to the encounter discard pile
-      moveCard(game, c, cardOfIf(game.s, c)?.owner ? ZONE.Discard : ZONE.EncounterDiscard);
-  game.s.chaosBag.push(...t.tokens, ...(t.ignored ?? []));
+      moveCard(
+        game,
+        c,
+        back ? ZONE.Hand : cardOfIf(game.s, c)?.owner ? ZONE.Discard : ZONE.EncounterDiscard,
+      );
+  }
+  // a sealed test's token was never in the bag (Seal of the Elder Sign)
+  const back = [...t.tokens, ...(t.ignored ?? [])];
+  if (t.sealed && back.includes(t.sealed)) back.splice(back.indexOf(t.sealed), 1);
+  game.s.chaosBag.push(...back);
   expireMods(game, "test");
+  // "for the next skill test you perform this phase" (Fieldwork): over once that test is
+  game.s.tempMods = game.s.tempMods.filter((m) => !(m.next === "test" && m.target === t.inv));
   // "for the next attack performed against it" (Expose Weakness): over once that attack is
   if (t.kind === "fight" && t.target)
     game.s.tempMods = game.s.tempMods.filter((m) => !(m.nextAttack && m.target === t.target));

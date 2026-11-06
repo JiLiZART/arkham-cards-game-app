@@ -147,6 +147,8 @@ function healEffect(game: GameContext, run: EffectRun<EffectOf<"heal">>) {
         data: { damage: d, horror: h },
       });
     if (h) push(game, healedWindow(ctx, me.cardId, h));
+    // "if Mark Harrigan has 4 or less damage on him" (Sophie)
+    if (d) push(game, win("damageHealed", { inv: i, amount: d }));
   }
   return;
 }
@@ -385,7 +387,27 @@ function defeatEnemyEffect(game: GameContext, run: EffectRun<EffectOf<"defeatEne
   push(game, { t: STEP.DefeatEnemy, enemy, by: run.you });
 }
 
+/** in a damageAssigned window: points of the damage just assigned to the card cancelled before it is placed */
+function cancelAssignedDamageEffect(
+  game: GameContext,
+  run: EffectRun<EffectOf<"cancelAssignedDamage">>,
+) {
+  const { ctx } = run;
+  if (!ctx.key) return;
+  const done = prevented.get(game, ctx.key) ?? [0, 0];
+  prevented.set(game, ctx.key, [done[0] + run.effect.amount, done[1]]);
+  emit(
+    game,
+    EVENT.Prevent,
+    `${def(game, ctx.card ?? ctx.source!).name}: ${run.effect.amount} damage cancelled`,
+    {
+      card: ctx.card ?? ctx.source ?? null,
+    },
+  );
+}
+
 export const damageEffects = {
+  cancelAssignedDamage: cancelAssignedDamageEffect,
   defeatEnemy: defeatEnemyEffect,
   enemyAttack: enemyAttackEffect,
   damageAssets: damageAssetsEffect,

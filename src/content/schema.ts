@@ -82,7 +82,8 @@ export const Placement: z.ZodType<Placement> = z.union([
 /** a number, or something computed from the effect context */
 export const Amount = z.union([
   z.number(),
-  z.enum(["failBy", "succeedBy", "all", "X"]),
+  /** `enemiesEngaged`: the enemies engaged with you (Trench Knife) */
+  z.enum(["failBy", "succeedBy", "all", "X", "enemiesEngaged"]),
   z.object({ perInvestigator: z.number() }),
   /** the tokens on the source card itself */
   z.object({ onSelf: z.enum([EVENT.Damage, "horror", EVENT.Clues, "resources", EVENT.Doom]) }),
@@ -101,18 +102,37 @@ export const Amount = z.union([
     .object({
       onYou: z.enum([EVENT.Damage, "horror", EVENT.Clues, "resources"]),
       plus: z.number().optional(),
+      /** one per this many, rounded down (Shell Shock: "for every 2 damage on you") */
+      per: z.number().optional(),
     })
     .strict(),
   /** n per action you have left in your turn (none outside it): Eerie Glade, Lost Memories */
   z.object({ actionsLeft: z.number() }).strict(),
   /** the event enemy's damage or horror value (Hypnotic Gaze: "the attacking enemy's damage") */
-  z.object({ eventEnemyStat: z.enum([EVENT.Damage, "horror"]) }).strict(),
+  /** the event enemy's evade value (Waylay: "test [agility] (X), where X is that enemy's evade value") */
+  z.object({ eventEnemyStat: z.enum([EVENT.Damage, "horror", EVENT.Evade]) }).strict(),
+  /** n per point the source spent as its commit cost ("Watch this!": "gain twice that many resources") */
+  z.object({ commitSpent: z.number() }).strict(),
   /** `base`, `plus` more while a condition holds for you ("+2 difficulty if Hunting Horror is at your location") */
   z
     .object({
       base: z.number(),
       plus: z.number(),
       if: z.lazy((): z.ZodType<Condition> => Condition),
+    })
+    .strict(),
+  /** another amount, capped (Alchemical Transmutation: "for each point you succeed by …, to a maximum of 3") */
+  z
+    .object({
+      atMost: z.number(),
+      of: z.union([z.number(), z.enum(["failBy", "succeedBy", "X"])]),
+    })
+    .strict(),
+  /** one per `per` points of another amount, rounded down (Archaic Glyphs: "for every 2 points you succeed by") */
+  z
+    .object({
+      per: z.number(),
+      of: z.enum(["failBy", "succeedBy", "X"]),
     })
     .strict(),
 ]);
@@ -132,6 +152,8 @@ export const CardFilter = z
     maxXp: z.number().optional(),
     /** a printed keyword (Depths of Demhe: "fast cards") */
     keyword: z.string().optional(),
+    /** not a card of this title (Resourceful: "not named Resourceful") */
+    notName: z.string().optional(),
   })
   .strict();
 export type CardFilter = z.infer<typeof CardFilter>;
@@ -160,6 +182,10 @@ export const EnemyTarget = z.enum([
   "chooseAtLocation",
   "chooseExhaustedAtLocation",
   "chooseEngaged", // an enemy engaged with you
+  /** an enemy at your location not engaged with you (Sneak Attack) */
+  "chooseNotEngagedWithYou",
+  /** each enemy at your location but the event's (Storm of Spirits) */
+  "eachOtherAtLocation",
   "eachAtLocation",
   "eventEnemy", // enemy from the triggering event / skill test target
   "nearestCultist",
@@ -203,6 +229,8 @@ export const ModStat = z.enum([
   "startingResources",
   /** the difficulty of the investigator's skill tests (Fine Clothes: -2 during parley actions) */
   "difficulty",
+  /** charges an asset with "uses (charges)" enters play with beyond its printed count (Akachi Onyele) */
+  "extraCharges",
 ]);
 export type ModStat = z.infer<typeof ModStat>;
 
@@ -300,6 +328,14 @@ export const ModFlag = z.enum([
   "cannotUseLocationActions",
   /** on an enemy: its attack's damage and horror go to one card as far as it can take them first (Beast of Aldebaran) */
   "assignToSingleCard",
+  /** the investigator may commit 1 card to each skill test performed at another location (Analytical Mind) */
+  "commitFromAfar",
+  /** the investigator can't commit exactly 1 or 2 cards to a skill test (The King in Yellow) */
+  "cannotCommitOneOrTwo",
+  /** no card leaves the investigator's discard pile; on an enemy, the discard pile of whom it is engaged with (Graveyard Ghouls) */
+  "cardsCannotLeaveDiscard",
+  /** the engage actions the investigator performs provoke no attack of opportunity (Trench Knife) */
+  "engageNoAoO",
 ]);
 export type ModFlag = z.infer<typeof ModFlag>;
 
@@ -446,7 +482,13 @@ export type Condition =
   | { enemyNearby: { range: number; nonElite?: boolean } }
   | { defeatedHealthThisTurn: { min: number } }
   | { testSource: CardFilter }
-  | { remainingSanity: { max: number } }
+  | { remainingSanity: { min?: number; max?: number } }
+  /** this card has doom on it (David Renfield) */
+  | { selfHasDoom: true }
+  /** the investigators at the location this card is or is attached to (Ambush: none) */
+  | { investigatorsAtThisLocation: { min?: number; max?: number } }
+  /** a card matching the filter is in your threat area (Logical Reasoning: a [[Terror]]) */
+  | { inThreatArea: CardFilter }
   | { eventEnemyExhausted: true }
   | { eventEnemyAttackedYouThisRound: true }
   | { eventCardIsSelf: true }
@@ -457,6 +499,8 @@ export type Condition =
   | { beneath: { of: BeneathOf; min?: number; max?: number } }
   /** the horror on you */
   | { horror: { min?: number; max?: number } }
+  /** the damage on you (Sophie: "if Mark Harrigan has 5 or more damage on him") */
+  | { damage: { min?: number; max?: number } }
   /** named tokens held */
   | { tokens: { name: string; on: TokenHolder; min?: number; max?: number } }
   | { testTokens: ChaosToken[] }
@@ -493,6 +537,18 @@ export type Condition =
   | { enemyWithDoom: "testEnemy" | "atYourLocation" }
   /** how many of these remembered facts the scenario holds (The Unspeakable Oath: "4 of the following") */
   | { rememberedCount: { of: string[]; min?: number; max?: number } }
+  /** the event's amount (`x`): "after you commit exactly 1 card" (Analytical Mind) */
+  | { eventAmount: { min?: number; max?: number } }
+  /** an enemy (ready or exhausted, if said) at the location this card is or is attached to (Hiding Spot) */
+  | { enemyAtThisLocation: { exhausted?: boolean } }
+  /** the attack of the event is an attack of opportunity (Narrow Escape) */
+  | { attackOfOpportunity: true }
+  /** what would defeat the investigator, in a wouldBeDefeated window (St. Hubert's Key: horror) */
+  | { defeatCause: ("damage" | "horror" | "both" | "effect")[] }
+  /** an investigator is taking their turn (Arcane Insight) */
+  | { anyTurn: true }
+  /** this card entered play during the current turn (Lupara) */
+  | { enteredPlayThisTurn: true }
   /** a condition a card or scenario script decides (`CardScript.conditions`) */
   | { script: string };
 
@@ -541,7 +597,22 @@ export const Condition: z.ZodType<Condition> = z.lazy(() =>
       .strict(),
     z.object({ defeatedHealthThisTurn: z.object({ min: z.number() }) }).strict(),
     z.object({ testSource: CardFilter }).strict(),
-    z.object({ remainingSanity: z.object({ max: z.number() }) }).strict(),
+    z
+      .object({
+        remainingSanity: z
+          .object({ min: z.number().optional(), max: z.number().optional() })
+          .strict(),
+      })
+      .strict(),
+    z.object({ selfHasDoom: z.literal(true) }).strict(),
+    z
+      .object({
+        investigatorsAtThisLocation: z
+          .object({ min: z.number().optional(), max: z.number().optional() })
+          .strict(),
+      })
+      .strict(),
+    z.object({ inThreatArea: CardFilter }).strict(),
     z.object({ eventEnemyExhausted: z.literal(true) }).strict(),
     z.object({ eventEnemyAttackedYouThisRound: z.literal(true) }).strict(),
     z.object({ eventCardIsSelf: z.literal(true) }).strict(),
@@ -557,6 +628,11 @@ export const Condition: z.ZodType<Condition> = z.lazy(() =>
     z
       .object({
         horror: z.object({ min: z.number().optional(), max: z.number().optional() }).strict(),
+      })
+      .strict(),
+    z
+      .object({
+        damage: z.object({ min: z.number().optional(), max: z.number().optional() }).strict(),
       })
       .strict(),
     z
@@ -619,6 +695,20 @@ export const Condition: z.ZodType<Condition> = z.lazy(() =>
           .strict(),
       })
       .strict(),
+    z
+      .object({
+        eventAmount: z.object({ min: z.number().optional(), max: z.number().optional() }).strict(),
+      })
+      .strict(),
+    z
+      .object({
+        enemyAtThisLocation: z.object({ exhausted: z.boolean().optional() }).strict(),
+      })
+      .strict(),
+    z.object({ attackOfOpportunity: z.literal(true) }).strict(),
+    z.object({ defeatCause: z.array(z.enum([EVENT.Damage, "horror", "both", "effect"])) }).strict(),
+    z.object({ anyTurn: z.literal(true) }).strict(),
+    z.object({ enteredPlayThisTurn: z.literal(true) }).strict(),
     z.object({ script: z.string() }).strict(),
   ]),
 );
@@ -681,9 +771,10 @@ export type Effect =
     }
   | { op: "putInThreatArea" }
   /** `mostInvestigators`: a location with the most investigators (Secret Door); the lead breaks a tie */
+  /** `any`: a location you choose (Hiding Spot) */
   | {
       op: "attachToLocation";
-      where: "yours" | "mostClues" | "mostInvestigators";
+      where: "yours" | "mostClues" | "mostInvestigators" | "any";
       limitOnePerLocation?: boolean;
     }
   | { op: "discardSelf" }
@@ -696,6 +787,8 @@ export type Effect =
       onSuccess?: Effect[];
       onFail?: Effect[];
       perPointFailed?: Effect[];
+      /** effects if any of the tokens is revealed (Alchemical Transmutation's backlash) */
+      onTokens?: OnTokens;
     }
   | {
       op: "fight";
@@ -727,13 +820,15 @@ export type Effect =
       noDamageToOthersOnFail?: boolean;
       /** only an enemy not engaged with you may be attacked (Springfield M1903) */
       notEngagedWithYou?: boolean;
+      /** the attacked enemy gains Retaliate for this attack (Knuckleduster), or its Retaliate is ignored (.45 Automatic 2) */
+      retaliate?: "gain" | "ignore";
     }
   | {
       op: "investigate";
       skill?: Skill;
       bonus?: Amount;
-      /** a revealed connecting location of your choice instead of yours (Local Map) */
-      at?: "connecting";
+      /** a revealed connecting location of your choice instead of yours (Local Map); any revealed one (In the Know) */
+      at?: "connecting" | "anyRevealed";
       boost?: Boost;
       shroud?: number;
       insteadOfClues?: Effect[];
@@ -762,14 +857,24 @@ export type Effect =
       onTokens?: OnTokens;
       /** the skill's base value for this test, in place of the investigator's */
       baseSkill?: number;
+      /** a success disengages the enemy without exhausting it (Stealth) */
+      noExhaust?: boolean;
+      /** after a success, the enemy can't engage you until the end of your turn (Stealth) */
+      cannotEngageYou?: boolean;
+      /** with `auto`: the enemy evaded, an engaged one you choose or the event's (Archaic Glyphs, Cheap Shot) */
+      target?: EnemyTarget;
     }
   | {
       op: "modify";
       mod: Modifier;
       until: z.infer<typeof Duration>;
       target?: InvTarget;
-      /** the modifier is on your location instead (Hand-Crank Flashlight) */
-      on?: "yourLocation";
+      /** the modifier is on your location instead (Hand-Crank Flashlight), or on the event's enemy (Anatomical Diagrams) */
+      on?: "yourLocation" | "eventEnemy";
+      /** it ends sooner, with your next skill test or the next card you play it applies to (Fieldwork, Improvisation) */
+      next?: "test" | "play";
+      /** the modifier's value, worked out as it resolves (Fight or Flight: the horror on you) */
+      amount?: Amount;
     }
   | {
       op: "chooseOne";
@@ -777,7 +882,8 @@ export type Effect =
       chooser?: "you" | "lead";
     }
   | { op: "discardFromHand"; amount: Amount; random?: boolean; target?: InvTarget }
-  | { op: "discardAsset"; orElse?: Effect[] }
+  /** an asset you control (matching the filter) discarded, or `orElse` when there is none (Astral Travel) */
+  | { op: "discardAsset"; orElse?: Effect[]; filter?: CardFilter }
   | { op: "discardAllButOneFromHand" }
   /** the top cards of an investigator's deck discarded ("failBy": one per point the test failed by) */
   | { op: "discardDeckTop"; amount: Amount; target?: InvTarget }
@@ -789,6 +895,8 @@ export type Effect =
       op: "gainActions";
       amount: number;
       /** the action can only be used for this kind of action */ onlyFor?: string;
+      /** at most once per turn for this card (.41 Derringer 2: "Once per turn, … you may take an additional action") */
+      oncePerTurn?: true;
     }
   | { op: "cancel" } // cancel the triggering attack/revelation/token
   | { op: "disengageAll"; nonTrait?: string }
@@ -801,7 +909,8 @@ export type Effect =
         | "revealedNoEnemies"
         | "central"
         | "choose"
-        | "eventLocation";
+        | "eventLocation"
+        | "anyRevealed";
       /** who moves (you by default); you choose where (Shortcut: an investigator at your location) */
       target?: InvTarget;
     }
@@ -822,12 +931,26 @@ export type Effect =
       intoPlay?: boolean;
     }
   /** `anyDeck`: any investigator's deck or the encounter deck (Scrying); the cards go back on top in the order chosen */
-  | { op: "lookAtTop"; amount: number; anyDeck?: boolean }
+  | {
+      op: "lookAtTop";
+      amount: number;
+      anyDeck?: boolean;
+      /** effects when a card matching the filter is among those looked at (Scrying 3: a [[Terror]] or [[Omen]]) */
+      ifAmong?: { filter: CardFilter; effects: Effect[] };
+    }
   /**
    * uses placed on an asset controlled by an investigator at your location; `double`: as many as it has (Contraband);
    * `usesType`: only an asset whose uses are of these kinds
    */
-  | { op: "addUses"; amount?: number; double?: boolean; usesType?: string[]; filter: CardFilter }
+  | {
+      op: "addUses";
+      amount?: number;
+      double?: boolean;
+      usesType?: string[];
+      filter: CardFilter;
+      /** only an asset you control (Akachi Onyele) */
+      yours?: boolean;
+    }
   | { op: "surge" }
   | { op: "drawCultistOrSearch" } // Mysterious Chanting fallback
   /** `orVictory`: the victory display is searched too ("Search all set-aside cards and the victory display for …") */
@@ -888,7 +1011,11 @@ export type Effect =
   | { op: "pullEnemy"; range: number; nonElite?: boolean; then: Effect[] }
   /** engage enemies at your location one at a time, `each` resolving for every one engaged; `done` is internal */
   | { op: "engageAny"; each: Effect[]; done?: string[] }
-  | { op: "readyCard"; filter: CardFilter }
+  /**
+   * a card you control readied; `atLocation`: an asset controlled by an investigator at your location, exhausted or not,
+   * then `onIt` resolved with it as the source (Inspiring Presence: heal 1 damage or horror from it)
+   */
+  | { op: "readyCard"; filter: CardFilter; atLocation?: boolean; onIt?: Effect[] }
   /** choose a card of your deck or discard pile that you can afford, play it, shuffle the deck */
   | {
       op: "searchAndPlay";
@@ -1053,8 +1180,31 @@ export type Effect =
   | { op: "redirectDamage" }
   /** the context's enemy defeated; `nonElite`: only a non-[[Elite]] one (Monster Slayer 5) */
   | { op: "defeatEnemy"; nonElite?: boolean }
-  /** a skill card you own committed to the test under way back to your hand, you choose which (Try and Try Again) */
-  | { op: "returnCommittedSkill" }
+  /**
+   * a skill card you own committed to the test under way back to your hand, you choose which (Try and Try Again);
+   * `anyOwner`: any committed skill card, to its owner's hand; `afterTest`: it goes there once the test ends, not now;
+   * `optional`: you may choose none (Minh Thi Phan's elder sign)
+   */
+  | { op: "returnCommittedSkill"; anyOwner?: boolean; afterTest?: boolean; optional?: boolean }
+  /** the event's card (a card just committed) gains these icons until the end of the test (Minh Thi Phan) */
+  | { op: "cardGainsIcons"; icons: z.infer<typeof Icons> }
+  /** the event's enemy, just defeated, to the victory display (Bury Them Deep) */
+  | { op: "toVictory" }
+  /** effects resolved with an enemy chosen (or named) by `target` as the event's enemy (Anatomical Diagrams) */
+  | { op: "forEnemy"; target: EnemyTarget; filter?: CardFilter; effects: Effect[] }
+  /** a card matching the filter in your threat area discarded, you choose which (Logical Reasoning); `all`: every one (Cheat Death) */
+  | { op: "discardThreat"; filter: CardFilter; all?: boolean }
+  /**
+   * `amount` points shared out one at a time: a resource you gain, or a token of `usesType` on an asset controlled by an
+   * investigator at your location that has uses of that kind (Emergency Cache 3); `left` is internal
+   */
+  | { op: "distributeUses"; amount: number; usesType: string; left?: number }
+  /** in a damageAssigned window: points of the damage just assigned to the card cancelled (Armor of Ardennes) */
+  | { op: "cancelAssignedDamage"; amount: number }
+  /** in a wouldDiscoverClues window: more clues discovered (Newspaper 2: "an additional clue") */
+  | { op: "addClues"; amount: number }
+  /** your discard pile shuffled into your deck (Quantum Flux) */
+  | { op: "shuffleDiscardIntoDeck" }
   | { op: "script"; fn: string; args?: unknown };
 
 /** extra effects if any of the listed tokens was revealed during the test; `after`: once the test has ended (Rite of Seeking) */
@@ -1159,7 +1309,7 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
     z
       .object({
         op: z.literal("attachToLocation"),
-        where: z.enum(["yours", "mostClues", "mostInvestigators"]),
+        where: z.enum(["yours", "mostClues", "mostInvestigators", "any"]),
         limitOnePerLocation: z.boolean().optional(),
       })
       .strict(),
@@ -1174,6 +1324,7 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
         onSuccess: effectsArr().optional(),
         onFail: effectsArr().optional(),
         perPointFailed: effectsArr().optional(),
+        onTokens: OnTokens().optional(),
       })
       .strict(),
     z
@@ -1203,6 +1354,7 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
         baseSkill: z.number().optional(),
         noDamageToOthersOnFail: z.boolean().optional(),
         notEngagedWithYou: z.boolean().optional(),
+        retaliate: z.enum(["gain", "ignore"]).optional(),
       })
       .strict(),
     z
@@ -1210,7 +1362,7 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
         op: z.literal("investigate"),
         skill: Skill.optional(),
         bonus: Amount.optional(),
-        at: z.literal("connecting").optional(),
+        at: z.enum(["connecting", "anyRevealed"]).optional(),
         boost: Boost().optional(),
         shroud: z.number().optional(),
         insteadOfClues: effectsArr().optional(),
@@ -1235,6 +1387,9 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
         filter: CardFilter.optional(),
         onTokens: OnTokens().optional(),
         baseSkill: z.number().optional(),
+        noExhaust: z.boolean().optional(),
+        cannotEngageYou: z.boolean().optional(),
+        target: EnemyTarget.optional(),
       })
       .strict(),
     z
@@ -1243,7 +1398,9 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
         mod: Modifier,
         until: Duration,
         target: InvTarget.optional(),
-        on: z.literal("yourLocation").optional(),
+        on: z.enum(["yourLocation", "eventEnemy"]).optional(),
+        next: z.enum(["test", "play"]).optional(),
+        amount: Amount.optional(),
       })
       .strict(),
     z
@@ -1265,7 +1422,13 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
         target: InvTarget.optional(),
       })
       .strict(),
-    z.object({ op: z.literal("discardAsset"), orElse: effectsArr().optional() }).strict(),
+    z
+      .object({
+        op: z.literal("discardAsset"),
+        orElse: effectsArr().optional(),
+        filter: CardFilter.optional(),
+      })
+      .strict(),
     z.object({ op: z.literal("discardAllButOneFromHand") }).strict(),
     z
       .object({ op: z.literal("discardDeckTop"), amount: Amount, target: InvTarget.optional() })
@@ -1274,7 +1437,12 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
     z.object({ op: z.literal("removeDiscardFromGame") }).strict(),
     z.object({ op: z.literal("drawEncounterCard") }).strict(),
     z
-      .object({ op: z.literal("gainActions"), amount: z.number(), onlyFor: z.string().optional() })
+      .object({
+        op: z.literal("gainActions"),
+        amount: z.number(),
+        onlyFor: z.string().optional(),
+        oncePerTurn: z.literal(true).optional(),
+      })
       .strict(),
     z.object({ op: z.literal("cancel") }).strict(),
     z.object({ op: z.literal("disengageAll"), nonTrait: z.string().optional() }).strict(),
@@ -1289,6 +1457,7 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
           "central",
           "choose",
           "eventLocation",
+          "anyRevealed",
         ]),
         target: InvTarget.optional(),
       })
@@ -1307,7 +1476,12 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
       })
       .strict(),
     z
-      .object({ op: z.literal("lookAtTop"), amount: z.number(), anyDeck: z.boolean().optional() })
+      .object({
+        op: z.literal("lookAtTop"),
+        amount: z.number(),
+        anyDeck: z.boolean().optional(),
+        ifAmong: z.object({ filter: CardFilter, effects: effectsArr() }).strict().optional(),
+      })
       .strict(),
     z
       .object({
@@ -1316,6 +1490,7 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
         double: z.boolean().optional(),
         usesType: z.array(z.string()).optional(),
         filter: CardFilter,
+        yours: z.boolean().optional(),
       })
       .strict(),
     z.object({ op: z.literal("surge") }).strict(),
@@ -1400,7 +1575,14 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
         done: z.array(z.string()).optional(),
       })
       .strict(),
-    z.object({ op: z.literal("readyCard"), filter: CardFilter }).strict(),
+    z
+      .object({
+        op: z.literal("readyCard"),
+        filter: CardFilter,
+        atLocation: z.boolean().optional(),
+        onIt: effectsArr().optional(),
+      })
+      .strict(),
     z
       .object({
         op: z.literal("searchAndPlay"),
@@ -1552,7 +1734,38 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
     z.object({ op: z.literal("forceResult"), result: z.enum(["succeed", "fail"]) }).strict(),
     z.object({ op: z.literal("redirectDamage") }).strict(),
     z.object({ op: z.literal("defeatEnemy"), nonElite: z.boolean().optional() }).strict(),
-    z.object({ op: z.literal("returnCommittedSkill") }).strict(),
+    z
+      .object({
+        op: z.literal("returnCommittedSkill"),
+        anyOwner: z.boolean().optional(),
+        afterTest: z.boolean().optional(),
+        optional: z.boolean().optional(),
+      })
+      .strict(),
+    z.object({ op: z.literal("cardGainsIcons"), icons: Icons }).strict(),
+    z.object({ op: z.literal("toVictory") }).strict(),
+    z
+      .object({
+        op: z.literal("forEnemy"),
+        target: EnemyTarget,
+        filter: CardFilter.optional(),
+        effects: effectsArr(),
+      })
+      .strict(),
+    z
+      .object({ op: z.literal("discardThreat"), filter: CardFilter, all: z.boolean().optional() })
+      .strict(),
+    z.object({ op: z.literal("shuffleDiscardIntoDeck") }).strict(),
+    z
+      .object({
+        op: z.literal("distributeUses"),
+        amount: z.number(),
+        usesType: z.string(),
+        left: z.number().optional(),
+      })
+      .strict(),
+    z.object({ op: z.literal("cancelAssignedDamage"), amount: z.number() }).strict(),
+    z.object({ op: z.literal("addClues"), amount: z.number() }).strict(),
     z.object({ op: z.literal("script"), fn: z.string(), args: z.unknown().optional() }).strict(),
   ]),
 );
@@ -1662,6 +1875,14 @@ export const EFFECT_OPS = [
   "redirectDamage",
   "defeatEnemy",
   "returnCommittedSkill",
+  "cardGainsIcons",
+  "toVictory",
+  "forEnemy",
+  "discardThreat",
+  "shuffleDiscardIntoDeck",
+  "distributeUses",
+  "cancelAssignedDamage",
+  "addClues",
   "script",
 ] as const;
 
@@ -1762,6 +1983,20 @@ export const TRIGGERS = [
   "parleyed",
   /** after clues are placed on a card that isn't a location (`card`, `amount`): Echoes of the Past's agendas */
   "cluesPlaced",
+  /** after damage is placed on an investigator or on cards they control, by one assignment (`inv`): Mark Harrigan */
+  "damagePlaced",
+  /** after an investigator commits a card to a skill test (`inv`: who committed it, `card`): Minh Thi Phan */
+  "cardCommitted",
+  /** after an investigator is done committing to a skill test (`inv`, `amount`: how many they committed): Analytical Mind */
+  "cardsCommitted",
+  /** after damage is healed from an investigator (`inv`, `amount`): Sophie flips back */
+  "damageHealed",
+  /** an investigator would draw an encounter card in the mythos phase (`inv`, `key`: cancelling it cancels the draw): On the Hunt */
+  "wouldDrawEncounter",
+  /** damage was assigned to an asset, before it is placed (`card`, `amount`, `key`): Armor of Ardennes */
+  "damageAssigned",
+  /** an investigator finished resolving an action during their turn (`inv`): Time Warp */
+  "actionPerformed",
 ] as const;
 export const Trigger = z.enum(TRIGGERS);
 export type Trigger = z.infer<typeof Trigger>;
@@ -1795,6 +2030,8 @@ export const Ability = z
         per: z.enum(["test", EVENT.Turn, EVENT.Phase, "round", "game"]),
         count: z.number().default(1),
         group: z.boolean().optional(),
+        /** "Limit once for each investigator per round" (Minh Thi Phan): counted apart for the event's investigator */
+        eachInvestigator: z.boolean().optional(),
       })
       .optional(),
     condition: Condition.optional(),
@@ -1804,7 +2041,7 @@ export const Ability = z
     usableBy: z.enum(["controller", "atLocation", "anyone", "engaged"]).optional(),
     /** for elderSign kind: token modifier */
     tokenValue: z
-      .union([z.number(), z.enum(["cluesOnLocation", "horrorOnYou", "resources"])])
+      .union([z.number(), z.enum(["cluesOnLocation", "horrorOnYou", "damageOnYou", "resources"])])
       .optional(),
     /** for elderSign kind: effects that resolve when it is revealed, before the result (`effects` wait for a success) */
     onReveal: z.array(Effect).optional(),
@@ -2075,12 +2312,33 @@ export const CardDef = z
     /** may be committed after the chaos tokens are revealed, to a test you perform (Timely Intervention) */
     commitAfterReveal: z.boolean().optional(),
     /**
+     * as an additional cost to commit it, up to `max` resources ("Watch this!") or charges from among the assets you
+     * control (Torrent of Power) spent, one at a time; each one spent gives the card `icons` for the test
+     */
+    commitSpend: z
+      .object({ of: z.enum(["resources", "charges"]), max: z.number(), icons: Icons.optional() })
+      .strict()
+      .optional(),
+    /** committed, no chaos token comes from the bag: this token is revealed, and the card leaves the game once the test ends (Seal of the Elder Sign) */
+    sealsToken: ChaosToken.optional(),
+    /**
+     * in play at a scenario's end, for its owner: experience more if they were not defeated, killed if they were, whatever
+     * the resolution says (Charon's Obol)
+     */
+    scenarioEnd: z
+      .object({ xpIfNotDefeated: z.number(), killedIfDefeated: z.literal(true) })
+      .strict()
+      .optional(),
+    /**
      * may be assigned damage dealt to other investigators at its controller's location (Bodyguard); `damageAndHorror`:
      * horror too (Brother Xavier)
      */
     soaksForLocation: z.union([z.boolean(), z.literal("damageAndHorror")]).optional(),
-    /** an "X" cost the player chooses as they play it, up to their resources; `uses`: it enters play with X uses */
-    costX: z.literal("uses").optional(),
+    /**
+     * an "X" cost: `uses`, the player chooses X as they play it, up to their resources, and it enters play with X uses;
+     * `script`, its script works X out and pays it (A Chance Encounter 2: the chosen Ally's printed cost)
+     */
+    costX: z.enum(["uses", "script"]).optional(),
     abilities: z.array(Ability).default([]),
     /** card behavior implemented in content/**\/scripts/<code>.ts */
     script: z.boolean().optional(),

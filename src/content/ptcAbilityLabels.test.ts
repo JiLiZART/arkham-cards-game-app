@@ -1,6 +1,7 @@
 /**
  * Every ability of a Path to Carcosa encounter card that a player uses ([action], [fast] or a reaction, from the card's
- * data or its script) has its label in both locales, `ability.<code>.<index>` (campaign-the-path-to-carcosa task 11.1).
+ * data or its script) has its label in both locales, `ability.<code>.<index>` (campaign-the-path-to-carcosa task 11.1);
+ * so does each of Return to The Path to Carcosa's player cards, 52001–52013 (player-cards-ptc task 9.1).
  * Without one the option shows the engine's English label (`src/ui/game/optionText.ts`).
  */
 import { readFileSync } from "node:fs";
@@ -12,14 +13,19 @@ import ru from "../../content/i18n/ru/ui.json";
 
 const USED = new Set(["action", "fast", "reaction"]);
 const base = (code: string) => code.replace(/[a-z]$/, "");
-const bases = new Set(
+const codes = (pack: string) =>
   (
-    JSON.parse(readFileSync("content/packs/ptc/cards.generated.json", "utf8")) as { code: string }[]
-  ).map((c) => base(c.code)),
-);
+    JSON.parse(readFileSync(`content/packs/${pack}/cards.generated.json`, "utf8")) as {
+      code: string;
+    }[]
+  ).map((c) => c.code);
+const bases = new Set([
+  ...codes("ptc").map(base),
+  ...codes("return").filter((c) => c >= "52001" && c <= "52013"),
+]);
 
 beforeAll(async () => {
-  await loadPack("ptc");
+  await Promise.all([loadPack("ptc"), loadPack("return")]);
 });
 
 describe("The Path to Carcosa's ability labels", () => {

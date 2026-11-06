@@ -21,6 +21,7 @@ import {
   immuneTo,
   isElite,
   committedSkillsOf,
+  locations,
   matchesFilter,
 } from "../queries";
 import { win } from "../rules/cards";
@@ -33,6 +34,7 @@ import type { EffectOf, EffectRun } from "./types";
 import { EVENT } from "../events/event";
 import { CHOICE, ZONE } from "../world/constants";
 import { moveCard } from "../movement";
+import { gainedIcons, returnAfterTest } from "../world/flags";
 import { STEP } from "../steps/step";
 
 function skillTestEffect(game: GameContext, run: EffectRun<EffectOf<"skillTest">>) {
@@ -60,6 +62,7 @@ function skillTestEffect(game: GameContext, run: EffectRun<EffectOf<"skillTest">
     onSuccess: e.onSuccess,
     onFail: e.onFail,
     perPointFailed: e.perPointFailed,
+    onTokens: e.onTokens,
     ctx,
   });
   return;
@@ -101,6 +104,7 @@ function fightEffect(game: GameContext, run: EffectRun<EffectOf<"fight">>) {
     autoSucceed: e.auto,
     baseSkill: e.baseSkill,
     noDamageToOthersOnFail: e.noDamageToOthersOnFail,
+    ...(e.retaliate ? { retaliate: e.retaliate } : {}),
     ctx: fctx,
   });
   return;
@@ -136,8 +140,11 @@ function investigateEffect(game: GameContext, run: EffectRun<EffectOf<"investiga
     push(game, ...(pick === "stay" ? [] : [{ t: STEP.Move, inv: you, to: pick } as Step]), rest);
     return;
   }
-  if (e.at === "connecting") {
-    const cands = connections(game, loc).filter((l) => card(game, l).revealed);
+  if (e.at) {
+    // a revealed connecting location (Local Map), or any revealed one, as if you were there (In the Know)
+    const cands = (
+      e.at === "connecting" ? connections(game, loc) : locations(game).map((l) => l.id)
+    ).filter((l) => card(game, l).revealed);
     if (!cands.length) return;
     const pick = ask<InstId>(
       game,
@@ -177,12 +184,20 @@ function evadeEffect(game: GameContext, run: EffectRun<EffectOf<"evade">>) {
   const loc = inv(game, you).location;
   if (e.all || e.auto) {
     // evading automatically is the card's effect, not a test: an enemy immune to it stays
-    let ts = (e.all === "engaged" ? engagedWith(game, you) : enemiesAt(game, loc))
-      .filter((x) => evadable(game, x.id) && !immuneTo(game, x.id, ctx.source))
-      .filter((x) => !e.filter || matchesFilter(game, x.code, e.filter))
-      .map((x) => x.id)
-      .filter((id) => !e.nonElite || !isElite(game, id));
-    if (!e.all) {
+    const fits = (id: InstId) =>
+      evadable(game, id) &&
+      !immuneTo(game, id, ctx.source) &&
+      (!e.filter || matchesFilter(game, card(game, id).code, e.filter)) &&
+      (!e.nonElite || !isElite(game, id));
+    // a named enemy: an engaged one you choose, or the event's (Archaic Glyphs, Cheap Shot)
+    const named = e.target && !e.all ? enemyTargets(game, step, e.target, ctx, fits) : null;
+    if (named === undefined) return;
+    let ts =
+      named ??
+      (e.all === "engaged" ? engagedWith(game, you) : enemiesAt(game, loc))
+        .map((x) => x.id)
+        .filter(fits);
+    if (!e.all && !named) {
       if (!ts.length) return;
       const pick = ask<InstId>(
         game,
@@ -237,6 +252,8 @@ function evadeEffect(game: GameContext, run: EffectRun<EffectOf<"evade">>) {
     onSuccess: untouched ? undefined : e.onSuccess,
     onFail: e.onFail,
     onTokens: e.onTokens,
+    ...(e.noExhaust ? { evadeNoExhaust: true } : {}),
+    ...(e.cannotEngageYou ? { noEngageAfterEvade: true } : {}),
     ctx: { ...ctx, enemy: pick },
   });
   return;
@@ -246,25 +263,28 @@ function modifyEffect(game: GameContext, run: EffectRun<EffectOf<"modify">>) {
   const { step, ctx, you } = run;
   const e = run.effect;
 
-  if (e.on === "yourLocation") {
-    const loc = inv(game, you).location;
-    if (loc) addTempMod(game, { ...e.mod, scope: undefined }, loc, e.until, ctx.source ?? null);
+  // a value worked out as it resolves (Fight or Flight: the horror on you)
+  const mod = e.amount === undefined ? e.mod : { ...e.mod, value: amt(game, e.amount, ctx) };
+  if (e.on === "yourLocation" || e.on === "eventEnemy") {
+    const on = e.on === "yourLocation" ? inv(game, you).location : ctx.enemy;
+    if (on && (e.on === "yourLocation" || card(game, on).zone === ZONE.Enemy))
+      addTempMod(game, { ...mod, scope: undefined }, on, e.until, ctx.source ?? null);
     return;
   }
   const tester = currentTest(game)?.inv;
   const target = e.until === "test" && tester ? tester : invTargets(game, step, e.target, ctx)?.[0];
   if (!target) return;
-  addTempMod(game, e.mod, target, e.until, ctx.source ?? null);
+  addTempMod(game, mod, target, e.until, ctx.source ?? null, false, e.next);
   // the feed words it from data (mod.stat.* / mod.flag.*); the text is the log's plain English
-  const what = (e.mod.stat ?? e.mod.flag ?? "").replace(/[A-Z]/g, (c) => ` ${c.toLowerCase()}`);
-  const by = e.mod.value !== undefined ? ` ${e.mod.value >= 0 ? "+" : ""}${e.mod.value}` : "";
+  const what = (mod.stat ?? mod.flag ?? "").replace(/[A-Z]/g, (c) => ` ${c.toLowerCase()}`);
+  const by = mod.value !== undefined ? ` ${mod.value >= 0 ? "+" : ""}${mod.value}` : "";
   emit(
     game,
     EVENT.Modify,
     `${invName(game, target)} gets ${what}${by} until the end of the ${e.until}`,
     {
       inv: target,
-      data: { stat: e.mod.stat, flag: e.mod.flag, value: e.mod.value, until: e.until },
+      data: { stat: mod.stat, flag: mod.flag, value: mod.value, until: e.until },
     },
   );
   return;
@@ -299,19 +319,51 @@ function returnCommittedSkillEffect(
   game: GameContext,
   run: EffectRun<EffectOf<"returnCommittedSkill">>,
 ) {
-  const mine = committedSkillsOf(game, run.you);
+  const e = run.effect;
+  const t = currentTest(game);
+  // any skill card committed, to its owner's hand (Minh Thi Phan's elder sign), or one you own
+  const mine = e.anyOwner
+    ? (t?.committed ?? []).filter(
+        (c) =>
+          card(game, c).zone === ZONE.Commit &&
+          !!card(game, c).owner &&
+          def(game, c).type === "skill",
+      )
+    : committedSkillsOf(game, run.you);
   if (!mine.length) return;
-  const pick = ask<InstId>(
+  const pick = ask<InstId | "none">(
     game,
     run.step,
     run.you,
     CHOICE.Target,
     "Choose a skill card to return to your hand",
-    mine.map((id) => opt(game, id)),
-    { auto: true, key: "returnCommittedSkill" },
+    [
+      ...mine.map((id) => opt(game, id)),
+      ...(e.optional
+        ? [{ id: "none", label: "Return none", value: "none" as const, key: "option.returnNone" }]
+        : []),
+    ],
+    { auto: !e.optional, key: "returnCommittedSkill" },
   );
-  if (pick === undefined) return;
-  moveCard(game, pick, ZONE.Hand);
+  if (pick === undefined || pick === "none") return;
+  // once the test ends, not now: its icons still count (Minh Thi Phan)
+  if (e.afterTest) returnAfterTest.set(game, pick, true);
+  else moveCard(game, pick, ZONE.Hand);
+}
+
+/** the event's card (a card just committed) gains icons until the end of the test (Minh Thi Phan) */
+function cardGainsIconsEffect(game: GameContext, run: EffectRun<EffectOf<"cardGainsIcons">>) {
+  const c = run.ctx.card;
+  if (!c || card(game, c).zone !== ZONE.Commit) return;
+  const had = gainedIcons.get(game, c) ?? {};
+  const icons = { ...had };
+  for (const [k, n] of Object.entries(run.effect.icons) as [keyof typeof icons, number][])
+    icons[k] = (icons[k] ?? 0) + n;
+  gainedIcons.set(game, c, icons);
+  emit(game, EVENT.Modify, `${def(game, c).name} gains icons until the end of the test`, {
+    card: c,
+    inv: run.you,
+  });
 }
 
 /** the test under way succeeds or fails whatever its total */
@@ -320,6 +372,7 @@ function forceResultEffect(game: GameContext, run: EffectRun<EffectOf<"forceResu
 }
 
 export const testsEffects = {
+  cardGainsIcons: cardGainsIconsEffect,
   forceResult: forceResultEffect,
   redirectDamage: redirectDamageEffect,
   returnCommittedSkill: returnCommittedSkillEffect,
