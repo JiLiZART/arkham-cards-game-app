@@ -4,14 +4,14 @@
 
 What the tests rewrite for themselves (counted in `src/engine/**/__tests__`):
 
-| Pattern                                              | Count                          |
-| ---------------------------------------------------- | ------------------------------ |
-| `chaosBag: [...] as never`                           | 39 in 15 files (+1 in natkit)  |
-| lines looping on `pending.kind !== "turn"`           | 29                             |
-| local `toTurn` / `finish` / `until`                  | 7 files                        |
-| local `fresh` / `gameOf` / `offered`                 | 12 files                       |
-| `pending.step` read (to find a reaction window)      | 12 lines in 4 files            |
-| `queue` or `skillTest` read or written               | 46 lines in 16 files           |
+| Pattern                                         | Count                         |
+| ----------------------------------------------- | ----------------------------- |
+| `chaosBag: [...] as never`                      | 39 in 15 files (+1 in natkit) |
+| lines looping on `pending.kind !== "turn"`      | 29                            |
+| local `toTurn` / `finish` / `until`             | 7 files                       |
+| local `fresh` / `gameOf` / `offered`            | 12 files                      |
+| `pending.step` read (to find a reaction window) | 12 lines in 4 files           |
+| `queue` or `skillTest` read or written          | 46 lines in 16 files          |
 
 The `as never` is there because `GameSetup.chaosBag` is `ChaosToken[]` (a zod enum) and a bag built outside the call is a `string[]`. The reaction-window lookups exist because a pending prompt carries its trigger only on `pending.step` (`{ t: "Window", trigger }`). `testSetters.test.ts` reads `game.s.skillTest` where `currentTest(game)` would do; `scriptGuards.test.ts` builds `Script` steps by hand and reads `queue.at(-1)` because it calls script functions without a game loop.
 

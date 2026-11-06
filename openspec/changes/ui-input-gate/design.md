@@ -2,18 +2,18 @@
 
 The engine sets `state.pending` and the store plays the animated events of each dispatch through `current` and `queue` (ADR-0002). Viewing is view state, deciding is game state (ADR-0004): `useView` holds `viewing`, `mySeats`, `intro`, `showcase` (drawn cards waiting) and `stage` (who holds the middle of the screen, as string claims such as `test:<id>`, `pause:<seq>`, `title:<key>`, `showcase`). Whether the player may answer the choice is computed in each surface from a subset of these, and again in `choose()`:
 
-| Where | busy | offered (`choicesOffered`) | intro | showcase | stage | seat |
-| --- | --- | --- | --- | --- | --- | --- |
-| `choose()` (`store.ts:666`) | yes | no | yes | yes | no | online only |
-| `useOptionsByCard` (map, strip, player bar, test screen, assets modal) | yes | yes | no | no | no | via offered |
-| `useCardOptions` (`Modals.tsx`, phone drawers) | yes | yes | no | no | no | via offered |
-| `useHand` (`HandFan.tsx`) | yes | yes | no | no | no | via offered |
-| `InstructionBar` | yes, plus caption, held, `kind === "phase"` | via `barAsk` | no | no | via caption | via `barAsk` |
-| `ActionRail` | dims only | yes | no | no | no | via offered |
-| `Showcase` deck pick | yes | no | yes | yes (its own) | its own claim | no |
-| `MulliganRow` | yes | no | no | no | no | no |
-| `InvestigatorChoiceOverlay` | yes | yes | yes | yes | `test:`/`pause:` only | via offered |
-| `PileColumn` decks | no | yes | no | no | no | via offered |
+| Where                                                                  | busy                                        | offered (`choicesOffered`) | intro | showcase      | stage                 | seat         |
+| ---------------------------------------------------------------------- | ------------------------------------------- | -------------------------- | ----- | ------------- | --------------------- | ------------ |
+| `choose()` (`store.ts:666`)                                            | yes                                         | no                         | yes   | yes           | no                    | online only  |
+| `useOptionsByCard` (map, strip, player bar, test screen, assets modal) | yes                                         | yes                        | no    | no            | no                    | via offered  |
+| `useCardOptions` (`Modals.tsx`, phone drawers)                         | yes                                         | yes                        | no    | no            | no                    | via offered  |
+| `useHand` (`HandFan.tsx`)                                              | yes                                         | yes                        | no    | no            | no                    | via offered  |
+| `InstructionBar`                                                       | yes, plus caption, held, `kind === "phase"` | via `barAsk`               | no    | no            | via caption           | via `barAsk` |
+| `ActionRail`                                                           | dims only                                   | yes                        | no    | no            | no                    | via offered  |
+| `Showcase` deck pick                                                   | yes                                         | no                         | yes   | yes (its own) | its own claim         | no           |
+| `MulliganRow`                                                          | yes                                         | no                         | no    | no            | no                    | no           |
+| `InvestigatorChoiceOverlay`                                            | yes                                         | yes                        | yes   | yes           | `test:`/`pause:` only | via offered  |
+| `PileColumn` decks                                                     | no                                          | yes                        | no    | no            | no                    | via offered  |
 
 Every row that says "no" where `choose` says "yes" is a lit card or button whose click is dropped; every row that says "yes" where `choose` says "no" is a click `choose` would take that no surface offers.
 
@@ -82,16 +82,23 @@ After:
 ### 2. The verdict
 
 ```ts
-type GateReason = "noChoice" | "animating" | "intro" | "showcase" | "middle" | "notYourSeat" | "notShown";
+type GateReason =
+  | "noChoice"
+  | "animating"
+  | "intro"
+  | "showcase"
+  | "middle"
+  | "notYourSeat"
+  | "notShown";
 type Gate = { open: true } | { open: false; why: GateReason };
 interface GateInput {
   pending: PendingChoice | null;
-  playing: boolean;            // current !== null || queue.length > 0
+  playing: boolean; // current !== null || queue.length > 0
   intro: boolean;
-  showcase: number;            // drawn cards waiting
-  stage: readonly string[];    // claims holding the middle
-  looking: Looking;            // viewing, mySeats
-  game: GameState;             // for shownInv / viewerOf
+  showcase: number; // drawn cards waiting
+  stage: readonly string[]; // claims holding the middle
+  looking: Looking; // viewing, mySeats
+  game: GameState; // for shownInv / viewerOf
 }
 ```
 

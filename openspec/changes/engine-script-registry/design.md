@@ -4,14 +4,14 @@
 
 Today's lookups, by kind:
 
-| Kind | Sites |
-| --- | --- |
-| `fns` (card, else scenario) | `steps/dispatch.ts:90` (`??`), `effects/choices.ts:73` (picks the code at push time), `rules/skillTest.ts:476` (card only), `index.ts:184` (scenario only) |
-| `conditions` (card, else scenario) | `queries.ts:502` |
-| scenario hooks | `rules/scenario.ts:277,285,296` (`checkObjectives`, `ended`, `allEliminated`), `rules/enemies.ts:98` (`spawnRedirect`) |
-| card hooks | `rules/scenario.ts:289` and `rules/investigators.ts:383` (`gameEnd`), `rules/cards.ts:660` (`eventFinished`), `effects/damage.ts:36` (`healHorror`), `effects/search.ts:28` (`searched`, presence only), `index.ts:267` (investigator `setup`) |
-| members | `queries.ts:209,225,242` (`blanks`, `abilities`, `modifiers`), `rules/skillTest.ts:172` (`icons`), `rules/cards.ts:279` (`extraPlayable`), `rules/round.ts:199` (`extraActionCost`), `rules/scenario.ts:132` (`wouldPlaceDoom`) |
-| outside the rules | `replays/corpus.ts:41` (member names as strings), `src/content/loader.ts:320` (card, else any scenario), `src/ui/hud/ActionRail/ActionRail.tsx:122` (`abilities`) |
+| Kind                               | Sites                                                                                                                                                                                                                                          |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fns` (card, else scenario)        | `steps/dispatch.ts:90` (`??`), `effects/choices.ts:73` (picks the code at push time), `rules/skillTest.ts:476` (card only), `index.ts:184` (scenario only)                                                                                     |
+| `conditions` (card, else scenario) | `queries.ts:502`                                                                                                                                                                                                                               |
+| scenario hooks                     | `rules/scenario.ts:277,285,296` (`checkObjectives`, `ended`, `allEliminated`), `rules/enemies.ts:98` (`spawnRedirect`)                                                                                                                         |
+| card hooks                         | `rules/scenario.ts:289` and `rules/investigators.ts:383` (`gameEnd`), `rules/cards.ts:660` (`eventFinished`), `effects/damage.ts:36` (`healHorror`), `effects/search.ts:28` (`searched`, presence only), `index.ts:267` (investigator `setup`) |
+| members                            | `queries.ts:209,225,242` (`blanks`, `abilities`, `modifiers`), `rules/skillTest.ts:172` (`icons`), `rules/cards.ts:279` (`extraPlayable`), `rules/round.ts:199` (`extraActionCost`), `rules/scenario.ts:132` (`wouldPlaceDoom`)                |
+| outside the rules                  | `replays/corpus.ts:41` (member names as strings), `src/content/loader.ts:320` (card, else any scenario), `src/ui/hud/ActionRail/ActionRail.tsx:122` (`abilities`)                                                                              |
 
 The two `gameEnd` sites are not duplicates: one fires for every card in play, threat area or hand at the scenario's resolution, the other for an eliminated investigator's weaknesses before they leave the game. They share the hook and the ctx shape. Constraints: ADR-0021 to ADR-0026 in force; only `world/`, the core files, `index.ts`, `steps/dispatch.ts` and `rules/skillTest.ts` read `game.s` (ADR-0022, `openspec/specs/game-engine/spec.md`); the layer test (ADR-0025) ranks `world/` 0, `context` 1, `queries` 2, `rules/` 3, `effects/` 4, `steps/dispatch` 5, `index` 6.
 
@@ -82,14 +82,18 @@ flowchart LR
 ### 3. Typed hooks
 
 ```ts
-interface HookRun { readonly you: InvId; readonly source: InstId; readonly ctx: EffCtx }
+interface HookRun {
+  readonly you: InvId;
+  readonly source: InstId;
+  readonly ctx: EffCtx;
+}
 interface ScriptHooks {
-  setup(game, run: HookRun): void;                       // investigator: before the deck is shuffled
-  checkObjectives(game): void;                           // scenario
-  ended(game, won: boolean): void;                       // scenario, after endScenario; today { x: 0 | 1 }
-  allEliminated(game): void;                             // scenario; default: resolution "none"
-  spawnRedirect(game, enemy: InstId): InstId | null;     // scenario; today sets ctx.location
-  gameEnd(game, run: HookRun): void;                     // card
+  setup(game, run: HookRun): void; // investigator: before the deck is shuffled
+  checkObjectives(game): void; // scenario
+  ended(game, won: boolean): void; // scenario, after endScenario; today { x: 0 | 1 }
+  allEliminated(game): void; // scenario; default: resolution "none"
+  spawnRedirect(game, enemy: InstId): InstId | null; // scenario; today sets ctx.location
+  gameEnd(game, run: HookRun): void; // card
   eventFinished(game, run: HookRun, event: InstId): void; // card
   healHorror(game, run: HookRun, target: InstId, n: number): number; // card; today lowers req.n
 }

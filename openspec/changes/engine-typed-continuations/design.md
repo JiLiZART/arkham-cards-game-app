@@ -4,20 +4,20 @@ The resolution stack (`steps/dispatch.ts`) pops a step and calls the one handler
 
 Who pushes what (measured):
 
-| Function            | Owner           | Pushed from                                    |
-| ------------------- | --------------- | ---------------------------------------------- |
-| finishEvent         | cards           | cards                                          |
-| assetDefeatCheck    | investigators   | investigators, cards; scripts 12129, 12137, 12155 |
-| removeDefeatedAsset | investigators   | investigators                                  |
-| revealLocation      | investigators   | investigators; scripts 01108, 01109, queen-of-ash |
-| checkEngagement     | investigators   | investigators, round                           |
-| chooseLead          | investigators   | investigators                                  |
-| allEliminated       | scenario        | investigators                                  |
-| finishRevelation, nextAgenda, nextAct | scenario | scenario                          |
-| exhaustEnemy        | enemies         | enemies                                        |
-| elusive             | enemies         | enemies, skillTest                             |
-| investigate, basicFight, basicEvade, endTurnCleanup, readyAll, roundCleanup | round | round (roundCleanup also `index.ts`); basicFight also script 12001 |
-| gainResource        | (inline lambda) | round                                          |
+| Function                                                                    | Owner           | Pushed from                                                        |
+| --------------------------------------------------------------------------- | --------------- | ------------------------------------------------------------------ |
+| finishEvent                                                                 | cards           | cards                                                              |
+| assetDefeatCheck                                                            | investigators   | investigators, cards; scripts 12129, 12137, 12155                  |
+| removeDefeatedAsset                                                         | investigators   | investigators                                                      |
+| revealLocation                                                              | investigators   | investigators; scripts 01108, 01109, queen-of-ash                  |
+| checkEngagement                                                             | investigators   | investigators, round                                               |
+| chooseLead                                                                  | investigators   | investigators                                                      |
+| allEliminated                                                               | scenario        | investigators                                                      |
+| finishRevelation, nextAgenda, nextAct                                       | scenario        | scenario                                                           |
+| exhaustEnemy                                                                | enemies         | enemies                                                            |
+| elusive                                                                     | enemies         | enemies, skillTest                                                 |
+| investigate, basicFight, basicEvade, endTurnCleanup, readyAll, roundCleanup | round           | round (roundCleanup also `index.ts`); basicFight also script 12001 |
+| gainResource                                                                | (inline lambda) | round                                                              |
 
 So the review's reading ("modules that can't import a sibling without a ring post a string step") holds for one case only: `cards` queuing `assetDefeatCheck` (`investigators` imports `cards`, so the reverse import would be a ring). 22 of the 23 engine pushes queue the pusher's own function, or one it already may import: the reason is deferral (run after the windows and steps queued around it), not a ring. Rules modules already defer to each other through step kinds (`cards` queues `STEP.DiscardIfEmpty`, `round` queues `STEP.Move`), since the `Step` union sits in `world/types.ts`, below every rules module.
 

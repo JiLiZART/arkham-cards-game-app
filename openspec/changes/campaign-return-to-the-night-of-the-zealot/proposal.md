@@ -50,9 +50,9 @@ None.
 
 - **Each base campaign offers its Return-to replacement sets as an option at campaign creation**, with the `CampaignDef.options` / `replaceSets` shape from `scenario-import-fixes` (its design decision 11 and campaign-play requirement "Campaign options chosen at creation"). Night of the Zealot's `campaign.json` gets `rtnotz-replacement-sets`. The bookmark (`inspired/AHC_CYOA-main/Return To Bookmarks/Return To Bookmarks - For Reading.pdf`) prints the pairs backwards ("Ghouls replaces Ghouls of Umôrdhoth"); per the setup cards and ArkhamCards the new sets replace the old:
 
-  | Replacement set | Replaces |
-  | --- | --- |
-  | Ghouls of Umôrdhoth | Ghouls |
+  | Replacement set     | Replaces  |
+  | ------------------- | --------- |
+  | Ghouls of Umôrdhoth | Ghouls    |
   | The Devourer's Cult | Dark Cult |
 
   Return to the Night of the Zealot always uses the replacement sets; `return_cult` joins the cultist deck without replacing anything.

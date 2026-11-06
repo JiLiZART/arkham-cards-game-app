@@ -42,12 +42,12 @@ None.
 
 - **The base campaign offers the replacement sets as a single option**, chosen at creation, off by default, through `CampaignDef.options` with `replaceSets` and `addSets` (`scenario-import-fixes`), not redefined here. The bookmark (`inspired/AHC_CYOA-main/Return To Bookmarks/Return To Bookmarks - For Reading.pdf`) lists the swaps:
 
-  | Replacement set | Replaces |
-  | --- | --- |
-  | Cult of Pnakotus | Dark Cult |
-  | Doomed Expedition | Expedition |
-  | Temporal Hunters | Temporal Flux |
-  | Venomous Hate | Yig's Venom |
+  | Replacement set   | Replaces      |
+  | ----------------- | ------------- |
+  | Cult of Pnakotus  | Dark Cult     |
+  | Doomed Expedition | Expedition    |
+  | Temporal Hunters  | Temporal Flux |
+  | Venomous Hate     | Yig's Venom   |
 
   The bookmark's variant of shuffling the old and new sets together is rejected and not offered.
 

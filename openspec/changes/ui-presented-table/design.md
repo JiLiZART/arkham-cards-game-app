@@ -7,15 +7,15 @@
 
 Readers today:
 
-| Surface | Reads | Holds enemy moves | Hides waiting cards |
-| --- | --- | --- | --- |
-| Map (`Table.tsx` `Scene`, arrivals) | `heldGame`, `heldCards` | yes | yes (arrival hold) |
-| Play strip (`PlayStrip.tsx`) | `heldGame`, `heldCards` | yes | yes (filtered) |
-| Investigators' modal (`Investigators.tsx`) | raw `game` | no | no |
-| Phone strip modal (`AssetsModal.tsx`) | raw `game` | no | no |
-| Encounter discard (`PileColumn.tsx`) | raw `game` | n/a | no |
-| Counters (`Stats.tsx`, `TokenBadges.tsx`, `ScenarioPanel.tsx`, map tokens) | raw `game` | n/a | n/a |
-| Options, bar, skill-test screen, showcase, hand, feed | raw `game` (plus their own clocks) | n/a | n/a |
+| Surface                                                                    | Reads                              | Holds enemy moves | Hides waiting cards |
+| -------------------------------------------------------------------------- | ---------------------------------- | ----------------- | ------------------- |
+| Map (`Table.tsx` `Scene`, arrivals)                                        | `heldGame`, `heldCards`            | yes               | yes (arrival hold)  |
+| Play strip (`PlayStrip.tsx`)                                               | `heldGame`, `heldCards`            | yes               | yes (filtered)      |
+| Investigators' modal (`Investigators.tsx`)                                 | raw `game`                         | no                | no                  |
+| Phone strip modal (`AssetsModal.tsx`)                                      | raw `game`                         | no                | no                  |
+| Encounter discard (`PileColumn.tsx`)                                       | raw `game`                         | n/a               | no                  |
+| Counters (`Stats.tsx`, `TokenBadges.tsx`, `ScenarioPanel.tsx`, map tokens) | raw `game`                         | n/a               | n/a                 |
+| Options, bar, skill-test screen, showcase, hand, feed                      | raw `game` (plus their own clocks) | n/a               | n/a                 |
 
 The first five rows draw where cards are; the counters show numbers whose events carry only deltas (`EVENT.Damage` has `{ damage, horror }`, `EVENT.Doom` `n`); the last row answers the choice, which the input gate keeps closed while events play.
 

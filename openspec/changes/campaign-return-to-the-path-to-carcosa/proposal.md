@@ -41,12 +41,12 @@ None.
 
 - **The base campaign offers the replacement sets as an option.** The bookmark (`inspired/AHC_CYOA-main/Return To Bookmarks/Return To Bookmarks - For Reading.pdf`, p.3) lists the swaps:
 
-  | Replacement set | Replaces |
-  | --- | --- |
-  | Delusory Evils | Ancient Evils |
-  | Neurotic Fear | Striking Fear |
-  | Hastur's Envoys | Agents of Hastur |
-  | Decaying Reality | Decay and Filth |
-  | Maddening Delusions | Delusions |
+  | Replacement set     | Replaces         |
+  | ------------------- | ---------------- |
+  | Delusory Evils      | Ancient Evils    |
+  | Neurotic Fear       | Striking Fear    |
+  | Hastur's Envoys     | Agents of Hastur |
+  | Decaying Reality    | Decay and Filth  |
+  | Maddening Delusions | Delusions        |
 
   The option is chosen at campaign creation, defaults to off, and can't be changed during the campaign. Return to The Path to Carcosa always uses the replacement sets.

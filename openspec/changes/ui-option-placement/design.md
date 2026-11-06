@@ -2,13 +2,13 @@
 
 After `ui-input-gate`, one function says whether the pending choice can be answered. Which surface offers which option is still spread over five mechanisms:
 
-| Mechanism | Where | Read by |
-| --- | --- | --- |
-| `optionHome` / `onRail` / `inBar` / `optionOwner` | `src/ui/game/optionHome.ts` | `ActionRail.tsx` (rail, bar), `Investigators.tsx` (invModal), `optionHome.test.ts` |
-| `useOptionsByCard` / `useCardClick` | `src/ui/game/cardClick.ts` | `Table.tsx`, `PlayStrip.tsx`, `ScenarioPanel.tsx`, `HoverCard.tsx`, `PlayerBar.tsx`, `SkillTestScreen.tsx`, `AssetsModal.tsx` |
-| `useCardOptions(ids)` | `Modals.tsx:68` | card modal, `CardOptions.tsx`, `Stats.tsx`, `Investigators.tsx`, `Hud.tsx` (`PhoneDrawers`) |
-| hand-written `options.filter/find(o => o.card === id)` | `HandFan.tsx:80`, `Showcase.tsx:90`, `:119` | the hand, the showcase pick |
-| `investigatorOptions`, `deckOptions` | `src/ui/state/players.ts` | `PlayerBar.tsx`, `Stats.tsx` (via `abilityOptionsOf`), `PileColumn.tsx`, `Hud.tsx` |
+| Mechanism                                              | Where                                       | Read by                                                                                                                       |
+| ------------------------------------------------------ | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `optionHome` / `onRail` / `inBar` / `optionOwner`      | `src/ui/game/optionHome.ts`                 | `ActionRail.tsx` (rail, bar), `Investigators.tsx` (invModal), `optionHome.test.ts`                                            |
+| `useOptionsByCard` / `useCardClick`                    | `src/ui/game/cardClick.ts`                  | `Table.tsx`, `PlayStrip.tsx`, `ScenarioPanel.tsx`, `HoverCard.tsx`, `PlayerBar.tsx`, `SkillTestScreen.tsx`, `AssetsModal.tsx` |
+| `useCardOptions(ids)`                                  | `Modals.tsx:68`                             | card modal, `CardOptions.tsx`, `Stats.tsx`, `Investigators.tsx`, `Hud.tsx` (`PhoneDrawers`)                                   |
+| hand-written `options.filter/find(o => o.card === id)` | `HandFan.tsx:80`, `Showcase.tsx:90`, `:119` | the hand, the showcase pick                                                                                                   |
+| `investigatorOptions`, `deckOptions`                   | `src/ui/state/players.ts`                   | `PlayerBar.tsx`, `Stats.tsx` (via `abilityOptionsOf`), `PileColumn.tsx`, `Hud.tsx`                                            |
 
 `optionHome` is what the reachability test checks; the by-card maps are what the screen shows. They agree because a card sits in one zone, not because one decides for the other. The rail's kinds and the deck's Draw read `(o.value as { kind?: string }).kind`; the engine types turn options as `TurnAction`.
 
@@ -74,9 +74,24 @@ After:
 ### 2. The shape
 
 ```ts
-type OptionHome = "hand" | "board" | "strip" | "avatar" | "sheet" | "invModal" | "rail" | "bar"
-  | "deck" | "skilltest" | "mulligan" | "phase" | "showcase";
-interface Slice { options: ChoiceOption[]; byCard: Map<InstId, ChoiceOption[]> }
+type OptionHome =
+  | "hand"
+  | "board"
+  | "strip"
+  | "avatar"
+  | "sheet"
+  | "invModal"
+  | "rail"
+  | "bar"
+  | "deck"
+  | "skilltest"
+  | "mulligan"
+  | "phase"
+  | "showcase";
+interface Slice {
+  options: ChoiceOption[];
+  byCard: Map<InstId, ChoiceOption[]>;
+}
 type Placement = Record<OptionHome, Slice>;
 function placeOptions(game: GameState, looking: Looking, mode: LayoutMode): Placement;
 ```

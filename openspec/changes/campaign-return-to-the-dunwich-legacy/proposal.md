@@ -43,13 +43,13 @@ None.
 
 - **The base campaign offers the replacement sets as an option.** The bookmark (`inspired/AHC_CYOA-main/Return To Bookmarks/Return To Bookmarks - For Reading.pdf`) lists the swaps:
 
-  | Replacement set | Replaces |
-  | --- | --- |
-  | Beyond the Threshold | The Beyond |
-  | Resurgent Evils | Ancient Evils |
-  | Erratic Fear | Striking Fear |
-  | Creeping Cold | Chilling Cold |
-  | Secret Doors | Locked Doors |
+  | Replacement set          | Replaces              |
+  | ------------------------ | --------------------- |
+  | Beyond the Threshold     | The Beyond            |
+  | Resurgent Evils          | Ancient Evils         |
+  | Erratic Fear             | Striking Fear         |
+  | Creeping Cold            | Chilling Cold         |
+  | Secret Doors             | Locked Doors          |
   | Yog-Sothoth's Emissaries | Agents of Yog-Sothoth |
 
   The option is chosen at campaign creation, defaults to off, and can't be changed during the campaign. Return to The Dunwich Legacy always uses the replacement sets.

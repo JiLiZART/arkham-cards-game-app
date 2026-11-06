@@ -79,10 +79,10 @@ flowchart LR
 
 ```ts
 interface ScriptRun {
-  readonly you: InvId;        // ctx.you ?? lead
-  readonly source: InstId;    // throws MissingSource(code.fn) when ctx.source is unset
-  readonly step: Step;        // the Script step, or a synthetic Script step for the token and setup callers
-  readonly ctx: EffCtx;       // enemy, location, card, key, x, token, ...
+  readonly you: InvId; // ctx.you ?? lead
+  readonly source: InstId; // throws MissingSource(code.fn) when ctx.source is unset
+  readonly step: Step; // the Script step, or a synthetic Script step for the token and setup callers
+  readonly ctx: EffCtx; // enemy, location, card, key, x, token, ...
   readonly args: unknown;
   chooseCard(ids, prompt, opts?): InstId;
   chooseInvestigator(invs, prompt, opts?): InvId;
