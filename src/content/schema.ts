@@ -82,8 +82,8 @@ export const Placement: z.ZodType<Placement> = z.union([
 /** a number, or something computed from the effect context */
 export const Amount = z.union([
   z.number(),
-  /** `enemiesEngaged`: the enemies engaged with you (Trench Knife) */
-  z.enum(["failBy", "succeedBy", "all", "X", "enemiesEngaged"]),
+  /** `enemiesEngaged`: the enemies engaged with you (Trench Knife); `yourShroud`: your location's shroud (Bleeding Walls) */
+  z.enum(["failBy", "succeedBy", "all", "X", "enemiesEngaged", "yourShroud"]),
   z.object({ perInvestigator: z.number() }),
   /** the tokens on the source card itself */
   z.object({ onSelf: z.enum([EVENT.Damage, "horror", EVENT.Clues, "resources", EVENT.Doom]) }),
@@ -237,6 +237,8 @@ export type ModStat = z.infer<typeof ModStat>;
 export const ModFlag = z.enum([
   "cannotPlayAssetsOrEvents",
   "cannotBeInvestigated",
+  /** a card investigators cannot parley with (Party Guest: "the [[Bystander]] assets at its location") */
+  "cannotBeParleyed",
   "cannotDiscoverClues",
   "cannotSpendClues",
   "cannotMoveInto",
@@ -336,6 +338,11 @@ export const ModFlag = z.enum([
   "cardsCannotLeaveDiscard",
   /** the engage actions the investigator performs provoke no attack of opportunity (Trench Knife) */
   "engageNoAoO",
+  /** on an enemy: nothing exhausts it, its attacks and evasion included (The Throne Room: Hastur) */
+  "cannotBeExhausted",
+  /** on a location: each investigator there is as if at a copy of their own: no one commits to another's test there
+   * (Recesses of Your Own Mind) */
+  "separateCopies",
 ]);
 export type ModFlag = z.infer<typeof ModFlag>;
 
@@ -377,6 +384,8 @@ export const Prey = z.union([
       /** the horror on the investigator (Spawn of Hali: "Prey - Most horror") */
       "horror",
     ]),
+    /** "Prey - … only": among every investigator in play, and never another (Preying Byakhee) */
+    only: z.literal(true).optional(),
   }),
   z.object({
     lowest: z.enum([
@@ -389,6 +398,7 @@ export const Prey = z.union([
       "remainingSanity",
       "cardsInHand",
     ]),
+    only: z.literal(true).optional(),
   }),
   z.literal("bearer"),
   /** only this investigator (by card code) is prey: Tommy Malloy */
@@ -443,6 +453,21 @@ export const Cost = z
 export type Cost = z.infer<typeof Cost>;
 
 // ---------- conditions ----------
+/** the kinds of action an investigator's turn records (an ability's or event's designator, else what the action is) */
+export const ActionKind = z.enum([
+  "play",
+  "resource",
+  "move",
+  "draw",
+  "investigate",
+  "fight",
+  "evade",
+  "engage",
+  "parley",
+  "resign",
+]);
+export type ActionKind = z.infer<typeof ActionKind>;
+
 export type Condition =
   | { all: Condition[] }
   | { any: Condition[] }
@@ -549,6 +574,15 @@ export type Condition =
   | { anyTurn: true }
   /** this card entered play during the current turn (Lupara) */
   | { enteredPlayThisTurn: true }
+  /** the location this card is at has clues or none (Maggot Swarm: "at a location with no clues") */
+  | { cluesOnThisLocation: "none" | "some" }
+  /** the Hidden cards in your hand (Maddening Delusions: "1 or more hidden cards in your hand") */
+  | { hiddenCardsInHand: { min?: number; max?: number } }
+  /**
+   * you performed an action of this kind during your turn (Visions in Your Mind: "at least 1 play action"); an
+   * investigator's actions are all taken in their one turn of the round, so the round's record is the turn's
+   */
+  | { actionThisTurn: ActionKind }
   /** a condition a card or scenario script decides (`CardScript.conditions`) */
   | { script: string };
 
@@ -709,6 +743,15 @@ export const Condition: z.ZodType<Condition> = z.lazy(() =>
     z.object({ defeatCause: z.array(z.enum([EVENT.Damage, "horror", "both", "effect"])) }).strict(),
     z.object({ anyTurn: z.literal(true) }).strict(),
     z.object({ enteredPlayThisTurn: z.literal(true) }).strict(),
+    z.object({ cluesOnThisLocation: z.enum(["none", "some"]) }).strict(),
+    z
+      .object({
+        hiddenCardsInHand: z
+          .object({ min: z.number().optional(), max: z.number().optional() })
+          .strict(),
+      })
+      .strict(),
+    z.object({ actionThisTurn: ActionKind }).strict(),
     z.object({ script: z.string() }).strict(),
   ]),
 );
@@ -756,6 +799,8 @@ export type Effect =
   | { op: "removeDoom"; amount: Amount; on: "self" | "chooseYours" | "allInPlay" }
   /** a fact the scenario keeps: "Remember that you 'set a fire in the kitchen'" (`rememberedCount` reads it) */
   | { op: "remember"; key: string }
+  /** one of these remembered facts, the one you choose, is no longer remembered (Clouded Memory: "Forget …") */
+  | { op: "forget"; of: string[] }
   | {
       op: "placeTokens";
       /** this card, you, or your location; `you` takes named tokens only; clues from the bank go on `yourLocation` too */
@@ -1292,6 +1337,7 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
       })
       .strict(),
     z.object({ op: z.literal("remember"), key: z.string() }).strict(),
+    z.object({ op: z.literal("forget"), of: z.array(z.string()).min(1) }).strict(),
     z
       .object({
         op: z.literal("placeTokens"),
@@ -1782,6 +1828,7 @@ export const EFFECT_OPS = [
   "placeDoom",
   "removeDoom",
   "remember",
+  "forget",
   "placeTokens",
   "putInThreatArea",
   "attachToLocation",
@@ -1997,6 +2044,13 @@ export const TRIGGERS = [
   "damageAssigned",
   /** an investigator finished resolving an action during their turn (`inv`): Time Warp */
   "actionPerformed",
+  /**
+   * an event just played is about to resolve (`inv`, `card`, `key`: cancelling it cancels the event, which is discarded):
+   * Painful Reflection
+   */
+  "eventWouldResolve",
+  /** an investigator discarded 1 or more cards from hand down to their hand size (`inv`): La Comtesse */
+  "discardedToHandSize",
 ] as const;
 export const Trigger = z.enum(TRIGGERS);
 export type Trigger = z.infer<typeof Trigger>;

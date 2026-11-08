@@ -5,6 +5,7 @@ import {
   cardIf,
   currentPhase,
   type GameContext,
+  isCancelled,
   leadInvestigator,
   resolvesFor,
   push,
@@ -28,6 +29,7 @@ import { STEP } from "../steps/step";
 export type { EffectHandlers } from "./types";
 
 export const effectsHandler = (game: GameContext, step: Extract<Step, { t: "Effects" }>) => {
+  if (step.unless && isCancelled(game, step.unless)) return;
   push(game, ...step.effects.map((effect): Step => ({ t: STEP.Eff, effect, ctx: step.ctx })));
 };
 

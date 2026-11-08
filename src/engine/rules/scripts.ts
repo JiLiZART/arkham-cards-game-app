@@ -10,6 +10,7 @@ import {
   type GameContext,
   inv,
   invName,
+  isCancelled,
   leadInvestigator,
   resolvesFor,
   scenarioIdOf,
@@ -50,6 +51,7 @@ export interface RunOpts {
 /** build the run for `step` and call its script function */
 export function runScript(game: GameContext, step: ScriptStep, opts: RunOpts = {}): void {
   if (!resolvesFor(game, step.ctx)) return;
+  if (step.unless && isCancelled(game, step.unless)) return;
   const fn = opts.fn ?? scriptFn(game, step.code, step.fn);
   if (!fn) throw new Error(`missing script function ${step.code}.${step.fn}`);
   const you = step.ctx.you ?? leadInvestigator(game);
@@ -108,7 +110,8 @@ type ScenarioHook =
   | "spawnRedirect"
   | "locationLeavesPlay"
   | "wouldBeDefeated"
-  | "patrolTarget";
+  | "patrolTarget"
+  | "actAdvanced";
 type CardHook =
   | "setup"
   | "gameEnd"

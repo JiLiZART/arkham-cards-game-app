@@ -31,7 +31,9 @@ export const LOLA = "03006";
 export const THEATRE = "03049";
 export const LOBBY = "03050";
 export const BACKSTAGE = "03052";
-export const ACT_2 = ["03047a", "03047b", "03047c"];
+export const BALCONY = "03051";
+/** act 2's versions: the three here, and Return to Curtain Call's three more */
+export const ACT_2 = ["03047a", "03047b", "03047c", "52015", "52016", "52017"];
 export const ACT_3 = "03048";
 
 /** 1 horror on a location (the theatre's flames, ooze and flood) */

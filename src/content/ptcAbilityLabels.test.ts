@@ -1,7 +1,8 @@
 /**
  * Every ability of a Path to Carcosa encounter card that a player uses ([action], [fast] or a reaction, from the card's
  * data or its script) has its label in both locales, `ability.<code>.<index>` (campaign-the-path-to-carcosa task 11.1);
- * so does each of Return to The Path to Carcosa's player cards, 52001–52013 (player-cards-ptc task 9.1).
+ * so does each of Return to The Path to Carcosa's player cards, 52001–52013 (player-cards-ptc task 9.1), and its
+ * encounter cards 52014–52078 (campaign-return-to-the-path-to-carcosa groups 1–9, task 11.2).
  * Without one the option shows the engine's English label (`src/ui/game/optionText.ts`).
  */
 import { readFileSync } from "node:fs";
@@ -21,7 +22,9 @@ const codes = (pack: string) =>
   ).map((c) => c.code);
 const bases = new Set([
   ...codes("ptc").map(base),
-  ...codes("return").filter((c) => c >= "52001" && c <= "52013"),
+  ...codes("return")
+    .map(base)
+    .filter((c) => c >= "52001" && c <= "52078"),
 ]);
 
 beforeAll(async () => {

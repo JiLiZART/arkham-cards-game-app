@@ -232,7 +232,6 @@ describe("acts and agendas", () => {
     expect(campaignTokens.get(g)).toEqual(["cultist", "cultist"]);
     expect(card(g, loc(g, THEATRE)!).horror).toBe(1);
     expect(countEntry.get(g, ["chasingTheStranger", "chasingTheStranger"])).toBe(1);
-    expect(r.state.flags["log:hidden:ccaAddChaosToken"]).toBe(true);
   });
 
   it("The Path is Mine: horror where he was, tablets; The Shores of Hali: horror on each Private location, elder things", () => {

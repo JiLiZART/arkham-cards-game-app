@@ -936,6 +936,20 @@ export function checkCondition(game: GameContext, c: Condition, ctx: EffCtx): bo
       ctx.x >= (c.eventAmount.min ?? 0) &&
       ctx.x <= (c.eventAmount.max ?? Infinity)
     );
+  if ("cluesOnThisLocation" in c) {
+    const src = ctx.source ? cardRecIf(game, ctx.source) : undefined;
+    const here = src ? (src.zone === ZONE.Location ? src.id : src.location) : null;
+    const n = here ? card(game, here).clues : 0;
+    return !!here && (c.cluesOnThisLocation === "none" ? n === 0 : n > 0);
+  }
+  if ("hiddenCardsInHand" in c) {
+    const n = you ? inv(game, you).hand.filter((h) => isHidden(game, h)).length : 0;
+    return (
+      !!you && n >= (c.hiddenCardsInHand.min ?? 0) && n <= (c.hiddenCardsInHand.max ?? Infinity)
+    );
+  }
+  if ("actionThisTurn" in c)
+    return !!you && inv(game, you).actionsThisRound.includes(c.actionThisTurn);
   if ("enemyAtThisLocation" in c) {
     const src = ctx.source ? cardRecIf(game, ctx.source) : undefined;
     const here = src ? (src.zone === ZONE.Location ? src.id : src.location) : null;

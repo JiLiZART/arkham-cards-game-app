@@ -13,7 +13,8 @@ export default {
   ],
   fns: {
     doorways(game: GameContext) {
-      doorways(game, ["03056", "03057", "03058"]);
+      // Return to Curtain Call adds its Prop Shop (52019) to the Backstage Doorways
+      doorways(game, ["03056", "03057", "03058", "52019"]);
     },
   },
 } satisfies CardScript;

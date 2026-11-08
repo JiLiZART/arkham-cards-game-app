@@ -8,14 +8,14 @@ import {
   queue,
   spawn,
 } from "../../../../src/engine/api";
-import { MITPM, PALACE } from "../../../campaigns/the-path-to-carcosa/scripts/dim-carcosa";
+import { MITPM, palaceInPlay } from "../../../campaigns/the-path-to-carcosa/scripts/dim-carcosa";
 
 export default {
   abilities: [{ kind: "revelation", run: "finalBow" }],
   fns: {
     finalBow(game: GameContext) {
       const him = findByCode(game, MITPM, [ZONE.SetAside]);
-      const palace = findByCode(game, PALACE, [ZONE.Location]);
+      const palace = palaceInPlay(game);
       if (him && palace) queue(game, spawn({ enemy: him.id, inv: null, at: palace.id }));
     },
   },

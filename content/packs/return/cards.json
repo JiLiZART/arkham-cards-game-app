@@ -596,5 +596,119 @@
   ] },
   "52011": { "script": true },
   "52012": { "script": true },
-  "52013": { "script": true }
+  "52013": { "script": true },
+  "52014": { "script": true },
+  "52015": { "script": true },
+  "52016": { "script": true },
+  "52017": { "script": true },
+  "52018": { "script": true },
+  "52019": { "script": true },
+  "52020": { "script": true },
+  "52022": { "script": true },
+  "52023": { "prey": { "highest": "clues" }, "script": true },
+  "52023b": { "script": true },
+  "52024": { "abilities": [
+    { "kind": "action", "designator": "parley", "usableBy": "atLocation", "label": "Crazed Guest: parley (intellect 4) to evade it", "effects": [{ "op": "skillTest", "skill": "intellect", "difficulty": 4, "onSuccess": [{ "op": "evade", "auto": true, "target": "self" }] }] }
+  ] },
+  "52024b": { "script": true },
+  "52025": { "script": true },
+  "52026": { "script": true },
+  "52027": { "script": true },
+  "52029": { "abilities": [
+    { "kind": "action", "label": "Quiet Halls: place 1 clue per investigator here", "condition": { "script": "allRevealedNoClues" }, "effects": [{ "op": "placeTokens", "on": "self", "clues": { "perInvestigator": 1 } }] }
+  ] },
+  "52030": { "script": true },
+  "52031": { "script": true },
+  "52032": { "script": true },
+  "52033": { "script": true },
+  "52035": { "script": true, "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "ignoreUnrevealedText", "scope": "self", "filter": { "trait": "Arkham Asylum" } }] }
+  ] },
+  "52036": { "script": true, "abilities": [
+    { "kind": "constant", "modifiers": [{ "flag": "ignoreUnrevealedText", "scope": "self", "filter": { "trait": "Arkham Asylum" } }] }
+  ] },
+  "52037": { "script": true, "abilities": [
+    { "kind": "action", "designator": "parley", "usableBy": "atLocation", "label": "Host of Insanity: parley (reveal the clasp) to evade it", "condition": { "controlsCard": "03142" }, "effects": [{ "op": "evade", "auto": true, "target": "self" }] }
+  ] },
+  "52038": { "script": true },
+  "52039": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "chooseOne", "options": [
+      { "label": "Forget something an investigator has remembered from an ability on a location", "condition": { "rememberedCount": { "of": ["knowTheGuardsPatrols", "setAFireInTheKitchen", "incitedAFightAmongstThePatients", "releasedADangerousPatient", "recalledTheWayOut", "distractedTheGuards"], "min": 1 } }, "effects": [{ "op": "forget", "of": ["knowTheGuardsPatrols", "setAFireInTheKitchen", "incitedAFightAmongstThePatients", "releasedADangerousPatient", "recalledTheWayOut", "distractedTheGuards"] }] },
+      { "label": "Take 1 horror; Clouded Memory gains surge", "effects": [{ "op": "takeHorror", "amount": 1 }, { "op": "surge" }] }
+    ] }] }
+  ] },
+  "52041": { "script": true },
+  "52042": { "script": true },
+  "52043": { "abilities": [
+    { "kind": "forced", "trigger": "enemyEntersLocation", "effects": [{ "op": "modify", "mod": { "stat": "enemyHorror", "value": 1 }, "until": "round", "on": "eventEnemy" }] }
+  ] },
+  "52044": { "script": true },
+  "52045": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "fight", "value": 1, "scope": "enemiesAtLocation" }, { "stat": "evade", "value": -1, "scope": "enemiesAtLocation" }] },
+    { "kind": "reaction", "trigger": "successfulEvade", "label": "Notre-Dame: take an additional action this turn", "limit": { "per": "round", "count": 1, "group": true }, "condition": { "all": [{ "eventInvestigatorIsYou": true }, { "eventAtThisLocation": true }, { "succeededBy": { "min": 3 } }, { "yourTurn": true }] }, "effects": [{ "op": "gainActions", "amount": 1 }] }
+  ] },
+  "52046": { "script": true },
+  "52047": { "script": true },
+  "52049": { "enterCluesPerInvestigator": 1, "script": true },
+  "52050": { "enterCluesPerInvestigator": 1, "script": true },
+  "52051": { "enterCluesPerInvestigator": 1, "script": true },
+  "52052": { "enterCluesPerInvestigator": 1, "script": true },
+  "52053": { "script": true },
+  "52055": { "abilities": [
+    { "kind": "action", "designator": "parley", "label": "Cloister: parley (willpower or intellect 4) to find the tower key", "condition": { "cluesOnYourLocation": "none" }, "effects": [{ "op": "skillTest", "skill": ["willpower", "intellect"], "difficulty": 4, "onSuccess": [{ "op": "remember", "key": "foundTheTowerKey" }] }] }
+  ] },
+  "52056": { "abilities": [
+    { "kind": "action", "label": "Knight's Hall: test combat or agility (3) to find a guide", "condition": { "cluesOnYourLocation": "none" }, "effects": [{ "op": "skillTest", "skill": ["combat", "agility"], "difficulty": 3, "onSuccess": [{ "op": "remember", "key": "foundAGuide" }] }] }
+  ] },
+  "52057": { "abilities": [
+    { "kind": "forced", "trigger": "doomPlaced", "usableBy": "anyone", "condition": { "script": "onDeckC" }, "effects": [{ "op": "takeHorror", "amount": 2 }, { "op": "discardSelf" }] }
+  ] },
+  "52058": { "abilities": [
+    { "kind": "forced", "trigger": "doomPlaced", "usableBy": "anyone", "condition": { "script": "onDeckA" }, "effects": [{ "op": "takeDamage", "amount": 2 }, { "op": "discardSelf" }] }
+  ] },
+  "52060": { "script": true },
+  "52060b": { "story": { "after": "flipBack" }, "script": true },
+  "52061": { "script": true },
+  "52061b": { "story": { "after": "flipBack" }, "script": true },
+  "52062": { "script": true },
+  "52062b": { "story": { "after": "flipBack" }, "script": true },
+  "52063": { "script": true },
+  "52063b": { "story": { "after": "flipBack" }, "script": true },
+  "52064": { "prey": { "highest": "cardsInHand" }, "script": true },
+  "52065": { "script": true },
+  "52066": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": "yourShroud", "onFail": [{ "op": "loseActions", "amount": 1 }, { "op": "takeHorror", "amount": 1 }] }] }
+  ] },
+  "52067": { "script": true },
+  "52068": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "shroud", "value": 2, "scope": "attachedLocation" }] },
+    { "kind": "constant", "condition": { "cluesOnThisLocation": "none" }, "modifiers": [{ "keyword": "hunter", "scope": "self" }] }
+  ] },
+  "52069": { "prey": { "lowest": "remainingSanity", "only": true }, "script": true },
+  "52070": { "script": true },
+  "52071": { "abilities": [
+    { "kind": "forced", "trigger": "turnEnds", "condition": { "all": [{ "eventInvestigatorIsYou": true }, { "not": { "actionThisTurn": "play" } }] }, "effects": [{ "op": "discardSelf" }, { "op": "takeDamage", "amount": 1, "direct": true }, { "op": "takeHorror", "amount": 1, "direct": true }] }
+  ] },
+  "52072": { "abilities": [
+    { "kind": "forced", "trigger": "turnEnds", "condition": { "all": [{ "eventInvestigatorIsYou": true }, { "not": { "actionThisTurn": "resource" } }] }, "effects": [{ "op": "discardSelf" }, { "op": "takeDamage", "amount": 1, "direct": true }, { "op": "takeHorror", "amount": 1, "direct": true }] }
+  ] },
+  "52073": { "abilities": [
+    { "kind": "forced", "trigger": "turnEnds", "condition": { "all": [{ "eventInvestigatorIsYou": true }, { "not": { "actionThisTurn": "move" } }] }, "effects": [{ "op": "discardSelf" }, { "op": "takeDamage", "amount": 1, "direct": true }, { "op": "takeHorror", "amount": 1, "direct": true }] }
+  ] },
+  "52074": { "abilities": [
+    { "kind": "forced", "trigger": "turnEnds", "condition": { "all": [{ "eventInvestigatorIsYou": true }, { "not": { "actionThisTurn": "draw" } }] }, "effects": [{ "op": "discardSelf" }, { "op": "takeDamage", "amount": 1, "direct": true }, { "op": "takeHorror", "amount": 1, "direct": true }] }
+  ] },
+  "52075": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "takeHorror", "amount": { "base": 0, "plus": 1, "if": { "hiddenCardsInHand": { "min": 1 } } } }] }
+  ] },
+  "52076": { "script": true },
+  "52077": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "putInThreatArea" }] },
+    { "kind": "constant", "modifiers": [{ "stat": "cost", "value": 1 }] },
+    { "kind": "forced", "trigger": "turnEnds", "condition": { "eventInvestigatorIsYou": true }, "effects": [{ "op": "skillTest", "skill": "willpower", "difficulty": 3, "onSuccess": [{ "op": "discardSelf" }] }] }
+  ] },
+  "52078": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "putInThreatArea" }] },
+    { "kind": "forced", "trigger": "eventWouldResolve", "condition": { "eventInvestigatorIsYou": true }, "effects": [{ "op": "revealToken", "on": [{ "tokens": ["skull", "cultist", "tablet", "elderThing", "autoFail"], "effects": [{ "op": "cancel" }, { "op": "takeHorror", "amount": 1 }, { "op": "discardSelf" }] }] }] }
+  ] }
 }

@@ -85,11 +85,25 @@
       "elderSign"
     ]
   },
-  "options": [],
+  "options": [
+    {
+      "id": "rtptc-replacement-sets",
+      "labelKey": "campaign.option.rtptc-replacement-sets",
+      "replaceSets": {
+        "delusory_evils": "ancient_evils",
+        "neurotic_fear": "striking_fear",
+        "hasturs_envoys": "agents_of_hastur",
+        "decaying_reality": "decay",
+        "maddening_delusions": "delusions"
+      },
+      "addSets": []
+    }
+  ],
   "logLabels": {},
   "packs": [
     "core",
-    "ptc"
+    "ptc",
+    "return"
   ],
   "generated": false,
   "card": "03043",

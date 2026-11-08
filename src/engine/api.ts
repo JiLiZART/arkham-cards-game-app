@@ -79,7 +79,7 @@ export {
   uniqueInPlay,
 } from "./queries";
 export { canPlay, playCost } from "./rules/cards";
-export { attackKey, canEnemyEnter, randomLocation } from "./rules/enemies";
+export { attackKey, canEnemyEnter, exhaustEnemy, randomLocation } from "./rules/enemies";
 export { canCommit, difficultyOf as testDifficulty } from "./rules/skillTest";
 export { repeatPhase, skipPhase } from "./rules/round";
 export { resolvesOnDraw } from "./rules/investigators";
@@ -148,6 +148,7 @@ export {
   treatTokenAs,
 } from "./rules/skillTest";
 export { resolveWeakness } from "./rules/investigators";
+export { hideInHand } from "./rules/scenario";
 export * as flags from "./world/flags";
 
 // ---------- choices outside a script function (a shared helper given the run's step) ----------

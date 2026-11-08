@@ -29,8 +29,9 @@ import {
   endScenario,
 } from "../../../../src/engine/api";
 
-/** the Monster pile and the Possessed pile, each set aside on its own */
-export const MONSTERS = ["03088", "03089", "03183", "01175"];
+/** the Monster pile and the Possessed pile, each set aside on its own (Preying Byakhee replaces Screeching Byakhee
+ * with Hastur's Envoys: Return to The Unspeakable Oath, or the replacement sets option) */
+export const MONSTERS = ["03088", "03089", "03183", "01175", "52069"];
 export const POSSESSED = ["03095", "03096", "03184"];
 export const CONSTANCE = "03065b";
 export const DANIEL = "03182a";

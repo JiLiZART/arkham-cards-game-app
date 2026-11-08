@@ -11,7 +11,7 @@ import {
 } from "../../../../src/engine/api";
 import {
   LORD_OF_CARCOSA,
-  PALACE,
+  palaceInPlay,
 } from "../../../campaigns/the-path-to-carcosa/scripts/dim-carcosa";
 import { noClues, removeStranger } from "./03321a";
 
@@ -20,7 +20,7 @@ export default {
   modifiers: noClues,
   fns: {
     disguise(game: GameContext) {
-      const at = removeStranger(game) ?? findByCode(game, PALACE, [ZONE.Location])?.id;
+      const at = removeStranger(game) ?? palaceInPlay(game)?.id;
       const lord = findByCode(game, LORD_OF_CARCOSA, [ZONE.SetAside]);
       if (lord && at) queue(game, spawn({ enemy: lord.id, inv: null, at }));
     },

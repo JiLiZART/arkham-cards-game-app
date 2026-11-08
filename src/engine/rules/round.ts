@@ -312,6 +312,9 @@ const FORBIDDEN_BY: Partial<Record<string, ModFlag>> = {
 };
 /** an action of a forbidden kind: a play action with a designator is of both kinds (Grimoire, Play Action) */
 function forbiddenAction(game: GameContext, i: InvId, a: TurnAction, designator: string) {
+  // a card investigators cannot parley with (Party Guest's Bystanders)
+  if (designator === "parley" && a.kind === "ability" && hasFlag(game, a.card, "cannotBeParleyed"))
+    return true;
   return (a.kind === EVENT.Play ? [EVENT.Play, designator] : [designator]).some((k) => {
     const flag = FORBIDDEN_BY[k];
     return !!flag && hasFlag(game, i, flag);

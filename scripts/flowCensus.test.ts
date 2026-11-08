@@ -37,25 +37,25 @@ const unsupportedTests = (c: FlowCondition): number =>
 
 describe("the generated flows", () => {
   it("are one per generated campaign, each valid", () => {
-    expect(ids.length).toBe(34); // Curse of the Rougarou now imports (its setup names no location); The Dunwich Legacy, its Return-to box and The Path to Carcosa are hand-written
-    expect(flows.length).toBe(34);
+    expect(ids.length).toBe(33); // Curse of the Rougarou now imports (its setup names no location); The Dunwich Legacy, The Path to Carcosa and their Return-to boxes are hand-written
+    expect(flows.length).toBe(33);
   });
 
   it("hold the interludes, the resolutions and the prompts the guides give, and as many as can't be offered as the census says", () => {
     const steps = flows.flatMap((f) => Object.values(f.flow.steps));
-    expect(flows.reduce((n, f) => n + Object.keys(f.flow.interludes).length, 0)).toBe(67); // only the interludes a flow reaches (no side flow carries another campaign's)
+    expect(flows.reduce((n, f) => n + Object.keys(f.flow.interludes).length, 0)).toBe(63); // only the interludes a flow reaches (no side flow carries another campaign's)
     expect(
       flows.reduce(
         (n, f) =>
           n + Object.values(f.flow.resolutions).reduce((m, r) => m + Object.keys(r).length, 0),
         0,
       ),
-    ).toBe(447); // hidden resolutions are tails, not endings; a defeated/resigned pair is one none
-    expect(steps.filter((s) => s.kind === "unsupported").length).toBe(153); // guide inputs the engine lacks: campaign links, supplies, partners, investigator choices
+    ).toBe(417); // hidden resolutions are tails, not endings; a defeated/resigned pair is one none
+    expect(steps.filter((s) => s.kind === "unsupported").length).toBe(152); // guide inputs the engine lacks: campaign links, supplies, partners, investigator choices
     expect(
       steps.reduce((n, s) => n + (s.kind === "branch" ? unsupportedTests(s.condition) : 0), 0),
-    ).toBe(390); // The Scarlet Keys' $embark compiled per scenario (127); with the scenarios' own setup steps (flow.before) and the version check (always true)
-    expect(steps.filter((s) => s.kind === "upgradeDecks").length).toBe(136);
+    ).toBe(388); // The Scarlet Keys' $embark compiled per scenario (127); with the scenarios' own setup steps (flow.before) and the version check (always true)
+    expect(steps.filter((s) => s.kind === "upgradeDecks").length).toBe(126);
   });
 
   it("list their scenario reference cards in the campaign's order, the interludes marked, as the picker needs", () => {

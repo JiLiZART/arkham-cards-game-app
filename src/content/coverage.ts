@@ -152,3 +152,35 @@ export function checkCampaignCards(db: ContentDb): ContentError[] {
   }
   return errors;
 }
+
+/** JSON with each object's keys sorted: two tables compare equal whatever order their keys were written in */
+const canonical = (v: unknown): string =>
+  Array.isArray(v)
+    ? `[${v.map(canonical).join(",")}]`
+    : v && typeof v === "object"
+      ? `{${Object.entries(v)
+          .sort(([a], [b]) => (a < b ? -1 : 1))
+          .map(([k, x]) => `${JSON.stringify(k)}:${canonical(x)}`)
+          .join(",")}}`
+      : JSON.stringify(v);
+
+/** a Return-to scenario's token table is a copy of its base scenario's (ADR-0038): the copies must not drift */
+export function checkReturnTokens(db: ContentDb): ContentError[] {
+  const errors: ContentError[] = [];
+  for (const s of Object.values(db.scenarios)) {
+    const base = s.id.startsWith("return-to-")
+      ? db.scenarios[s.id.slice("return-to-".length)]
+      : null;
+    if (!base) continue;
+    const t = s.tokens as Record<string, unknown>;
+    const b = base.tokens as Record<string, unknown>;
+    for (const d of new Set([...Object.keys(t), ...Object.keys(b)]))
+      if (canonical(t[d]) !== canonical(b[d]))
+        errors.push({
+          file: `scenarios/${s.id}.json`,
+          path: `tokens.${d}`,
+          message: `${s.id}'s ${d} token table differs from ${base.id}'s`,
+        });
+  }
+  return errors;
+}

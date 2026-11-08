@@ -1,5 +1,5 @@
 // Patient Confinement (Daniel's Cell) — 1 clue to enter while unrevealed (its data: `enterClues`). After it is
-// revealed: advance to act 2b (during either version of act 2).
+// revealed: advance to act 2b (during any version of act 2: Return to The Unspeakable Oath's v. III and v. IV too).
 import {
   cardIf,
   type CardScript,
@@ -9,7 +9,7 @@ import {
   advanceAct,
 } from "../../../../src/engine/api";
 
-const ACT_2 = ["03164", "03165"];
+const ACT_2 = ["03164", "03165", "52035", "52036"];
 
 export default {
   abilities: [{ kind: "forced", trigger: "revealed", run: "danielsCell" }],

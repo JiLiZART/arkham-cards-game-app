@@ -1163,22 +1163,13 @@
   "rtptc": {
    "encounter": {
     "total": 69,
-    "works": 8,
-    "rest": {
-     "act": 5,
-     "agenda": 1,
-     "enemy": 9,
-     "location": 22,
-     "story": 6,
-     "treachery": 18
-    }
+    "works": 69,
+    "rest": {}
    },
    "player": {
     "total": 15,
-    "works": 13,
-    "rest": {
-     "asset": 2
-    }
+    "works": 15,
+    "rest": {}
    }
   },
   "rtr": {
@@ -2119,29 +2110,12 @@
   },
   "return-to-the-path-to-carcosa": {
    "cards": {
-    "total": 344,
-    "works": 281,
-    "rest": {
-     "act": 5,
-     "agenda": 1,
-     "asset": 2,
-     "enemy": 9,
-     "location": 22,
-     "story": 6,
-     "treachery": 18
-    }
+    "total": 343,
+    "works": 343,
+    "rest": {}
    },
-   "unscripted": [
-    "return-to-curtain-call",
-    "return-to-the-last-king",
-    "return-to-a-phantom-of-truth",
-    "return-to-black-stars-rise",
-    "return-to-dim-carcosa",
-    "return-to-echoes-of-the-past",
-    "return-to-the-pallid-mask",
-    "return-to-the-unspeakable-oath"
-   ],
-   "complete": false
+   "unscripted": [],
+   "complete": true
   },
   "side-all-or-nothing": {
    "cards": {
@@ -3986,16 +3960,12 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 49,
-    "works": 40,
-    "rest": {
-     "enemy": 1,
-     "location": 6,
-     "treachery": 2
-    }
+    "works": 49,
+    "rest": {}
    },
    "tokens": true,
-   "scripted": false,
-   "complete": false
+   "scripted": true,
+   "complete": true
   },
   "return-to-at-deaths-doorstep": {
    "campaign": "return-to-the-circle-undone",
@@ -4039,15 +4009,12 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 50,
-    "works": 45,
-    "rest": {
-     "location": 2,
-     "treachery": 3
-    }
+    "works": 50,
+    "rest": {}
    },
    "tokens": true,
-   "scripted": false,
-   "complete": false
+   "scripted": true,
+   "complete": true
   },
   "return-to-blood-on-the-altar": {
    "campaign": "return-to-the-dunwich-legacy",
@@ -4064,48 +4031,34 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 44,
-    "works": 30,
-    "rest": {
-     "act": 3,
-     "enemy": 1,
-     "location": 2,
-     "treachery": 8
-    }
+    "works": 44,
+    "rest": {}
    },
    "tokens": true,
-   "scripted": false,
-   "complete": false
+   "scripted": true,
+   "complete": true
   },
   "return-to-dim-carcosa": {
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 72,
-    "works": 53,
-    "rest": {
-     "enemy": 2,
-     "location": 4,
-     "story": 4,
-     "treachery": 9
-    }
+    "works": 72,
+    "rest": {}
    },
    "tokens": true,
-   "scripted": false,
-   "complete": false
+   "scripted": true,
+   "complete": true
   },
   "return-to-echoes-of-the-past": {
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 48,
-    "works": 38,
-    "rest": {
-     "enemy": 1,
-     "location": 4,
-     "treachery": 5
-    }
+    "works": 48,
+    "rest": {}
    },
    "tokens": true,
-   "scripted": false,
-   "complete": false
+   "scripted": true,
+   "complete": true
   },
   "return-to-essex-county-express": {
    "campaign": "return-to-the-dunwich-legacy",
@@ -4354,19 +4307,13 @@
   "return-to-the-last-king": {
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
-    "total": 51,
-    "works": 39,
-    "rest": {
-     "agenda": 1,
-     "asset": 2,
-     "enemy": 3,
-     "story": 2,
-     "treachery": 4
-    }
+    "total": 50,
+    "works": 50,
+    "rest": {}
    },
    "tokens": true,
-   "scripted": false,
-   "complete": false
+   "scripted": true,
+   "complete": true
   },
   "return-to-the-midnight-masks": {
    "campaign": "return-to-the-night-of-the-zealot",
@@ -4399,15 +4346,12 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 37,
-    "works": 32,
-    "rest": {
-     "enemy": 1,
-     "location": 4
-    }
+    "works": 37,
+    "rest": {}
    },
    "tokens": true,
-   "scripted": false,
-   "complete": false
+   "scripted": true,
+   "complete": true
   },
   "return-to-the-secret-name": {
    "campaign": "return-to-the-circle-undone",
@@ -4432,16 +4376,12 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 52,
-    "works": 37,
-    "rest": {
-     "act": 2,
-     "enemy": 3,
-     "treachery": 10
-    }
+    "works": 52,
+    "rest": {}
    },
    "tokens": true,
-   "scripted": false,
-   "complete": false
+   "scripted": true,
+   "complete": true
   },
   "return-to-the-untamed-wilds": {
    "campaign": "return-to-the-forgotten-age",

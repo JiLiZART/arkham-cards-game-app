@@ -38,7 +38,7 @@ import {
   tapToDraw,
 } from "../context";
 import { flip, link, moveCard, passBeneath, reshuffleDiscard } from "../movement";
-import type { EffCtx, InstId, Step, StepOf } from "../world/types";
+import type { EffCtx, InstId, InvId, Step, StepOf } from "../world/types";
 import { win } from "./cards";
 import { EVENT } from "../events/event";
 import { CHOICE, ZONE, type Zone } from "../world/constants";
@@ -127,6 +127,13 @@ export const drawEncounterHandler: Handler<"DrawEncounter"> = (game, step) => {
   });
 };
 
+/** a Hidden card goes into the investigator's hand, secretly; it works from there as if in their threat area */
+export function hideInHand(game: GameContext, id: InstId, i: InvId) {
+  moveCard(game, id, ZONE.Hand, { inv: i });
+  setController(game, id, i);
+  emit(game, EVENT.HiddenDrawn, `${invName(game, i)} takes a hidden card`, { inv: i, card: id });
+}
+
 export const revelationHandler: Handler<"Revelation"> = (game, step) => {
   const c = cardIf(game, step.card);
   if (!c) return;
@@ -137,14 +144,12 @@ export const revelationHandler: Handler<"Revelation"> = (game, step) => {
     moveCard(game, step.card, c.owner ? ZONE.Discard : ZONE.EncounterDiscard);
     return;
   }
-  // Hidden: into the drawer's hand, secretly; it works from there as if in their threat area
-  if (hasKeyword(game, step.card, "hidden")) {
-    moveCard(game, step.card, ZONE.Hand, { inv: step.inv });
-    setController(game, step.card, step.inv);
-    emit(game, EVENT.HiddenDrawn, `${invName(game, step.inv)} takes a hidden card`, {
-      inv: step.inv,
-      card: step.card,
-    });
+  // Hidden: into the drawer's hand, secretly; one whose revelation offers something else resolves it (Delusory Evils)
+  if (
+    hasKeyword(game, step.card, "hidden") &&
+    !abilitiesOf(game, step.card).some((a) => a.kind === "revelation")
+  ) {
+    hideInHand(game, step.card, step.inv);
     return;
   }
   moveCard(game, step.card, ZONE.Resolving);
@@ -395,6 +400,7 @@ export function nextAct(game: GameContext, prev: InstId, deck = "a") {
   if (next) {
     moveCard(game, next, ZONE.Act, { deck });
     emit(game, EVENT.Act, `New act: ${def(game, next).name}`, { card: next });
+    fireScenarioHook(game, "actAdvanced", next);
   } else endUnscripted(game, prev, EVENT.Act);
 }
 

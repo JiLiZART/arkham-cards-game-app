@@ -3,6 +3,10 @@
  * Dim Carcosa, both interludes and the epilogue, on a fixed log. Scenarios end at once with the resolution given; what a
  * scenario script records at its end (`log:hidden:*`, `count:*`, `cards:*`) is written into the log first, as the
  * script would. Prompts take the answer given for them, else their first open one.
+ *
+ * Return to The Path to Carcosa walks the same way (campaign-return-to-the-path-to-carcosa task 11.1): its flow is the
+ * base's under the Return scenarios' ids, so every case below runs for both campaigns, a Return scenario named by its
+ * base's id.
  */
 import { describe, expect, it } from "vitest";
 import { advance, openChoices, startResolution } from "../flow";
@@ -11,7 +15,8 @@ import type { CampaignState, FlowValue } from "../types";
 import { db } from "../../kits/testkit";
 import { addCards, hasEntry, logCount, record, setCount } from "../log";
 
-const ID = "the-path-to-carcosa";
+const CAMPAIGNS = ["the-path-to-carcosa", "return-to-the-path-to-carcosa"];
+const baseId = (id: string) => id.replace(/^return-to-/, "");
 const ROLAND = "01001";
 const DAISY = "01002";
 const SCENARIOS = [
@@ -51,13 +56,14 @@ const WIN: Record<string, End> = {
 /** called after each scenario's resolution has run, and as each scenario is offered */
 type Seen = (c: CampaignState, at: { resolved?: string; offered?: string }) => void;
 
-function walk(
+function walkIn(
+  campaignId: string,
   ends: Record<string, Partial<End>> = {},
   answers: Record<string, FlowValue> = {},
   seen: Seen = () => {},
 ) {
   let c = startCampaign(db, {
-    campaignId: ID,
+    campaignId,
     difficulty: "standard",
     seed: 3,
     investigators: [
@@ -70,17 +76,17 @@ function walk(
   const stories = new Set<string>();
   const note = () => {
     if (c.flow.item && items.at(-1) !== c.flow.item) items.push(c.flow.item);
-    for (const s of c.flow.shown) if ("story" in s) stories.add(s.story);
+    for (const s of c.flow.shown) if ("story" in s) stories.add(baseId(s.story));
   };
   for (let n = 0; n < 2000; n++) {
     note();
     if (c.flow.waiting) {
       const { id, step } = c.flow.waiting;
-      if (step.kind === "play") seen(c, { offered: step.scenario });
+      if (step.kind === "play") seen(c, { offered: baseId(step.scenario) });
       const active = c.investigators.filter((i) => i.status === "active").map((i) => i.code);
       const value: FlowValue =
-        id in answers
-          ? answers[id]
+        baseId(id) in answers
+          ? answers[baseId(id)]
           : step.kind === "chooseOne"
             ? openChoices(db, c, step.choices)[0].id
             : step.kind === "investigatorChoice" || step.kind === "investigator"
@@ -89,8 +95,9 @@ function walk(
       c = advance(db, c, value);
     } else if (c.flow.playing && c.flow.play) {
       const id = c.flow.play;
-      const end: End = { ...WIN[id], ...ends[id] };
-      played.push(id);
+      const base = baseId(id);
+      const end: End = { ...WIN[base], ...ends[base] };
+      played.push(base);
       end.log?.(c);
       const codes = c.investigators.filter((i) => i.status === "active").map((i) => i.code);
       c.history.push({ scenarioId: id, resolution: end.resolution, xp: 0, victory: 0 });
@@ -105,7 +112,7 @@ function walk(
         resigned: end.resigned ? codes : [],
         defeated: end.defeated ? codes : [],
       });
-      seen(c, { resolved: id });
+      seen(c, { resolved: base });
     } else break;
   }
   note();
@@ -113,13 +120,14 @@ function walk(
 }
 
 /** the campaign as it stands at the first moment `pick` names */
-function at(
+function atIn(
+  campaignId: string,
   pick: (x: { resolved?: string; offered?: string }) => boolean,
   ends: Record<string, Partial<End>> = {},
   answers: Record<string, FlowValue> = {},
 ): CampaignState {
   let out: CampaignState | undefined;
-  walk(ends, answers, (c, x) => {
+  walkIn(campaignId, ends, answers, (c, x) => {
     if (!out && pick(x)) out = structuredClone(c);
   });
   if (!out) throw new Error("never reached");
@@ -132,10 +140,25 @@ const symbols = (bag: string[]) => ({
   elderThing: bag.filter((t) => t === "elderThing").length,
 });
 const ONE_EACH = { cultist: 1, tablet: 1, elderThing: 1 };
-const bagAfter = (scenario: string, ends: Record<string, Partial<End>>) =>
-  symbols(at((x) => x.resolved === scenario, ends).chaosBag);
+it("Return to The Path to Carcosa's flow is the base's under the Return scenarios' ids", () => {
+  let base = JSON.stringify(db.flows["the-path-to-carcosa"]);
+  for (const id of SCENARIOS)
+    base = base.replace(new RegExp(`"${id}(?=[":])`, "g"), `"return-to-${id}`);
+  expect(db.flows["return-to-the-path-to-carcosa"]).toEqual(JSON.parse(base));
+});
 
-describe("The Path to Carcosa's flow", () => {
+describe.each(CAMPAIGNS)("%s's flow", (campaignId) => {
+  type Ends = Record<string, Partial<End>>;
+  const walk = (ends?: Ends, answers?: Record<string, FlowValue>) =>
+    walkIn(campaignId, ends, answers);
+  const at = (
+    pick: (x: { resolved?: string; offered?: string }) => boolean,
+    ends?: Ends,
+    answers?: Record<string, FlowValue>,
+  ) => atIn(campaignId, pick, ends, answers);
+  const bagAfter = (scenario: string, ends: Record<string, Partial<End>>) =>
+    symbols(at((x) => x.resolved === scenario, ends).chaosBag);
+
   it("runs from the prologue through 8 scenarios and both interludes to the epilogue", () => {
     const { c, played, items, stories } = walk();
     expect(played).toEqual(SCENARIOS);

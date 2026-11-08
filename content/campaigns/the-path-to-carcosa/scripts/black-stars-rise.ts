@@ -56,6 +56,8 @@ export const ABBEY_CHURCH = "03291";
 export const CHOEUR = ["03292", "03293"];
 export const CLOISTER = "03294";
 export const KNIGHTS_HALL = "03295";
+/** Return to Black Stars Rise's Cloister and Knight's Hall (52055, 52056): set aside instead when their pile is kept */
+export const NEW_CLOISTER_PAIR = ["52055", "52056"];
 export const CHAPEL = ["03296", "03297"];
 export const TOWER = ["03298", "03299"];
 /** act 3a (the Chapel, R1) and act 3c (the Tower, R2) */

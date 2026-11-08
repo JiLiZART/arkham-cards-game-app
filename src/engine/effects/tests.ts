@@ -5,7 +5,6 @@ import {
   currentTest,
   def,
   emit,
-  exhaust,
   type GameContext,
   inv,
   invName,
@@ -28,6 +27,7 @@ import { win } from "../rules/cards";
 import { basicInvestigate } from "../rules/round";
 import { canMoveTo } from "../rules/investigators";
 import { attackDamage, forceResult, startTest } from "../rules/skillTest";
+import { exhaustEnemy } from "../rules/enemies";
 import type { InstId, Step } from "../world/types";
 import { amt, enemyTargets, invTargets, opt } from "./targets";
 import type { EffectOf, EffectRun } from "./types";
@@ -213,7 +213,7 @@ function evadeEffect(game: GameContext, run: EffectRun<EffectOf<"evade">>) {
     }
     for (const id of ts) {
       const en = card(game, id);
-      exhaust(game, en.id);
+      exhaustEnemy(game, en.id);
       setEngaged(game, en.id, null);
       emit(game, EVENT.Evade, `${invName(game, you)} evades ${def(game, id).name}`, {
         inv: you,

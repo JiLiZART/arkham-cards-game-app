@@ -404,14 +404,15 @@ export type Step = { choice?: any } & (
   | { t: "HandSize"; inv: InvId; stepped?: boolean }
   | { t: "EndRound" }
   | { t: "Window"; trigger: Trigger; data: EventData; offered?: string[]; forcedDone?: boolean }
-  | { t: "Effects"; effects: Effect[]; ctx: EffCtx }
+  | { t: "Effects"; effects: Effect[]; ctx: EffCtx; unless?: string }
   | { t: "Eff"; effect: Effect; ctx: EffCtx }
   | { t: "GainClues"; inv: InvId; location: InstId; n: number; key: string }
   | { t: "SlotCheck"; inv: InvId; card: InstId }
   /** `uses`: the uses it enters play with, chosen as its X cost (Jenny's Twin .45s) */
   | { t: "EnterPlay"; inv: InvId; card: InstId; uses?: number }
   | { t: "ChooseTurnOrder" }
-  | { t: "Script"; code: string; fn: string; ctx: EffCtx; args?: unknown }
+  /** `unless`: a cancel key; the step does nothing once it is cancelled (an event cancelled as it is played) */
+  | { t: "Script"; code: string; fn: string; ctx: EffCtx; args?: unknown; unless?: string }
   // the engine's deferred rules: each runs after the steps queued before it
   | { t: "ExhaustEnemy"; enemy: InstId }
   | { t: "Elusive"; enemy: InstId }
@@ -797,9 +798,14 @@ export interface ScriptHooks {
   allEliminated(game: GameContext): void;
   /**
    * scenario: where an enemy with no spawn location of its own spawns, if the scenario says; `inv`: who drew it (The
-   * Pallid Mask's Corpse Dweller gains surge)
+   * Pallid Mask's Corpse Dweller gains surge); a list: the drawer chooses among those locations, and with none the enemy
+   * is discarded (Return to The Pallid Mask's Corpse Dweller: The Man in the Pallid Mask is no Humanoid to it)
    */
-  spawnRedirect(game: GameContext, enemy: InstId, inv?: InvId | null): InstId | null | undefined;
+  spawnRedirect(
+    game: GameContext,
+    enemy: InstId,
+    inv?: InvId | null,
+  ): InstId | readonly InstId[] | null | undefined;
   /** card: "when the game ends" (Cover Up, Hospital Debts) */
   gameEnd(game: GameContext, run: HookRun): void;
   /** card: an event its controller played finished resolving (Wendy's Amulet) */
@@ -822,6 +828,11 @@ export interface ScriptHooks {
   ): boolean;
   /** scenario: where a Patrol enemy patrols toward, when its expression can't say (Fortune and Folly's ring) */
   patrolTarget(game: GameContext, enemy: InstId): InstId[] | undefined;
+  /**
+   * scenario: the investigators advanced an act and `act` is the current one now, its predecessor's back resolved
+   * (Return to Echoes of the Past: "after the investigators advance to act 2 or act 3")
+   */
+  actAdvanced(game: GameContext, act: InstId): void;
   /**
    * scenario: the locations connected to this one now beyond the map's, by what the cards say (Echoes of the Past's
    * Passageways); `enemy`: for an enemy's move ("while an enemy is moving"), the moving enemy when the move knows it

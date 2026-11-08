@@ -11,36 +11,15 @@
     "chilling_cold"
   ],
   "sideDecks": {},
-  "acts": [
-    "03243",
-    "03244",
-    "03245"
-  ],
-  "agendas": [
-    "03241",
-    "03242"
-  ],
-  "setupCards": [
-    "52048"
-  ],
+  "acts": ["03243", "03244", "03245", "03246"],
+  "agendas": ["03241", "03242"],
+  "setupCards": ["52048"],
   "setup": [
-    {
-      "do": "putIntoPlay",
-      "codes": [
-        "52049"
-      ]
-    },
-    {
-      "do": "setAside",
-      "codes": [
-        "03257",
-        "03256"
-      ]
-    },
-    {
-      "do": "startAt",
-      "code": "52049"
-    }
+    { "do": "script", "fn": "returnRules" },
+    { "do": "script", "fn": "harukoAside", "when": { "not": { "logHas": "03067b" } } },
+    { "do": "script", "fn": "catacombs" },
+    { "do": "script", "fn": "secretPassageway", "when": { "logHas": "03078" } },
+    { "do": "script", "fn": "strangerAside" }
   ],
   "tokens": {
     "easy": {
@@ -257,14 +236,6 @@
           "value": true
         },
         {
-          "do": "addChaosToken",
-          "token": "elderThing"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "elderThing"
-        },
-        {
           "do": "xp",
           "victory": true,
           "bonus": 0,
@@ -280,14 +251,6 @@
           "do": "record",
           "key": "knowSiteOfGate",
           "value": true
-        },
-        {
-          "do": "addChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "cultist"
         },
         {
           "do": "xp",
@@ -307,14 +270,6 @@
           "value": true
         },
         {
-          "do": "addChaosToken",
-          "token": "tablet"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "tablet"
-        },
-        {
           "do": "xp",
           "victory": true,
           "bonus": 0,
@@ -324,33 +279,8 @@
     }
   },
   "i18nId": "return_to_the_pallid_mask",
-  "connections": [
-    [
-      "52049",
-      "03257"
-    ],
-    [
-      "52049",
-      "03256"
-    ],
-    [
-      "03257",
-      "03256"
-    ]
-  ],
+  "adjacency": "orthogonal",
+  "connections": [],
   "oneWay": [],
-  "layout": {
-    "52049": [
-      0,
-      0
-    ],
-    "03257": [
-      1,
-      0
-    ],
-    "03256": [
-      2,
-      0
-    ]
-  }
+  "layout": {}
 }

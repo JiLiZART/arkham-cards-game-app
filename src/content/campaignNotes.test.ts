@@ -59,17 +59,24 @@ function flowNames(campaign: string): Set<string> {
 
 /**
  * The Path to Carcosa's scripts (campaign-the-path-to-carcosa task 10.1): every count, card list and hidden entry they
- * write (`count:`, `cards:`, `log:hidden:`) is one a flow condition or effect reads. The pack's card scripts serve
- * Return to The Path to Carcosa too, whose generated flow reads what the base one no longer asks (Curtain Call's act 2
- * tokens), so either flow may be the reader. A key built from a variable (`[which, which]`) takes each string the
- * variable is declared with.
+ * write (`count:`, `cards:`, `log:hidden:`) is one a flow condition or effect reads. Return to The Path to Carcosa's
+ * scripts compose the base's and its flow is the base's under the Return ids (campaign-return-to-the-path-to-carcosa
+ * task 11.1), so its flow is checked against both sets of scripts: the Return scenario scripts and the box's cards
+ * (520xx). A key built from a variable (`[which, which]`) takes each string the variable is declared with.
  */
-describe("the-path-to-carcosa's campaign notes", () => {
-  const sources = sourcesOf([
-    "content/campaigns/the-path-to-carcosa/scripts",
-    "content/packs/ptc/scripts",
-  ]);
+const CARCOSA = ["content/campaigns/the-path-to-carcosa/scripts", "content/packs/ptc/scripts"];
+const RTPTC_CARDS = readdirSync("content/packs/return/scripts")
+  .filter((f) => /^520\d\d\w*\.ts$/.test(f))
+  .map((f) => readFileSync(join("content/packs/return/scripts", f), "utf8"));
+const CARCOSA_CAMPAIGNS = {
+  "the-path-to-carcosa": sourcesOf(CARCOSA),
+  "return-to-the-path-to-carcosa": [
+    ...sourcesOf([...CARCOSA, "content/campaigns/return-to-the-path-to-carcosa/scripts"]),
+    ...RTPTC_CARDS,
+  ],
+};
 
+describe.each(Object.entries(CARCOSA_CAMPAIGNS))("%s's campaign notes", (campaign, sources) => {
   function writtenByCarcosa(): string[] {
     const out: string[] = [];
     for (const src of sources)
@@ -126,7 +133,7 @@ describe("the-path-to-carcosa's campaign notes", () => {
     return names;
   }
 
-  it("every count, card list and hidden entry a script writes is read by a flow", () => {
+  it("every count, card list and hidden entry a script writes is read by the flow", () => {
     const notes = writtenByCarcosa();
     expect(notes).toEqual(
       expect.arrayContaining([
@@ -136,10 +143,7 @@ describe("the-path-to-carcosa's campaign notes", () => {
         "campaign_notes:possessed",
       ]),
     );
-    const read = new Set([
-      ...readByFlow("content/campaigns/the-path-to-carcosa/flow.json"),
-      ...readByFlow("content/campaigns-generated/return-to-the-path-to-carcosa/flow.json"),
-    ]);
+    const read = readByFlow(`content/campaigns/${campaign}/flow.json`);
     for (const n of notes) expect(read.has(n), n).toBe(true);
   });
 });

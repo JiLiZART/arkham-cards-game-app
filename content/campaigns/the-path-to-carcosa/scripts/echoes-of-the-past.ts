@@ -36,15 +36,24 @@ const ACT_3 = "03126";
 /** the investigators fled the dinner party: each takes 1 additional action during their first turn */
 export const ARRIVED_EARLY = "eotpArrivedEarly";
 /** each floor's row on the map, top to bottom */
-const FLOORS: [string, number][] = [
+export const FLOORS: [string, number][] = [
   ["Third Floor", 0],
   ["Second Floor", 1],
   ["Ground Floor", 2],
 ];
 
-const isSociety = (game: GameContext, id: InstId) => def(game, id).name === "Historical Society";
+export const isSociety = (game: GameContext, id: InstId) =>
+  def(game, id).name === "Historical Society";
 const onFloor = (game: GameContext, floor: string) =>
   locations(game).filter((l) => isSociety(game, l.id) && def(game, l.id).traits.includes(floor));
+
+/** each floor's two Historical Societies on either side of its hall */
+export function layFloors(game: GameContext, floors: [string, number][]) {
+  for (const [floor, row] of floors)
+    onFloor(game, floor)
+      .sort((a, b) => a.code.localeCompare(b.code))
+      .forEach((l, k) => setCell(game, l.id, [k === 0 ? 0 : 2, row]));
+}
 
 /** the location Mr. Peabody chose, while he is exhausted ("until Mr. Peabody readies") */
 export function peabodysLocation(game: GameContext): InstId | undefined {
@@ -68,12 +77,8 @@ export function passageways(game: GameContext, enemyMoving: boolean): InstId[] {
 
 export default {
   fns: {
-    /** each floor's two Historical Societies on either side of its hall */
     floors(game: GameContext) {
-      for (const [floor, row] of FLOORS)
-        onFloor(game, floor)
-          .sort((a, b) => a.code.localeCompare(b.code))
-          .forEach((l, k) => setCell(game, l.id, [k === 0 ? 0 : 2, row]));
+      layFloors(game, FLOORS);
     },
     /** "If Sebastien Moreau is not listed under VIPs Slain": he waits set aside for agenda 2's back */
     sebastienAside(game: GameContext) {

@@ -27,6 +27,7 @@ import {
   immuneTo,
   invsAt,
   skillValue,
+  shroud,
 } from "../queries";
 import type { EffCtx, InstId, InvId } from "../world/types";
 import { commitSpent } from "../world/flags";
@@ -78,6 +79,11 @@ export function amt(game: GameContext, a: Amount, ctx: EffCtx): number {
   if (a === "succeedBy") return ctx.succeedBy ?? 0;
   if (a === "X") return ctx.x ?? 0;
   if (a === "enemiesEngaged") return ctx.you ? engagedWith(game, ctx.you).length : 0;
+  if (a === "yourShroud") {
+    const loc = ctx.you ? inv(game, ctx.you).location : null;
+    const x = loc ? shroud(game, loc) : 0;
+    return Number.isFinite(x) ? x : 0;
+  }
   return Infinity; // "all"
 }
 

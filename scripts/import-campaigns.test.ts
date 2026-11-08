@@ -161,6 +161,7 @@ describe("the generated campaigns (pnpm import:campaigns output)", () => {
       "the-dunwich-legacy",
       "return-to-the-dunwich-legacy",
       "the-path-to-carcosa",
+      "return-to-the-path-to-carcosa",
     ]) {
       expect(existsSync(join("content/campaigns", id, "campaign.json")), id).toBe(true);
       expect(existsSync(join(G, id)), id).toBe(false);
@@ -184,10 +185,10 @@ describe("the generated campaigns (pnpm import:campaigns output)", () => {
     expect(own).not.toEqual(notz);
   });
 
-  // The Path to Carcosa is hand-written now; its Return-to box gathers the same Midnight Masks subset
+  // The Path to Carcosa and its Return-to box are hand-written now: the box's Echoes there started as the importer's output
   it("removes the Midnight Masks cards Echoes of the Past doesn't gather", () => {
     const echoes = json(
-      join(G, "return-to-the-path-to-carcosa/scenarios/return-to-echoes-of-the-past.json"),
+      "content/campaigns/return-to-the-path-to-carcosa/scenarios/return-to-echoes-of-the-past.json",
     );
     const removed = echoes.setup.find((st: { do: string }) => st.do === "remove");
     // its locations, acts, agendas and The Masked Hunter go; Hunting Shadow (01135) and False Lead (01136) stay
@@ -266,7 +267,10 @@ describe("the generated flows (campaign-flow-compiler-fixes)", () => {
       "dim-carcosa",
       "ptc-epilogue",
     ]);
-    expect(flowOf("return-to-the-path-to-carcosa").order.slice(0, 4)).toEqual([
+    const ret: Flow = JSON.parse(
+      readFileSync("content/campaigns/return-to-the-path-to-carcosa/flow.json", "utf8"),
+    );
+    expect(ret.order.slice(0, 4)).toEqual([
       "ptc-prologue",
       "return-to-curtain-call",
       "return-to-the-last-king",

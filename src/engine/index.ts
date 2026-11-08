@@ -55,7 +55,7 @@ import { ZONE, PHASE, INV_STATUS, PILE, SCENARIO_CARD, isOneOf } from "./world/c
 import { STEP } from "./steps/step";
 import { scriptOf } from "./world/scripts";
 
-export const ENGINE_VERSION = 17;
+export const ENGINE_VERSION = 18;
 
 /**
  * Whether a save written by this engine version replays to the same game on this one. Version 8 changed the setup (a

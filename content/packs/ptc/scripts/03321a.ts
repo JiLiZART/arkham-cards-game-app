@@ -22,7 +22,7 @@ import {
 } from "../../../../src/engine/api";
 import {
   MITPM,
-  PALACE,
+  palaceInPlay,
   PALLID_MASK,
   TATTERED_KING,
 } from "../../../campaigns/the-path-to-carcosa/scripts/dim-carcosa";
@@ -79,7 +79,7 @@ export default {
       }
       removeStranger(game);
       const king = findByCode(game, TATTERED_KING, [ZONE.SetAside]);
-      const palace = findByCode(game, PALACE, [ZONE.Location]);
+      const palace = palaceInPlay(game);
       if (king && palace) queue(game, spawn({ enemy: king.id, inv: null, at: palace.id }));
     },
   },

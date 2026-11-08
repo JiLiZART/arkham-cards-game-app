@@ -13,7 +13,11 @@ import {
   queue,
   spawn,
 } from "../../../../src/engine/api";
-import { BEAST, hastur, PALACE } from "../../../campaigns/the-path-to-carcosa/scripts/dim-carcosa";
+import {
+  BEAST,
+  hastur,
+  palaceInPlay,
+} from "../../../campaigns/the-path-to-carcosa/scripts/dim-carcosa";
 
 /** "Hastur gets +N fight" while this agenda is current */
 export const hasturFight = (n: number) => (game: GameContext, _self: InstId) => {
@@ -29,7 +33,7 @@ export default {
       reshuffleDiscard(game, "encounter");
       emit(game, EVENT.Reshuffle, "The encounter discard pile is shuffled into the encounter deck");
       const beast = findByCode(game, BEAST, [ZONE.SetAside]);
-      const palace = findByCode(game, PALACE, [ZONE.Location]);
+      const palace = palaceInPlay(game);
       if (beast && palace) queue(game, spawn({ enemy: beast.id, inv: null, at: palace.id }));
     },
   },

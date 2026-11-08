@@ -93,10 +93,12 @@ export function preyCandidates(game: GameContext, enemy: InstId, all: InvId[]): 
   if (!prey) return candidates;
   // "only" prey never falls back to others: with nobody matching it engages and hunts no one
   if (prey === "bearer") return candidates.filter((i) => i === card(game, enemy).owner);
-  if ("only" in prey)
-    return candidates.filter((i) => card(game, inv(game, i).cardId).code === prey.only);
   if ("nearestTo" in prey) return nearestTo(game, prey.nearestTo, candidates);
-  if (candidates.length <= 1) return candidates;
+  if (!("highest" in prey) && !("lowest" in prey))
+    return candidates.filter((i) => card(game, inv(game, i).cardId).code === prey.only);
+  // "Prey - lowest remaining sanity only": the best among every investigator in play, the others ignored
+  const pool = prey.only ? activeInvs(game) : candidates;
+  if (pool.length <= 1) return candidates.filter((i) => pool.includes(i));
   const [dir, stat] = "highest" in prey ? [1, prey.highest] : [-1, prey.lowest];
   const val = (i: InvId) => {
     switch (stat) {
@@ -116,14 +118,14 @@ export function preyCandidates(game: GameContext, enemy: InstId, all: InvId[]): 
         return skillValue(game, i, stat);
     }
   };
-  const best = Math.max(...candidates.map((i) => dir * val(i)));
+  const best = Math.max(...pool.map((i) => dir * val(i)));
   return candidates.filter((i) => dir * val(i) === best);
 }
 
 /** Prey - bearer only / Prey - X only: the enemy ignores every other investigator */
 export function onlyPrey(game: GameContext, enemy: InstId) {
   const prey = preyOf(game, enemy);
-  return prey === "bearer" || (!!prey && "only" in prey);
+  return prey === "bearer" || (!!prey && "only" in prey && !!prey.only);
 }
 
 // ---------- spawning ----------
@@ -133,12 +135,17 @@ export const spawnHandler: Handler<"Spawn"> = (game, step) => {
   let at = step.at ?? null;
   let engage: InvId | null = null;
   const drawerLoc = step.inv ? inv(game, step.inv).location : null;
-  if (!at) at = fireScenarioHook(game, "spawnRedirect", step.enemy, step.inv) ?? null;
-  if (!at && (step.among || (d.spawn && typeof d.spawn === "object"))) {
-    // a spawn expression, or the locations the step names (Hired Gun): the drawer chooses among them; with none in play,
-    // the enemy is discarded
+  let among = step.among;
+  if (!at) {
+    const redirect = fireScenarioHook(game, "spawnRedirect", step.enemy, step.inv);
+    if (Array.isArray(redirect)) among = redirect;
+    else at = (redirect as InstId | null | undefined) ?? null;
+  }
+  if (!at && (among || (d.spawn && typeof d.spawn === "object"))) {
+    // a spawn expression, or the locations the step (Hired Gun) or the scenario names: the drawer chooses among them;
+    // with none in play, the enemy is discarded
     const cands =
-      step.among ??
+      among ??
       (d.spawn && typeof d.spawn === "object" ? spawnTargets(game, d.spawn, drawerLoc) : []);
     if (!cands.length) {
       emit(game, EVENT.SpawnFail, `${d.name} has no spawn location in play and is discarded`, {
@@ -810,7 +817,7 @@ export const enemyAttacksHandler: Handler<"EnemyAttacks"> = (game, step) => {
   // each enemy that attacked exhausts
   for (const key of done) {
     const id = key.split("|")[1];
-    if (cardIf(game, id)?.zone === "enemy") exhaust(game, id);
+    exhaustEnemy(game, id);
   }
 };
 
@@ -887,8 +894,10 @@ export const addSwarmHandler: Handler<"AddSwarm"> = (game, step) => {
     });
 };
 
+/** an enemy in play exhausts, unless it cannot be (The Throne Room: Hastur) */
 export function exhaustEnemy(game: GameContext, id: InstId) {
-  if (cardIf(game, id)?.zone === "enemy") exhaust(game, id);
+  if (cardIf(game, id)?.zone === "enemy" && !hasFlag(game, id, "cannotBeExhausted"))
+    exhaust(game, id);
 }
 
 export const enemyEngageHandler: Handler<"EnemyEngage"> = (game, step) => {

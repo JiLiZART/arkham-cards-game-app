@@ -173,10 +173,13 @@ export function moveCard(
         { inv: card(game, under).owner },
       );
   if (leavingPlay) {
-    // discard attachments; to the void a card keeps them (Shadow-spawned stays on the Hunting Horror), its tokens go
+    // discard attachments; to the void a card keeps them (Shadow-spawned stays on the Hunting Horror), its tokens go. A
+    // scenario card attached to it stays, its tokens too (Return to Curtain Call: "cannot be detached … even if Royal
+    // Emissary leaves play")
     for (const other of allCardRecs(game)) {
       if (
         zone !== ZONE.Void &&
+        game.db.cards[other.code]?.type !== "scenario" &&
         (other.attachedTo === id ||
           (other.zone === "attached" && other.location === id && c.zone === "location"))
       ) {

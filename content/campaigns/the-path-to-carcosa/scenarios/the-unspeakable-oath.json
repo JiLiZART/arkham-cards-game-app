@@ -20,7 +20,7 @@
     { "do": "putRandomIntoPlay", "from": ["03170", "03171"], "count": 1 },
     { "do": "putIntoPlay", "codes": ["03172", "03173", "03174", "03175", "03176", "03177"] },
     { "do": "setAside", "codes": ["03182a", "03178", "03179", "03180", "03181"] },
-    { "do": "setAside", "codes": ["03088", "03089", "03183", "01175"] },
+    { "do": "setAside", "codes": ["03088", "03089", "03183", "01175", "52069"] },
     { "do": "setAside", "codes": ["03095", "03096", "03184"] },
     { "do": "script", "fn": "halls" },
     { "do": "script", "fn": "constanceAside", "when": { "not": { "logHas": "03065b" } } },

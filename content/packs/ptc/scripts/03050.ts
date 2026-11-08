@@ -51,7 +51,8 @@ export default {
   },
   fns: {
     doorways(game: GameContext) {
-      doorways(game, ["03053", "03054", "03055"]);
+      // Return to Curtain Call adds its Theatre Lounge (52018) to the Lobby Doorways
+      doorways(game, ["03053", "03054", "03055", "52018"]);
     },
   },
 } satisfies CardScript;

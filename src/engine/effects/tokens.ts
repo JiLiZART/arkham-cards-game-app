@@ -402,6 +402,24 @@ function rememberEffect(game: GameContext, run: EffectRun<EffectOf<"remember">>)
   emit(game, EVENT.Remember, `Remembered: ${run.effect.key}`, { data: { key: run.effect.key } });
 }
 
+/** "Forget something an investigator has 'remembered'": you choose one of the facts held; it is no longer true */
+function forgetEffect(game: GameContext, run: EffectRun<EffectOf<"forget">>) {
+  const held = run.effect.of.filter((k) => rememberedFact.get(game, k));
+  if (!held.length) return;
+  const k = ask<string>(
+    game,
+    run.step,
+    run.you,
+    CHOICE.Generic,
+    "Forget which remembered fact?",
+    held.map((x) => ({ id: x, label: x, value: x, key: `option.remembered.${x}` })),
+    { auto: true, key: "forget" },
+  );
+  if (k === undefined) return;
+  rememberedFact.clear(game, k);
+  emit(game, EVENT.Remember, `Forgotten: ${k}`, { data: { key: k, forgotten: true } });
+}
+
 /** in a wouldDiscoverClues window: more clues discovered by that discovery (Newspaper 2) */
 function addCluesEffect(game: GameContext, run: EffectRun<EffectOf<"addClues">>) {
   if (run.ctx.key) extraClues.add(game, run.ctx.key, run.effect.amount);
@@ -421,6 +439,7 @@ export const tokensEffects = {
   checkDoom: checkDoomEffect,
   dropClues: dropCluesEffect,
   remember: rememberEffect,
+  forget: forgetEffect,
   moveClues: moveCluesEffect,
   takeControlOfClues: takeControlOfCluesEffect,
   cluesToDoom: cluesToDoomEffect,

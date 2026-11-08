@@ -223,7 +223,7 @@ describe("the campaign list", () => {
       ids.indexOf("return-to-the-night-of-the-zealot"),
     );
     expect(ids.indexOf("return-to-the-night-of-the-zealot")).toBeLessThan(
-      ids.indexOf("return-to-the-path-to-carcosa"),
+      ids.indexOf("return-to-the-forgotten-age"),
     );
     // a hand-written Return-to box after the hand-written cycles, before the generated ones
     expect(ids.indexOf("the-dunwich-legacy")).toBeLessThan(
@@ -233,6 +233,9 @@ describe("the campaign list", () => {
       ids.indexOf("return-to-the-dunwich-legacy"),
     );
     expect(ids.indexOf("return-to-the-dunwich-legacy")).toBeLessThan(
+      ids.indexOf("return-to-the-path-to-carcosa"),
+    );
+    expect(ids.indexOf("return-to-the-path-to-carcosa")).toBeLessThan(
       ids.indexOf("the-circle-undone"),
     );
     const firstSide = ids.findIndex((id) => id.startsWith("side-"));
@@ -259,6 +262,7 @@ describe("filtering the campaign list", () => {
       "brethren-of-ash",
       "night-of-the-zealot",
       "return-to-the-dunwich-legacy",
+      "return-to-the-path-to-carcosa",
       "the-dunwich-legacy",
       "the-path-to-carcosa",
     ]);
@@ -285,11 +289,12 @@ describe("filtering the campaign list", () => {
     expect(ids({ rules: "complete" }).length + ids({ rules: "partial" }).length).toBe(ids().length);
   });
 
-  it("Night of the Zealot, Brethren of Ash, The Dunwich Legacy and its Return, and The Path to Carcosa are the campaigns the Complete filter shows", () => {
+  it("Night of the Zealot, Brethren of Ash, The Dunwich Legacy and The Path to Carcosa with their Returns are the campaigns the Complete filter shows", () => {
     expect(ids({ rules: "complete" }).sort()).toEqual([
       "brethren-of-ash",
       "night-of-the-zealot",
       "return-to-the-dunwich-legacy",
+      "return-to-the-path-to-carcosa",
       "the-dunwich-legacy",
       "the-path-to-carcosa",
     ]);

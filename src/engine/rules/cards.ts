@@ -278,7 +278,12 @@ function isSubject(game: GameContext, cardId: InstId, data: EventData) {
  * events about the whole game an encounter card's forced ability may wait for, whatever card they name (Black Stars
  * Rise's Outer Wall: "after 1 or more doom is placed on the 'a' agenda deck")
  */
-const GAME_EVENTS: readonly Trigger[] = ["agendaAdvances", "doomPlaced"];
+const GAME_EVENTS: readonly Trigger[] = [
+  "agendaAdvances",
+  "doomPlaced",
+  // "after any investigator performs a parley action" (Return to The Last King's Dianne Devine)
+  "parleyed",
+];
 
 function triggerMatches(
   game: GameContext,
@@ -833,20 +838,17 @@ export const playCardHandler: Handler<"PlayCard"> = (game, step) => {
     ? (abilitiesOf(game, step.card).find((x) => x.fromHand) ?? playAbility(game, step.card))
     : playAbility(game, step.card);
   const after: Step = { t: STEP.FinishEvent, ctx: { source: step.card, you: step.inv } };
-  if (a?.run)
-    push(
-      game,
-      { t: STEP.Script, code: c.code, fn: a.run, ctx },
-      after,
-      win("cardPlayed", { inv: step.inv, card: step.card }),
-    );
-  else
-    push(
-      game,
-      { t: STEP.Effects, effects: a?.effects ?? [], ctx },
-      after,
-      win("cardPlayed", { inv: step.inv, card: step.card }),
-    );
+  // "when you play an event" may cancel it before it resolves (Painful Reflection); cancelled, it is only discarded
+  const unless = `event:${step.card}`;
+  push(
+    game,
+    win("eventWouldResolve", { inv: step.inv, card: step.card, key: unless }),
+    a?.run
+      ? { t: STEP.Script, code: c.code, fn: a.run, ctx, unless }
+      : { t: STEP.Effects, effects: a?.effects ?? [], ctx, unless },
+    after,
+    win("cardPlayed", { inv: step.inv, card: step.card }),
+  );
 };
 
 /** after an event resolves, discard it unless an effect moved it */

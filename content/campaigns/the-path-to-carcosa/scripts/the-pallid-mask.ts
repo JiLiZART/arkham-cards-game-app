@@ -132,6 +132,48 @@ export function catacombsOneOf(game: GameContext, run: ScriptRun, self: InstId, 
   putCatacomb(game, toward(here, d));
 }
 
+/**
+ * The starting location, the Catacombs deck, and everyone at the start; `extra` Catacombs join the pool before the
+ * start is chosen, and `removed` random ones other than the start, the Tomb and the Blocked Passage then leave the game
+ * unseen (Return to The Pallid Mask)
+ */
+export function layCatacombs(game: GameContext, extra: readonly string[] = [], removed = 0) {
+  const aside = (code: string) =>
+    allCards(game).filter((c) => c.code === code && c.zone === ZONE.SetAside);
+  const pool = [...CATACOMBS, ...extra].flatMap((code) => aside(code).map((c) => c.id));
+  const awoke = !!campaignLogOf(game).awokeInsideCatacombs;
+  const candidates = awoke
+    ? pool.filter((id) => ![TOMB, BLOCKED].includes(card(game, id).code))
+    : pool.filter((id) => card(game, id).code === GATE);
+  shuffleList(game, candidates);
+  const start = candidates[0];
+  moveCard(game, start, ZONE.Location);
+  setCell(game, start, [0, 0]);
+  flags.startLocation.set(game, start);
+  // the Tomb, the Blocked Passage and 3 others the bottom 5; the rest on top, in a random order
+  const rest = pool.filter((id) => id !== start);
+  const pair = rest.filter((id) => [TOMB, BLOCKED].includes(card(game, id).code));
+  const others = rest.filter((id) => !pair.includes(id));
+  shuffleList(game, others);
+  for (const id of others.splice(0, removed)) moveCard(game, id, ZONE.Removed);
+  const bottom = [...pair, ...others.slice(0, 3)];
+  shuffleList(game, bottom);
+  const top = others.slice(3);
+  flags.catacombs.set(game, [...top, ...bottom]);
+  for (const i of turnOrder(game)) placeInvestigator(game, i, start);
+  flags.rememberedFact.set(game, START_PENDING, true);
+}
+
+/**
+ * Return to The Pallid Mask: "For the purposes of Corpse Dweller's spawn ability, The Man in the Pallid Mask does not
+ * count as a [[Humanoid]] enemy. While it is act 2, The Man in the Pallid Mask cannot leave the Tomb of Shadows."
+ */
+export const RETURN_RULES = "rtpmRules";
+/** a Humanoid enemy for Corpse Dweller's spawn ability */
+export const dwellerPrey = (game: GameContext, enemy: InstId) =>
+  def(game, enemy).traits.includes("Humanoid") &&
+  !(flags.named(game, RETURN_RULES) && card(game, enemy).code === MITPM);
+
 /** "look at the revealed side of any Catacombs location in play" (Candlelit Tunnels, Catacombs Docent) */
 export function peek(game: GameContext, run: ScriptRun) {
   const hidden = locations(game).filter((l) => !l.revealed);
@@ -159,29 +201,7 @@ export default {
     },
     /** the starting location, the Catacombs deck, and everyone at the start */
     catacombs(game: GameContext) {
-      const aside = (code: string) =>
-        allCards(game).filter((c) => c.code === code && c.zone === ZONE.SetAside);
-      const pool = CATACOMBS.flatMap((code) => aside(code).map((c) => c.id));
-      const awoke = !!campaignLogOf(game).awokeInsideCatacombs;
-      const candidates = awoke
-        ? pool.filter((id) => ![TOMB, BLOCKED].includes(card(game, id).code))
-        : pool.filter((id) => card(game, id).code === GATE);
-      shuffleList(game, candidates);
-      const start = candidates[0];
-      moveCard(game, start, ZONE.Location);
-      setCell(game, start, [0, 0]);
-      flags.startLocation.set(game, start);
-      // the Tomb, the Blocked Passage and 3 others the bottom 5; the rest on top, in a random order
-      const rest = pool.filter((id) => id !== start);
-      const pair = rest.filter((id) => [TOMB, BLOCKED].includes(card(game, id).code));
-      const others = rest.filter((id) => !pair.includes(id));
-      shuffleList(game, others);
-      const bottom = [...pair, ...others.slice(0, 3)];
-      shuffleList(game, bottom);
-      const top = others.slice(3);
-      flags.catacombs.set(game, [...top, ...bottom]);
-      for (const i of turnOrder(game)) placeInvestigator(game, i, start);
-      flags.rememberedFact.set(game, START_PENDING, true);
+      layCatacombs(game);
     },
     /** Ishimaru's Information: "you opened a secret passageway" */
     secretPassageway(game: GameContext) {
@@ -225,7 +245,8 @@ export default {
      */
     spawnRedirect(game: GameContext, enemy: InstId, drawer: InvId | null) {
       if (card(game, enemy).code !== "03259" || !drawer) return undefined;
-      if (!enemies(game).some((e) => def(game, e.id).traits.includes("Humanoid")))
+      const prey = enemies(game).filter((e) => dwellerPrey(game, e.id));
+      if (!prey.length)
         queue(
           game,
           resolveEffect({
@@ -233,7 +254,11 @@ export default {
             ctx: { you: drawer, source: null },
           }),
         );
-      return undefined;
+      // Return to The Pallid Mask: the Humanoids' locations but his (its data's `enemyTrait` would count him)
+      if (!flags.named(game, RETURN_RULES)) return undefined;
+      return locations(game)
+        .filter((l) => prey.some((e) => e.location === l.id))
+        .map((l) => l.id);
     },
     ended(game: GameContext) {
       if (allCards(game).some((c) => c.code === HARUKO && c.zone === ZONE.Victory))

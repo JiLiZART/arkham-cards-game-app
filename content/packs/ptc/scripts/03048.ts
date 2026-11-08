@@ -1,7 +1,9 @@
 // Curtain Call (act 3) — what horror on a location became at act 2's back (flames, ooze, flood: each location with
 // horror gains its forced ability, once per round for each location where it says so); at the end of the round horror
 // spreads to each location with none connected to one with horror. While The Man in the Pallid Mask is not in play
-// the Lobby can be resigned from (the Lobby's script). The objective, each undefeated investigator resigned, is the
+// the Lobby can be resigned from (the Lobby's script). Return to Curtain Call's versions add mists ("when you would
+// leave": willpower 3, cancel the move or lose your remaining actions), overgrowth ("after you leave": willpower 4,
+// discard an Item or Ally asset or take 2 damage) and screeching (as flames, willpower 2 for 1 horror). The objective, each undefeated investigator resigned, is the
 // scenario's; back: the investigators decide (→R1) or (→R2).
 import {
   card,
@@ -54,6 +56,48 @@ export default {
     },
     // flood: when you would leave this location
     { kind: "forced", trigger: "wouldMoveOut", condition: { script: "flood" }, run: "flood" },
+    // mists: when you would leave this location
+    {
+      kind: "forced",
+      trigger: "wouldMoveOut",
+      condition: { script: "mists" },
+      effects: [
+        {
+          op: "skillTest",
+          skill: "willpower",
+          difficulty: 3,
+          onFail: [{ op: "script", fn: "lost" }],
+        },
+      ],
+    },
+    // overgrowth: after you leave this location
+    {
+      kind: "forced",
+      trigger: "leftLocation",
+      condition: { script: "overgrowth" },
+      effects: [
+        {
+          op: "skillTest",
+          skill: "willpower",
+          difficulty: 4,
+          onFail: [
+            {
+              op: "discardAsset",
+              filter: { trait: ["Item", "Ally"] },
+              orElse: [{ op: "takeDamage", amount: 2 }],
+            },
+          ],
+        },
+      ],
+    },
+    // screeching: after you enter this location or end your turn at it
+    {
+      kind: "forced",
+      trigger: "enterLocation",
+      condition: { script: "screeching" },
+      run: "screech",
+    },
+    { kind: "forced", trigger: "turnEnds", condition: { script: "screeching" }, run: "screech" },
     { kind: "forced", trigger: "roundEnds", run: "spread" },
     { kind: "revelation", run: "back" },
   ],
@@ -66,6 +110,14 @@ export default {
       spreading(game) === "ooze" && hasHorror(game, ctx.location),
     flood: (game: GameContext, ctx: EffCtx) =>
       spreading(game) === "flood" && hasHorror(game, ctx.location) && fresh(game, ctx.location!),
+    mists: (game: GameContext, ctx: EffCtx) =>
+      spreading(game) === "mists" && hasHorror(game, ctx.location),
+    overgrowth: (game: GameContext, ctx: EffCtx) =>
+      spreading(game) === "overgrowth" && hasHorror(game, ctx.location),
+    screeching: (game: GameContext, ctx: EffCtx) => {
+      const loc = where(game, ctx);
+      return spreading(game) === "screeching" && hasHorror(game, loc) && fresh(game, loc!);
+    },
   },
   fns: {
     burn(game: GameContext, run: ScriptRun) {
@@ -81,6 +133,48 @@ export default {
             difficulty: 3,
             onFail: [{ op: "takeDamage", amount: 1 }],
           },
+          ctx: { ...run.ctx, you: run.you },
+        }),
+      );
+    },
+    /** "Test [willpower] (2). If you fail, take 1 horror. (Limit once per round.)" */
+    screech(game: GameContext, run: ScriptRun) {
+      const loc = where(game, run.ctx);
+      if (!loc) return;
+      flags.setNamed(game, usedKey(game, loc), true);
+      queue(
+        game,
+        resolveEffect({
+          effect: {
+            op: "skillTest",
+            skill: "willpower",
+            difficulty: 2,
+            onFail: [{ op: "takeHorror", amount: 1 }],
+          },
+          ctx: { ...run.ctx, you: run.you },
+        }),
+      );
+    },
+    /** "you must either cancel the effects of the move or lose all remaining actions and end your turn after completing
+     * the effects of the move" (with no action left the turn ends once the move is done) */
+    lost(game: GameContext, run: ScriptRun) {
+      const id = run.choose<string>(
+        [
+          { id: "cancel", label: "Cancel the move", value: "cancel", key: "option.ccMists.cancel" },
+          {
+            id: "lose",
+            label: "Lose all remaining actions and end your turn after the move",
+            value: "lose",
+            key: "option.ccMists.lose",
+          },
+        ],
+        { text: "The mist: cancel the move, or lose your remaining actions", key: "ccMists" },
+        { auto: false },
+      );
+      queue(
+        game,
+        resolveEffect({
+          effect: id === "cancel" ? { op: "cancel" } : { op: "loseActions", amount: "all" },
           ctx: { ...run.ctx, you: run.you },
         }),
       );

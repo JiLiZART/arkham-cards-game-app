@@ -20,10 +20,11 @@ import {
   CHOEUR,
   CLOISTER,
   KNIGHTS_HALL,
+  NEW_CLOISTER_PAIR,
   TOWER,
 } from "../../../campaigns/the-path-to-carcosa/scripts/black-stars-rise";
 
-const SET_ASIDE = [...CHOEUR, KNIGHTS_HALL, CLOISTER, ...CHAPEL, ...TOWER];
+const SET_ASIDE = [...CHOEUR, KNIGHTS_HALL, CLOISTER, ...NEW_CLOISTER_PAIR, ...CHAPEL, ...TOWER];
 
 export default {
   abilities: [{ kind: "forced", trigger: "revealed", run: "abbey" }],

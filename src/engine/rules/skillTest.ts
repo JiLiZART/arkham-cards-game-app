@@ -41,7 +41,6 @@ import {
   cardOfIf,
   def,
   emit,
-  exhaust,
   type GameContext,
   inv,
   invName,
@@ -54,7 +53,7 @@ import {
 import { moveCard } from "../movement";
 import type { EffCtx, InstId, InvId, SkillTestState, Step } from "../world/types";
 import { activatable, canPay, canPlay, payCost, playable, win } from "./cards";
-import { attackKey } from "./enemies";
+import { attackKey, exhaustEnemy } from "./enemies";
 import { tokenX } from "./tokens";
 import { runScript } from "./scripts";
 import { EVENT } from "../events/event";
@@ -404,7 +403,8 @@ function commitStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
   const asked = step.asked ?? [];
   const perilous = !!peril.get(game);
   const loc = inv(game, t.inv).location;
-  const here = invsAt(game, loc);
+  // at Recesses of Your Own Mind each investigator is at a copy of their own
+  const here = loc && hasFlag(game, loc, "separateCopies") ? [t.inv] : invsAt(game, loc);
   // an investigator elsewhere who may commit to tests at other locations (Analytical Mind)
   const afar = activeInvs(game).filter(
     (i) => !here.includes(i) && hasFlag(game, i, "commitFromAfar"),
@@ -972,7 +972,7 @@ function resultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) {
   const success = t.autoSucceed || (!t.autoFail && total >= diff);
   if (success && !t.succeedWindowDone) {
     t.succeedWindowDone = true;
-    push(game, win("wouldSucceedSkillTest", { inv: t.inv, testId: t.id }), {
+    push(game, win("wouldSucceedSkillTest", { inv: t.inv, testId: t.id, margin: total - diff }), {
       t: STEP.Test,
       stage: TEST_STAGE.Result,
     });
@@ -1277,7 +1277,7 @@ function kindResultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) 
     if (t.kind === "evade" && t.target && !t.noEvade) {
       const e = cardOfIf(game.s, t.target);
       if (e?.zone === "enemy") {
-        if (!t.evadeNoExhaust) exhaust(game, e.id);
+        if (!t.evadeNoExhaust) exhaustEnemy(game, e.id);
         setEngaged(game, e.id, null);
         // "until the end of your turn, that enemy cannot engage you" (Stealth)
         if (t.noEngageAfterEvade) noEngage.set(game, [e.id, t.inv], game.s.counters.turn);

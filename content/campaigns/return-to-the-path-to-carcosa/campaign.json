@@ -92,7 +92,7 @@
     "ptc",
     "return"
   ],
-  "generated": true,
+  "generated": false,
   "card": "03043",
   "cover": "03044",
   "prologue": "“He mentioned the establishment of the Dynasty in Carcosa, the lakes which connected Hastur, Aldebaran, and the mystery of the Hyades. He spoke of Cassilda and Camilla, and sounded the cloudy depths of Demhe and the Lake of Hali.” – Robert W. Chambers, “The Repairer of Reputations”",
@@ -149,7 +149,7 @@
       "name": "Return to Curtain Call",
       "code": "03043",
       "agenda": "03044",
-      "act": "52015"
+      "act": "03046"
     },
     {
       "scenario": "return-to-the-last-king",
@@ -175,7 +175,7 @@
       "name": "Return to The Unspeakable Oath",
       "code": "03159",
       "agenda": "03160",
-      "act": "52035"
+      "act": "03163"
     },
     {
       "scenario": "ptc-interlude2",
@@ -200,8 +200,7 @@
       "scenario": "return-to-black-stars-rise",
       "name": "Return to Black Stars Rise",
       "code": "03274",
-      "agenda": "03275",
-      "act": "03281"
+      "agenda": "03275"
     },
     {
       "scenario": "return-to-dim-carcosa",

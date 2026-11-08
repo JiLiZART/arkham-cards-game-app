@@ -22,7 +22,7 @@ import {
   emit,
   enemies,
   enemyStat,
-  exhaust,
+  exhaustEnemy,
   flags,
   type GameContext,
   type InstId,
@@ -30,6 +30,7 @@ import {
   invIf,
   type InvId,
   leadInvestigator,
+  locationByName,
   type Queued,
   maxSanity,
   moveCard,
@@ -56,6 +57,7 @@ import pallid from "./the-pallid-mask";
 import { creatureAttacks } from "../../../packs/ptc/scripts/03335";
 import { wingedOneMoves } from "../../../packs/ptc/scripts/03336";
 import { palaceSealed } from "../../../packs/ptc/scripts/03331";
+import { domainSealed, HASTURS_DOMAIN } from "../../../packs/return/scripts/52060";
 import { possessionKills } from "../../../packs/ptc/scripts/03340";
 
 export const MITPM = "03059";
@@ -85,6 +87,11 @@ export const ACT2_CHOICE = "dcaAct2Choice";
 export const SECRET = "dcaKnowTheSecret";
 /** the Hastur that was defeated: `${DEFEATED}:<code>` */
 export const DEFEATED = "dcaHasturDefeated";
+/**
+ * Return to Dim Carcosa: "Hastur's health cannot be reduced to less than 2 [per_investigator] unless any investigator
+ * 'knows the secret'" (its setup sets it; damageHastur reads it)
+ */
+export const HEALTH_FLOOR = "dcaHasturHealthFloor";
 /** a location whose story can't be flipped over again */
 export const locked = (loc: InstId) => `dcaLocked:${loc}`;
 const SCENARIO = "dim-carcosa";
@@ -105,6 +112,8 @@ const count = (game: GameContext, k: string) => {
 export const convictionAtLeastDoubt = (game: GameContext) =>
   count(game, "conviction") >= count(game, "doubt");
 
+/** the Palace of the King in play, by its title: Return to Dim Carcosa's Hastur's Domain (52060) takes its place */
+export const palaceInPlay = (game: GameContext) => locationByName(game, "Palace of the King");
 /** Hastur in play, whichever version (The King in Yellow at no location) */
 export const hastur = (game: GameContext) => enemies(game).find((e) => e.code in HASTURS) ?? null;
 export const hasturDamage = (game: GameContext) => hastur(game)?.damage ?? 0;
@@ -120,6 +129,7 @@ export const overTwiceSanity = (game: GameContext, i: InvId) =>
 export function canFlip(game: GameContext, loc: InstId | null | undefined): loc is InstId {
   if (!loc || flags.rememberedFact.get(game, locked(loc))) return false;
   if (card(game, loc).code === PALACE && palaceSealed(game)) return false;
+  if (card(game, loc).code === HASTURS_DOMAIN && domainSealed(game)) return false;
   return !!def(game, loc).back;
 }
 
@@ -134,26 +144,25 @@ export function flipLocation(game: GameContext, loc: InstId, you: InvId) {
 }
 
 /**
- * the steps that deal damage to Hastur from a story card (he takes damage from nothing else), then check the agendas'
+ * the steps that deal damage to Hastur from a story card (he takes damage from nothing else; in Return to Dim Carcosa not
+ * below 2 health per investigator without the secret), then check the agendas'
  * damage thresholds; none while he is not in play
  */
 export function damageHastur(game: GameContext, story: InstId, perInvestigator: number): Queued[] {
   const h = hastur(game);
   if (!h) return [];
+  let amount = perInvestigator * playerCount(game);
+  if (flags.named(game, HEALTH_FLOOR) && !flags.rememberedFact.get(game, SECRET))
+    amount = Math.min(amount, enemyStat(game, h.id, "health") - 2 * playerCount(game) - h.damage);
   return [
-    damageEnemy({
-      enemy: h.id,
-      amount: perInvestigator * playerCount(game),
-      by: null,
-      source: story,
-    }),
+    ...(amount > 0 ? [damageEnemy({ enemy: h.id, amount, by: null, source: story })] : []),
     runScript({ code: SCENARIO, fn: "thresholds", ctx: { source: null } }),
   ];
 }
 
 /** an enemy exhausted and disengaged from all investigators */
 export function stun(game: GameContext, id: InstId) {
-  exhaust(game, id);
+  exhaustEnemy(game, id);
   setEngaged(game, id, null);
   emit(game, EVENT.Evade, `${def(game, id).name} is exhausted and disengaged`, { card: id });
 }

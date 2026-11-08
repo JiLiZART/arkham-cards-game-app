@@ -879,7 +879,11 @@ export const handSizeHandler: Handler<"HandSize"> = (game, step) => {
   const excess = handCount(game, step.inv) - limit;
   // a Hidden card is never discarded to the hand size
   const discardable = me.hand.filter((h) => !isHidden(game, h));
-  if (excess <= 0 || !discardable.length) return;
+  if (excess <= 0 || !discardable.length) {
+    // "after you discard 1 or more cards from your hand during the upkeep phase" (La Comtesse)
+    if (step.stepped) push(game, win("discardedToHandSize", { inv: step.inv }));
+    return;
+  }
   if (!step.stepped && step.choice === undefined) logStep(game, "handSize", step.inv);
   const pick = ask<InstId>(
     game,
