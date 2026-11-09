@@ -52,11 +52,6 @@ const artClass = (c: Pick<CardDef, "faction" | "factions">) =>
 /** the class painting behind an investigator panel (public/art/investigator-bg, the author's art) */
 export const classBackground = (c: Pick<CardDef, "faction" | "factions">) =>
   asset(`art/investigator-bg/${artClass(c)}.webp`);
-/** a piece of the investigator card frame in the class's colours (public/art/investigator-card) */
-export const cardFrame = (
-  c: Pick<CardDef, "faction" | "factions">,
-  part: "title" | "skills" | "description",
-) => asset(`art/investigator-card/${part}-${artClass(c)}.webp`);
 /** the health heart or the sanity brain printed on investigator cards */
 export const vitalArt = (kind: "health" | "sanity") => asset(`art/investigator-card/${kind}.webp`);
 

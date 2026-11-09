@@ -220,7 +220,7 @@ function Sheet({
       onPointerEnter={onEnter}
       onPointerLeave={onLeave}
       style={{
-        left: Math.max(8, Math.min(anchor?.left ?? 8, innerWidth - 440)),
+        left: Math.max(8, Math.min(anchor?.left ?? 8, innerWidth - 520)),
         top: (anchor?.bottom ?? 60) + 6,
       }}
     >

@@ -6,9 +6,8 @@ import { maxHealth, maxSanity, skillValue } from "../../../engine/queries";
 import { handLimit } from "../../../engine/rules/investigators";
 import type { ChoiceOption, GameState, InvId } from "../../../engine/world/types";
 import { db, gameStore, useGame } from "../../state/context";
-import { Stat } from "../../components/Icon";
-import { backUrl, cardFrame, classBackground, vitalArt } from "../../assets/images";
-import { Portrait } from "../../components/Portrait";
+import { Glyph, Stat } from "../../components/Icon";
+import { backUrl, cardImage, classBackground, FACTION_COLORS, vitalArt } from "../../assets/images";
 import { TokenPile } from "../../components/TokenPile";
 import { abilityOptionsOf } from "../../state/players";
 import { useShown } from "../../state/usePlayers";
@@ -152,6 +151,8 @@ export function StatBody({
   const n = invNumbers(game, inv);
   const d = db.cards[inv];
   const tx = cardText(db, inv, locale);
+  // the card's front scan: its painting is cropped into the frame
+  const art = cardImage(d, "front");
   return (
     <>
       <div className={styles.tokenRow} data-inv={inv}>
@@ -159,42 +160,49 @@ export function StatBody({
         <TokenStack kind="clue" value={n.clues} />
         <HandCount value={n.hand} limit={n.handLimit} />
       </div>
-      {/* the card frame of the investigator's class over the class painting */}
+      {/* the investigator card, landscape: the card's own art over the class painting in a frame of the class's colour;
+          the skills down the left edge, health and sanity top right, the traits and ability bottom right */}
       <div
-        className={styles.statBar}
+        className={cx(styles.statBar, legal ? "legal" : "")}
         data-testid="stat-bar"
         style={
           {
+            "--class": FACTION_COLORS[d.faction] ?? FACTION_COLORS.neutral,
             "--class-bg": `url(${classBackground(d)})`,
-            "--frame-title": `url(${cardFrame(d, "title")})`,
-            "--frame-skills": `url(${cardFrame(d, "skills")})`,
-            "--frame-notes": `url(${cardFrame(d, "description")})`,
+            "--art": art ? `url(${art})` : "none",
           } as CSSProperties
         }
       >
-        <div className={styles.title}>
-          <span className={cx(styles.statName, "card-name")}>{tx.name}</span>
-          {tx.subname && <span className={styles.subname}>{tx.subname}</span>}
-        </div>
         <button
           data-tip="portrait"
-          className={cx(styles.portraitBtn, legal ? "legal" : "", dimmed ? "dimmed" : "")}
+          className={cx(styles.art, dimmed ? "dimmed" : "")}
           onClick={onPortrait}
           title={tx.name}
+          aria-label={tx.name}
           disabled={!onPortrait}
-        >
-          <Portrait code={inv} size={120} active={game.active === inv} />
-        </button>
+        />
+        <header className={styles.title}>
+          <span className={cx(styles.badge, game.active === inv ? "active" : "")}>
+            <Glyph name={d.faction} size={34} />
+          </span>
+          <span className={styles.names}>
+            <span className={cx(styles.statName, "card-name")}>
+              {d.unique && <Glyph name="unique" size={16} title="" />}
+              {tx.name}
+            </span>
+            {tx.subname && <span className={styles.subname}>{tx.subname}</span>}
+          </span>
+        </header>
         <div className={styles.vitals}>
           <Vital kind="health" value={n.health} max={n.maxHealth} />
           <Vital kind="sanity" value={n.sanity} max={n.maxSanity} />
         </div>
         <div className={styles.skills}>
           {n.skills.map(([s, v]) => (
-            <FlashStat key={s} icon={s} value={v} size={32} label={tr(`stat.${s}`)} />
+            <FlashStat key={s} icon={s} value={v} size={30} label={tr(`stat.${s}`)} />
           ))}
         </div>
-        {/* the traits and the ability on the notebook, with its options when it can be used right now */}
+        {/* the traits and the ability, with its options when it can be used right now */}
         <div className={cx(styles.notes, "stat-who")}>
           {!!tx.traits?.length && (
             <i className={styles.traits}>{tx.traits.map((t) => `${t}.`).join(" ")}</i>
@@ -211,11 +219,11 @@ export function StatBody({
 }
 
 /**
- * The investigator on screen (the one being looked at, else the decider), bottom-left at 75 %, drawn like the card:
- * the title band, the portrait with health and sanity under it, the skills strip and the ability on the notebook;
- * resources and clues as token stacks and the hand count above. The investigator's own ability options
- * are buttons under the ability text (and in the avatar sheet, which the phone uses); answers among investigators stay on
- * the avatars. The portrait opens the card.
+ * The investigator on screen (the one being looked at, else the decider), bottom-left, drawn as a landscape investigator
+ * card: the card's painting in a frame of the class's colour, the skills down the left edge, health and sanity top
+ * right, the traits and ability bottom right; resources and clues as token stacks and the hand count above. The
+ * investigator's own ability options are buttons under the ability text (and in the avatar sheet, which the phone uses);
+ * answers among investigators stay on the avatars. The painting opens the card.
  */
 export function StatBar() {
   const game = useGame((s) => s.game) as GameState;

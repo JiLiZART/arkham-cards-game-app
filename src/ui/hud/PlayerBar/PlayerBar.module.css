@@ -110,7 +110,7 @@
 .pb-sheet {
   position: fixed;
   z-index: 72;
-  width: 420px;
+  width: 500px;
   display: flex;
   flex-direction: column;
   gap: 6px;
