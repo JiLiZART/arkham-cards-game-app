@@ -230,6 +230,9 @@ export function moveCard(
     case "encounterDiscard":
       pileRec(game, PILE.EncounterDiscard).push(id);
       break;
+    case "exploration":
+      at(pileRec(game, PILE.Exploration));
+      break;
     case "act":
       game.s.acts[deck] = id;
       break;

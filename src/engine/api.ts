@@ -6,7 +6,14 @@
 import { push, type GameContext } from "./context";
 import { afterTest as afterTestSteps } from "./rules/skillTest";
 import { STEP } from "./steps/step";
-import type { BeneathOf, Effect, Placement, TokenHolder, Trigger } from "../content/schema";
+import type {
+  BeneathOf,
+  Effect,
+  ExplorationSpec,
+  Placement,
+  TokenHolder,
+  Trigger,
+} from "../content/schema";
 import type {
   CardScript,
   EffCtx,
@@ -54,8 +61,10 @@ export {
   canPay,
   canReady,
   cardsIn,
+  cannotExplore,
   checkCondition,
   connections,
+  connectsBySymbol,
   controlled,
   distances,
   enemies,
@@ -266,6 +275,24 @@ export const openWindow = (trigger: Trigger, data: EventData): Queued =>
   ({ t: STEP.Window, trigger, data }) as unknown as Queued;
 /** reveal a location once the steps before it have resolved */
 export const revealLocation = (location: InstId): Queued => verb(STEP.RevealLocation)({ location });
+/** Explore (ADR-0052): `inv` draws from the exploration deck for a location matching `match` */
+export const explore = (inv: InvId, match: Extract<Effect, { op: "explore" }>["match"]): Queued =>
+  verb(STEP.Explore)({ inv, match, drawn: [] });
+/** look at the top cards of the exploration deck: 1 to the bottom and the rest on top, or its treacheries discarded */
+export const lookAtExploration = (
+  top: number,
+  then: "reorder" | "discardTreacheries",
+  ctx: EffCtx,
+): Queued => verb(STEP.Eff)({ effect: { op: "lookAtExploration", top, then }, ctx });
+/** this card (`ctx.source`), or the encounter deck's top card, shuffled into the exploration deck */
+export const shuffleIntoExploration = (card: "self" | "encounterTop", ctx: EffCtx): Queued =>
+  verb(STEP.Eff)({ effect: { op: "shuffleIntoExploration", card }, ctx });
+/** the first location in the exploration deck put into play, the deck shuffled */
+export const revealExplorationUntil = (ctx: EffCtx): Queued =>
+  verb(STEP.Eff)({ effect: { op: "revealExplorationUntil", type: "location" }, ctx });
+/** the exploration deck's cards set aside and a new one built from `spec` */
+export const rebuildExploration = (spec: ExplorationSpec, ctx: EffCtx): Queued =>
+  verb(STEP.Eff)({ effect: { op: "rebuildExploration", ...spec }, ctx });
 /** an investigator's assets with enough damage or horror on them are defeated */
 export const checkAssetDefeat = (inv: InvId): Queued => verb(STEP.AssetDefeatCheck)({ inv });
 /** the basic Fight action against the context's enemy */

@@ -851,7 +851,7 @@ function resolveTokensStage(game: GameContext) {
                     const cost = def(game, id).cost;
                     return n + (typeof cost === "number" ? cost : 0);
                   }, 0)
-                : tokenX(game, eff.x!, t.inv));
+                : tokenX(game, eff.x!, t.inv, eff.xCounter));
         const x = () =>
           -(
             Math.max(Math.min(xOf(), eff.xMax ?? Infinity), eff.xMin ?? 0) * (eff.xTimes ?? 1) +

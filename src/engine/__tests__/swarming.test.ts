@@ -23,7 +23,7 @@ function drawn(who: string | null, swarming = 2) {
     investigators: [ROLAND, DAISY],
     prep: (g) => {
       host = createCard(g, HOST, ZONE.Limbo);
-      deckTop = [...inv(g, who ?? leadInvestigator(g)).deck.slice(0, swarming)];
+      deckTop = inv(g, who ?? leadInvestigator(g)).deck.slice(0, swarming);
     },
   });
   const r = inject(

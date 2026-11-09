@@ -15,6 +15,8 @@ export const ZONE = {
   EncounterDeck: "encounterDeck",
   EncounterDiscard: "encounterDiscard",
   SideDeck: "sideDeck",
+  /** the exploration deck, top first: single-sided locations and encounter cards an Explore ability draws from */
+  Exploration: "exploration",
   Location: "location",
   Enemy: "enemy",
   Attached: "attached",
@@ -93,8 +95,64 @@ export const PILE = {
   EncounterDiscard: "encounterDiscard",
   ActDeck: "actDeck",
   AgendaDeck: "agendaDeck",
+  Exploration: "exploration",
 } as const;
 export type FixedPile = (typeof PILE)[keyof typeof PILE];
+
+/**
+ * The connection symbols printed on locations (The Forgotten Age): a location's own symbol, and the symbols of the
+ * locations it connects to. The five the Return-to box names, and the base cycle's glyphs; `campaign-the-forgotten-age`
+ * extends the set as it transcribes the scans.
+ */
+export const CONNECTION_SYMBOLS = [
+  "purpleMoon",
+  "blueTriangle",
+  "redSquare",
+  "orangeHeart",
+  "greenDiamond",
+  "circle",
+  "square",
+  "triangle",
+  "diamond",
+  "cross",
+  "moon",
+  "heart",
+  "star",
+  "hourglass",
+  "t",
+  "equals",
+  "slash",
+  "spade",
+  "clover",
+] as const;
+export type ConnectionSymbol = (typeof CONNECTION_SYMBOLS)[number];
+
+/**
+ * The supplies a campaign's investigators can carry (The Forgotten Age's Supply Points, its Return-to box, Relics of the
+ * Past), by the campaign guide's ids: a campaign-log section keeps each investigator's count (ADR-0053)
+ */
+export const SUPPLIES = [
+  "provisions",
+  "medicine",
+  "rope",
+  "blanket",
+  "canteen",
+  "torches",
+  "compass",
+  "map",
+  "binoculars",
+  "chalk",
+  "pendant",
+  "gasoline",
+  "pocketknife",
+  "pickaxe",
+  "journal",
+  "satchel",
+  "key_of_eztli",
+  "sticky_goop",
+  "mysterious_scepter",
+] as const;
+export type Supply = (typeof SUPPLIES)[number];
 
 /** whether a value is one of the options: `isOneOf(card.zone, ZONE.Play, ZONE.Threat)`, for any of the sets above */
 export const isOneOf = <T extends string>(value: T, ...options: readonly T[]): boolean =>

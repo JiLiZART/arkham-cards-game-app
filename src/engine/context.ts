@@ -34,7 +34,7 @@ import type {
   PileName,
 } from "./world/types";
 import { EVENT } from "./events/event";
-import { PHASE, CHOICE, PILE } from "./world/constants";
+import { PHASE, CHOICE, PILE, type FixedPile } from "./world/constants";
 
 /** The engine context's accessors, counters and setters, events and the step queue: what every rule builds on (ADR-0022, ADR-0025). */
 
@@ -184,10 +184,8 @@ export function endScenario(game: GameContext, resolution: string) {
   game.s.pending = null;
 }
 /** a scenario pile, top first for the decks (read-only: move cards with moveCard) */
-export const pile = (
-  game: GameContext,
-  name: "encounterDeck" | "encounterDiscard" | "actDeck" | "agendaDeck",
-): readonly InstId[] => pileRead(game.s, name);
+export const pile = (game: GameContext, name: FixedPile): readonly InstId[] =>
+  pileRead(game.s, name);
 /** an act or agenda deck's cards under its current one, top first (deck `a`: a one-deck scenario's) */
 export const deckCards = (
   game: GameContext,
@@ -267,9 +265,19 @@ export const randomInt = (game: GameContext, n: number) => randInt(game.s, n);
 export function shuffleList<T>(game: GameContext, list: T[]) {
   shuffle(game.s, list);
 }
-/** shuffle an investigator's deck or the encounter deck */
-export function shuffleDeck(game: GameContext, owner: InvId | "encounter") {
-  shuffle(game.s, pileRec(game, owner === "encounter" ? PILE.EncounterDeck : `deck:${owner}`));
+/** shuffle an investigator's deck, the encounter deck or the exploration deck */
+export function shuffleDeck(game: GameContext, owner: InvId | "encounter" | "exploration") {
+  shuffle(
+    game.s,
+    pileRec(
+      game,
+      owner === "encounter"
+        ? PILE.EncounterDeck
+        : owner === "exploration"
+          ? PILE.Exploration
+          : `deck:${owner}`,
+    ),
+  );
 }
 
 // ---------- counters ----------
@@ -404,10 +412,17 @@ export function setStatus(
 /** put cards on top of a deck in the order given (`ids[0]` on top), the rest of the deck below them in its order */
 export function arrangeOnTop(
   game: GameContext,
-  owner: InvId | "encounter",
+  owner: InvId | "encounter" | "exploration",
   ids: readonly InstId[],
 ) {
-  const deck = pileRec(game, owner === "encounter" ? PILE.EncounterDeck : `deck:${owner}`);
+  const deck = pileRec(
+    game,
+    owner === "encounter"
+      ? PILE.EncounterDeck
+      : owner === "exploration"
+        ? PILE.Exploration
+        : `deck:${owner}`,
+  );
   deck.splice(0, deck.length, ...ids, ...deck.filter((id) => !ids.includes(id)));
 }
 

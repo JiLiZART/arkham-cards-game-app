@@ -18,6 +18,8 @@ export interface LogSectionState {
   cards: Record<string, string[]>;
   /** count id → investigator → number */
   investigators: Record<string, Record<string, number>>;
+  /** a supplies section (ADR-0053): investigator → supply → how many they carry (absent in older saves) */
+  supplies?: Record<string, Record<string, number>>;
 }
 
 export type CampaignLog = Record<string, LogSectionState>;
@@ -123,6 +125,59 @@ export function addCards(
       ? now.filter((c) => !codes.includes(c))
       : [...now, ...codes.filter((c) => !now.includes(c))];
   });
+}
+
+export const SUPPLIES_SECTION = "supplies";
+
+/** `n` more of a supply for an investigator */
+export function addSupply(
+  log: CampaignLog,
+  inv: string,
+  supply: string,
+  n = 1,
+  section = SUPPLIES_SECTION,
+): CampaignLog {
+  return edit(log, section, (s) => {
+    const by = ((s.supplies ??= {})[inv] ??= {});
+    by[supply] = (by[supply] ?? 0) + n;
+  });
+}
+
+/** one of the investigator's supply crossed off (`all`: every one of it); nothing when they have none */
+export function crossOffSupply(
+  log: CampaignLog,
+  inv: string,
+  supply: string,
+  section = SUPPLIES_SECTION,
+  all = false,
+): CampaignLog {
+  return edit(log, section, (s) => {
+    const by = s.supplies?.[inv];
+    if (!by?.[supply]) return;
+    by[supply] = all ? 0 : by[supply] - 1;
+    if (!by[supply]) delete by[supply];
+  });
+}
+
+/** how many of a supply an investigator carries */
+export const supplyCount = (
+  log: CampaignLog,
+  inv: string,
+  supply: string,
+  section = SUPPLIES_SECTION,
+): number => log[section]?.supplies?.[inv]?.[supply] ?? 0;
+
+/** whether the investigator (or any investigator) has the supply */
+export function hasSupply(
+  log: CampaignLog,
+  inv: string | "any",
+  supply: string,
+  section = SUPPLIES_SECTION,
+): boolean {
+  const by = log[section]?.supplies ?? {};
+  return inv === "any"
+    ? Object.values(by).some((x) => (x[supply] ?? 0) > 0)
+    : (by[inv]?.[supply] ?? 0) > 0;
 }
 
 /** the flat view: entries as true (or their value), counts as numbers, card lists as arrays, every section together */

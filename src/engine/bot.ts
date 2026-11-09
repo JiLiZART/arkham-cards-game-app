@@ -356,6 +356,11 @@ function turnChoice(db: ContentDb, r: Result): string | undefined {
       .map((l) => l.id),
   );
   if (toClues) return toClues;
+  // no clues here and none to move to: explore, to put new places into play (The Forgotten Age)
+  if (clues === 0) {
+    const o = pick((x) => ability(x)?.designator === "explore");
+    if (o) return o;
+  }
   // no clues left to investigate: go to a place whose action gives clues (the Clover Club's Bar), staying at one whose
   // action can't be paid yet: the resources come next
   const givesClues = (l: InstId) =>

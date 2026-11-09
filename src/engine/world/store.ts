@@ -257,6 +257,7 @@ export const PILED_ZONES: Zone[] = [
   ZONE.EncounterDiscard,
   ZONE.ActDeck,
   ZONE.AgendaDeck,
+  ZONE.Exploration,
 ];
 
 /**
@@ -277,6 +278,7 @@ export function pileKey(zone: Zone, owner: InvId | null): PileName | null {
     case "encounterDiscard":
     case "actDeck":
     case "agendaDeck":
+    case "exploration":
       return zone;
     default:
       return null;

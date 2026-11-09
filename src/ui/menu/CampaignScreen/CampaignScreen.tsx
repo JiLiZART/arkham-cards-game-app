@@ -194,6 +194,12 @@ export function CampaignScreen() {
                   .join(", ")}
               </div>
             ))}
+            {sec.supplies.map((x) => (
+              <div key={x.code} data-testid="log-supplies">
+                <b>{cardText(db, x.code, locale).name}:</b>{" "}
+                {x.items.map((i) => tr(`supply.${i.id}`) + (i.n > 1 ? ` ×${i.n}` : "")).join(", ")}
+              </div>
+            ))}
           </section>
         ))}
       </div>

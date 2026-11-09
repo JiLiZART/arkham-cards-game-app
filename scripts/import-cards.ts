@@ -54,7 +54,7 @@ export function patrolTarget(words: string): SpawnExpr | null {
   // the location of the nearest enemy of a trait
   let m = /^\[\[([^\]]+)\]\] enemy$/.exec(w);
   if (m) return { ...out, enemyTrait: m[1] };
-  if (/^empty /.test(w)) {
+  if (w.startsWith("empty ")) {
     out.empty = true;
     w = w.replace(/^empty /, "");
   }

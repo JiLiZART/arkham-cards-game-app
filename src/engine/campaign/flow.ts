@@ -8,12 +8,21 @@
  * players are looking at; `pos` is where the order of play stands; `play` is the scenario to play (or being played).
  */
 import { flowOf, resolutionSteps } from "../../content/flow";
-import type { CampaignStep, FlowChoice, FlowCondition, FlowEffect } from "../../content/schema";
+import type {
+  CampaignStep,
+  FlowChoice,
+  FlowCondition,
+  FlowEffect,
+  SupplyBranch,
+} from "../../content/schema";
 import type { CampaignState, FlowState, FlowValue, ScenarioFacts, WaitingStep } from "./types";
 import {
   addCards,
+  addSupply,
+  crossOffSupply,
   crossOut,
   hasEntry,
+  hasSupply,
   logCount,
   NOTES,
   record,
@@ -124,6 +133,8 @@ export function test(
       );
     case "hasCard":
       return inv(cond.inv).some((i) => i.deck.includes(cond.card));
+    case "hasSupply":
+      return inv(cond.inv).some((i) => hasSupply(c.log, i.code, cond.supply, cond.section));
     case "data":
       return cond.equals !== undefined
         ? c.flow.data[cond.key] === cond.equals
@@ -148,9 +159,12 @@ export function test(
 // ---------- effects ----------
 
 /** the effect with "input" amounts and codes filled in from the answer */
-function bound(e: FlowEffect, input: Input): FlowEffect {
+function bound(e: FlowEffect, input: Input, facts: ScenarioFacts | null): FlowEffect {
   if ((e.do === "count" || e.do === "investigatorCount") && e.value === "input")
     return { ...e, value: input.n ?? 0 };
+  // Yig's Fury: the vengeance the scenario just played left in the victory display, never asked
+  if ((e.do === "count" || e.do === "investigatorCount") && e.value === "vengeance")
+    return { ...e, value: facts?.vengeance ?? 0 };
   if ((e.do === "removeCard" || e.do === "earnCard") && e.code === "$input")
     return { ...e, code: input.code ?? "" };
   if (e.do === "listCards" && e.codes.includes("$input"))
@@ -187,7 +201,7 @@ function apply(
   input: Input,
   rng: { rng: number },
 ) {
-  const e = bound(raw, input);
+  const e = bound(raw, input, c.flow.scenario);
   const who = (w: string | undefined) =>
     targets(c, w, input).map((code) => c.investigators.find((i) => i.code === code)!);
   const facts = c.flow.scenario;
@@ -210,13 +224,21 @@ function apply(
         e.key,
         e.source === "victoryUniqueCultists"
           ? (facts?.cultistsVictory ?? [])
-          : (facts?.cultistsRemaining ?? []),
+          : e.source === "vengeanceInVictory"
+            ? (facts?.vengeanceCodes ?? [])
+            : (facts?.cultistsRemaining ?? []),
         false,
         NOTES,
       );
       return;
     case "count":
-      c.log = setCount(c.log, e.id, e.op, e.value === "input" ? 0 : e.value, e.section ?? NOTES);
+      c.log = setCount(
+        c.log,
+        e.id,
+        e.op,
+        typeof e.value === "number" ? e.value : 0,
+        e.section ?? NOTES,
+      );
       return;
     case "listCards":
       c.log = addCards(c.log, e.id, e.codes, e.remove, e.section ?? NOTES);
@@ -233,7 +255,7 @@ function apply(
           e.id,
           i.code,
           e.op,
-          e.value === "input" ? 0 : e.value,
+          typeof e.value === "number" ? e.value : 0,
           e.section ?? NOTES,
         );
       return;
@@ -298,6 +320,12 @@ function apply(
         if (pool.length) i.deck.push(pool[randInt(rng, pool.length)].code);
       return;
     }
+    case "gainSupply":
+      for (const i of who(e.who)) c.log = addSupply(c.log, i.code, e.supply, 1, e.section);
+      return;
+    case "loseSupply":
+      for (const i of who(e.who)) c.log = crossOffSupply(c.log, i.code, e.supply, e.section, true);
+      return;
     case "addChaosToken":
       c.chaosBag.push(e.token);
       return;
@@ -422,6 +450,87 @@ const PROMPTS = new Set([
   "upgradeDecks",
 ]);
 
+// ---------- supplies (ADR-0053) ----------
+
+/** a supply branch for each investigator (their effects, with them as the input), its steps once if anyone took it */
+function supplyBranch(
+  db: ContentDb,
+  c: CampaignState,
+  branch: SupplyBranch,
+  invs: InvId[],
+  rng: { rng: number },
+) {
+  if (!invs.length) return;
+  c.flow.queue.unshift(...branch.steps);
+  for (const inv of invs) runEffects(db, c, branch.effects, { inv }, rng);
+}
+
+/** a supply step reached: settled at once, or a prompt to wait at */
+function runSupplyStep(
+  db: ContentDb,
+  c: CampaignState,
+  st: Extract<CampaignStep, { kind: "checkSupply" | "crossOffSupply" }>,
+  rng: { rng: number },
+) {
+  const all = active(c).map((i) => i.code);
+  const havers = all.filter((i) => hasSupply(c.log, i, st.supply, st.section));
+  const lackers = all.filter((i) => !havers.includes(i));
+  const choose = (
+    among: InvId[],
+    min: number,
+    max: number,
+    cross: boolean,
+    branch: SupplyBranch,
+  ) => {
+    const n = Math.min(max, among.length);
+    // nothing to choose: everyone on offer takes it
+    if (min >= among.length && n === among.length) return use(among, cross, branch);
+    c.flow.waiting = {
+      id: `supply:${st.supply}`,
+      step: {
+        kind: "supplyChoice",
+        supply: st.supply,
+        section: st.section,
+        among,
+        min,
+        max: n,
+        cross,
+        branch,
+      },
+    };
+  };
+  const use = (invs: InvId[], cross: boolean, branch: SupplyBranch) => {
+    if (cross) for (const i of invs) c.log = crossOffSupply(c.log, i, st.supply, st.section);
+    supplyBranch(db, c, branch, invs, rng);
+  };
+  if (st.kind === "checkSupply") {
+    if (st.who === "chosen")
+      return havers.length
+        ? choose(havers, 1, 1, false, st.has)
+        : choose(all, 1, 1, false, st.missing);
+    // the missing branch goes behind the has branch
+    supplyBranch(db, c, st.missing, lackers, rng);
+    supplyBranch(db, c, st.has, havers, rng);
+    return;
+  }
+  if (st.who === "each") {
+    supplyBranch(db, c, st.missing, lackers, rng);
+    use(havers, true, st.used);
+    return;
+  }
+  // too few have it to use it (nobody has gasoline): the missing branch once, for nobody in particular
+  if (!havers.length || havers.length < st.min) {
+    c.flow.queue.unshift(...st.missing.steps);
+    runEffects(db, c, st.missing.effects, {}, rng);
+    return;
+  }
+  choose(havers, st.min, st.max ?? havers.length, true, st.used);
+}
+
+/** the points an investigator has to buy supplies with: the step's for the number of investigators */
+export const supplyPoints = (st: Extract<CampaignStep, { kind: "buySupplies" }>, players: number) =>
+  st.points[Math.min(players, st.points.length) - 1] ?? 0;
+
 /** run until a prompt, a scenario to play, or the campaign's end */
 function run(db: ContentDb, c: CampaignState) {
   const f = c.flow;
@@ -488,6 +597,18 @@ function run(db: ContentDb, c: CampaignState) {
           break;
         case "end":
           endCampaign(db, c, st.result ?? c.result ?? "win");
+          break;
+        case "checkSupply":
+        case "crossOffSupply":
+          runSupplyStep(db, c, st, rng);
+          break;
+        case "buySupplies":
+          // each investigator buys in turn
+          if (!st.inv) {
+            f.queue.unshift(...active(c).map((i) => ({ ...st, inv: i.code })));
+            break;
+          }
+          if (active(c).some((i) => i.code === st.inv)) f.waiting = { id, step: st };
           break;
         default:
           // a checkpoint between two parts runs no upgrade
@@ -607,6 +728,42 @@ function answer(db: ContentDb, c: CampaignState, value: FlowValue) {
         after(st.steps);
         runEffects(db, c, st.effects, {}, rng);
         return;
+      case "supplyChoice": {
+        const invs = (Array.isArray(value) ? value : value === null ? [] : [value]).map(String);
+        need(
+          invs.length >= st.min && invs.length <= st.max && new Set(invs).size === invs.length,
+          `choose from ${st.min} to ${st.max} investigators`,
+        );
+        need(
+          invs.every((i) => st.among.includes(i)),
+          "that investigator can't be chosen",
+        );
+        if (st.cross) for (const i of invs) c.log = crossOffSupply(c.log, i, st.supply, st.section);
+        supplyBranch(db, c, st.branch, invs, rng);
+        return;
+      }
+      case "buySupplies": {
+        const ids = Array.isArray(value) ? value : [];
+        const inv = c.investigators.find((i) => i.code === st.inv)!;
+        const items = ids.map((id) => st.list.find((x) => x.id === id));
+        need(
+          items.every((x) => !!x),
+          "that supply is not on offer",
+        );
+        need(
+          items.every((x) => x!.multiple || ids.filter((y) => y === x!.id).length === 1),
+          "that supply can be bought once",
+        );
+        const cost = items.reduce((n, x) => n + x!.cost, 0);
+        const over = Math.max(0, cost - supplyPoints(st, c.investigators.length));
+        const xp = over * (st.xpRate ?? Infinity);
+        need(!over || (xp <= (st.xpMax ?? Infinity) && xp <= inv.xp), "not enough supply points");
+        if (over) inv.xp -= xp;
+        for (const id of ids) c.log = addSupply(c.log, inv.code, id, 1, st.section);
+        if (!st.record && !localSupplies(c).includes(st.section))
+          f.data[LOCAL_SUPPLIES] = [...localSupplies(c), st.section];
+        return;
+      }
     }
   } finally {
     c.rng = rng.rng;
@@ -628,6 +785,11 @@ export function advance(db: ContentDb, c0: CampaignState, value?: FlowValue): Ca
   return c;
 }
 
+/** the supply sections bought for the next scenario only (`buySupplies` with `record: false`), erased at its end */
+const LOCAL_SUPPLIES = "localSupplies";
+const localSupplies = (c: CampaignState): string[] =>
+  Array.isArray(c.flow.data[LOCAL_SUPPLIES]) ? (c.flow.data[LOCAL_SUPPLIES] as string[]) : [];
+
 /** the resolution of a scenario just ended: its steps run, then the flow goes on (the engine's own part of the end is done) */
 export function startResolution(
   db: ContentDb,
@@ -640,6 +802,9 @@ export function startResolution(
   c.flow.playing = false;
   c.flow.play = null;
   c.flow.scenario = facts;
+  // supplies bought for this scenario only are gone (Relics of the Past)
+  for (const section of localSupplies(c)) delete c.log[section];
+  delete c.flow.data[LOCAL_SUPPLIES];
   c.flow.queue.unshift(...resolutionSteps(db, c.campaignId, facts.id, facts.resolution).ids);
   run(db, c);
   return c;

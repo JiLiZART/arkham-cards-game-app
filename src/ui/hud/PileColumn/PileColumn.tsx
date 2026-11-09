@@ -15,6 +15,7 @@ import { cx } from "../../components/cx";
 import styles from "./PileColumn.module.css";
 import { cardOf, cardOfIf, cardsOf, invOfIf, pileMap, pileOf } from "../../../engine/context";
 import { PILE } from "../../../engine/world/constants";
+import { vengeanceInVictory } from "../../../engine/queries";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -111,6 +112,9 @@ export function PileColumn() {
   const victory = cardsOf(game).filter((c) => c.zone === "victory");
   const encounterDeck = pileOf(game, PILE.EncounterDeck);
   const encounterDiscard = pileOf(game, PILE.EncounterDiscard);
+  const exploration = pileOf(game, PILE.Exploration);
+  // The Forgotten Age: the vengeance points the victory display holds
+  const vengeance = vengeanceInVictory({ s: game, db, events: [] });
   return (
     <div className={styles.pileColumn} data-testid="pile-column">
       <Pile
@@ -130,8 +134,18 @@ export function PileColumn() {
         faceUp
         kind="encounter"
       />
+      {exploration.length > 0 && (
+        <Pile
+          label={tr("pile.exploration")}
+          id="exploration"
+          count={exploration.length}
+          top={exploration[0]}
+          faceUp={false}
+          kind="encounter"
+        />
+      )}
       <Pile
-        label={tr("pile.victory")}
+        label={vengeance ? tr("pile.victoryVengeance", { n: vengeance }) : tr("pile.victory")}
         count={victory.length}
         top={victory.at(-1)?.id ?? null}
         faceUp

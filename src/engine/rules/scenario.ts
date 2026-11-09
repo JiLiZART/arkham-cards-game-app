@@ -1,4 +1,4 @@
-import { logEntry, peril, surge as surgeFlag } from "../world/flags";
+import { explored, logEntry, peril, surge as surgeFlag } from "../world/flags";
 import {
   abilitiesOf,
   actClueCost,
@@ -6,6 +6,8 @@ import {
   enemies,
   gainsKeyword,
   hasKeyword,
+  connectsBySymbol,
+  POISONED,
   invsAt,
 } from "../queries";
 import {
@@ -29,19 +31,23 @@ import {
   isCancelled,
   leadInvestigator,
   logLength,
+  periodCounter,
   pile,
   placeInvestigator,
+  shuffleDeck,
+  shuffleList,
   push,
   scenarioIdOf,
   setController,
   setCounter,
   tapToDraw,
 } from "../context";
-import { flip, link, moveCard, passBeneath, reshuffleDiscard } from "../movement";
+import { createCard, flip, link, moveCard, passBeneath, reshuffleDiscard } from "../movement";
 import type { EffCtx, InstId, InvId, Step, StepOf } from "../world/types";
 import { win } from "./cards";
 import { EVENT } from "../events/event";
-import { CHOICE, ZONE, type Zone } from "../world/constants";
+import { CHOICE, PILE, SCENARIO_CARD, ZONE, isOneOf, type Zone } from "../world/constants";
+import type { ExplorationSpec } from "../../content/schema";
 import { STEP } from "../steps/step";
 import { scriptOf } from "../world/scripts";
 import { fireCardHook, fireGameEnd, fireScenarioHook, hasScenarioHook } from "./scripts";
@@ -176,7 +182,8 @@ export function finishRevelation(game: GameContext, cardId: InstId, invId: strin
     moveCard(
       game,
       cardId,
-      !c.owner && d.victory !== undefined
+      // Vengeance X goes there as Victory X does (The Forgotten Age)
+      !c.owner && (d.victory ?? d.vengeance) !== undefined
         ? ZONE.Victory
         : c.owner
           ? playerType
@@ -186,6 +193,149 @@ export function finishRevelation(game: GameContext, cardId: InstId, invId: strin
     );
   if (surges) push(game, { t: STEP.DrawEncounter, inv: invId });
 }
+
+// ---------- the Poisoned weakness (The Forgotten Age) ----------
+/**
+ * Set aside the Poisoned weaknesses not in an investigator's deck: `copies` in all, less those the investigators hold
+ * (in the encounter deck when its set was gathered, made otherwise)
+ */
+export function setAsidePoisoned(game: GameContext, copies: number) {
+  const all = allCards(game).filter((c) => c.code === POISONED);
+  const held = all.filter((c) => !!c.owner).length;
+  const loose = all.filter((c) => !c.owner);
+  const want = Math.max(0, copies - held);
+  loose.forEach((c, k) => moveCard(game, c.id, k < want ? ZONE.SetAside : ZONE.Removed));
+  for (let k = loose.length; k < want; k++) createCard(game, POISONED, ZONE.SetAside);
+}
+
+// ---------- the exploration deck (ADR-0052) ----------
+/**
+ * Build the exploration deck: the listed cards (a code per copy), each pick's `count` codes at random, one location per
+ * connection symbol of `bySymbol`, taken from the encounter deck, the set-aside cards and the side decks; then shuffled
+ * with the seed, so a replay rebuilds the same deck.
+ */
+export function buildExploration(game: GameContext, spec: ExplorationSpec) {
+  const out = (code: string) =>
+    allCards(game).find(
+      (c) =>
+        c.code === code &&
+        isOneOf(c.zone, ZONE.SetAside, ZONE.EncounterDeck, ZONE.SideDeck, ZONE.Limbo),
+    )?.id;
+  const put = (id: InstId) => moveCard(game, id, ZONE.Exploration);
+  for (const code of spec.cards ?? []) {
+    const id = out(code);
+    if (id) put(id);
+  }
+  for (const p of spec.pick ?? []) {
+    const pool = p.from.flatMap((code) => out(code) ?? []);
+    shuffleList(game, pool);
+    pool.forEach((id, k) => {
+      if (k < p.count) put(id);
+      else if (p.rest === "remove") moveCard(game, id, ZONE.Removed);
+    });
+  }
+  // one location per symbol, the rest out of the game (Return to The Forgotten Age)
+  const groups = new Map<string, InstId[]>();
+  for (const code of spec.bySymbol ?? []) {
+    const id = out(code);
+    if (!id) continue;
+    const key = def(game, id).symbol ?? code;
+    groups.set(key, [...(groups.get(key) ?? []), id]);
+  }
+  for (const ids of groups.values()) {
+    shuffleList(game, ids);
+    ids.forEach((id, k) => (k === 0 ? put(id) : moveCard(game, id, ZONE.Removed)));
+  }
+  shuffleDeck(game, "exploration");
+}
+
+/** a drawn card is the kind of location an Explore ability seeks: connected to the explorer's location, a trait, any */
+function explorationMatch(game: GameContext, step: StepOf<"Explore">, id: InstId) {
+  if (def(game, id).type !== "location") return false;
+  const m = step.match;
+  if ("any" in m) return true;
+  if ("trait" in m) return def(game, id).traits.includes(m.trait);
+  const here = inv(game, step.inv).location;
+  return !!here && connectsBySymbol(game, here, id);
+}
+
+/**
+ * Explore (ADR-0052, the Forgotten Age guide): draw the top card of the exploration deck. A matching location is put into
+ * play with its clues and the investigator moves there (successful); another location is set beside the deck and the
+ * next card drawn; an encounter card resolves as drawn, a treachery to the encounter discard (unsuccessful); an empty
+ * deck ends it, neither. Then the set-aside locations are shuffled back and the `explored` window opens.
+ */
+export const exploreHandler: Handler<"Explore"> = (game, step) => {
+  if (currentPhase(game) === "ended") return;
+  if (step.ended) {
+    for (const id of step.drawn)
+      if (cardIf(game, id)?.zone === ZONE.Limbo) moveCard(game, id, ZONE.Exploration);
+    if (step.drawn.length) shuffleDeck(game, "exploration");
+    const { ok, location } = step.ended;
+    if (ok !== undefined) {
+      const turn = periodCounter(game, "turn");
+      const rec = explored.get(game, step.inv);
+      explored.set(game, step.inv, {
+        turn,
+        ok: [...(rec?.turn === turn ? rec.ok : []), ok],
+      });
+    }
+    const after = ok ? (game.db.scenarios[scenarioIdOf(game)].afterExplore ?? []) : [];
+    push(
+      game,
+      win("explored", { inv: step.inv, location, ...(ok !== undefined ? { ok } : {}) }),
+      ...(after.length
+        ? [
+            {
+              t: STEP.Effects,
+              effects: after,
+              ctx: { source: SCENARIO_CARD, you: step.inv },
+            } as Step,
+          ]
+        : []),
+    );
+    return;
+  }
+  const here = inv(game, step.inv).location;
+  const id = pile(game, PILE.Exploration)[0];
+  if (!id) {
+    emit(game, EVENT.Look, `The exploration deck is empty`, { inv: step.inv });
+    push(game, { ...step, ended: { location: here } });
+    return;
+  }
+  const d = def(game, id);
+  if (d.type === "location") {
+    if (explorationMatch(game, step, id)) {
+      moveCard(game, id, ZONE.Location);
+      emit(game, EVENT.Location, `${invName(game, step.inv)} explores and finds ${d.name}`, {
+        inv: step.inv,
+        card: id,
+      });
+      push(
+        game,
+        { t: STEP.RevealLocation, location: id, by: step.inv },
+        { t: STEP.Move, inv: step.inv, to: id },
+        { ...step, ended: { ok: true, location: id } },
+      );
+      return;
+    }
+    // not the place sought: beside the deck until the exploration ends
+    moveCard(game, id, ZONE.Limbo);
+    emit(game, EVENT.Look, `${d.name} is set beside the exploration deck`, {
+      inv: step.inv,
+      card: id,
+    });
+    push(game, { ...step, drawn: [...step.drawn, id] });
+    return;
+  }
+  // a treachery or an enemy resolves as an encounter card drawn (a discarded one to the encounter discard pile)
+  moveCard(game, id, ZONE.Limbo);
+  push(
+    game,
+    { t: STEP.DrawEncounter, inv: step.inv, card: id },
+    { ...step, ended: { ok: false, location: here } },
+  );
+};
 
 // ---------- doom, agenda, act ----------
 const DOOM_ZONES: Zone[] = [
@@ -455,7 +605,7 @@ export const removeLocationHandler: Handler<"RemoveLocation"> = (game, step) => 
   moveCard(
     game,
     loc.id,
-    d.victory !== undefined && loc.clues === 0
+    (d.victory ?? d.vengeance) !== undefined && loc.clues === 0
       ? ZONE.Victory
       : step.outOfGame
         ? ZONE.Removed
@@ -530,4 +680,5 @@ export const handlers = {
   ReadInterlude: readInterludeHandler,
   CheckObjectives: checkObjectivesHandler,
   Resolution: resolutionHandler,
+  Explore: exploreHandler,
 };

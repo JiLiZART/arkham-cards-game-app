@@ -20,6 +20,11 @@ import { searchEffects } from "./search";
 import { testsEffects } from "./tests";
 import { choicesEffects } from "./choices";
 import { structureEffects } from "./structure";
+import { explorationEffects } from "./exploration";
+import { suppliesEffects } from "./supplies";
+import { vengeanceEffects } from "./vengeance";
+import { poisonEffects } from "./poison";
+import { counterEffects } from "./counters";
 import type { EffectHandlers, EffectRun, EffStep } from "./types";
 import { ATTACK_OPS, opt } from "./targets";
 import { immuneTo } from "../queries";
@@ -67,6 +72,11 @@ export const EFFECT_HANDLERS: EffectHandlers = {
   ...searchEffects,
   ...testsEffects,
   ...choicesEffects,
+  ...explorationEffects,
+  ...suppliesEffects,
+  ...vengeanceEffects,
+  ...poisonEffects,
+  ...counterEffects,
 };
 
 export const effHandler = (game: GameContext, step: EffStep) => {

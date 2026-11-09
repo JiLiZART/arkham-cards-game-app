@@ -85,6 +85,7 @@
         "tfa-interlude5:check_torches",
         "tfa-interlude5:time_passes",
         "tfa-interlude5:provisions_and_medicine_gone:text",
+        "tfa-interlude5:provisions_and_medicine_gone",
         "tfa-interlude5:upgradeDecks"
       ]
     },
@@ -539,7 +540,7 @@
           "id": "yigsFury",
           "section": "yigsFury",
           "op": "add",
-          "value": "input"
+          "value": "vengeance"
         }
       ]
     },
@@ -674,7 +675,7 @@
           "id": "yigsFury",
           "section": "yigsFury",
           "op": "add",
-          "value": "input"
+          "value": "vengeance"
         }
       ]
     },
@@ -731,7 +732,7 @@
           "id": "yigsFury",
           "section": "yigsFury",
           "op": "add",
-          "value": "input"
+          "value": "vengeance"
         },
         {
           "do": "count",
@@ -1312,7 +1313,7 @@
           "id": "yigsFury",
           "section": "yigsFury",
           "op": "add",
-          "value": "input"
+          "value": "vengeance"
         }
       ]
     },
@@ -1465,10 +1466,69 @@
       "steps": []
     },
     "return-to-threads-of-fate:buy_supplies": {
-      "kind": "unsupported",
-      "name": "supplies",
-      "effects": [],
-      "steps": []
+      "kind": "buySupplies",
+      "section": "supplies",
+      "list": [
+        {
+          "id": "provisions",
+          "cost": 1,
+          "multiple": true
+        },
+        {
+          "id": "medicine",
+          "cost": 2,
+          "multiple": true
+        },
+        {
+          "id": "gasoline",
+          "cost": 1,
+          "multiple": true
+        },
+        {
+          "id": "blanket",
+          "cost": 2,
+          "multiple": false
+        },
+        {
+          "id": "canteen",
+          "cost": 2,
+          "multiple": false
+        },
+        {
+          "id": "compass",
+          "cost": 2,
+          "multiple": false
+        },
+        {
+          "id": "binoculars",
+          "cost": 2,
+          "multiple": false
+        },
+        {
+          "id": "chalk",
+          "cost": 2,
+          "multiple": false
+        },
+        {
+          "id": "pocketknife",
+          "cost": 2,
+          "multiple": false
+        },
+        {
+          "id": "pickaxe",
+          "cost": 2,
+          "multiple": false
+        }
+      ],
+      "points": [
+        8,
+        5,
+        4,
+        3
+      ],
+      "xpRate": 2,
+      "xpMax": 10,
+      "record": true
     },
     "return-to-threads-of-fate:upgradeDecks": {
       "kind": "upgradeDecks"
@@ -1771,7 +1831,7 @@
           "id": "yigsFury",
           "section": "yigsFury",
           "op": "add",
-          "value": "input"
+          "value": "vengeance"
         }
       ]
     },
@@ -1858,12 +1918,36 @@
         "return-to-the-boundary-beyond:check_relic_is_missing"
       ]
     },
+    "return-to-the-boundary-beyond:out_of_gas": {
+      "kind": "story",
+      "title": "Out of Gas",
+      "text": "Fuel is a constant concern throughout your journey south. You are able to refuel several times along the way at general and hardware stores, but eventually your car putters out along the side of the road, just north of the southern border. You and Ichtaca are forced to walk several miles to the nearest town to refuel, setting you back several hours.",
+      "bullets": []
+    },
+    "return-to-the-boundary-beyond:no_mulligan:text": {
+      "kind": "story",
+      "text": "When drawing opening hands during this scenario, investigators cannot take a mulligan.",
+      "bullets": []
+    },
     "return-to-the-boundary-beyond:use_gasoline": {
-      "kind": "unsupported",
-      "name": "use_supplies",
+      "kind": "crossOffSupply",
       "text": "Check your supplies. Any one investigator must cross off one gasoline from their supplies. If no gasoline was crossed off, read <b>Out of Gas</b>.",
-      "effects": [],
-      "steps": []
+      "supply": "gasoline",
+      "section": "supplies",
+      "who": "chosen",
+      "min": 1,
+      "max": 1,
+      "used": {
+        "effects": [],
+        "steps": []
+      },
+      "missing": {
+        "effects": [],
+        "steps": [
+          "return-to-the-boundary-beyond:out_of_gas",
+          "return-to-the-boundary-beyond:no_mulligan:text"
+        ]
+      }
     },
     "return-to-heart-of-the-elders-part-1:record_paths_known": {
       "kind": "counter",
@@ -2635,7 +2719,7 @@
           "id": "yigsFury",
           "section": "yigsFury",
           "op": "add",
-          "value": "input"
+          "value": "vengeance"
         }
       ]
     },
@@ -3242,15 +3326,23 @@
     "return-to-the-depths-of-yoth:gain_key_of_eztli": {
       "kind": "investigatorChoice",
       "optional": false,
-      "effects": [],
+      "effects": [
+        {
+          "do": "gainSupply",
+          "supply": "key_of_eztli",
+          "section": "supplies",
+          "who": "input"
+        }
+      ],
       "steps": []
     },
     "return-to-the-depths-of-yoth:check_goop": {
       "kind": "branch",
       "condition": {
-        "kind": "unsupported",
-        "name": "check_supplies",
-        "take": false
+        "kind": "hasSupply",
+        "supply": "sticky_goop",
+        "section": "supplies",
+        "inv": "any"
       },
       "then": [
         "return-to-the-depths-of-yoth:key_of_eztli_story",
@@ -3338,7 +3430,7 @@
           "id": "yigsFury",
           "section": "yigsFury",
           "op": "add",
-          "value": "input"
+          "value": "vengeance"
         }
       ]
     },
@@ -3581,9 +3673,10 @@
     "return-to-the-depths-of-yoth:check_pocketknife": {
       "kind": "branch",
       "condition": {
-        "kind": "unsupported",
-        "name": "check_supplies",
-        "take": false
+        "kind": "hasSupply",
+        "supply": "pocketknife",
+        "section": "supplies",
+        "inv": "any"
       },
       "then": [
         "return-to-the-depths-of-yoth:intro_7"
@@ -4802,12 +4895,43 @@
       "text": "Once more, you venture south, leaving the safety of civilization behind. There is no time to waste. The path to the Nexus lies on familiar ground, not far from the previous expedition’s trail. Using the leather-bound journal as your guide, you retrace the expedition’s journey. Soon, you are deep within the jungle, surrounded on all sides by hazards—some natural, others bizarre…",
       "bullets": []
     },
+    "tfa-interlude3:out_of_gas": {
+      "kind": "story",
+      "title": "Out of Gas",
+      "text": "Unfortunately, a dozen or so miles north of the edge of the rainforest, your car ran out of gas. Since you are pressed for time, you decided to walk the rest of the way instead of returning to refuel. Traveling by foot set you back several hours, but soon enough you reached the jungle once more.",
+      "bullets": []
+    },
+    "tfa-interlude3:no_mulligan:text": {
+      "kind": "story",
+      "text": "When drawing opening hands during this scenario, investigators cannot take a mulligan.",
+      "bullets": []
+    },
     "tfa-interlude3:use_gasoline": {
-      "kind": "unsupported",
-      "name": "use_supplies",
+      "kind": "crossOffSupply",
       "text": "Check your supplies. Any one investigator must cross off one gasoline from their supplies. If no gasoline was crossed off, read <b>Out of Gas</b>.",
-      "effects": [],
-      "steps": []
+      "supply": "gasoline",
+      "section": "supplies",
+      "who": "chosen",
+      "min": 1,
+      "max": 1,
+      "used": {
+        "effects": [],
+        "steps": []
+      },
+      "missing": {
+        "effects": [
+          {
+            "do": "record",
+            "key": "hoteNoMulligan",
+            "section": "hidden",
+            "value": true
+          }
+        ],
+        "steps": [
+          "tfa-interlude3:out_of_gas",
+          "tfa-interlude3:no_mulligan:text"
+        ]
+      }
     },
     "tfa-interlude3:path_discovered": {
       "kind": "story",
@@ -4834,9 +4958,10 @@
     "tfa-interlude3:check_map": {
       "kind": "branch",
       "condition": {
-        "kind": "unsupported",
-        "name": "check_supplies",
-        "take": false
+        "kind": "hasSupply",
+        "supply": "map",
+        "section": "supplies",
+        "inv": "any"
       },
       "then": [
         "tfa-interlude3:path_discovered",
@@ -4845,19 +4970,65 @@
       ],
       "else": []
     },
+    "tfa-interlude3:low_on_rations": {
+      "kind": "story",
+      "title": "Low on Rations",
+      "text": "Traversing the jungle to find the path to the Nexus took longer than you anticipated, and in your haste you have not been able to hunt or forage for more food. Hunger clouds your mind and drills a painful hole in your stomach.",
+      "bullets": []
+    },
+    "tfa-interlude3:fewer_resources:text": {
+      "kind": "story",
+      "text": "You begin the next scenario with 3 fewer resources.",
+      "bullets": []
+    },
     "tfa-interlude3:eat_provisions": {
-      "kind": "unsupported",
-      "name": "use_supplies",
+      "kind": "crossOffSupply",
       "text": "Check your supplies. The investigators, as a group, must cross off one provisions per investigator from their supplies. For each provisions they cannot cross off, choose an investigator to read Low on Rations.",
-      "effects": [],
-      "steps": []
+      "supply": "provisions",
+      "section": "supplies",
+      "who": "each",
+      "min": 0,
+      "used": {
+        "effects": [],
+        "steps": []
+      },
+      "missing": {
+        "effects": [
+          {
+            "do": "record",
+            "key": "hoteFewerResources",
+            "section": "hidden",
+            "value": true
+          }
+        ],
+        "steps": [
+          "tfa-interlude3:low_on_rations",
+          "tfa-interlude3:fewer_resources:text"
+        ]
+      }
     },
     "tfa-interlude3:use_medicine": {
-      "kind": "unsupported",
-      "name": "use_supplies",
+      "kind": "crossOffSupply",
       "text": "Check your supplies. Each investigator with medicine may cross it off from their supplies to choose and remove a Poisoned weakness from any investigator’s deck. Each investigator who still has a Poisoned weakness in their deck reads <b>The Poison Spreads</b>.",
-      "effects": [],
-      "steps": []
+      "supply": "medicine",
+      "section": "supplies",
+      "who": "chosen",
+      "min": 0,
+      "max": 4,
+      "used": {
+        "effects": [
+          {
+            "do": "removeCard",
+            "code": "04102",
+            "who": "input"
+          }
+        ],
+        "steps": []
+      },
+      "missing": {
+        "effects": [],
+        "steps": []
+      }
     },
     "tfa-interlude3:poison_spreads": {
       "kind": "story",
@@ -4936,9 +5107,10 @@
     "tfa-interlude3:check_canteen": {
       "kind": "branch",
       "condition": {
-        "kind": "unsupported",
-        "name": "check_supplies",
-        "take": false
+        "kind": "hasSupply",
+        "supply": "canteen",
+        "section": "supplies",
+        "inv": "any"
       },
       "then": [
         "tfa-interlude3:patterns_in_the_stone",
@@ -5009,11 +5181,73 @@
       "bullets": []
     },
     "tfa-prologue:supplies": {
-      "kind": "unsupported",
-      "name": "supplies",
+      "kind": "buySupplies",
       "text": "As an outcast from academia, funding for Alejandro’s expedition is limited. Each investigator must choose supplies to bring for the expedition. In the Campaign Log, under each investigator’s “Supplies” section, record the supplies that investigator chose to bring. <i>(Note: Provisions and Medicine can be taken more than once by recording their name multiple times and spending the appropriate number of supply points each time.)</i>",
-      "effects": [],
-      "steps": []
+      "section": "supplies",
+      "list": [
+        {
+          "id": "provisions",
+          "cost": 1,
+          "multiple": true
+        },
+        {
+          "id": "medicine",
+          "cost": 2,
+          "multiple": true
+        },
+        {
+          "id": "rope",
+          "cost": 3,
+          "multiple": false
+        },
+        {
+          "id": "blanket",
+          "cost": 2,
+          "multiple": false
+        },
+        {
+          "id": "canteen",
+          "cost": 2,
+          "multiple": false
+        },
+        {
+          "id": "torches",
+          "cost": 3,
+          "multiple": false
+        },
+        {
+          "id": "compass",
+          "cost": 2,
+          "multiple": false
+        },
+        {
+          "id": "map",
+          "cost": 3,
+          "multiple": false
+        },
+        {
+          "id": "binoculars",
+          "cost": 2,
+          "multiple": false
+        },
+        {
+          "id": "chalk",
+          "cost": 2,
+          "multiple": false
+        },
+        {
+          "id": "pendant",
+          "cost": 1,
+          "multiple": false
+        }
+      ],
+      "points": [
+        10,
+        7,
+        5,
+        4
+      ],
+      "record": true
     },
     "tfa-interlude1:prompt:text": {
       "kind": "story",
@@ -5038,40 +5272,134 @@
       "bullets": []
     },
     "tfa-interlude1:check_blanket": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "check_supplies",
-        "take": false
+      "kind": "checkSupply",
+      "supply": "blanket",
+      "section": "supplies",
+      "who": "each",
+      "has": {
+        "effects": [],
+        "steps": [
+          "tfa-interlude1:restful_sleep",
+          "tfa-interlude1:no_ill_effects:text"
+        ]
       },
-      "then": [
-        "tfa-interlude1:restful_sleep",
-        "tfa-interlude1:no_ill_effects:text"
-      ],
-      "else": [
-        "tfa-interlude1:tossing_and_turning"
-      ]
+      "missing": {
+        "effects": [],
+        "steps": [
+          "tfa-interlude1:tossing_and_turning"
+        ]
+      }
+    },
+    "tfa-interlude1:low_on_rations": {
+      "kind": "story",
+      "title": "Low on Rations",
+      "text": "We thought we’d brought enough food and water for everybody, but the journey had taken its toll on our supplies. When the sun rose and it came time to eat, we discovered we were already running out of provisions.",
+      "bullets": []
+    },
+    "tfa-interlude1:fewer_resources:text": {
+      "kind": "story",
+      "text": "You begin the next scenario with 3 fewer resources.",
+      "bullets": []
     },
     "tfa-interlude1:eat_provisions": {
-      "kind": "unsupported",
-      "name": "use_supplies",
+      "kind": "crossOffSupply",
       "text": "Check your supplies. The investigators, as a group, must cross off one provisions per investigator from their supplies. For each provisions they cannot cross off, choose an investigator to read <b>Low on Rations</b>.",
-      "effects": [],
-      "steps": []
+      "supply": "provisions",
+      "section": "supplies",
+      "who": "each",
+      "min": 0,
+      "used": {
+        "effects": [],
+        "steps": []
+      },
+      "missing": {
+        "effects": [
+          {
+            "do": "record",
+            "key": "eztliFewerResources",
+            "section": "hidden",
+            "value": true
+          }
+        ],
+        "steps": [
+          "tfa-interlude1:low_on_rations",
+          "tfa-interlude1:fewer_resources:text"
+        ]
+      }
+    },
+    "tfa-interlude1:shapes_in_the_tress": {
+      "kind": "story",
+      "title": "Shapes in the Trees",
+      "text": "Most of the nights passed without incident, but on this night, I was startled by the rustling of tree branches along the southern border of our camp’s clearing. Despite the darkness, I was able to use my binoculars to see shapes moving in the trees. The shapes appeared human, but…why? Why do they only watch us from afar? What is their purpose?",
+      "bullets": []
+    },
+    "tfa-interlude1:bonus_binoculars_xp:text": {
+      "kind": "story",
+      "text": "You earn 2 additional experience as you gain further insight into the motivations of the Eztli.",
+      "bullets": []
+    },
+    "tfa-interlude1:eyes_in_the_dark": {
+      "kind": "story",
+      "title": "Eyes in the Dark",
+      "text": "Each night, I was watched. I didn’t just feel watched: I saw the eyes peering out from the inky darkness that surrounded our camp. They knew we were there. The yellow eyes watched me, alert, my weapons drawn, ready to defend the camp if the need arose. Our eyes met, and a darkness seized my heart.",
+      "bullets": []
     },
     "tfa-interlude1:choose_lookout": {
-      "kind": "unsupported",
-      "name": "investigator_choice_supplies",
+      "kind": "checkSupply",
       "text": "The lead investigator must choose one investigator to be the group’s lookout. Then, that investigator checks their supplies to see if they have binoculars.",
-      "effects": [],
-      "steps": []
+      "supply": "binoculars",
+      "section": "supplies",
+      "who": "chosen",
+      "has": {
+        "effects": [
+          {
+            "do": "xp",
+            "bonus": 2,
+            "who": "input",
+            "victory": false
+          }
+        ],
+        "steps": [
+          "tfa-interlude1:shapes_in_the_tress",
+          "tfa-interlude1:bonus_binoculars_xp:text"
+        ]
+      },
+      "missing": {
+        "effects": [
+          {
+            "do": "trauma",
+            "who": "input",
+            "physical": 0,
+            "mental": 1
+          }
+        ],
+        "steps": [
+          "tfa-interlude1:eyes_in_the_dark"
+        ]
+      }
     },
     "tfa-interlude1:use_medicine": {
-      "kind": "unsupported",
-      "name": "use_supplies",
+      "kind": "crossOffSupply",
       "text": "Check your supplies. Each investigator with medicine may cross it off from their supplies to choose and remove a Poisoned weakness from any investigator’s deck. Each investigator who still has a Poisoned weakness in their deck reads <b>The Poison Spreads</b>.",
-      "effects": [],
-      "steps": []
+      "supply": "medicine",
+      "section": "supplies",
+      "who": "chosen",
+      "min": 0,
+      "max": 4,
+      "used": {
+        "effects": [
+          {
+            "do": "removeCard",
+            "code": "04102",
+            "who": "input"
+          }
+        ],
+        "steps": []
+      },
+      "missing": {
+        "effects": [],
+        "steps": []
+      }
     },
     "tfa-interlude1:poison_spreads": {
       "kind": "story",
@@ -5424,30 +5752,29 @@
       "text": "Each investigator with a map earns 2 additional experience as they gain insight into the caverns that dwell beneath the surface of the Earth.",
       "bullets": []
     },
-    "tfa-interlude5:check_map_braziers:yes:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 2,
-          "who": "input",
-          "victory": false
-        }
-      ]
-    },
     "tfa-interlude5:check_map_braziers": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "check_supplies",
-        "take": false
+      "kind": "checkSupply",
+      "supply": "map",
+      "section": "supplies",
+      "who": "each",
+      "has": {
+        "effects": [
+          {
+            "do": "xp",
+            "bonus": 2,
+            "who": "input",
+            "victory": false
+          }
+        ],
+        "steps": [
+          "tfa-interlude5:reading_signs",
+          "tfa-interlude5:map_xp:text"
+        ]
       },
-      "then": [
-        "tfa-interlude5:reading_signs",
-        "tfa-interlude5:map_xp:text",
-        "tfa-interlude5:check_map_braziers:yes:fx"
-      ],
-      "else": []
+      "missing": {
+        "effects": [],
+        "steps": []
+      }
     },
     "tfa-interlude5:the_abyss": {
       "kind": "story",
@@ -5474,9 +5801,10 @@
     "tfa-interlude5:check_torches": {
       "kind": "branch",
       "condition": {
-        "kind": "unsupported",
-        "name": "check_supplies",
-        "take": false
+        "kind": "hasSupply",
+        "supply": "torches",
+        "section": "supplies",
+        "inv": "any"
       },
       "then": [
         "tfa-interlude5:torchlight",
@@ -5499,6 +5827,23 @@
       "kind": "story",
       "text": "Cross off all provisions and medicine the investigators have remaining in their supplies.",
       "bullets": []
+    },
+    "tfa-interlude5:provisions_and_medicine_gone": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "loseSupply",
+          "supply": "provisions",
+          "section": "supplies",
+          "who": "each"
+        },
+        {
+          "do": "loseSupply",
+          "supply": "medicine",
+          "section": "supplies",
+          "who": "each"
+        }
+      ]
     },
     "tfa-interlude5:upgradeDecks": {
       "kind": "upgradeDecks"
@@ -5677,9 +6022,10 @@
     "tfa-interlude4:check_chalk": {
       "kind": "branch",
       "condition": {
-        "kind": "unsupported",
-        "name": "check_supplies",
-        "take": false
+        "kind": "hasSupply",
+        "supply": "chalk",
+        "section": "supplies",
+        "inv": "any"
       },
       "then": [
         "tfa-interlude4:the_way_is_open",
@@ -5691,19 +6037,65 @@
         "tfa-interlude4:check_chalk:no:fx"
       ]
     },
+    "tfa-interlude4:low_on_rations": {
+      "kind": "story",
+      "title": "Low on Rations",
+      "text": "Hours later, you are almost too weary to go on. Every inch of your body aches with intense pain. There is nothing in this desolate cavern to eat but the occasional wild mushroom, and although temptation gnaws at your insides, you cannot tell which are toxic and which are healthy…",
+      "bullets": []
+    },
+    "tfa-interlude4:fewer_resources:text": {
+      "kind": "story",
+      "text": "You begin the next scenario with 3 fewer resources.",
+      "bullets": []
+    },
     "tfa-interlude4:eat_provisions": {
-      "kind": "unsupported",
-      "name": "use_supplies",
+      "kind": "crossOffSupply",
       "text": "Check your supplies. The investigators, as a group, must cross off one provisions per investigator from their supplies. For each provisions they cannot cross off, choose an investigator to read <b>Low on Rations</b>.",
-      "effects": [],
-      "steps": []
+      "supply": "provisions",
+      "section": "supplies",
+      "who": "each",
+      "min": 0,
+      "used": {
+        "effects": [],
+        "steps": []
+      },
+      "missing": {
+        "effects": [
+          {
+            "do": "record",
+            "key": "doyFewerResources",
+            "section": "hidden",
+            "value": true
+          }
+        ],
+        "steps": [
+          "tfa-interlude4:low_on_rations",
+          "tfa-interlude4:fewer_resources:text"
+        ]
+      }
     },
     "tfa-interlude4:use_medicine": {
-      "kind": "unsupported",
-      "name": "use_supplies",
+      "kind": "crossOffSupply",
       "text": "Check your supplies. Each investigator with medicine may cross it off from their supplies to choose and remove a Poisoned weakness from any investigator’s deck. Each investigator who still has a Poisoned weakness in their deck reads <b>The Poison Spreads</b>.",
-      "effects": [],
-      "steps": []
+      "supply": "medicine",
+      "section": "supplies",
+      "who": "chosen",
+      "min": 0,
+      "max": 4,
+      "used": {
+        "effects": [
+          {
+            "do": "removeCard",
+            "code": "04102",
+            "who": "input"
+          }
+        ],
+        "steps": []
+      },
+      "missing": {
+        "effects": [],
+        "steps": []
+      }
     },
     "tfa-interlude4:poison_spreads": {
       "kind": "story",
@@ -5753,19 +6145,23 @@
       "bullets": []
     },
     "tfa-interlude4:check_blanket": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "check_supplies",
-        "take": false
+      "kind": "checkSupply",
+      "supply": "blanket",
+      "section": "supplies",
+      "who": "each",
+      "has": {
+        "effects": [],
+        "steps": [
+          "tfa-interlude4:restful_sleep",
+          "tfa-interlude4:no_ill_effects:text"
+        ]
       },
-      "then": [
-        "tfa-interlude4:restful_sleep",
-        "tfa-interlude4:no_ill_effects:text"
-      ],
-      "else": [
-        "tfa-interlude4:tossing_and_turning"
-      ]
+      "missing": {
+        "effects": [],
+        "steps": [
+          "tfa-interlude4:tossing_and_turning"
+        ]
+      }
     },
     "tfa-interlude4:upgradeDecks": {
       "kind": "upgradeDecks"

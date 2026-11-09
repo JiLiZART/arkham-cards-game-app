@@ -335,6 +335,8 @@ export interface EffCtx {
   aoo?: true;
   /** what would defeat the investigator (a wouldBeDefeated window) */
   cause?: "damage" | "horror" | "both" | "effect";
+  /** whether the exploration of an `explored` window succeeded */
+  ok?: boolean;
 }
 
 export interface ChoiceOption {
@@ -466,6 +468,18 @@ export type Step = { choice?: any } & (
   /** `would`: the key of the wouldDrawEncounter window opened for it in the mythos phase (On the Hunt) */
   | { t: "DrawEncounter"; inv: InvId; card?: InstId; key?: string; would?: string }
   | { t: "Revelation"; inv: InvId; card: InstId }
+  /**
+   * An exploration (ADR-0052): draws from the exploration deck until a location matching `match`, an encounter card, or
+   * nothing; `drawn` holds the locations set beside the deck. `ended`: the draw is over (`ok` absent: the deck ran out),
+   * the set-aside locations go back and the window opens
+   */
+  | {
+      t: "Explore";
+      inv: InvId;
+      match: Extract<Effect, { op: "explore" }>["match"];
+      drawn: InstId[];
+      ended?: { ok?: boolean; location: InstId | null };
+    }
   /** `redirect`: the spawn was turned away from `at` (Barricade (3)) and the player chooses where instead */
   /** `asked`: the "would spawn" window was opened, `engage` who it engages as it spawns (if they are still there) */
   | {
@@ -563,7 +577,13 @@ export type Step = { choice?: any } & (
   | { t: "CheckObjectives" }
   | { t: "ForEachInv"; invs: InvId[]; step: Step }
   /** put looked-at cards back on top of a deck in the order chosen: `placed` from the top down, the last one goes under them */
-  | { t: "ArrangeTop"; inv: InvId; deck: InvId | "encounter"; cards: InstId[]; placed: InstId[] }
+  | {
+      t: "ArrangeTop";
+      inv: InvId;
+      deck: InvId | "encounter" | "exploration";
+      cards: InstId[];
+      placed: InstId[];
+    }
   /** turn a card to its other printed face (engine-scenario-structure) */
   | { t: "Flip"; card: InstId }
   /** a story face: shown, its abilities run, then what the card says (flip back, leave the game, stay) */
@@ -627,6 +647,8 @@ export interface EventData {
   /** what an attack just dealt (the attackDealsDamage window) */
   damage?: number;
   horror?: number;
+  /** an exploration succeeded (true) or not (false); absent when the deck ran out (an `explored` window) */
+  ok?: boolean;
 }
 
 export interface GameEvent {
@@ -873,6 +895,9 @@ export interface ContentDb {
   coverage?: ContentCoverage;
 }
 
+/** supplies by log section, investigator and supply (ADR-0053) */
+export type SupplyTable = Record<string, Record<InvId, Record<string, number>>>;
+
 export interface GameSetup {
   campaignId: string;
   scenarioId: string;
@@ -886,6 +911,8 @@ export interface GameSetup {
     mentalTrauma?: number;
   }[];
   campaignLog?: Record<string, unknown>;
+  /** the campaign log's supplies (ADR-0053): section → investigator → supply → how many */
+  supplies?: SupplyTable;
   chaosBag?: ChaosToken[];
   /** wait for the lead investigator before each phase (the UI's games; engine tests and old saves don't) */
   pacePhases?: boolean;

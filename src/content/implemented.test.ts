@@ -356,3 +356,35 @@ describe("the printed lines are read the way the card prints them", () => {
     expect(implemented(db("", { type: "agenda", backText: "" }), "c")).toBe(true);
   });
 });
+
+describe("supply lines (engine-tfa-supplies-vengeance-exploration 2.5)", () => {
+  const CAMP =
+    "[action]: <b>Resign.</b> The wilds are too dangerous!\n[action]: Check your supplies. If you have a map, look at the top 3 cards of the exploration deck. Place 1 on the bottom and the other 2 on top, in any order.";
+  it("Expedition Camp's map check works through its abilities' hasSupply condition", () => {
+    const abilities = [
+      { kind: "action", effects: [{ op: "resign" }] },
+      {
+        kind: "action",
+        condition: { hasSupply: { supply: "map", who: "you" } },
+        effects: [{ op: "lookAtExploration", top: 3, then: "reorder" }],
+      },
+    ];
+    expect(implemented(db(CAMP, { type: "location", abilities }), "c")).toBe(true);
+    expect(implemented(db(CAMP, { type: "location" }), "c")).toBe(false);
+  });
+});
+
+describe("vengeance lines (engine-tfa-supplies-vengeance-exploration 3.4)", () => {
+  it("Serpent from Yoth's 'vengeance points in the victory display' lines work through vengeanceInVictory conditions", () => {
+    const text =
+      "While there are 1 or more vengeance points in the victory display, Serpent from Yoth gains retaliate.\nWhile there are 2 or more vengeance points in the victory display, Serpent from Yoth gains hunter.";
+    const gains = (min: number, keyword: string) => ({
+      kind: "constant",
+      condition: { vengeanceInVictory: { min } },
+      modifiers: [{ keyword, scope: "self" }],
+    });
+    const abilities = [gains(1, "retaliate"), gains(2, "hunter")];
+    expect(implemented(db(text, { abilities }), "c")).toBe(true);
+    expect(implemented(db(text), "c")).toBe(false);
+  });
+});

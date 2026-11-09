@@ -35,9 +35,10 @@ import {
 } from "./queries";
 import { legalTurnActions } from "./rules/round";
 import { drawOpeningCards, revealLocation } from "./rules/investigators";
+import { buildExploration, setAsidePoisoned } from "./rules/scenario";
 import { run } from "./steps/dispatch";
 import { fireCardHook, runScript } from "./rules/scripts";
-import { actionStart, discardFromOpeningHands } from "./world/flags";
+import { actionStart, discardFromOpeningHands, supplies as suppliesFlag } from "./world/flags";
 import { randInt, shuffle } from "./world/rng";
 import { deckPile, newWorld, pileRec } from "./world/store";
 import type {
@@ -55,7 +56,7 @@ import { ZONE, PHASE, INV_STATUS, PILE, SCENARIO_CARD, isOneOf } from "./world/c
 import { STEP } from "./steps/step";
 import { scriptOf } from "./world/scripts";
 
-export const ENGINE_VERSION = 18;
+export const ENGINE_VERSION = 19;
 
 /**
  * Whether a save written by this engine version replays to the same game on this one. Version 8 changed the setup (a
@@ -386,6 +387,12 @@ function applySetupStep(game: GameContext, st: SetupStep) {
       // applied after opening hands are drawn
       discardFromOpeningHands.set(game, st.amount);
       return;
+    case "setAsidePoisoned":
+      setAsidePoisoned(game, st.copies);
+      return;
+    case "buildExploration":
+      buildExploration(game, st);
+      return;
     case "script": {
       const fn = scriptOf(game.db, s.scenarioId)?.fns?.[st.fn];
       if (fn)
@@ -439,8 +446,12 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
     for (const kind of ["deck", "hand", "discard"] as const) pileRec(game, `${kind}:${x.code}`);
     for (const code of x.deck) {
       const id = createCard(game, code, ZONE.Deck, x.code);
-      // a permanent card starts the game in play (Grimoire, Permanent)
-      if (db.cards[code].text.startsWith("Permanent.")) moveCard(game, id, ZONE.Play);
+      // a permanent card starts the game in play (Grimoire, Permanent); a permanent weakness in the threat area (Poisoned)
+      if (/^Permanent\./m.test(db.cards[code].text)) {
+        const weakness = db.cards[code].type === "treachery";
+        moveCard(game, id, weakness ? ZONE.Threat : ZONE.Play);
+        if (weakness) setController(game, id, x.code);
+      }
     }
     // a permanent card may change what the investigator starts with (Indebted: 2 fewer resources)
     const start = 5 + modSum(game, x.code, "startingResources");
@@ -514,6 +525,7 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
     }
   }
   s.chaosBag = [...(setup.chaosBag ?? campaign?.chaosBags[setup.difficulty] ?? [])];
+  if (setup.supplies) suppliesFlag.set(game, structuredClone(setup.supplies));
   for (const st of scen.setup) applySetupStep(game, st);
   shuffleDeck(game, "encounter");
   // reveal starting locations where investigators are

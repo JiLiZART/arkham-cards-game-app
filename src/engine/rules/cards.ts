@@ -354,6 +354,7 @@ export function ctxFor(data: EventData, source: InstId, you: InvId | null): EffC
         : undefined,
     ...(data.aoo ? { aoo: true as const } : {}),
     ...(data.cause ? { cause: data.cause } : {}),
+    ...(data.ok !== undefined ? { ok: data.ok } : {}),
   };
 }
 

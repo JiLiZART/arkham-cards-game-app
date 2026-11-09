@@ -26,8 +26,10 @@ import {
   enemyStat,
   immuneTo,
   invsAt,
+  locations,
   skillValue,
   shroud,
+  vengeanceInVictory,
 } from "../queries";
 import type { EffCtx, InstId, InvId } from "../world/types";
 import { commitSpent } from "../world/flags";
@@ -79,6 +81,9 @@ export function amt(game: GameContext, a: Amount, ctx: EffCtx): number {
   if (a === "succeedBy") return ctx.succeedBy ?? 0;
   if (a === "X") return ctx.x ?? 0;
   if (a === "enemiesEngaged") return ctx.you ? engagedWith(game, ctx.you).length : 0;
+  if (a === "vengeanceInVictory") return vengeanceInVictory(game);
+  if (a === "locationsWithDoom") return locations(game).filter((l) => l.doom > 0).length;
+  if (a === "doomOnLocations") return locations(game).reduce((n, l) => n + l.doom, 0);
   if (a === "yourShroud") {
     const loc = ctx.you ? inv(game, ctx.you).location : null;
     const x = loc ? shroud(game, loc) : 0;

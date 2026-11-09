@@ -522,7 +522,9 @@ export function main() {
               ? "count"
               : sec.type === "investigator_count"
                 ? "investigatorCount"
-                : "entries") as "count" | "investigatorCount" | "entries",
+                : sec.type === "supplies"
+                  ? "supplies"
+                  : "entries") as "count" | "investigatorCount" | "supplies" | "entries",
             label: String(sec.title),
           })),
       ];

@@ -4,16 +4,27 @@ import {
   exiled as exiledFlag,
   killed as killedFlag,
   insane as insaneFlag,
+  supplies as suppliesFlag,
   xp,
 } from "../world/flags";
-import { addCards, emptyLog, flatLog, migrateLog, NOTES, record, setCount } from "./log";
+import {
+  addCards,
+  emptyLog,
+  flatLog,
+  migrateLog,
+  NOTES,
+  record,
+  setCount,
+  type LogSectionState,
+} from "./log";
 import { flowOf } from "../../content/flow";
 import { basicWeaknessPool, expandDeck, validateDeck } from "./decks";
 import { ENGINE_VERSION } from "../index";
 import { advance, initFlow, settle, startResolution } from "./flow";
 import { randInt } from "../world/rng";
-import type { ContentDb, GameSetup, GameState } from "../world/types";
+import type { ContentDb, GameSetup, GameState, SupplyTable } from "../world/types";
 import { cardOf, cardsOf, invsOf, namedTokensOf, pileOf } from "../context";
+import { POISONED, vengeanceCards, vengeanceInVictory } from "../queries";
 import type { CampaignState, NewCampaign, ScenarioFacts } from "./types";
 import { EVENT } from "../events/event";
 import { isOneOf, SCENARIO_CARD, ZONE } from "../world/constants";
@@ -81,7 +92,7 @@ export function migrateCampaign(
   raw: Record<string, any>,
   inGame: boolean,
 ): CampaignState {
-  if (raw.flow) return raw as CampaignState;
+  if (raw.flow) return withSupplies(db, raw as CampaignState);
   const { scenarioIndex, log, ...rest } = raw;
   const def = db.campaigns[raw.campaignId];
   const id: string | null = def?.scenarios[scenarioIndex ?? 0] ?? null;
@@ -96,8 +107,38 @@ export function migrateCampaign(
   return { ...rest, log: migrateLog(log ?? {}), flow } as CampaignState;
 }
 
+/**
+ * A campaign saved before supplies and vengeance (engine version 19): its records count no vengeance, and a campaign
+ * whose log has a supplies section starts it empty (ADR-0053)
+ */
+function withSupplies(db: ContentDb, c: CampaignState): CampaignState {
+  if (c.version >= 19) return c;
+  const log = { ...c.log };
+  for (const sec of db.campaigns[c.campaignId]?.logSections ?? [])
+    if (sec.kind === "supplies") {
+      const had = log[sec.id] as LogSectionState | undefined;
+      log[sec.id] = had
+        ? { ...had, supplies: had.supplies ?? {} }
+        : { entries: [], counts: {}, cards: {}, investigators: {}, supplies: {} };
+    }
+  return {
+    ...c,
+    version: 19,
+    log,
+    history: c.history.map((h) => ({ vengeance: 0, ...h })),
+  };
+}
+
 /** the scenario to play now (or being played); null while the flow is between, or when the campaign is over */
 export const currentScenarioId = (_db: ContentDb, c: CampaignState): string | null => c.flow.play;
+
+/** the log's supply sections, as the game state keeps them (ADR-0053) */
+function suppliesOf(c: CampaignState): SupplyTable | undefined {
+  const out: SupplyTable = {};
+  for (const [id, sec] of Object.entries(c.log))
+    if (sec.supplies) out[id] = structuredClone(sec.supplies);
+  return Object.keys(out).length ? out : undefined;
+}
 
 /** setup for the next scenario of the campaign */
 export function scenarioSetup(db: ContentDb, c: CampaignState, seed: number): GameSetup {
@@ -108,6 +149,7 @@ export function scenarioSetup(db: ContentDb, c: CampaignState, seed: number): Ga
     ...active.filter((i) => i.code === c.lead),
     ...active.filter((i) => i.code !== c.lead),
   ];
+  const supplies = suppliesOf(c);
   // scenario setup steps may add tokens on top of this bag (and the campaign keeps them afterwards)
   return {
     campaignId: c.campaignId,
@@ -117,6 +159,7 @@ export function scenarioSetup(db: ContentDb, c: CampaignState, seed: number): Ga
     campaignLog: flatLog(c.log),
     chaosBag: [...c.chaosBag],
     ...(c.options?.length ? { options: [...c.options] } : {}),
+    ...(supplies ? { supplies } : {}),
     investigators: ordered.map((i) => ({
       code: i.code,
       deck: i.deck,
@@ -176,6 +219,7 @@ export function scenarioFacts(
     victoryCodes: cardsOf(s)
       .filter((x) => x.zone === "victory")
       .map((x) => x.code),
+    ...vengeanceOf(db, s),
     cultistsVictory: uniqueCultists(db, s, "victory"),
     cultistsRemaining: uniqueCultists(db, s, "remaining"),
     notResigned: invsOf(s)
@@ -232,6 +276,20 @@ function recordCheckpoint(c: CampaignState, s: GameState) {
   if (under.length) c.log = addCards(c.log, "checkpoint:beneathScenario", under, false, CHECKPOINT);
 }
 
+/** the vengeance the scenario left in the victory display, with the clue-less locations that join it at the end */
+function vengeanceOf(
+  db: ContentDb,
+  s: GameState,
+): { vengeance?: number; vengeanceCodes?: string[] } {
+  const game = { s, db, events: [] };
+  const ids = vengeanceCards(game, true);
+  if (!ids.length) return {};
+  return {
+    vengeance: vengeanceInVictory(game, true),
+    vengeanceCodes: ids.map((id) => cardOf(s, id).code),
+  };
+}
+
 /** what each investigator exiled during the scenario, when anyone did */
 function exiledIn(s: GameState): { exiled?: Record<string, string[]> } {
   const out = Object.fromEntries(
@@ -264,6 +322,14 @@ export function applyScenarioEnd(db: ContentDb, c0: CampaignState, s: GameState)
     if (end && i.status === "defeated") ci.status = "killed";
     else if (end && !db.scenarios[s.scenarioId].resolutions[s.resolution]?.checkpoint)
       ci.xp += end.xpIfNotDefeated;
+    // a Poisoned weakness in play stays in the deck: it starts the next scenario in play (The Forgotten Age)
+    if (
+      cardsOf(s).some(
+        (x) => x.code === POISONED && x.zone === ZONE.Threat && x.controller === i.id,
+      ) &&
+      !ci.deck.includes(POISONED)
+    )
+      ci.deck.push(POISONED);
     // an exiled card leaves the campaign deck: one copy for each exile
     for (const code of exiledFlag.get({ s }, i.id) ?? []) {
       const at = ci.deck.indexOf(code);
@@ -279,11 +345,21 @@ export function applyScenarioEnd(db: ContentDb, c0: CampaignState, s: GameState)
     else c.log = setCount(c.log, n.id, "add", Number(n.value), n.section || NOTES);
   }
   if (db.scenarios[s.scenarioId].resolutions[s.resolution]?.checkpoint) recordCheckpoint(c, s);
+  // the supplies the scenario crossed off are gone from the log (ADR-0053)
+  for (const [id, by] of Object.entries(suppliesFlag.get({ s }) ?? {}))
+    if (c.log[id]) c.log[id].supplies = structuredClone(by);
   // permanent bag additions from this scenario's setup, and those made during play "for the remainder of the campaign"
   for (const st of db.scenarios[s.scenarioId].setup)
     if (st.do === "addChaosToken") c.chaosBag.push(st.token);
   c.chaosBag.push(...(campaignTokens.get({ s }) ?? []));
-  c.history.push({ scenarioId: s.scenarioId, resolution: s.resolution, xp: 0, victory });
+  const { vengeance } = vengeanceOf(db, s);
+  c.history.push({
+    scenarioId: s.scenarioId,
+    resolution: s.resolution,
+    xp: 0,
+    victory,
+    ...(vengeance ? { vengeance } : {}),
+  });
   settle(db, c);
   return startResolution(db, c, scenarioFacts(db, s, victory));
 }

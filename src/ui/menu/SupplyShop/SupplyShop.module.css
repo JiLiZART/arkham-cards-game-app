@@ -1,0 +1,65 @@
+/* a Supply Point in the campaign flow (ADR-0053) */
+.supply-shop {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 52ch;
+}
+.buyer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.buyer output {
+  margin-left: auto;
+  font: 20px var(--f-display);
+}
+.buyer .over {
+  color: var(--bad);
+}
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.items li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+.items li.on {
+  background: #151e2155;
+  outline: 1px solid var(--accent);
+}
+.name {
+  flex: 1;
+}
+.cost {
+  opacity: 0.8;
+  font-size: 14px;
+}
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.counter button {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+}
+.counter output {
+  min-width: 2ch;
+  text-align: center;
+}
+.items input {
+  width: 22px;
+  height: 22px;
+}

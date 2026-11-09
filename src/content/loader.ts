@@ -16,6 +16,7 @@ import {
   ScenarioDef,
   SoundManifest,
   type Ability,
+  type ExplorationSpec,
   deckCodes,
 } from "./schema";
 import { hasScript, scriptFnIn, scriptOf } from "../engine/world/scripts";
@@ -322,6 +323,47 @@ export function checkPrintText(
   return errors;
 }
 
+/** every code an exploration deck is built from */
+const explorationCodes = (spec: ExplorationSpec) => [
+  ...(spec.cards ?? []),
+  ...(spec.pick ?? []).flatMap((p) => p.from),
+  ...(spec.bySymbol ?? []),
+];
+
+/**
+ * ADR-0052: every location of a scenario's exploration deck is reached from a location put into play at setup through
+ * the connection symbols printed on the cards, so a symbol transcribed wrong fails here instead of stranding the scenario
+ */
+export function explorationReach(db: ContentDb, s: ScenarioDef, file: string): ContentError[] {
+  const deck = s.setup.flatMap((st) => (st.do === "buildExploration" ? explorationCodes(st) : []));
+  const isLocation = (c: string) => db.cards[c]?.type === "location";
+  const explored = [...new Set(deck.filter(isLocation))];
+  if (!explored.length) return [];
+  const reached = new Set(
+    s.setup.flatMap((st) =>
+      st.do === "putIntoPlay" ? st.codes : st.do === "placeLocation" ? [st.code] : [],
+    ),
+  );
+  for (let grew = true; grew;) {
+    grew = false;
+    for (const c of explored) {
+      const symbol = db.cards[c].symbol;
+      if (reached.has(c) || !symbol) continue;
+      if ([...reached].some((r) => db.cards[r]?.connectsTo?.includes(symbol))) {
+        reached.add(c);
+        grew = true;
+      }
+    }
+  }
+  return explored
+    .filter((c) => !reached.has(c))
+    .map((c) => ({
+      file,
+      path: "setup",
+      message: `${c} in the exploration deck is reached from no start location by connection symbols`,
+    }));
+}
+
 /** dangling references between content files */
 export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {}): ContentError[] {
   const errors: ContentError[] = [];
@@ -431,6 +473,8 @@ export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {
           });
       if ("from" in st && Array.isArray(st.from))
         st.from.forEach((c) => need(file, `setup.${k}`, c));
+      if (st.do === "buildExploration")
+        explorationCodes(st).forEach((c) => need(file, `setup.${k}`, c));
       if (st.do === "script" && !scriptOf(db, s.id)?.fns?.[st.fn])
         errors.push({ file, path: `setup.${k}`, message: `missing script function ${st.fn}` });
     });
@@ -471,6 +515,7 @@ export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {
             message: `link to ${code}, which is not put into play before it`,
           });
     }
+    errors.push(...explorationReach(db, s, file));
     if (!s.resolutions.none)
       errors.push({ file, path: "resolutions", message: `scenario needs a "none" resolution` });
   }

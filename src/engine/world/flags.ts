@@ -4,7 +4,7 @@
  * and write flags only through it. Each family is `prefix:id` (or `prefix:id:id`); a global is a fixed name.
  */
 import type { ChaosToken, Effect, Skill } from "../../content/schema";
-import type { EffCtx, FlagTables, GameState, InstId, InvId } from "./types";
+import type { EffCtx, FlagTables, GameState, InstId, InvId, SupplyTable } from "./types";
 
 /** anything holding a game state: the engine context, or `{ s }` around a state */
 type HasState = { s: GameState };
@@ -106,6 +106,8 @@ export const resignedWith = family<string[], InvId>("resignedWith");
 export const killed = family<true, InvId>("killed");
 /** the investigator was driven insane in the scenario (Yog-Sothoth's discards emptied their deck): the campaign marks them insane */
 export const insane = family<true, InvId>("insane");
+/** the turn (`counters.turn`) the investigator last explored in, and how each exploration of that turn went */
+export const explored = family<{ turn: number; ok: boolean[] }, InvId>("explored");
 /** "remember that you have …": a fact a scenario keeps about an investigator, by what it is ("had a drink") */
 export const remembered = family<true, readonly [string, InvId]>("remembered");
 /** "remember that you …" about the whole group: a fact the scenario keeps (The Unspeakable Oath's six), by its key */
@@ -169,6 +171,10 @@ export const servantBeneath = global<true>("servantBeneath");
 export const devourer = global<true>("devourer");
 /** chaos tokens added "for the remainder of the campaign": the campaign's bag gains them as the scenario ends */
 export const campaignTokens = global<ChaosToken[]>("campaignTokens");
+/** a named scenario counter (The Depths of Yoth's depth level, Bad Blood's memories) */
+export const scenarioCounter = family<number>("counter");
+/** the campaign's supplies, copied in at setup and written back at the end (ADR-0053) */
+export const supplies = global<SupplyTable>("supplies");
 /** the location the investigators started the scenario at, for `distanceFromStart` (The Pallid Mask's setup sets it) */
 export const startLocation = global<InstId>("startLocation");
 /** The Pallid Mask's Catacombs deck, top card first: set-aside locations put into play from the top as Catacombs reveal */

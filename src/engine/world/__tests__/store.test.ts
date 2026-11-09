@@ -27,6 +27,7 @@ const ZONES: Zone[] = [
   ZONE.Commit,
   ZONE.EncounterDeck,
   ZONE.EncounterDiscard,
+  ZONE.Exploration,
   ZONE.SideDeck,
   ZONE.Location,
   ZONE.Enemy,
@@ -82,6 +83,7 @@ describe("pileKey", () => {
     expect(pileKey(ZONE.EncounterDiscard, null)).toBe("encounterDiscard");
     expect(pileKey(ZONE.ActDeck, null)).toBe("actDeck");
     expect(pileKey(ZONE.AgendaDeck, null)).toBe("agendaDeck");
+    expect(pileKey(ZONE.Exploration, null)).toBe("exploration");
   });
 
   it("an investigator's piles need an owner; a side deck's name isn't in the zone", () => {

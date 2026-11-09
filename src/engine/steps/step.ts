@@ -82,6 +82,7 @@ export const STEP = {
   Flip: "Flip",
   ResolveStory: "ResolveStory",
   RemoveLocation: "RemoveLocation",
+  Explore: "Explore",
   EnterVehicle: "EnterVehicle",
   LeaveVehicle: "LeaveVehicle",
   MoveVehicle: "MoveVehicle",

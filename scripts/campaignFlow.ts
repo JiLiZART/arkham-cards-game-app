@@ -11,10 +11,10 @@ import type {
   FlowCondition,
   FlowEffect,
 } from "../src/content/schema";
-import { stepRefs } from "../src/content/schema";
+import { stepRefs, type SupplyBranch } from "../src/content/schema";
 import { namedScenarios } from "../src/content/flow";
 import { kebab, tokenName, type Raw } from "./campaignGuide";
-import { TEST_STAGE } from "../src/engine/world/constants";
+import { SUPPLIES, TEST_STAGE, type Supply } from "../src/engine/world/constants";
 
 export interface FlowSource {
   /** the guide's campaign record */
@@ -43,6 +43,8 @@ export interface FlowResult {
 
 type Who = "each" | "lead" | "choice" | "input";
 const NOTES = "campaign_notes";
+const SUPPLY_SECTION = "supplies";
+const isSupply = (id: unknown): id is Supply => SUPPLIES.includes(id as Supply);
 /** a limit the guide gives as a number (it may also be a count read from the log, which the game doesn't offer) */
 const num = (v: unknown): number | undefined => (typeof v === "number" ? v : undefined);
 /** inputs the new-game screen and the engine already answer, and the placeholder random weakness the campaign start draws */
@@ -282,6 +284,27 @@ class Compiler {
             return this.skipEffect(e);
         }
       }
+      case "lose_supplies":
+        return isSupply(e.supply)
+          ? [
+              {
+                do: "loseSupply",
+                supply: e.supply,
+                section: e.section ?? SUPPLY_SECTION,
+                who: who(["each", "lead", "input"]) as "each",
+              },
+            ]
+          : this.skipEffect(e);
+      case "gain_supplies": {
+        const list: Raw[] = Array.isArray(e.supplies) ? e.supplies : [];
+        if (!list.length || !list.every((x) => isSupply(x.id))) return this.skipEffect(e);
+        return list.map((x) => ({
+          do: "gainSupply" as const,
+          supply: x.id,
+          section: e.section ?? SUPPLY_SECTION,
+          who: who(["each", "lead", "input"]) as "each",
+        }));
+      }
       case "story_step":
         return [{ steps: e.steps ?? [] }];
       default:
@@ -331,6 +354,11 @@ class Compiler {
         return { kind: "logCards", id: c.id, section: c.section ?? NOTES };
       case "has_card":
         return { kind: "hasCard", card: c.card, inv: "any" };
+      // "if any investigator has a map"
+      case "check_supplies":
+        return c.investigator === "any" && isSupply(c.id)
+          ? { kind: "hasSupply", supply: c.id, section: c.section ?? SUPPLY_SECTION, inv: "any" }
+          : null;
       case "campaign_data":
         if (c.campaign_data === "scenario_completed" && c.scenario)
           return { kind: "scenarioCompleted", scenario: this.scenarioId(c.scenario) };
@@ -417,6 +445,23 @@ class Compiler {
           min: n,
           max: n,
         }));
+      case "check_supplies":
+        // which investigators have a blanket: a branch for each with it, one for each without
+        if (c.investigator === "all" && isSupply(c.id)) {
+          const yes = options.find((o) => o.boolCondition === true);
+          const no = options.find((o) => o.boolCondition === false);
+          return [
+            this.add(owner, id, {
+              kind: "checkSupply",
+              supply: c.id,
+              section: c.section ?? SUPPLY_SECTION,
+              who: "each",
+              has: this.supplyBranch(owner, byId, yes),
+              missing: this.supplyBranch(owner, byId, no),
+            }),
+          ];
+        }
+        break;
       case "scenario_data":
         if (c.scenario_data === "player_count")
           return numeric((n) => ({ kind: "playerCount", min: n, max: n }));
@@ -521,6 +566,18 @@ class Compiler {
         ];
       }
       case "counter": {
+        // "Vengeance in the victory display": Yig's Fury is counted by the game from the scenario's end, never asked
+        if (/vengeance/i.test(i.text ?? ""))
+          return this.effectSteps(owner, byId, st.id, i.effects ?? []).flatMap((id) => {
+            const fx = this.steps[id];
+            if (fx?.kind === "effects")
+              fx.effects = fx.effects.map((e) =>
+                (e.do === "count" || e.do === "investigatorCount") && e.value === "input"
+                  ? { ...e, value: "vengeance" as const }
+                  : e,
+              );
+            return [id];
+          });
         // "Victory display": the experience from the cards in the victory display is counted by the game itself
         if (
           /victory display/i.test(i.text ?? "") ||
@@ -606,10 +663,77 @@ class Compiler {
         ];
       case "upgrade_decks":
         return [this.add(owner, st.id, { kind: "upgradeDecks" })];
+      case "supplies": {
+        const list = (i.supplies ?? []).filter((x: Raw) => isSupply(x.id));
+        if (!list.length || list.length < (i.supplies ?? []).length)
+          return this.unsupportedInput(owner, st, i.type);
+        return [
+          this.add(owner, st.id, {
+            kind: "buySupplies",
+            ...head,
+            section: i.section ?? SUPPLY_SECTION,
+            list: list.map((x: Raw) => ({ id: x.id, cost: x.cost ?? 0, multiple: !!x.multiple })),
+            points: i.points ?? [0],
+            // the Return-to Resupply Point: 1 supply point for every 2 experience, up to 10 experience
+            ...(i.special_xp === "supply_points" ? { xpRate: 2, xpMax: 10 } : {}),
+            record: true,
+          }),
+        ];
+      }
+      case "use_supplies": {
+        if (!isSupply(i.id)) return this.unsupportedInput(owner, st, i.type);
+        const yes = (i.choices ?? []).find((o: Raw) => o.boolCondition === true);
+        const no = (i.choices ?? []).find((o: Raw) => o.boolCondition === false);
+        const each = i.investigator === "all";
+        return [
+          this.add(owner, st.id, {
+            kind: "crossOffSupply",
+            ...head,
+            supply: i.id,
+            section: i.section ?? SUPPLY_SECTION,
+            who: each ? "each" : "chosen",
+            min: each ? 0 : (num(i.min) ?? 0),
+            ...(!each && num(i.max) !== undefined ? { max: num(i.max) } : {}),
+            used: this.supplyBranch(owner, byId, yes),
+            missing: this.supplyBranch(owner, byId, no),
+          }),
+        ];
+      }
+      case "investigator_choice_supplies":
+        if (!isSupply(i.id)) return this.unsupportedInput(owner, st, i.type);
+        return [
+          this.add(owner, st.id, {
+            kind: "checkSupply",
+            ...head,
+            supply: i.id,
+            section: i.section ?? SUPPLY_SECTION,
+            who: "chosen",
+            has: this.supplyBranch(owner, byId, i.positiveChoice),
+            missing: this.supplyBranch(owner, byId, i.negativeChoice),
+          }),
+        ];
       default:
         if (HANDLED_INPUTS.has(i.type)) return [];
         return this.unsupportedInput(owner, st, i.type);
     }
+  }
+
+  /**
+   * A supply step's option for the investigator it is about: their effects (the guide's "choice" or "$input_value" is
+   * that investigator), its stories and steps once
+   */
+  private supplyBranch(owner: string, byId: Map<string, Raw>, o: Raw | undefined): SupplyBranch {
+    if (!o) return { effects: [], steps: [] };
+    const effects: FlowEffect[] = [];
+    const steps: string[] = [];
+    for (const e of o.effects ?? []) {
+      const own = e.investigator === "choice" ? { ...e, investigator: "$input_value" } : e;
+      for (const r of this.effect(own, false))
+        if ("steps" in r) steps.push(...this.expand(owner, byId, r.steps));
+        else effects.push(r);
+    }
+    steps.push(...this.expand(owner, byId, o.steps ?? []));
+    return { effects, steps };
   }
 
   private unsupportedInput(owner: string, st: Raw, kind: string): string[] {

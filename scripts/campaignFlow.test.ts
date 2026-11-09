@@ -953,3 +953,73 @@ describe("the flow compiler's fixes (campaign-flow-compiler-fixes)", () => {
     expect(flow.setup.map((id) => flow.steps[id].kind)).toEqual(["story"]);
   });
 });
+
+describe("The Forgotten Age's supplies compile to supply steps (engine-tfa-supplies-vengeance-exploration 2.3)", () => {
+  const guides = JSON.parse(
+    readFileSync("inspired/ArkhamCards/assets/generated/all_campaigns.txt", "utf8"),
+  ).map(camelizeGuide);
+  const tfa = guides.find((g: { campaign: { id: string } }) => g.campaign.id === "tfa");
+  const ids = new Map<string, string>(
+    tfa.scenarios
+      .filter((s: { type?: string }) => s.type !== "interlude" && s.type !== "epilogue")
+      .map((s: { id: string }) => [s.id, s.id.replace(/_/g, "-")]),
+  );
+  const { flow, unsupported } = compileFlow({
+    campaign: tfa.campaign,
+    scenarios: tfa.scenarios,
+    ids,
+  });
+  const steps = Object.entries(flow.steps);
+  const of = (kind: string) => steps.filter(([, st]) => st.kind === kind);
+
+  it("Yig's Fury takes the vengeance in the victory display, not a number typed in", () => {
+    const fury = steps.flatMap(([, st]) =>
+      st.kind === "effects"
+        ? st.effects.filter((e) => e.do === "count" && e.section === "yigsFury")
+        : [],
+    );
+    expect(fury.some((e) => "value" in e && e.value === "vengeance")).toBe(true);
+    expect(fury.some((e) => "value" in e && e.value === "input")).toBe(false);
+  });
+
+  it("leaves no supply kind unsupported", () => {
+    const kinds = Object.keys(unsupported);
+    for (const k of [
+      "input:supplies",
+      "input:use_supplies",
+      "input:investigator_choice_supplies",
+      "condition:check_supplies",
+      "effect:lose_supplies",
+    ])
+      expect(kinds).not.toContain(k);
+  });
+
+  it("the prologue's Supply Point 1: eleven supplies at their prices, points by player count", () => {
+    const [, buy] = of("buySupplies").find(([id]) => id.startsWith("tfa-prologue:"))!;
+    expect(buy).toMatchObject({ points: [10, 7, 5, 4], section: "supplies" });
+    if (buy.kind !== "buySupplies") throw new Error();
+    expect(buy.list).toHaveLength(11);
+    expect(buy.list.find((x) => x.id === "provisions")).toEqual({
+      id: "provisions",
+      cost: 1,
+      multiple: true,
+    });
+    expect(buy.list.find((x) => x.id === "rope")).toEqual({ id: "rope", cost: 3, multiple: false });
+  });
+
+  it("Interlude I: provisions crossed off per investigator, a blanket checked for each", () => {
+    const interlude = steps.filter(([id]) => id.startsWith("tfa-interlude1:"));
+    const eat = interlude.find(
+      ([, st]) => st.kind === "crossOffSupply" && st.supply === "provisions",
+    );
+    expect(eat?.[1]).toMatchObject({ who: "each" });
+    const sleep = interlude.find(([, st]) => st.kind === "checkSupply" && st.supply === "blanket");
+    expect(sleep?.[1]).toMatchObject({ who: "each" });
+    const medicine = interlude.find(
+      ([, st]) => st.kind === "crossOffSupply" && st.supply === "medicine",
+    )?.[1];
+    expect(medicine).toMatchObject({ who: "chosen", min: 0, max: 4 });
+    if (medicine?.kind !== "crossOffSupply") throw new Error();
+    expect(medicine.used.effects).toEqual([{ do: "removeCard", code: "04102", who: "input" }]);
+  });
+});

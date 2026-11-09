@@ -125,7 +125,7 @@ function oldContextNames(file: string): string[] {
 
 describe("the engine context's names (engine-folder-structure)", () => {
   it("is GameContext, and a parameter or variable of that type is called game, in the engine and in every script", () => {
-    const files = [...walk("src/engine"), ...walk("content")].filter((f) => /\.ts$/.test(f));
+    const files = [...walk("src/engine"), ...walk("content")].filter((f) => f.endsWith(".ts"));
     expect(files.flatMap(oldContextNames)).toEqual([]);
   });
 });

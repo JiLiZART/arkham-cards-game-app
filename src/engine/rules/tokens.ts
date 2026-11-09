@@ -9,6 +9,7 @@ import {
   def,
   type GameContext,
   inv,
+  pile,
 } from "../context";
 
 /** the doom on each agenda in play, one entry per agenda deck */
@@ -18,14 +19,35 @@ const agendaDoom = (game: GameContext) =>
 /** how many cards lie beneath a card (none: 0) */
 const beneathOf = (game: GameContext, holder: string | null) =>
   holder ? cardsBeneath(game, holder).length : 0;
-import { cardsIn, distances, enemies, enemiesAt, locations, shroud } from "../queries";
+import {
+  cardsIn,
+  distances,
+  enemies,
+  enemiesAt,
+  locations,
+  shroud,
+  vengeanceInVictory,
+} from "../queries";
 import type { InvId } from "../world/types";
-import { SCENARIO_CARD, ZONE } from "../world/constants";
-import { startLocation } from "../world/flags";
+import { PILE, SCENARIO_CARD, ZONE } from "../world/constants";
+import { scenarioCounter, startLocation } from "../world/flags";
 
 /** X values used by scenario reference cards */
-export function tokenX(game: GameContext, x: NonNullable<TokenEffect["x"]>, i: InvId): number {
+export function tokenX(
+  game: GameContext,
+  x: NonNullable<TokenEffect["x"]>,
+  i: InvId,
+  counter?: string,
+): number {
   switch (x) {
+    case "locationsInPlay":
+      return locations(game).length;
+    case "locationsWithDoom":
+      return locations(game).filter((l) => l.doom > 0).length;
+    case "doomOnLocations":
+      return locations(game).reduce((n, l) => n + l.doom, 0);
+    case "scenarioCounter":
+      return counter ? (scenarioCounter.get(game, counter) ?? 0) : 0;
     case "ghoulsAtYourLocation":
       return enemiesAt(game, inv(game, i).location).filter((e) =>
         def(game, e.id).traits.includes("Ghoul"),
@@ -39,6 +61,10 @@ export function tokenX(game: GameContext, x: NonNullable<TokenEffect["x"]>, i: I
       );
     case "broodInPlay":
       return enemies(game).filter((e) => def(game, e.id).name === "Brood of Yog-Sothoth").length;
+    case "explorationDeckSize":
+      return pile(game, PILE.Exploration).length;
+    case "vengeanceInVictory":
+      return vengeanceInVictory(game);
     case "extradimensionalLocations":
       return locations(game).filter((l) => def(game, l.id).traits.includes("Extradimensional"))
         .length;

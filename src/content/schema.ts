@@ -1,6 +1,14 @@
 import { z } from "zod";
 import { EVENT } from "../engine/events/event";
-import { ZONE, PHASE, CHOICE, TEST_STAGE } from "../engine/world/constants";
+import {
+  ZONE,
+  PHASE,
+  CHOICE,
+  TEST_STAGE,
+  CONNECTION_SYMBOLS,
+  SUPPLIES,
+  type Supply,
+} from "../engine/world/constants";
 
 // ---------- primitives ----------
 export const SKILLS = ["willpower", "intellect", "combat", "agility"] as const;
@@ -83,7 +91,19 @@ export const Placement: z.ZodType<Placement> = z.union([
 export const Amount = z.union([
   z.number(),
   /** `enemiesEngaged`: the enemies engaged with you (Trench Knife); `yourShroud`: your location's shroud (Bleeding Walls) */
-  z.enum(["failBy", "succeedBy", "all", "X", "enemiesEngaged", "yourShroud"]),
+  /** `vengeanceInVictory`: the vengeance points in the victory display (The Forgotten Age) */
+  z.enum([
+    "failBy",
+    "succeedBy",
+    "all",
+    "X",
+    "enemiesEngaged",
+    "yourShroud",
+    "vengeanceInVictory",
+    /** the locations in play with doom on them, and the doom on locations (The Forgotten Age) */
+    "locationsWithDoom",
+    "doomOnLocations",
+  ]),
   z.object({ perInvestigator: z.number() }),
   /** the tokens on the source card itself */
   z.object({ onSelf: z.enum([EVENT.Damage, "horror", EVENT.Clues, "resources", EVENT.Doom]) }),
@@ -318,6 +338,10 @@ export const ModFlag = z.enum([
   "ignoreUnrevealedText",
   /** the investigator can't take control of clues (Dianne Devine: at her location) */
   "cannotTakeControlOfClues",
+  /** the investigator can't explore, or nobody can explore at this location (Lost in the Wilds, Overgrowth) */
+  "cannotExplore",
+  /** on a card in play: its vengeance counts as if it were in the victory display (Underground Ruins, while the condition holds) */
+  "consideredInVictory",
   /** on an enemy: its attacks can't be cancelled (Sebastien Moreau) */
   "attacksCannotBeCancelled",
   /** the investigator can't trigger [fast] abilities (Whispers in Your Head (Anxiety)) */
@@ -401,6 +425,8 @@ export const Prey = z.union([
     only: z.literal(true).optional(),
   }),
   z.literal("bearer"),
+  /** "Prey - Poisoned investigator" (Fang of Yig): a poisoned one, else as if it had no prey */
+  z.literal("poisoned"),
   /** only this investigator (by card code) is prey: Tommy Malloy */
   z.object({ only: z.string() }),
   /** the investigator nearest to a card in play matching the filter */
@@ -452,6 +478,34 @@ export const Cost = z
   .strict();
 export type Cost = z.infer<typeof Cost>;
 
+/** a connection symbol printed on a location (`constants.ts`) */
+export const ConnectionSymbol = z.enum(CONNECTION_SYMBOLS);
+
+/**
+ * What an exploration deck is built from (ADR-0052): `cards` by code, repeated for copies; each `pick` takes `count` of
+ * its codes at random (the rest removed with `rest: "remove"`, else left where they are); `bySymbol` takes one location
+ * per connection symbol at random and removes the others. The cards come out of the encounter deck, the set-aside
+ * cards and the side decks; the deck is shuffled with the seed.
+ */
+export const ExplorationSpec = z
+  .object({
+    cards: z.array(z.string()).optional(),
+    pick: z
+      .array(
+        z
+          .object({
+            from: z.array(z.string()).min(1),
+            count: z.number().int().positive(),
+            rest: z.literal("remove").optional(),
+          })
+          .strict(),
+      )
+      .optional(),
+    bySymbol: z.array(z.string()).optional(),
+  })
+  .strict();
+export type ExplorationSpec = z.infer<typeof ExplorationSpec>;
+
 // ---------- conditions ----------
 /** the kinds of action an investigator's turn records (an ability's or event's designator, else what the action is) */
 export const ActionKind = z.enum([
@@ -465,6 +519,7 @@ export const ActionKind = z.enum([
   "engage",
   "parley",
   "resign",
+  "explore",
 ]);
 export type ActionKind = z.infer<typeof ActionKind>;
 
@@ -583,6 +638,19 @@ export type Condition =
    * investigator's actions are all taken in their one turn of the round, so the round's record is the turn's
    */
   | { actionThisTurn: ActionKind }
+  /**
+   * an exploration: in an `explored` window, whether it succeeded (`ok`); with `thisTurn`, you explored this turn (with
+   * that result when `ok` is given). Voice of the Jungle: "if you did not successfully explore this turn"
+   */
+  | { explored: { ok?: boolean; thisTurn?: true } }
+  /** a named scenario counter within bounds (The Depths of Yoth's depth level) */
+  | { counter: { name: string; min?: number; max?: number } }
+  /** you are poisoned: a Poisoned weakness is in your threat area (The Forgotten Age) */
+  | { poisoned: true }
+  /** at least `min` vengeance points in the victory display */
+  | { vengeanceInVictory: { min: number } }
+  /** a campaign supply carried by you, an investigator at your location, or anyone (ADR-0053; "if you have a map") */
+  | { hasSupply: { supply: Supply; who: "you" | "atYourLocation" | "any" } }
   /** a condition a card or scenario script decides (`CardScript.conditions`) */
   | { script: string };
 
@@ -752,6 +820,29 @@ export const Condition: z.ZodType<Condition> = z.lazy(() =>
       })
       .strict(),
     z.object({ actionThisTurn: ActionKind }).strict(),
+    z
+      .object({
+        explored: z
+          .object({ ok: z.boolean().optional(), thisTurn: z.literal(true).optional() })
+          .strict(),
+      })
+      .strict(),
+    z.object({ vengeanceInVictory: z.object({ min: z.number() }).strict() }).strict(),
+    z.object({ poisoned: z.literal(true) }).strict(),
+    z
+      .object({
+        counter: z
+          .object({ name: z.string(), min: z.number().optional(), max: z.number().optional() })
+          .strict(),
+      })
+      .strict(),
+    z
+      .object({
+        hasSupply: z
+          .object({ supply: z.enum(SUPPLIES), who: z.enum(["you", "atYourLocation", "any"]) })
+          .strict(),
+      })
+      .strict(),
     z.object({ script: z.string() }).strict(),
   ]),
 );
@@ -1002,6 +1093,32 @@ export type Effect =
   | { op: "spawnSetAside"; code: string; at?: string; orVictory?: boolean }
   | { op: "putSetAsideIntoPlay"; code: string }
   | { op: "shuffleIntoEncounterDeck"; target: "eventEnemy" }
+  /**
+   * Explore (ADR-0052): draw from the exploration deck until a location matching (connected to yours by its symbols,
+   * with a trait, or any) or an encounter card is drawn
+   */
+  | { op: "explore"; match: { connecting: true } | { trait: string } | { any: true } }
+  /**
+   * look at the top cards of the exploration deck: `reorder` puts 1 on the bottom and the others on top in any order
+   * (Expedition Camp); `discardTreacheries` discards the treacheries among them and shuffles the deck (Entryway)
+   */
+  | { op: "lookAtExploration"; top: number; then: "reorder" | "discardTreacheries" }
+  /** this card (Pitfall), or the encounter deck's top card (the Return-to rule), shuffled into the exploration deck */
+  | { op: "shuffleIntoExploration"; card: "self" | "encounterTop" }
+  /** cards revealed from the exploration deck until a location, put into play; the rest shuffled back (Worlds Beyond) */
+  | { op: "revealExplorationUntil"; type: "location" }
+  /** the exploration deck's cards set aside and a new deck built (Depths of Yoth's depth levels) */
+  | ({ op: "rebuildExploration" } & ExplorationSpec)
+  /** one of a campaign supply crossed off: yours, or anyone's who has it, you first (Steps of Yoth's rope; ADR-0053) */
+  | { op: "crossOffSupply"; supply: Supply; who: "you" | "any" }
+  /** one clue on a location turned to its doom side (Ancient Hall); `at`: this card, or your location */
+  | { op: "flipClueToDoom"; at: "self" | "yourLocation" }
+  /** a named scenario counter set to, or raised by, an amount (The Depths of Yoth's depth level) */
+  | { op: "setCounter" | "addCounter"; name: string; amount: Amount }
+  /** "if you are not poisoned, put a set-aside Poisoned weakness into play in your threat area" (Snake Bite, Pit Viper) */
+  | { op: "poison" }
+  /** a non-[[Elite]] card with vengeance chosen from the victory display to the encounter discard pile (Time-Wracked Woods) */
+  | { op: "returnVengeanceCard" }
   | { op: "takeControl" }
   | { op: "resolution"; id: string }
   | { op: "resign" }
@@ -1553,6 +1670,40 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
     z
       .object({ op: z.literal("shuffleIntoEncounterDeck"), target: z.literal("eventEnemy") })
       .strict(),
+    z
+      .object({
+        op: z.literal("explore"),
+        match: z.union([
+          z.object({ connecting: z.literal(true) }).strict(),
+          z.object({ trait: z.string() }).strict(),
+          z.object({ any: z.literal(true) }).strict(),
+        ]),
+      })
+      .strict(),
+    z
+      .object({
+        op: z.literal("lookAtExploration"),
+        top: z.number().int().positive(),
+        then: z.enum(["reorder", "discardTreacheries"]),
+      })
+      .strict(),
+    z
+      .object({ op: z.literal("shuffleIntoExploration"), card: z.enum(["self", "encounterTop"]) })
+      .strict(),
+    z.object({ op: z.literal("revealExplorationUntil"), type: z.literal("location") }).strict(),
+    ExplorationSpec.extend({ op: z.literal("rebuildExploration") }).strict(),
+    z.object({ op: z.literal("returnVengeanceCard") }).strict(),
+    z.object({ op: z.literal("poison") }).strict(),
+    z.object({ op: z.literal("flipClueToDoom"), at: z.enum(["self", "yourLocation"]) }).strict(),
+    z.object({ op: z.literal("setCounter"), name: z.string(), amount: Amount }).strict(),
+    z.object({ op: z.literal("addCounter"), name: z.string(), amount: Amount }).strict(),
+    z
+      .object({
+        op: z.literal("crossOffSupply"),
+        supply: z.enum(SUPPLIES),
+        who: z.enum(["you", "any"]),
+      })
+      .strict(),
     z.object({ op: z.literal("takeControl") }).strict(),
     z.object({ op: z.literal(EVENT.Resolution), id: z.string() }).strict(),
     z.object({ op: z.literal(EVENT.Resign) }).strict(),
@@ -1860,6 +2011,17 @@ export const EFFECT_OPS = [
   "spawnSetAside",
   "putSetAsideIntoPlay",
   "shuffleIntoEncounterDeck",
+  "explore",
+  "lookAtExploration",
+  "shuffleIntoExploration",
+  "revealExplorationUntil",
+  "rebuildExploration",
+  "crossOffSupply",
+  "returnVengeanceCard",
+  "poison",
+  "flipClueToDoom",
+  "setCounter",
+  "addCounter",
   "takeControl",
   "resolution",
   "resign",
@@ -1963,6 +2125,8 @@ export const TRIGGERS = [
   /** at the end of the upkeep phase, after hand sizes are checked (Hired Muscle) */
   "upkeepPhaseEnds",
   "enterLocation",
+  /** after an investigator explores: `ok` true, false, or absent (the deck ran out); `location` the new one or theirs */
+  "explored",
   /** a location's "after you reveal this location", after its clues are placed */
   "revealed",
   /** before an investigator or an enemy is defeated: a replacement cancels it (`cancel`) and does something else */
@@ -2075,7 +2239,16 @@ export const Ability = z
     trigger: Trigger.optional(),
     /** action designator, e.g. fight/investigate (counts as that action for AoO and effects) */
     designator: z
-      .enum(["fight", "investigate", EVENT.Evade, "parley", EVENT.Resign, EVENT.Move, EVENT.Engage])
+      .enum([
+        "fight",
+        "investigate",
+        EVENT.Evade,
+        "parley",
+        EVENT.Resign,
+        EVENT.Move,
+        EVENT.Engage,
+        "explore",
+      ])
       .optional(),
     actionCost: z.number().optional(), // default 1 for kind=action
     cost: Cost.optional(),
@@ -2343,6 +2516,9 @@ export const CardDef = z
     /** location investigated with a different skill */
     investigateSkill: Skill.optional(),
     victory: z.number().optional(),
+    /** a location's connection symbol, and the symbols of the locations it connects to (ADR-0052) */
+    symbol: ConnectionSymbol.optional(),
+    connectsTo: z.array(ConnectionSymbol).optional(),
     /** Vengeance X: the vengeance points it adds to the campaign while in the victory display (The Forgotten Age) */
     vengeance: z.number().optional(),
     keywords: z.array(Keyword).default([]),
@@ -2645,6 +2821,19 @@ export const SetupStep = z.discriminatedUnion("do", [
     })
     .strict(),
   z.object({ do: z.literal("script"), fn: z.string(), when: LogCondition.optional() }).strict(),
+  /** every Poisoned weakness not in an investigator's deck set aside, `copies` in all (The Forgotten Age) */
+  z
+    .object({
+      do: z.literal("setAsidePoisoned"),
+      copies: z.number().int().positive().default(4),
+      when: LogCondition.optional(),
+    })
+    .strict(),
+  /** the exploration deck built (ADR-0052) */
+  ExplorationSpec.extend({
+    do: z.literal("buildExploration"),
+    when: LogCondition.optional(),
+  }).strict(),
 ]);
 export type SetupStep = z.infer<typeof SetupStep>;
 
@@ -2678,6 +2867,16 @@ export const TokenEffect = z
         "broodInPlay",
         /** the [[Extradimensional]] locations in play; the shroud of the testing investigator's location (Lost in Time and Space) */
         "extradimensionalLocations",
+        /** the cards in the exploration deck */
+        "explorationDeckSize",
+        /** the vengeance points in the victory display (The Forgotten Age) */
+        "vengeanceInVictory",
+        /** the locations in play; those with doom; the doom on them (The Forgotten Age) */
+        "locationsInPlay",
+        "locationsWithDoom",
+        "doomOnLocations",
+        /** a named scenario counter (`xCounter`: The Depths of Yoth's depth level) */
+        "scenarioCounter",
         "yourLocationShroud",
         /** the horror on the investigator testing (Curtain Call, The Unspeakable Oath, Dim Carcosa) */
         "horrorOnYou",
@@ -2723,6 +2922,8 @@ export const TokenEffect = z
       .optional(),
     /** "Cancel the effects and icons of each skill card committed to this test" (Where Doom Awaits) */
     cancelCommitted: z.literal(true).optional(),
+    /** for `x: "scenarioCounter"`: the counter's name */
+    xCounter: z.string().optional(),
     /** for `x: "tokensOn"`: whose tokens of which name */
     xTokens: z.object({ name: z.string(), on: TokenHolder }).strict().optional(),
     /** X becomes X × xTimes + xPlus */
@@ -2778,7 +2979,8 @@ export const CampaignEffect = z.discriminatedUnion("do", [
     .object({
       do: z.literal("recordCards"),
       key: z.string(),
-      source: z.enum(["victoryUniqueCultists", "remainingUniqueCultists"]),
+      /** `vengeanceInVictory`: the vengeance cards the scenario left in the victory display ("the jungle watches") */
+      source: z.enum(["victoryUniqueCultists", "remainingUniqueCultists", "vengeanceInVictory"]),
     })
     .strict(),
   z
@@ -2927,6 +3129,8 @@ export const ScenarioDef = z
     connections: z.array(z.tuple([z.string(), z.string()])),
     /** one-way connections [from, to] by card code: only `from` → `to` is a move */
     oneWay: z.array(z.tuple([z.string(), z.string()])).default([]),
+    /** effects after every successful exploration (Return to The Forgotten Age: the encounter deck's top card in) */
+    afterExplore: z.array(Effect).optional(),
     /** "orthogonal": locations on cells that share a side are connected (Tidal Tunnels, In Too Deep) */
     adjacency: z.literal("orthogonal").optional(),
     /** location layout for rendering: code -> [col,row] grid */
@@ -2938,8 +3142,12 @@ export type ScenarioDef = z.infer<typeof ScenarioDef>;
 
 // ---------- campaign flow (ADR-0011) ----------
 
-/** the number an input answers with, where an effect takes a count */
-const FlowAmount = z.union([z.number(), z.literal("input")]);
+/** a supply's id (`SUPPLIES`) */
+export const SupplyId = z.enum(SUPPLIES);
+const SUPPLY_SECTION = "supplies";
+
+/** the number an input answers with, where an effect takes a count; `vengeance`: the last scenario's vengeance points */
+const FlowAmount = z.union([z.number(), z.literal("input"), z.literal("vengeance")]);
 
 /** what a campaign does besides the resolution's own effects: the log's sections, the bag, decks, the order of play */
 export const FlowEffect = z.discriminatedUnion("do", [
@@ -2974,6 +3182,15 @@ export const FlowEffect = z.discriminatedUnion("do", [
       who: Who.exclude(["choice"]),
       op: z.enum(["add", "set"]),
       value: FlowAmount,
+    })
+    .strict(),
+  /** a supply given to investigators (the Return-to box's Key of Eztli), or every one of a supply taken away */
+  z
+    .object({
+      do: z.enum(["gainSupply", "loseSupply"]),
+      supply: SupplyId,
+      section: z.string().optional(),
+      who: Who.exclude(["choice"]),
     })
     .strict(),
   z.object({ do: z.literal("removeChaosToken"), token: ChaosToken }).strict(),
@@ -3027,6 +3244,8 @@ export type FlowCondition =
   | { kind: "playerCount"; min?: number; max?: number }
   | { kind: "trauma"; inv: WhoInv; physical?: number; mental?: number }
   | { kind: "hasCard"; card: string; inv: WhoInv }
+  /** an investigator (anyone's, the input's...) has the supply in the log (ADR-0053) */
+  | { kind: "hasSupply"; supply: z.infer<typeof SupplyId>; section?: string; inv: WhoInv }
   | { kind: "data"; key: string; equals?: boolean | number | string; min?: number }
   /** the scenario just played: an investigator resigned, was defeated; every investigator resigned */
   | { kind: "anyResigned" }
@@ -3108,6 +3327,14 @@ export const FlowCondition: z.ZodType<FlowCondition> = z.lazy(() =>
     z.object({ kind: z.literal("hasCard"), card: z.string(), inv: WhoInv }).strict(),
     z
       .object({
+        kind: z.literal("hasSupply"),
+        supply: SupplyId,
+        section: z.string().optional(),
+        inv: WhoInv,
+      })
+      .strict(),
+    z
+      .object({
         kind: z.literal("data"),
         key: z.string(),
         equals: z.union([z.boolean(), z.number(), z.string()]).optional(),
@@ -3132,6 +3359,12 @@ const FlowChoice = z
   })
   .strict();
 export type FlowChoice = z.infer<typeof FlowChoice>;
+
+/** what a supply step does for an investigator (their effects, with them as the input) and once (its steps) */
+const SupplyBranch = z
+  .object({ effects: z.array(FlowEffect).default([]), steps: StepIds })
+  .strict();
+export type SupplyBranch = z.infer<typeof SupplyBranch>;
 
 /** one thing a campaign shows or asks (the prompts are `chooseOne` … `unsupported`); steps are keyed by id in `CampaignFlow.steps` and named by the steps around them */
 export const CampaignStep = z.discriminatedUnion("kind", [
@@ -3224,6 +3457,72 @@ export const CampaignStep = z.discriminatedUnion("kind", [
       steps: StepIds,
     })
     .strict(),
+  /**
+   * Each investigator buys supplies from `list` with the points for the number of investigators (`points[players - 1]`);
+   * with `xpRate`, a point more costs that much experience, up to `xpMax` experience (the Return-to Resupply Point).
+   * `record: false` keeps them for the next scenario only (Relics of the Past). The flow asks each investigator in turn
+   * (`inv`). ADR-0053
+   */
+  z
+    .object({
+      kind: z.literal("buySupplies"),
+      title: z.string().optional(),
+      text: z.string().optional(),
+      section: z.string().default(SUPPLY_SECTION),
+      list: z
+        .array(
+          z
+            .object({
+              id: SupplyId,
+              cost: z.number().int().nonnegative(),
+              multiple: z.boolean().default(false),
+            })
+            .strict(),
+        )
+        .min(1),
+      points: z.array(z.number().int().nonnegative()).min(1),
+      xpRate: z.number().int().positive().optional(),
+      xpMax: z.number().int().nonnegative().optional(),
+      record: z.boolean().default(true),
+      inv: z.string().optional(),
+    })
+    .strict(),
+  /**
+   * Who has a supply: `each` runs `has.effects` for each investigator with it and `missing.effects` for each without
+   * (as the input), the branches' steps once if any; `chosen` asks for one investigator with it (anyone when nobody has
+   * it) and takes the branch for them. "Does any investigator have it" is a branch on `hasSupply`. ADR-0053
+   */
+  z
+    .object({
+      kind: z.literal("checkSupply"),
+      title: z.string().optional(),
+      text: z.string().optional(),
+      supply: SupplyId,
+      section: z.string().default(SUPPLY_SECTION),
+      who: z.enum(["each", "chosen"]),
+      has: SupplyBranch.default({}),
+      missing: SupplyBranch.default({}),
+    })
+    .strict(),
+  /**
+   * A supply crossed off: `each` investigator with it crosses one off, `missing` for each without it; `chosen`: the
+   * players pick from `min` to `max` investigators with it, each crosses one off, and `missing` when fewer than `min`
+   * have it (Gasoline, Medicine). `used` runs for each one who crossed it off, as the input. ADR-0053
+   */
+  z
+    .object({
+      kind: z.literal("crossOffSupply"),
+      title: z.string().optional(),
+      text: z.string().optional(),
+      supply: SupplyId,
+      section: z.string().default(SUPPLY_SECTION),
+      who: z.enum(["each", "chosen"]),
+      min: z.number().int().nonnegative().default(0),
+      max: z.number().int().positive().optional(),
+      used: SupplyBranch.default({}),
+      missing: SupplyBranch.default({}),
+    })
+    .strict(),
   z.object({ kind: z.literal("upgradeDecks") }).strict(),
   z
     .object({
@@ -3247,6 +3546,10 @@ export function stepRefs(st: CampaignStep): string[] {
     case "cardChoice":
     case "unsupported":
       return st.steps;
+    case "checkSupply":
+      return [...st.has.steps, ...st.missing.steps];
+    case "crossOffSupply":
+      return [...st.used.steps, ...st.missing.steps];
     default:
       return [];
   }
@@ -3298,7 +3601,13 @@ export const CampaignFlow = z
 export type CampaignFlow = z.infer<typeof CampaignFlow>;
 
 /** how a section of the campaign log is kept and shown */
-export const LOG_SECTION_KINDS = ["entries", "count", "cards", "investigatorCount"] as const;
+export const LOG_SECTION_KINDS = [
+  "entries",
+  "count",
+  "cards",
+  "investigatorCount",
+  "supplies",
+] as const;
 export const LogSection = z
   .object({ id: z.string(), kind: z.enum(LOG_SECTION_KINDS), label: z.string() })
   .strict();

@@ -51,10 +51,10 @@ describe("the generated flows", () => {
         0,
       ),
     ).toBe(417); // hidden resolutions are tails, not endings; a defeated/resigned pair is one none
-    expect(steps.filter((s) => s.kind === "unsupported").length).toBe(152); // guide inputs the engine lacks: campaign links, supplies, partners, investigator choices
+    expect(steps.filter((s) => s.kind === "unsupported").length).toBe(130); // guide inputs the engine lacks: campaign links, partners, investigator choices (supplies compile, ADR-0053)
     expect(
       steps.reduce((n, s) => n + (s.kind === "branch" ? unsupportedTests(s.condition) : 0), 0),
-    ).toBe(388); // The Scarlet Keys' $embark compiled per scenario (127); with the scenarios' own setup steps (flow.before) and the version check (always true)
+    ).toBe(371); // supply checks compile (17, ADR-0053); The Scarlet Keys' $embark compiled per scenario (127); with the scenarios' own setup steps (flow.before) and the version check (always true)
     expect(steps.filter((s) => s.kind === "upgradeDecks").length).toBe(126);
   });
 

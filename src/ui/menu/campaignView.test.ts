@@ -3,6 +3,8 @@ import { CampaignDef, CampaignFlow, I18nCampaigns } from "../../content/schema";
 import { startCampaign } from "../../engine/campaign/campaign";
 import {
   addCards,
+  addSupply,
+  crossOffSupply,
   crossOut,
   record,
   setCount,
@@ -164,5 +166,15 @@ describe("logView", () => {
   it("shows a section the log has that the campaign didn't declare, under its id", () => {
     const v = logView(db, { ...c0, log: record(c0.log, "z", "surprise") }, "en");
     expect(v.map((s) => s.id)).toEqual(["surprise"]);
+  });
+
+  it("shows each investigator's supplies, the ones crossed off to none left out", () => {
+    let log = addSupply(c0.log, "01001", "provisions", 2);
+    log = addSupply(log, "01001", "rope");
+    log = crossOffSupply(log, "01001", "rope");
+    const v = logView(db, { ...c0, log }, "en");
+    expect(v.find((s) => s.id === "supplies")?.supplies).toEqual([
+      { code: "01001", items: [{ id: "provisions", n: 2 }] },
+    ]);
   });
 });

@@ -4,8 +4,10 @@ import type { CampaignState } from "../../../engine/campaign/types";
 import { db, gameStore, useGame } from "../../state/context";
 import { guideHtml } from "../../game/guideText";
 import { Portrait } from "../../components/Portrait";
+import { cx } from "../../components/cx";
 import { moment } from "../../hud/SoundLayer";
 import { visibleChoices } from "../campaignView";
+import { SupplyShop } from "../SupplyShop";
 import styles from "./FlowPrompt.module.css";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
@@ -219,6 +221,39 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
           </button>
         </div>
       );
+    case "buySupplies":
+      return (
+        <div className={styles.flowPrompt}>
+          {head}
+          <SupplyShop key={st.inv} campaign={campaign} step={st} onBuy={answer} />
+        </div>
+      );
+    case "supplyChoice": {
+      const one = st.min === 1 && st.max === 1;
+      return (
+        <div className={styles.flowPrompt}>
+          <div className="flow-text">
+            {tr(st.cross ? "supply.whoUses" : "supply.whoHas", {
+              supply: tr(`supply.${st.supply}`),
+            })}
+          </div>
+          <div className={styles.flowAvatars}>
+            {st.among.map((code) => (
+              <button
+                key={code}
+                className={cx(styles.flowAvatar, ticked.includes(code) && "on")}
+                aria-pressed={one ? undefined : ticked.includes(code)}
+                onClick={() => (one ? answer(code) : toggle(code, st.max))}
+              >
+                <Portrait code={code} size={88} />
+                <b>{cardText(db, code, locale).name}</b>
+              </button>
+            ))}
+          </div>
+          {!one && confirm(ticked.length >= st.min && ticked.length <= st.max, ticked)}
+        </div>
+      );
+    }
     case "play":
       return null;
   }

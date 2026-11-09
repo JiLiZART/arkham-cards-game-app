@@ -1,4 +1,13 @@
-import { attacked, baseRaised, named, rememberedFact, role } from "./world/flags";
+import {
+  attacked,
+  baseRaised,
+  explored,
+  named,
+  rememberedFact,
+  role,
+  supplies as suppliesFlag,
+  scenarioCounter as scenarioCounterFlag,
+} from "./world/flags";
 import { keywordName, type Keyword } from "../content/schema";
 import type {
   Amount,
@@ -40,6 +49,7 @@ import {
   def,
   defOf,
   inv,
+  periodCounter,
   playerCount,
 } from "./context";
 import { SCENARIO_CARD, ZONE, isOneOf } from "./world/constants";
@@ -251,8 +261,60 @@ export function connections(game: GameContext, loc: InstId, enemy: EnemyMove = f
   };
   const grid = scen.adjacency === "orthogonal";
   return locations(game)
-    .filter((l) => l.id !== loc && (codes.has(l.code) || linked.has(l.id) || (grid && side(l.id))))
+    .filter(
+      (l) =>
+        l.id !== loc &&
+        (codes.has(l.code) ||
+          linked.has(l.id) ||
+          (grid && side(l.id)) ||
+          connectsBySymbol(game, loc, l.id)),
+    )
     .map((l) => l.id);
+}
+
+/**
+ * Whether location `a` connects to `b` by their printed symbols: one of `a`'s connection symbols is `b`'s own symbol
+ * (ADR-0052). Read off the cards, so it holds for a location not in play (a card drawn from the exploration deck).
+ */
+export function connectsBySymbol(game: GameContext, a: InstId, b: InstId): boolean {
+  const symbol = def(game, b).symbol;
+  return !!symbol && !!def(game, a).connectsTo?.includes(symbol);
+}
+
+/**
+ * The vengeance points in the victory display (The Forgotten Age): the cards there, those in play "considered" there
+ * (`consideredInVictory`), and at the scenario's end (`atEnd`) the revealed locations with no clues, which join it then
+ */
+export function vengeanceInVictory(game: GameContext, atEnd = false): number {
+  return vengeanceCards(game, atEnd).reduce((n, id) => n + (def(game, id).vengeance ?? 0), 0);
+}
+
+/** the cards whose vengeance counts: see `vengeanceInVictory` */
+export function vengeanceCards(game: GameContext, atEnd = false): InstId[] {
+  return allCardRecs(game)
+    .filter((c) => {
+      if (def(game, c.id).vengeance === undefined) return false;
+      if (c.zone === ZONE.Victory) return true;
+      if (isInPlayZone(c.zone) && hasFlag(game, c.id, "consideredInVictory")) return true;
+      return atEnd && c.zone === ZONE.Location && c.revealed && c.clues === 0;
+    })
+    .map((c) => c.id);
+}
+
+/** the Poisoned weakness (The Forgotten Age) */
+export const POISONED = "04102";
+/** the investigator is poisoned: a Poisoned weakness is in their threat area */
+export const poisoned = (game: GameContext, i: InvId) =>
+  threatArea(game, i).some((c) => c.code === POISONED);
+
+/** how many of a campaign supply the investigator carries, over the log's supply sections (ADR-0053) */
+export const supplyCount = (game: GameContext, i: InvId, supply: string): number =>
+  Object.values(suppliesFlag.get(game) ?? {}).reduce((n, by) => n + (by[i]?.[supply] ?? 0), 0);
+
+/** the investigator can't explore: they can't, or nobody can at their location (Lost in the Wilds, Overgrowth) */
+export function cannotExplore(game: GameContext, i: InvId): boolean {
+  const loc = invRecIf(game, i)?.location;
+  return hasFlag(game, i, "cannotExplore") || (!!loc && hasFlag(game, loc, "cannotExplore"));
 }
 
 /** a location instance's cell on the map, `[col, row]` (null: none, out of play) */
@@ -950,6 +1012,38 @@ export function checkCondition(game: GameContext, c: Condition, ctx: EffCtx): bo
   }
   if ("actionThisTurn" in c)
     return !!you && inv(game, you).actionsThisRound.includes(c.actionThisTurn);
+  if ("poisoned" in c) return !!you && poisoned(game, you);
+  if ("counter" in c) {
+    const n = scenarioCounterFlag.get(game, c.counter.name) ?? 0;
+    return n >= (c.counter.min ?? -Infinity) && n <= (c.counter.max ?? Infinity);
+  }
+  if ("vengeanceInVictory" in c) return vengeanceInVictory(game) >= c.vengeanceInVictory.min;
+  if ("hasSupply" in c) {
+    const { supply, who } = c.hasSupply;
+    const here = you ? invRecIf(game, you)?.location : null;
+    const whom =
+      who === "you"
+        ? you
+          ? [you]
+          : []
+        : who === "any"
+          ? activeInvs(game)
+          : here
+            ? invsAt(game, here)
+            : [];
+    return whom.some((i) => supplyCount(game, i, supply) > 0);
+  }
+  if ("explored" in c) {
+    const want = c.explored.ok;
+    if (!c.explored.thisTurn)
+      return ctx.ok !== undefined && (want === undefined || ctx.ok === want);
+    const rec = you ? explored.get(game, you) : undefined;
+    return (
+      !!rec &&
+      rec.turn === periodCounter(game, "turn") &&
+      (want === undefined ? rec.ok.length > 0 : rec.ok.includes(want))
+    );
+  }
   if ("enemyAtThisLocation" in c) {
     const src = ctx.source ? cardRecIf(game, ctx.source) : undefined;
     const here = src ? (src.zone === ZONE.Location ? src.id : src.location) : null;

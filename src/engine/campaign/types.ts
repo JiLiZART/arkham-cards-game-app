@@ -5,6 +5,7 @@ import type {
   DeckDef,
   Difficulty,
   FlowEffect,
+  SupplyBranch,
 } from "../../content/schema";
 import type { InvId } from "../world/types";
 import type { CampaignLog } from "./log";
@@ -24,9 +25,22 @@ export type WaitingStep =
           | "checklist"
           | "sideScenario"
           | "unsupported"
-          | "upgradeDecks";
+          | "upgradeDecks"
+          | "buySupplies";
       }
     >
+  /** investigators among `among` who use or have a supply, from `min` to `max` of them; `branch` runs for each (ADR-0053) */
+  | {
+      kind: "supplyChoice";
+      supply: string;
+      section: string;
+      among: InvId[];
+      min: number;
+      max: number;
+      /** each chosen crosses one off */
+      cross: boolean;
+      branch: SupplyBranch;
+    }
   | { kind: "continue" }
   | { kind: "play"; scenario: string }
   | { kind: "investigator"; effects: FlowEffect[] };
@@ -42,6 +56,9 @@ export interface ScenarioFacts {
   resolution: string;
   victory: number;
   victoryCodes: string[];
+  /** the vengeance points in the victory display at the end, and those cards (The Forgotten Age; absent in older saves) */
+  vengeance?: number;
+  vengeanceCodes?: string[];
   cultistsVictory: string[];
   cultistsRemaining: string[];
   /** investigators who did not resign */
@@ -104,6 +121,8 @@ export interface ScenarioRecord {
   resolution: string;
   xp: number;
   victory: number;
+  /** the vengeance points in the victory display at its end (absent in older saves) */
+  vengeance?: number;
 }
 
 export interface CampaignState {

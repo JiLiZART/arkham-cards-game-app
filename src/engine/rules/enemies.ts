@@ -68,6 +68,7 @@ import {
   remainingSanity,
   skillValue,
   stepsToward,
+  poisoned,
 } from "../queries";
 import { moveCard, putBeneath } from "../movement";
 import type { InstId, InvId, Step, StepOf } from "../world/types";
@@ -93,6 +94,10 @@ export function preyCandidates(game: GameContext, enemy: InstId, all: InvId[]): 
   if (!prey) return candidates;
   // "only" prey never falls back to others: with nobody matching it engages and hunts no one
   if (prey === "bearer") return candidates.filter((i) => i === card(game, enemy).owner);
+  if (prey === "poisoned") {
+    const them = candidates.filter((i) => poisoned(game, i));
+    return them.length ? them : candidates;
+  }
   if ("nearestTo" in prey) return nearestTo(game, prey.nearestTo, candidates);
   if (!("highest" in prey) && !("lowest" in prey))
     return candidates.filter((i) => card(game, inv(game, i).cardId).code === prey.only);
@@ -125,7 +130,7 @@ export function preyCandidates(game: GameContext, enemy: InstId, all: InvId[]): 
 /** Prey - bearer only / Prey - X only: the enemy ignores every other investigator */
 export function onlyPrey(game: GameContext, enemy: InstId) {
   const prey = preyOf(game, enemy);
-  return prey === "bearer" || (!!prey && "only" in prey && !!prey.only);
+  return prey === "bearer" || (typeof prey === "object" && "only" in prey && !!prey.only);
 }
 
 // ---------- spawning ----------
@@ -581,7 +586,7 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (game, step) => {
   );
   // where it was defeated ("after a non-[[Elite]] enemy at your location is defeated": Bury Them Deep)
   const from = e.location;
-  if (d.victory !== undefined) moveCard(game, step.enemy, ZONE.Victory);
+  if ((d.victory ?? d.vengeance) !== undefined) moveCard(game, step.enemy, ZONE.Victory);
   else moveCard(game, step.enemy, e.owner ? ZONE.Discard : ZONE.EncounterDiscard);
   defeated.set(game, e.code, true);
   push(

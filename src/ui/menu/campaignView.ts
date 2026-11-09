@@ -37,6 +37,8 @@ export interface LogViewSection {
   counts: { id: string; n: number }[];
   cards: { id: string; codes: string[] }[];
   investigators: { id: string; byInvestigator: { code: string; n: number }[] }[];
+  /** a supplies section: what each investigator carries (ADR-0053) */
+  supplies: { code: string; items: { id: string; n: number }[] }[];
 }
 
 const HIDDEN = "hidden";
@@ -67,11 +69,20 @@ export function logView(db: ContentDb, c: CampaignState, locale: string): LogVie
         id: k,
         byInvestigator: Object.entries(by).map(([code, n]) => ({ code, n })),
       })),
+      supplies: Object.entries(s.supplies ?? {})
+        .map(([code, by]) => ({
+          code,
+          items: Object.entries(by)
+            .filter(([, n]) => n > 0)
+            .map(([id, n]) => ({ id, n })),
+        }))
+        .filter((x) => x.items.length),
     };
     return view.entries.length ||
       view.counts.length ||
       view.cards.length ||
-      view.investigators.length
+      view.investigators.length ||
+      view.supplies.length
       ? [view]
       : [];
   });

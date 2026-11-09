@@ -26,6 +26,7 @@ import {
   spendableGroupClues,
   threatArea,
   hasKeyword,
+  cannotExplore,
 } from "../queries";
 import {
   activeInvestigator,
@@ -315,6 +316,8 @@ function forbiddenAction(game: GameContext, i: InvId, a: TurnAction, designator:
   // a card investigators cannot parley with (Party Guest's Bystanders)
   if (designator === "parley" && a.kind === "ability" && hasFlag(game, a.card, "cannotBeParleyed"))
     return true;
+  // "you cannot explore" (Lost in the Wilds), "you cannot explore at attached location" (Overgrowth)
+  if (designator === "explore" && cannotExplore(game, i)) return true;
   return (a.kind === EVENT.Play ? [EVENT.Play, designator] : [designator]).some((k) => {
     const flag = FORBIDDEN_BY[k];
     return !!flag && hasFlag(game, i, flag);
