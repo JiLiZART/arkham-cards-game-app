@@ -88,19 +88,20 @@
 }
 
 /* prompt banner, bottom centre just over the hand fan; non-card options on the right rail next to the hand */
+/* the gap between the investigator card (--stat-w, its width on screen) and the rail: the bar centres and wraps there,
+   never under either */
 .center-col {
   position: absolute;
   /* clear of the fan cards and the skill icons above them */
   bottom: 200px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: calc(8px + var(--stat-w, 0px) + 16px);
+  right: calc(var(--rail-w) + 16px);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
   z-index: 46;
   pointer-events: none;
-  max-width: min(72vw, 1080px);
 }
 .center-col > * {
   pointer-events: auto;

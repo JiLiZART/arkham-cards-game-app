@@ -1,4 +1,6 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { RAIL_W, statBarW } from "../fan";
+import { useViewport } from "../../state/layoutMode";
 import { cardText, scenarioText, t } from "../../../content/i18n";
 import type { GameEvent, GameState } from "../../../engine/world/types";
 import { whenSettled } from "../../game/arrivals";
@@ -741,6 +743,7 @@ export function Hud() {
   // the phone layout (ADR-0005): one thin bar, the panels and the Journal in drawers, the rail's actions in the bar
   const phone = useLayoutMode() === "phone";
   const centerCol = useBarTop();
+  const { width, height } = useViewport();
   return (
     <>
       <TopBar phone={phone} />
@@ -761,7 +764,16 @@ export function Hud() {
       <PlayStrip part="threats" />
       <PlayStrip part="assets" />
       <MulliganRow />
-      <div className={styles.centerCol} ref={centerCol}>
+      <div
+        className={styles.centerCol}
+        ref={centerCol}
+        style={
+          {
+            "--stat-w": phone ? undefined : `${statBarW(width, height)}px`,
+            "--rail-w": `${RAIL_W}px`,
+          } as CSSProperties
+        }
+      >
         <StepCaption />
         <InstructionBar />
       </div>
