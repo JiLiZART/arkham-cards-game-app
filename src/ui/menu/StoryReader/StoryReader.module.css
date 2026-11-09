@@ -1,0 +1,281 @@
+/* the story reader (ADR-0084): black, the film gap between the paper and the table. The guide's painting is the content
+   here, the one place a painting is more than a card scan; the text stays bone ink in EB Garamond. */
+.reader {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  grid-template-columns: 55fr 45fr;
+  background: #020405;
+  color: var(--ink);
+  font-family: var(--f-body);
+  overflow: hidden;
+  cursor: default;
+  animation: fade-in 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reader.phone {
+  grid-template-columns: 40fr 60fr;
+}
+
+/* the painting, full height at the left, its right edge faded into the black */
+.art {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  animation: fade-in 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.painting {
+  position: absolute;
+  inset: 0;
+  mask-image: linear-gradient(90deg, #000 62%, transparent 100%);
+  animation: drift 24s ease-out forwards;
+  transform-origin: 40% 50%;
+}
+.painting img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+  display: block;
+  user-select: none;
+}
+/* the guide edition's painting: its fog edge is already transparent, so it is shown whole, centred, with no fade of ours */
+.guide {
+  mask-image: none;
+  padding: clamp(12px, 3vh, 36px) clamp(12px, 2vw, 32px);
+}
+.guide img {
+  object-fit: contain;
+  object-position: 50% 50%;
+}
+
+/* an agenda's scan: only its painting strip (the left 38 %), at the scan's own proportions, over a blurred wash of itself */
+.strip {
+  inset: 0 auto 0 0;
+  aspect-ratio: 205 / 378;
+  max-width: 100%;
+  mask-image: linear-gradient(90deg, #000 30%, transparent 100%);
+}
+.strip img {
+  width: 259.5%;
+  max-width: none;
+  object-fit: cover;
+  object-position: left center;
+}
+.wash {
+  position: absolute;
+  inset: -10%;
+  background: center / cover no-repeat;
+  filter: blur(30px) brightness(0.62) saturate(1.25);
+  mask-image: linear-gradient(90deg, #000 20%, transparent 100%);
+}
+
+/* the title and the text, vertically centred on the right */
+.page {
+  position: relative;
+  z-index: 1;
+  /* centred while it fits (auto margins on its ends), scrolling from the top when it doesn't */
+  align-self: stretch;
+  overflow-y: auto;
+  min-width: 0;
+  padding: clamp(24px, 5vh, 56px) clamp(24px, 4vw, 64px) clamp(56px, 9vh, 88px) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: fade-in 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+.label {
+  margin: 0;
+  font: 500 clamp(15px, 1.5vw, 20px) var(--f-body);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+.title {
+  margin: 0;
+  font: 400 clamp(30px, 4vw, 54px) / 1.05 var(--f-display);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+/* the ironwork rule that ends in a curl */
+.rule {
+  height: 12px;
+  width: min(100%, 460px);
+  background:
+    var(--curl-r, none) right center / contain no-repeat,
+    linear-gradient(90deg, #c9c6b8c0, #c9c6b800) center / 100% 1px no-repeat;
+}
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  max-width: 60ch;
+  padding-right: 8px;
+  font-size: clamp(18px, 1.45vw, 22px);
+  line-height: 1.5;
+  scrollbar-width: thin;
+  scrollbar-color: var(--edge-lit) transparent;
+}
+.para {
+  animation: rise 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.para :global(.g-center) {
+  text-align: center;
+}
+.note {
+  margin: 0;
+  font-style: italic;
+  color: var(--fog);
+}
+.ask {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 60ch;
+  margin-bottom: auto;
+}
+.tap {
+  margin: 0;
+  color: var(--fog);
+  font-style: italic;
+  animation: breathe 2.4s ease-in-out infinite;
+}
+.answered {
+  margin: 0;
+}
+.answered small {
+  display: block;
+  color: var(--fog);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* a choice as dialog lines */
+.lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.line {
+  width: 100%;
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  text-align: left;
+  min-height: 48px;
+  padding: 10px 14px;
+  font: clamp(17px, 1.35vw, 20px) / 1.4 var(--f-body);
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  color: var(--ink);
+  animation: rise 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.lines li:nth-child(2) .line {
+  animation-delay: 90ms;
+}
+.lines li:nth-child(3) .line {
+  animation-delay: 180ms;
+}
+.line b {
+  flex: none;
+  min-width: 1.4ch;
+  color: var(--accent);
+}
+.line:hover,
+.line:focus-visible {
+  background: #1e303866;
+  border-color: var(--accent);
+}
+.prompt {
+  max-width: 52ch;
+}
+.begin {
+  align-self: flex-start;
+  animation: rise 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* skip and show-the-page, small, at the bottom right */
+.bar {
+  position: absolute;
+  z-index: 2;
+  right: clamp(16px, 3vw, 40px);
+  bottom: clamp(12px, 3vh, 28px);
+  display: flex;
+  gap: 18px;
+}
+
+/* phone landscape: a one-line title, a tighter column */
+.phone .page {
+  gap: 8px;
+  padding: 12px 16px 44px 0;
+}
+.phone .label {
+  display: inline;
+  font-size: 13px;
+}
+.phone .head {
+  flex-direction: row;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+.phone .title {
+  font-size: 22px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.phone .rule {
+  display: none;
+}
+.phone .text {
+  max-height: 58vh;
+  font-size: 16px;
+  gap: 0.7em;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+@keyframes drift {
+  to {
+    transform: scale(1.04);
+  }
+}
+@keyframes breathe {
+  50% {
+    opacity: 0.35;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reader,
+  .art,
+  .page,
+  .para,
+  .line,
+  .begin,
+  .painting,
+  .tap {
+    animation: none;
+  }
+}

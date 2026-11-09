@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { botChoice } from "../../engine/bot";
 import { db } from "../../engine/kits/testkit";
+import { useView } from "./view";
 import type { GameState } from "../../engine/world/types";
 import { scenarioSetup } from "../../engine/campaign/campaign";
 import { ENGINE_VERSION } from "../../engine";
@@ -38,6 +39,8 @@ const start = (storage: Storage) => {
     seed: 9,
     investigators: [{ code: "01001", deckId: "roland-starter" }],
   });
+  // the story reader comes first (campaign-story-reader); Begin sets the scenario up
+  s.getState().startScenario(9);
   return s;
 };
 
@@ -425,6 +428,7 @@ describe("the tap decks setting", () => {
       seed: 9,
       investigators: [{ code: "01001", deckId: "roland-starter" }],
     });
+    s.getState().startScenario(9);
     return s;
   };
 
@@ -458,6 +462,7 @@ describe("the tap decks setting", () => {
       seed: 9,
       investigators: [{ code: "01001", deckId: "roland-starter" }],
     });
+    s.getState().startScenario(9);
     expect(s.getState().setup?.tapDecks).toBe(true);
     expect(s.getState().game?.tapDecks).toBe(true);
   });
@@ -477,6 +482,7 @@ describe("the tap decks setting", () => {
       seed: 9,
       investigators: [{ code: "01001", deckId: "roland-starter" }],
     });
+    s.getState().startScenario(9);
     let sawWait = false;
     s.subscribe((st) => (sawWait ||= waiting(st.game!)));
     play(s, (g) => g.round >= 2 && g.phase === "investigation");
@@ -509,6 +515,7 @@ describe("the tap decks setting", () => {
         { code: "01002", deckId: "daisy-starter" },
       ],
     });
+    s.getState().startScenario(9);
     let sawWait = false;
     s.subscribe((st) => (sawWait ||= waiting(st.game!)));
     play(s, (g) => g.round >= 2 && g.phase === "investigation");
@@ -743,6 +750,9 @@ describe("campaigns whose cards load first", () => {
     await Promise.resolve();
     await Promise.resolve();
     expect(s.getState().loading).toBe(false);
+    // the campaign is in and the story reader is open; Begin sets the scenario up
+    expect(s.getState().screen).toBe("reader");
+    s.getState().startScenario(opts.seed);
     expect(s.getState().game?.pending?.kind).toBe("mulligan");
   });
 
@@ -806,9 +816,11 @@ describe("campaigns whose cards load first", () => {
     expect(seen[0]).toContain("01086");
   });
 
-  it("with nothing to load the campaign starts at once, as before", () => {
+  it("with nothing to load the campaign opens the reader at once, as it started before", () => {
     const s = createGameStore(db, mem(), () => undefined);
     s.getState().newCampaign(opts);
+    expect(s.getState().screen).toBe("reader");
+    s.getState().startScenario(opts.seed);
     expect(s.getState().game).not.toBeNull();
   });
 });
@@ -854,5 +866,128 @@ describe("the scenario structure (engine version 8)", () => {
     expect(s.getState().notice).toMatch(/restart/);
     // the campaign is kept
     expect(s.getState().campaign).toEqual(save.campaign);
+  });
+});
+
+describe("the story reader before a scenario (campaign-story-reader 3.1)", () => {
+  const roland = {
+    campaignId: "night-of-the-zealot",
+    difficulty: "standard" as const,
+    seed: 9,
+    investigators: [{ code: "01001", deckId: "roland-starter" }],
+  };
+
+  it("a new campaign opens the reader, not the table", () => {
+    const s = createGameStore(db, mem());
+    s.getState().newCampaign(roland);
+    expect(s.getState().screen).toBe("reader");
+    expect(s.getState().game).toBeNull();
+    expect(useView.getState().reader?.pages.map((p) => p.kind)).toEqual(["opening", "scenario"]);
+  });
+
+  it("Begin sets the scenario up with the new-game seed", () => {
+    const s = createGameStore(db, mem());
+    s.getState().newCampaign(roland);
+    s.getState().startScenario(9);
+    expect(s.getState().screen).toBe("game");
+    expect(s.getState().setup?.seed).toBe(9);
+  });
+
+  it("the campaign screen's door opens the reader for the next scenario", () => {
+    const s = start(mem());
+    const masks = s.getState().campaign!;
+    s.setState({
+      game: null,
+      screen: "log",
+      campaign: {
+        ...masks,
+        history: [{ scenarioId: "the-gathering", resolution: "R1", xp: 0, victory: 0 }],
+        flow: {
+          ...masks.flow,
+          playing: false,
+          waiting: { id: "play", step: { kind: "play", scenario: "the-midnight-masks" } },
+        },
+      },
+    });
+    s.getState().openReader();
+    expect(s.getState().screen).toBe("reader");
+    expect(useView.getState().reader?.pages.map((p) => p.id)).toEqual([
+      "scenario:the-midnight-masks",
+    ]);
+  });
+
+  it("a scenario already begun goes to the table without the reader", () => {
+    const storage = mem();
+    start(storage);
+    const save = JSON.parse(storage.data.get(SAVE_KEY)!);
+    save.version = ENGINE_VERSION - 1;
+    storage.setItem(SAVE_KEY, JSON.stringify(save));
+    const s = createGameStore(db, storage);
+    s.getState().resume();
+    expect(s.getState().screen).toBe("log");
+    s.getState().startScenario();
+    expect(s.getState().screen).toBe("game");
+  });
+});
+
+describe("the reader online (campaign-story-reader 3.4)", () => {
+  const roland = {
+    campaignId: "night-of-the-zealot",
+    difficulty: "standard" as const,
+    seed: 9,
+    investigators: [{ code: "01001", deckId: "roland-starter" }],
+  };
+  const withChoice = () => {
+    const flow = db.flows["night-of-the-zealot"];
+    db.flows["night-of-the-zealot"] = {
+      ...flow,
+      before: { "the-gathering": ["zzAsk"] },
+      steps: {
+        zzAsk: {
+          kind: "chooseOne",
+          title: "A choice",
+          text: "Wary or trusting?",
+          choices: [
+            { id: "wary", text: "We should be wary.", effects: [], steps: [] },
+            { id: "trust", text: "Maybe I should listen.", effects: [], steps: [] },
+          ],
+        },
+      },
+    };
+    return () => void (db.flows["night-of-the-zealot"] = flow);
+  };
+
+  it("a choice another player answered is marked as theirs on its page", async () => {
+    const restore = withChoice();
+    try {
+      const s = createGameStore(db, mem());
+      await s.getState().applyMove({ t: "new", opts: roland });
+      expect(useView.getState().reader?.pages.map((p) => p.kind)).toEqual(["opening", "prompt"]);
+      await s.getState().applyMove({ t: "flow", value: "wary" }, undefined, "Agnes");
+      expect(useView.getState().reader?.movers).toEqual({ zzAsk: "Agnes" });
+      // one's own answer is not marked
+      const mine = createGameStore(db, mem());
+      await mine.getState().applyMove({ t: "new", opts: roland });
+      await mine.getState().applyMove({ t: "flow", value: "wary" });
+      expect(useView.getState().reader?.movers).toEqual({});
+    } finally {
+      restore();
+    }
+  });
+
+  it("Begin pressed elsewhere sets the scenario up but leaves this reader open, with who began", async () => {
+    const s = createGameStore(db, mem());
+    await s.getState().applyMove({ t: "new", opts: roland });
+    await s.getState().applyMove({ t: "start", seed: 9 }, undefined, "Agnes");
+    expect(s.getState().game).not.toBeNull();
+    expect(s.getState().screen).toBe("reader");
+    expect(useView.getState().reader?.movers.start).toBe("Agnes");
+  });
+
+  it("one's own Begin goes to the table", async () => {
+    const s = createGameStore(db, mem());
+    await s.getState().applyMove({ t: "new", opts: roland });
+    await s.getState().applyMove({ t: "start", seed: 9 });
+    expect(s.getState().screen).toBe("game");
   });
 });

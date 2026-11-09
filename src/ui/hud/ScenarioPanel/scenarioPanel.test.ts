@@ -15,6 +15,7 @@ describe("the scenario panel", () => {
       seed: 3,
       investigators: [{ code: "01001", deckId: "roland-starter" }],
     });
+    gameStore.getState().startScenario(3);
     // server rendering reads the initial state: make that the game just started
     gameStore.getInitialState = gameStore.getState;
     const html = renderToStaticMarkup(createElement(ScenarioPanel));

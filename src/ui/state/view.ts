@@ -5,6 +5,7 @@ import type { ChoiceOption, InstId, InvId } from "../../engine/world/types";
 import { reducedMotion } from "../game/arrivals";
 import type { ScreenRect } from "../game/hit";
 import type { SharedView } from "../game/sharedView";
+import type { ReaderState } from "../game/readerState";
 
 /** an investigator portrait being dragged to a location: legal targets map location → Move option id */
 export interface MoveDrag {
@@ -53,6 +54,8 @@ export interface ViewState {
   playing: unknown;
   /** the scenario introduction after the last mulligan (the story, agenda, act, then dealing the locations); input waits meanwhile */
   intro: { step: IntroStep; setup: unknown } | null;
+  /** the story reader (ADR-0084): its pages, the page on screen and the paragraphs shown; null while it isn't open */
+  reader: ReaderState | null;
   /** cards just drawn into the on-screen hand, held large in the middle until sent on to the hand; input waits meanwhile */
   showcase: InstId[];
   /** who wants the middle of the screen, in the order they asked: the first holds it, the rest wait their turn */
@@ -99,7 +102,7 @@ export const outsideSpotlight = (s: Spotlight | null, id: string) =>
   !!s?.choice && !reducedMotion() && !s.cards.includes(id) && !s.invs.includes(id);
 export const useDimmed = (id: string) => useView((s) => outsideSpotlight(s.spotlight, id));
 
-export type IntroStep = "story" | "agenda" | "act" | "deal";
+export type IntroStep = "agenda" | "act" | "deal";
 
 export const useView = create<ViewState>((set, get) => ({
   hovered: null,
@@ -107,6 +110,7 @@ export const useView = create<ViewState>((set, get) => ({
   settledFor: null,
   playing: null,
   intro: null,
+  reader: null,
   showcase: [],
   stage: [],
   viewing: null,

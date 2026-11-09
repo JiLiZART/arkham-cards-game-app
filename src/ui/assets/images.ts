@@ -1,4 +1,7 @@
-import type { CardDef } from "../../content/schema";
+import { deckCodes, type CardDef } from "../../content/schema";
+import { flowOf } from "../../content/flow";
+import type { ContentDb } from "../../engine/world/types";
+import storyManifest from "../../../content/art/story.json";
 import ruImages from "./ruImages.generated.json";
 
 /** a file under public/, at the site's base path (Vite's `base`, "/" today) */
@@ -149,4 +152,34 @@ export function wrap(text: string, width: number): string[] {
     if (line.trim()) out.push(line.trim());
   }
   return out;
+}
+
+/** the guide-edition paintings the story reader has, by scenario id (content/art/story.json) */
+const STORY: Record<string, { file: string }> = storyManifest.scenarios;
+
+/**
+ * The painting for a scenario's page in the story reader (ADR-0085): the guide edition's painting when the manifest maps one
+ * (`from: "guide"`), else the scan of the scenario's first agenda, of which the reader shows the painting (`"agenda"`), else
+ * the campaign's first scenario's; null when there is no painting anywhere.
+ */
+export function storyArt(
+  db: ContentDb,
+  campaignId: string,
+  scenarioId: string,
+  locale = "en",
+  mapped: Record<string, { file: string }> = STORY,
+): { url: string; from: "guide" | "agenda" } | null {
+  const own = mapped[scenarioId];
+  if (own) return { url: asset(`art/story/${campaignId}/${own.file}`), from: "guide" };
+  const agendaOf = (id: string) => {
+    const code = deckCodes(db.scenarios[id]?.agendas ?? {})[0];
+    const card = code ? db.cards[code] : undefined;
+    // an HTML view: the scans of the sets the game does not host come from the CDN
+    return card ? cardImage(card, "front", locale, { remote: true }) : null;
+  };
+  const first = db.campaigns[campaignId]
+    ? flowOf(db, campaignId).order.find((id) => db.scenarios[id])
+    : undefined;
+  const url = agendaOf(scenarioId) ?? (first ? agendaOf(first) : null);
+  return url ? { url, from: "agenda" } : null;
 }

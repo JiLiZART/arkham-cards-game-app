@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { autoPlay } from "../../bot";
 import { flatLog, hasEntry } from "../log";
 import { applyScenarioEnd, migrateCampaign, scenarioSetup, startCampaign } from "../campaign";
+import { advance } from "../flow";
 import { card, def, inv } from "../../context";
 import { findByCode } from "../../queries";
 import { moveCard } from "../../movement";
@@ -147,7 +148,9 @@ describe("campaign", () => {
     expect(hasEntry(next.log, "houseBurned")).toBe(true);
     expect(next.investigators[0].mentalTrauma).toBe(1); // lead
     expect(next.investigators[0].deck).toContain("01117"); // Lita earned
-    expect(next.flow.play).toBe("the-midnight-masks");
+    // the resolution's records are read at the door, then the next scenario is offered
+    expect(next.flow.waiting?.step).toEqual({ kind: "continue" });
+    expect(advance(db, next, "continue").flow.play).toBe("the-midnight-masks");
   });
 
   it("weakness in the opening hand is set aside and redrawn", () => {

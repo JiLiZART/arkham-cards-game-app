@@ -18,7 +18,7 @@ export function trackIntro(store: StoreApi<UiState>) {
       mulliganing(prev.game) &&
       !mulliganing(s.game)
     )
-      useView.setState({ intro: { step: "story", setup: s.setup } });
+      useView.setState({ intro: { step: "agenda", setup: s.setup } });
   });
 }
 
@@ -36,7 +36,7 @@ export function introHides(game: GameState, step: IntroStep | undefined) {
   };
 }
 
-export const INTRO_STEPS: IntroStep[] = ["story", "agenda", "act", "deal"];
+export const INTRO_STEPS: IntroStep[] = ["agenda", "act", "deal"];
 
 /** calls `done` once every dealt location has landed and flipped (quiet for a moment), or after `max` ms */
 export function whenDealt(done: () => void, max = 9000): () => void {

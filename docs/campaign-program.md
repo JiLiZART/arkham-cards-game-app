@@ -25,7 +25,7 @@ The change is **done** when `pnpm coverage` reports the pack (and, for its last 
 `content/coverage.json` going up is the diff that shows it. Coverage is the progress measure, not the quality gate: a card whose written
 abilities cover only part of its text counts as working, so the bot playthroughs and the card tests are the real check.
 
-## The 65 changes, in landing order
+## The 66 changes, in landing order
 
 Status comes from `openspec/changes/` (and `archive/`): *not written*, *being written* (artifacts missing), *ready* (tasks written, none done),
 *in progress*, *implemented*, *archived*. A change is applied with `/opsx:apply <change>` after its proposal is on `main`.
@@ -45,7 +45,7 @@ Status comes from `openspec/changes/` (and `archive/`): *not written*, *being wr
 
 | Change | Status | Completes |
 | --- | --- | --- |
-| `engine-tfa-supplies-vengeance-exploration` | ready (0/24) | The Forgotten Age: supplies, vengeance, exploration |
+| `engine-tfa-supplies-vengeance-exploration` | implemented (24/24) | The Forgotten Age: supplies, vengeance, exploration |
 | `engine-tcu-haunted-spectral-breaches` | being written | The Circle Undone: haunted, spectral, breaches |
 | `engine-tde-linked-campaigns` | being written | The Dream-Eaters: two linked campaigns |
 | `engine-tic-keys-flooding` | being written | The Innsmouth Conspiracy: keys, flooding |
@@ -55,10 +55,11 @@ Status comes from `openspec/changes/` (and `archive/`): *not written*, *being wr
 | `engine-fhv-days-relationships` | being written | The Feast of Hemlock Vale: days, relationships |
 | `engine-tdc-flood-levels-tasks` | being written | The Drowned City: flood levels, tasks |
 
-### Languages
+### Languages and reading
 
 | Change | Status | Completes |
 | --- | --- | --- |
+| `campaign-story-reader` | implemented (19/19) | a fullscreen story reader for the start of each scenario, with the guide's paintings |
 | `i18n-all-locales` | ready (0/27) | card and campaign text in the nine more languages the vendored sources carry |
 
 ### Campaigns: each base campaign before its Return-to, side scenarios after their cycle

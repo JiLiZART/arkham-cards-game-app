@@ -20,7 +20,8 @@ describe("starting a campaign with an investigator whose pack is not loaded", ()
     expect(packLoaded(db, "dwl")).toBe(true);
     // the campaign opens with its prologue, then the choice of the first scenario (Extracurricular Activity), then Begin
     const waits = () => gameStore.getState().campaign!.flow.waiting?.step.kind;
-    expect(gameStore.getState().screen).toBe("log");
+    // the story reader is open on it: the flow's steps are answered there
+    expect(gameStore.getState().screen).toBe("reader");
     expect(waits()).toBe("continue");
     gameStore.getState().answerFlow("continue");
     expect(waits()).toBe("chooseOne");

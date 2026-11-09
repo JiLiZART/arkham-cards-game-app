@@ -1,0 +1,23 @@
+{
+ "source": "inspired/AHC_CYOA-main",
+ "scenarios": {
+  "the-gathering": {
+   "file": "the-gathering.webp",
+   "campaign": "night-of-the-zealot",
+   "pdf": "01 Night of the Zealot.pdf",
+   "page": 8
+  },
+  "the-midnight-masks": {
+   "file": "the-midnight-masks.webp",
+   "campaign": "night-of-the-zealot",
+   "pdf": "01 Night of the Zealot.pdf",
+   "page": 20
+  },
+  "the-devourer-below": {
+   "file": "the-devourer-below.webp",
+   "campaign": "night-of-the-zealot",
+   "pdf": "01 Night of the Zealot.pdf",
+   "page": 28
+  }
+ }
+}

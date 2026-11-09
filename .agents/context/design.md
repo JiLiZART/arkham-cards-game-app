@@ -133,6 +133,8 @@ The table and every menu sit in a cold teal night: a dark baize, bone ink, fog-g
 
 Between scenarios the player handles the case file. Menus are night ground. What you would write down (tiles, sheets, the campaign log, settings, the rules) sits on warm off-white paper notes with dark ink. A chosen tile gets a paperclip, and a chosen chip on paper is an inked stamp. On the table, the instruction bar is an ironwork cartouche that holds the current answer, and one teal enamel plate per screen marks the way on.
 
+Before each scenario the screen goes black. The story reader is a third material, the film gap between the paper and the table: the guide's painting fills the left of the screen, its fog edge dissolving into the black, and the text is read beside it a paragraph at a time. The painting is the content there, not chrome.
+
 Density follows the game. The HUD is compact and reads at a glance, menus read like a ledger, and both work at desktop and phone-landscape sizes in Russian and English. Rejected outright: leather, brass and gold props, parchment page grounds, blue SaaS dark themes, neon, glass, gore and grunge.
 
 **Key Characteristics:**
@@ -171,7 +173,7 @@ A low-chroma teal night with one muted teal accent, bone ink, and a warm paper s
 - **Paper set** (paper-leaf, paper-chosen, paper-button, paper-rule, paper-ink, paper-muted): the leaf, the chosen leaf, control fill, dotted ledger rule, ink and secondary ink of a paper note. Tooltips use tip-paper.
 
 ### Named Rules
-**The Warm Cards Rule.** Card scans are the only warm color on the table. Chrome stays in the teal-bone range; warm paper appears only as paper notes in the menus and as tooltips.
+**The Warm Cards Rule.** Card scans are the only warm color on the table. Chrome stays in the teal-bone range; warm paper appears only as paper notes in the menus and as tooltips. The one exemption is the story reader, where the campaign guide's painting is the content, as a card scan is on the table; the reader's own chrome (title, rule, text, Begin) stays cool.
 
 **The Earned Glow Rule.** Lamp gold means "the current step" and Playable Green means "a legal move". Neither is decoration, and the glow outranks the plate when both apply.
 
@@ -254,13 +256,16 @@ Lacquered tabs on the night and one enamel plate.
 ### Instruction Cartouche (signature)
 The prompt and its answer share one night pill in a double bone rule (`1px #c9c6b88c` border plus 3px and 4px inset rings), closed at each end by the ironwork `--cap`. The answer sits inside the cartouche, not beside it. It is set in EB Garamond at 22px, with names in Teutonic.
 
+### Story Reader (signature)
+A near-black screen (`#020405`) in two columns, the painting at about 55% and the text at 45% (40/60 on a phone in landscape). The guide edition's painting is shown whole with its own transparent fog edge; an agenda's painting strip, the fallback, sits over a blurred wash of itself and fades into the black. The scenario's number in small spaced capitals over its name in Prata capitals, then one ironwork rule, then EB Garamond at 18-22px in bone ink. Paragraphs rise 12px and fade in over 420ms with an exponential ease-out, one at a time; the painting drifts 4% over 24s; pages cross-fade through black. A choice is numbered dialog lines with a one-pixel rule; Begin is the screen's one teal enamel plate. Reduced motion shows every paragraph at once and moves nothing.
+
 ### Icons
 The UI uses an authored stroke icon set (`UiIcon`): 24x24 viewBox, `currentColor`, 1.8 stroke, round caps and joins. Game symbols come from the card icon sprite.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** keep chrome in the teal-bone range so card scans stay the only warm things (The Warm Cards Rule).
+- **Do** keep chrome in the teal-bone range so card scans stay the only warm things (The Warm Cards Rule); the story reader's guide painting is the one other warm thing.
 - **Do** give each screen exactly one teal enamel plate for the primary action.
 - **Do** use lamp gold only for the current step and Playable Green only for legal moves (The Earned Glow Rule).
 - **Do** draw structure with ironwork hairlines that end in a curl, and close cartouches and the title's primary oval with `--cap`.

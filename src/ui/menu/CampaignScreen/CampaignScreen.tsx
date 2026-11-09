@@ -14,6 +14,7 @@ import { createRoom, useOnline } from "../../state/online";
 import { guideHtml } from "../../game/guideText";
 import { Portrait } from "../../components/Portrait";
 import { logView, readItems } from "../campaignView";
+import { handsOver, inReaderTerritory, scenarioAhead } from "../../game/readerPages";
 import { DeckBuilder } from "../DeckBuilder";
 import { FlowPrompt } from "../FlowPrompt";
 import { cx } from "../../components/cx";
@@ -75,7 +76,10 @@ export function CampaignScreen() {
   const waiting = campaign.flow.waiting?.step.kind;
   // the deck upgrade is offered where the guide offers it, and before a scenario begins
   const mayUpgrade = !campaign.result && (waiting === "upgradeDecks" || waiting === "play");
-  const read = readItems(db, campaign, locale);
+  // what the flow reads before the next scenario is the story reader's: the campaign screen ends at its door
+  const territory = inReaderTerritory(campaign) && !handsOver(campaign);
+  const ahead = scenarioAhead(db, campaign);
+  const read = territory ? [] : readItems(db, campaign, locale);
   const item = campaign.flow.item
     ? interludeName(db, def.id, campaign.flow.item, locale)
     : undefined;
@@ -122,7 +126,7 @@ export function CampaignScreen() {
             )}
           </section>
         )}
-        {!campaign.result && <FlowPrompt campaign={campaign} />}
+        {!campaign.result && !territory && <FlowPrompt campaign={campaign} />}
         <section className={styles.logInvestigators}>
           {campaign.investigators.map((i) => (
             <div key={i.code} className={cx("log-inv", i.status !== "active" ? styles.out : "")}>
@@ -216,7 +220,17 @@ export function CampaignScreen() {
             {tr("net.open")}
           </button>
         )}
-        {!campaign.result && waiting === "play" && next && (
+        {territory && ahead && (
+          <button
+            className="primary big"
+            data-testid="reader-door"
+            onClick={() => gameStore.getState().openReader()}
+          >
+            {tr("reader.next")}: {scenarioText(db, ahead, locale).name}
+          </button>
+        )}
+        {/* a scenario already begun (restarted after an update, say) goes straight to the table, without the reader */}
+        {!campaign.result && campaign.flow.playing && next && (
           <button className="primary big" onClick={() => gameStore.getState().startScenario()}>
             {tr("log.next")}: {scenarioText(db, next, locale).name}
           </button>

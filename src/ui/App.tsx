@@ -9,6 +9,8 @@ import { NetIndicator } from "./hud/NetIndicator";
 import { moment, useAudioLevels, useMenuMusic } from "./hud/SoundLayer";
 import { Catalog } from "./catalog/Catalog";
 import { CampaignScreen } from "./menu/CampaignScreen";
+import { StoryReader } from "./menu/StoryReader";
+import { handsOver } from "./game/readerPages";
 import { HowTo } from "./menu/HowTo";
 import { Settings } from "./menu/Settings";
 import { Lobby } from "./menu/Lobby";
@@ -53,6 +55,7 @@ function Corner() {
 export function App() {
   const screen = useGame((s) => s.screen);
   const game = useGame((s) => s.game);
+  const campaign = useGame((s) => s.campaign);
   // a language switch re-renders everything: module-level tr() helpers read the locale without subscribing
   const locale = useGame((s) => s.locale);
   useEffect(() => {
@@ -102,8 +105,16 @@ export function App() {
       </div>
     );
   }
+  // the story reader fills the window; a prompt it can't host (a deck upgrade, a side scenario) is answered on paper
+  if (screen === "reader" && !handsOver(campaign))
+    return (
+      <div className={`menus ${mode}`} data-layout={mode}>
+        {rotate && <RotateCard />}
+        <StoryReader />
+      </div>
+    );
   const page =
-    screen === "log" ? (
+    screen === "log" || screen === "reader" ? (
       <CampaignScreen />
     ) : screen === "howto" ? (
       <HowTo />

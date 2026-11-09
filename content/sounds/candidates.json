@@ -5016,6 +5016,120 @@
         }
       ]
     },
+    "moment:readerPage": {
+      "kind": "effect",
+      "where": "a page of the story reader opening",
+      "candidates": [
+        {
+          "original": "kenney-rpg-audio/Audio/doorOpen_2.ogg",
+          "preview": "moment-open/241533f7.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "doorOpen_2.ogg · kenney-rpg-audio",
+          "sha256": "68962fb0458c9bac59dec3adefa9849703c7c89d34712de03dd0075d095e79e9"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/maximize_005.ogg",
+          "preview": "moment-open/fa441efd.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "maximize_005.ogg · kenney-interface-sounds",
+          "sha256": "0ee06fc3ee494723fc95b2224f9dc0af857f2903e7f94d5d33d8e67f454b3cf7"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/doorOpen_1.ogg",
+          "preview": "moment-open/20da4648.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "doorOpen_1.ogg · kenney-rpg-audio",
+          "sha256": "4ab93bab96522d8eb109ff96dc57cb6765deb02448fe14c10472084be5bb2a0b"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/bookOpen.ogg",
+          "preview": "moment-open/8931016c.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bookOpen.ogg · kenney-rpg-audio",
+          "sha256": "953390534377222bee89ac8cd9e60a58fdc037c71a4d7c18c43cd647c7f34ba8"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/creak2.ogg",
+          "preview": "moment-open/54cc65e6.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "creak2.ogg · kenney-rpg-audio",
+          "sha256": "8a990afdc03aebb91d528f5385e2f95582dbfa8e2c12c71098ab01be9142294a"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/doorOpen_000.ogg",
+          "preview": "moment-open/fb5bd264.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "doorOpen_000.ogg · kenney-sci-fi-sounds",
+          "sha256": "5b7e07eccd4413ad9ef3720c2d14f9cc699f4c50111e9b2f48bd60e6f1a164c3"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/maximize_006.ogg",
+          "preview": "moment-open/ff9a04f8.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "maximize_006.ogg · kenney-interface-sounds",
+          "sha256": "f050b3bb77cb0b901bc8df43d2cc1872c353aebae10b4030cf8ae681726ad343"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/doorOpen_001.ogg",
+          "preview": "moment-open/a808b562.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "doorOpen_001.ogg · kenney-sci-fi-sounds",
+          "sha256": "8c204ca94eb722d3af95f29221f4551938ca3c217fda32c14dabe2cf6a9c782b"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/creak3.ogg",
+          "preview": "moment-open/fe5acda1.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "creak3.ogg · kenney-rpg-audio",
+          "sha256": "f9638787f95004b9d2d06f8eff8e99d4e594c21b51947daf562856fbcec905d1"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/doorOpen_002.ogg",
+          "preview": "moment-open/f8e6b146.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "doorOpen_002.ogg · kenney-sci-fi-sounds",
+          "sha256": "84473b70b0b2f69bd325fffee5790f030ff6597d178efddc7e4c201933a6c6c1"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/maximize_007.ogg",
+          "preview": "moment-open/599d32b2.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "maximize_007.ogg · kenney-interface-sounds",
+          "sha256": "3400931f3f3a1e9cf253efef9069bcdf053edd2234e4ee9bf88977c389943484"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/creak1.ogg",
+          "preview": "moment-open/166b13da.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "creak1.ogg · kenney-rpg-audio",
+          "sha256": "8a346186fd297254248cab8e8117060a52a5cf2a84f603153a762108550ea95e"
+        }
+      ]
+    },
     "moment:turn": {
       "kind": "effect",
       "where": "a turn's title appears",

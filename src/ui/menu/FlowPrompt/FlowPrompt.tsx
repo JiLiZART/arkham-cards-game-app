@@ -23,7 +23,14 @@ const Html = ({ text, className }: { text?: string; className?: string }) =>
  * What the campaign's flow asks the players (ADR-0011): a choice as buttons, a number, an investigator as avatars, cards
  * or a checklist to tick, a side scenario on offer, or just "Continue". The guide's own words come first.
  */
-export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
+export function FlowPrompt({
+  campaign,
+  bare = false,
+}: {
+  campaign: CampaignState;
+  /** without the step's own title and text: the story reader has drawn them already */
+  bare?: boolean;
+}) {
   const locale = useGame((s) => s.locale);
   const waiting = campaign.flow.waiting;
   const [n, setN] = useState<number | null>(null);
@@ -32,7 +39,7 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
   const st = waiting.step;
   const words = stepText(db, campaign.campaignId, waiting.id, locale);
   const active = campaign.investigators.filter((i) => i.status === "active");
-  const head = (
+  const head = bare ? null : (
     <>
       {words.title && <h3 className="flow-title">{words.title}</h3>}
       <Html text={words.text} className="flow-text" />

@@ -34,7 +34,7 @@ describe("a view another player shows", () => {
     view().closeMenu();
     useView.setState({ moveDrag: { inv: "i", targets: {}, rects: [], dx: 0, dy: 0, over: null } });
     expect(view().showFrom("Ana", { deck: "act" })).toBe(false);
-    useView.setState({ moveDrag: null, intro: { step: "story", setup: null } });
+    useView.setState({ moveDrag: null, intro: { step: "agenda", setup: null } });
     expect(view().showFrom("Ana", { deck: "act" })).toBe(false);
     expect(view().modal).toBeNull();
   });

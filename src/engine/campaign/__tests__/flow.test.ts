@@ -115,6 +115,9 @@ describe("advance: reading and prompts", () => {
     let c = advance(d, begin(d), "continue");
     c = advance(d, c, "a");
     expect(hasEntry(c.log, "wentA")).toBe(true);
+    // what the answer recorded is read before the scenario's turn (campaign-story-reader: the door)
+    expect(kindOf(c)).toBe("continue");
+    c = advance(d, c, "continue");
     expect(kindOf(c)).toBe("play");
     expect(c.flow.play).toBe(GATHERING);
   });
@@ -133,7 +136,7 @@ describe("advance: reading and prompts", () => {
     const c = advance(d, begin(d), "continue");
     expect(() => advance(d, c, "z")).toThrow(/not a choice/);
     expect(() => advance(d, c)).toThrow(/waiting for an answer/);
-    const playing = advance(d, advance(d, c, "a"), "continue");
+    const playing = advance(d, advance(d, advance(d, c, "a"), "continue"), "continue");
     expect(() => advance(d, playing, "continue")).toThrow(/not waiting/);
   });
 
@@ -199,6 +202,9 @@ describe("advance: the scenario's end and the order", () => {
     expect(logCount(c.log, "doubt", "doubt")).toBe(2);
     expect(c.investigators[0].xp).toBe(3);
     expect(c.history.at(-1)).toMatchObject({ scenarioId: GATHERING, resolution: "R1", xp: 3 });
+    // what the resolution recorded is read first, then the interlude
+    expect(kindOf(c)).toBe("continue");
+    c = advance(d, c, "continue");
     // the interlude between reads "A happened" (the log says wentA), with the deck upgrade offered under it
     expect(kindOf(c)).toBe("upgradeDecks");
     expect(shownStories(c)).toEqual(["tale-a"]);

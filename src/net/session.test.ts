@@ -18,6 +18,7 @@ import { db } from "../engine/kits/testkit";
 import type { InvId } from "../engine/world/types";
 import { canUndoHere, createGameStore, type Prepare, type Storage } from "../ui/state/store";
 import { Session, seatMap } from "./session";
+import { useView } from "../ui/state/view";
 import { playerId, type FromRoom, type Roster, type ToRoom } from "./protocol";
 import type { Link, LinkHandlers, Mesh, MeshHandlers, ShownView, Wire } from "./transport";
 import type { Numbered } from "./moves";
@@ -260,7 +261,7 @@ const world = (opts: { noLinks?: boolean } = {}) => {
   return { server, hub, join, crash };
 };
 
-/** Ana hosts Roland, Ben holds Agnes, and the campaign has started */
+/** Ana hosts Roland, Ben holds Agnes, the campaign has started and Ana pressed Begin in the story reader */
 const started = async (opts: { noLinks?: boolean } = {}) => {
   const w = world(opts);
   const ana = await w.join("ana");
@@ -270,6 +271,9 @@ const started = async (opts: { noLinks?: boolean } = {}) => {
   ben.session.claim(AGNES, { deckId: "agnes-starter" });
   await flush();
   ana.session.startGame();
+  await flush();
+  // the campaign opens the story reader on every browser; Begin is the `start` move
+  ana.store.getState().startScenario(9);
   await flush();
   return { ...w, ana, ben };
 };
@@ -539,6 +543,9 @@ describe("waiting for a campaign's cards", () => {
     await flush();
     ana.session.startGame();
     await flush();
+    // Begin in the story reader is the move that sets the scenario up
+    ana.store.getState().startScenario(9);
+    await flush();
     expect(ana.store.getState().game).not.toBeNull();
     expect(ben.store.getState().game).toBeNull();
     // Ana plays while Ben's cards are still loading
@@ -558,6 +565,8 @@ describe("tap decks off", () => {
     ana.session.claim(ROLAND, { deckId: "roland-starter" });
     await flush();
     ana.session.startGame();
+    await flush();
+    ana.store.getState().startScenario(9);
     await flush();
     for (let k = 0; k < 120; k++) {
       const g = ana.store.getState().game!;
@@ -724,5 +733,35 @@ describe("showing a card to the room", () => {
     expect(ben.shown).toEqual([["ana", { card: "c9" }]]);
     ana.session.leave();
     expect(ana.open).toBeUndefined();
+  });
+});
+
+describe("the story reader in a room (campaign-story-reader 3.4)", () => {
+  /** Ana hosts Roland, Ben holds Agnes, the campaign has started and nobody has begun */
+  const reading = async () => {
+    const w = world();
+    const ana = await w.join("ana");
+    const ben = await w.join("ben");
+    ana.session.setLobby({ campaignId: "night-of-the-zealot", difficulty: "standard" });
+    ana.session.claim(ROLAND, { deckId: "roland-starter" });
+    ben.session.claim(AGNES, { deckId: "agnes-starter" });
+    await flush();
+    ana.session.startGame();
+    await flush();
+    return { ana, ben };
+  };
+
+  it("opens on every browser, and Begin on one leaves the other's reader open, saying who began", async () => {
+    const { ana, ben } = await reading();
+    expect(ana.store.getState().screen).toBe("reader");
+    expect(ben.store.getState().screen).toBe("reader");
+    expect(ben.store.getState().game).toBeNull();
+    ana.store.getState().startScenario(9);
+    await flush();
+    // Ana is at the table; Ben's browser has the game, his reader is still open and says who began
+    expect(ana.store.getState().screen).toBe("game");
+    expect(ben.store.getState().game).not.toBeNull();
+    expect(ben.store.getState().screen).toBe("reader");
+    expect(useView.getState().reader?.movers.start).toBe("ana");
   });
 });

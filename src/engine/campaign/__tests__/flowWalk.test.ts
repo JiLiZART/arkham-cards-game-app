@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadCampaign } from "../../../content";
+import { stepRefs } from "../../../content/schema";
 import { startCampaign } from "../campaign";
 import { type CampaignState } from "../types";
 import { advance, openChoices, startResolution } from "../flow";
@@ -76,4 +77,29 @@ describe("every generated campaign's flow", () => {
       expect(c.result, `${id} did not finish after playing ${played.join(", ")}`).not.toBeNull();
     });
   }
+});
+
+// the story reader answers the steps before a scenario (a campaign's setup, a scenario's own `before`); a deck upgrade or a
+// side scenario met there is handed to the paper screen. Two guides ask for a deck upgrade at the start of a scenario
+describe("the steps before a scenario (campaign-story-reader)", () => {
+  it("reach a deck upgrade or a side scenario only where the guide asks one at a scenario's start", () => {
+    const found: string[] = [];
+    for (const [campaign, flow] of Object.entries(db.flows)) {
+      const seen = new Set<string>();
+      const walk = (id: string) => {
+        if (seen.has(id) || !flow.steps[id]) return;
+        seen.add(id);
+        const st = flow.steps[id];
+        if (st.kind === "upgradeDecks" || st.kind === "sideScenario")
+          found.push(`${campaign}:${id}`);
+        stepRefs(st).forEach(walk);
+      };
+      flow.setup.forEach(walk);
+      Object.values(flow.before).flat().forEach(walk);
+    }
+    expect(found.sort()).toEqual([
+      "the-innsmouth-conspiracy:the-vanishing-of-elina-harper:upgradeDecks",
+      "the-scarlet-keys:marrakesh:upgradeDecks",
+    ]);
+  });
 });

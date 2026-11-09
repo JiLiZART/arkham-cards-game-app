@@ -55,11 +55,13 @@ describe("applyMove", () => {
   it("rebuilds the same campaign, setup and choices as playing them directly", async () => {
     const a = solo();
     a.getState().newCampaign(opts);
+    a.getState().startScenario(opts.seed);
     const moves = play(a, 40);
     expect(moves.length).toBeGreaterThan(10);
 
     const b = solo();
     expect(await b.getState().applyMove({ t: "new", opts })).toBeNull();
+    expect(await b.getState().applyMove({ t: "start", seed: opts.seed })).toBeNull();
     for (const m of moves) expect(await b.getState().applyMove(m)).toBeNull();
 
     expect(b.getState().campaign).toEqual(a.getState().campaign);
@@ -70,9 +72,11 @@ describe("applyMove", () => {
 
   it("starts the scenario with the seed of the move", async () => {
     const a = solo();
-    await a.getState().applyMove({ t: "new", opts: { ...opts, seed: 11 } });
+    await a.getState().applyMove({ t: "new", opts });
+    await a.getState().applyMove({ t: "start", seed: 11 });
     const b = solo();
-    await b.getState().applyMove({ t: "new", opts: { ...opts, seed: 11 } });
+    await b.getState().applyMove({ t: "new", opts });
+    await b.getState().applyMove({ t: "start", seed: 11 });
     expect(a.getState().setup).toEqual(b.getState().setup);
     expect(a.getState().setup!.seed).toBe(11);
   });
@@ -80,6 +84,7 @@ describe("applyMove", () => {
   it("takes back the last choice, like Undo", async () => {
     const a = solo();
     await a.getState().applyMove({ t: "new", opts });
+    await a.getState().applyMove({ t: "start", seed: opts.seed });
     // the mulligan is beyond Undo; the first choice after it can be taken back
     const g = a.getState().game!;
     expect(g.pending!.kind).toBe("mulligan");
@@ -96,6 +101,7 @@ describe("applyMove", () => {
   it("refuses a choice for an investigator who is not deciding, and changes nothing", async () => {
     const a = solo();
     await a.getState().applyMove({ t: "new", opts });
+    await a.getState().applyMove({ t: "start", seed: opts.seed });
     const before = a.getState().actions;
     const err = await a.getState().applyMove({ t: "choose", inv: "01002", option: "done" });
     expect(err).toEqual(expect.any(String));
@@ -105,6 +111,7 @@ describe("applyMove", () => {
   it("restores a saved campaign from a load move without touching this device's settings", async () => {
     const a = solo();
     a.getState().newCampaign(opts);
+    a.getState().startScenario(opts.seed);
     play(a, 12);
     const save = JSON.parse(a.getState().exportLog()) as Pick<
       Save,
@@ -151,6 +158,7 @@ describe("in a room", () => {
   it("sends the player's choice instead of making it", async () => {
     const s = solo();
     await s.getState().applyMove({ t: "new", opts });
+    await s.getState().applyMove({ t: "start", seed: opts.seed });
     const sent: Move[] = [];
     s.getState().setNet({ propose: (m) => void sent.push(m) });
     const g = s.getState().game!;
@@ -172,6 +180,7 @@ describe("in a room", () => {
   it("sends Undo only when it could be taken back", async () => {
     const s = solo();
     await s.getState().applyMove({ t: "new", opts });
+    await s.getState().applyMove({ t: "start", seed: opts.seed });
     const sent: Move[] = [];
     s.getState().setNet({ propose: (m) => void sent.push(m) });
     s.getState().undo();
@@ -183,6 +192,7 @@ describe("in a room", () => {
     s.getState().setTapDecks(false);
     s.getState().setNet({ propose: () => {} });
     await s.getState().applyMove({ t: "new", opts });
+    await s.getState().applyMove({ t: "start", seed: opts.seed });
     const g = s.getState().game!;
     await s.getState().applyMove({ t: "choose", inv: g.pending!.inv, option: "done" });
     // whatever the mulligan led to, no choice was added that the move did not name
@@ -221,6 +231,7 @@ describe("canUndoHere", () => {
   const withLast = async (by: string, move: Move) => {
     const s = solo();
     await s.getState().applyMove({ t: "new", opts });
+    await s.getState().applyMove({ t: "start", seed: opts.seed });
     const g = s.getState().game!;
     await s.getState().applyMove({ t: "choose", inv: g.pending!.inv, option: "done" });
     const p = s.getState().game!.pending!;
@@ -240,6 +251,7 @@ describe("canUndoHere", () => {
   it("is Undo's own rule without a room", async () => {
     const s = solo();
     await s.getState().applyMove({ t: "new", opts });
+    await s.getState().applyMove({ t: "start", seed: opts.seed });
     expect(canUndoHere(s.getState())).toBe(canUndoHere({ ...s.getState(), room: null }));
   });
 

@@ -116,6 +116,10 @@ export class Session {
   private get roster(): Roster<DeckDef> | null {
     return this.net.getState().roster;
   }
+  /** the name of another player (none for this one): what the story reader says they did */
+  private otherName = (id: string): string | undefined =>
+    id === this.me ? undefined : (this.roster?.players[id]?.name ?? id);
+
   private isHost = () => !!this.roster && this.roster.host === this.me;
 
   /** join the room; a game held here that isn't the room's stays until the room's first move replaces it */
@@ -456,7 +460,7 @@ export class Session {
       if (why) return this.refuse(p, why);
       const err = await this.store
         .getState()
-        .applyMove(p.move, this.roomSave([...this.log.moves, nm]));
+        .applyMove(p.move, this.roomSave([...this.log.moves, nm]), this.otherName(p.by));
       if (err) return this.refuse(p, err);
       this.log.receive(nm);
       this.sendAll({ t: EVENT.Move, m: nm });
@@ -485,7 +489,7 @@ export class Session {
         if (why) this.notify("net.warn.forbidden", why);
         const err = await this.store
           .getState()
-          .applyMove(m.move, this.roomSave(this.log.moves.slice(0, m.n + 1)));
+          .applyMove(m.move, this.roomSave(this.log.moves.slice(0, m.n + 1)), this.otherName(m.by));
         if (err) this.notify("net.error.applyFailed", err);
         this.afterMove(m);
       }

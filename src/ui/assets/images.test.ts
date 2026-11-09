@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { db } from "../../engine/kits/testkit";
-import { cardImage, classBackground, faceLines } from "./images";
+import { cardImage, classBackground, faceLines, storyArt } from "./images";
 
 describe("card images", () => {
   it("resolves front and back URLs", () => {
@@ -49,5 +49,43 @@ describe("card images", () => {
     expect(classBackground({ faction: "rogue", factions: ["rogue", "survivor"] })).toBe(
       "/art/investigator-bg/neutral.webp",
     );
+  });
+});
+
+describe("the story reader's paintings (5.3)", () => {
+  it("a mapped scenario has its guide painting", () => {
+    const mapped = { "the-gathering": { file: "the-gathering.webp" } };
+    expect(storyArt(db, "night-of-the-zealot", "the-gathering", "en", mapped)).toEqual({
+      url: "/art/story/night-of-the-zealot/the-gathering.webp",
+      from: "guide",
+    });
+  });
+
+  it("an unmapped scenario shows the painting of its first agenda, cropped from its scan", () => {
+    expect(storyArt(db, "night-of-the-zealot", "the-gathering", "en", {})).toEqual({
+      url: "/cards/01105.webp",
+      from: "agenda",
+    });
+    expect(storyArt(db, "night-of-the-zealot", "the-gathering", "ru", {})?.url).toBe(
+      "/cards-ru/01105.webp",
+    );
+  });
+
+  it("a scenario with no agenda painting falls back to the campaign's first scenario's", () => {
+    const bare = {
+      ...db,
+      scenarios: {
+        ...db.scenarios,
+        "the-midnight-masks": { ...db.scenarios["the-midnight-masks"], agendas: {} },
+      },
+    };
+    expect(storyArt(bare as never, "night-of-the-zealot", "the-midnight-masks", "en", {})).toEqual({
+      url: "/cards/01105.webp",
+      from: "agenda",
+    });
+  });
+
+  it("nothing at all when there is no painting anywhere", () => {
+    expect(storyArt(db, "no-such-campaign", "no-such-scenario", "en", {})).toBeNull();
   });
 });

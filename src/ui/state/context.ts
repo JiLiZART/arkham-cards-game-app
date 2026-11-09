@@ -6,6 +6,7 @@ import { packLoaded } from "../../content/loader";
 import { campaignSpriteLoaded, loadCampaignSprite } from "../assets/icons";
 import { trackArrivals } from "../game/arrivals";
 import { trackIntro } from "../game/intro";
+import { trackReader } from "../game/readerTrack";
 import { trackShowcase } from "../game/showcase";
 import { createGameStore, type UiState } from "./store";
 
@@ -44,6 +45,7 @@ const prepare = (campaignId: string) => {
 export const gameStore = createGameStore(content, undefined, prepare);
 trackArrivals(gameStore);
 trackIntro(gameStore);
+trackReader(gameStore, content);
 trackShowcase(gameStore);
 export const GameStoreContext = createContext<StoreApi<UiState>>(gameStore);
 

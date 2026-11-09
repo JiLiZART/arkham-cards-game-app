@@ -541,8 +541,9 @@ function run(db: ContentDb, c: CampaignState) {
       if (c.result || f.waiting || f.playing) return;
       const item = f.queue.shift();
       if (item === undefined) {
-        // everything here has run: the stories read wait for a "Continue", then the next item of the order
-        if (f.shown.some((s) => "story" in s)) {
+        // everything here has run: whatever was shown (a story, a recorded entry) waits for a "Continue" before the next
+        // item of the order, so a scenario's own setup steps never run under what the last one showed
+        if (f.shown.length) {
           f.waiting = { id: "continue", step: { kind: "continue" } };
           return;
         }
@@ -582,8 +583,11 @@ function run(db: ContentDb, c: CampaignState) {
         f.waiting = { id: "play", step: { kind: EVENT.Play, scenario: id } };
         return;
       }
-      const id = typeof item === "string" ? item : "inline";
-      const st = typeof item === "string" ? stepOf(db, c, item) : item;
+      let id = "inline";
+      let st: CampaignStep | undefined;
+      if (typeof item === "string") [id, st] = [item, stepOf(db, c, item)];
+      else if ("of" in item) [id, st] = [item.of, item.step];
+      else st = item;
       if (!st) continue;
       switch (st.kind) {
         case "story":
@@ -605,7 +609,7 @@ function run(db: ContentDb, c: CampaignState) {
         case "buySupplies":
           // each investigator buys in turn
           if (!st.inv) {
-            f.queue.unshift(...active(c).map((i) => ({ ...st, inv: i.code })));
+            f.queue.unshift(...active(c).map((i) => ({ of: id, step: { ...st, inv: i.code } })));
             break;
           }
           if (active(c).some((i) => i.code === st.inv)) f.waiting = { id, step: st };

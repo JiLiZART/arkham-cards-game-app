@@ -15,6 +15,8 @@ import { upgradeDeck, type UpgradeResult } from "../../engine/campaign/upgrade";
 import type { Move, RoomSave } from "../../net/moves";
 import { quietNextGame } from "../game/arrivals";
 import { useView } from "./view";
+import { inReaderTerritory } from "../game/readerPages";
+import { openReader as openReaderState } from "../game/readerState";
 import type {
   Action,
   ContentDb,
@@ -117,7 +119,16 @@ export interface Save {
 export type Pace = "normal" | "slow" | "tap";
 
 export interface UiState {
-  screen: "title" | "wizard" | "settings" | "game" | "log" | "howto" | "catalog" | "lobby";
+  screen:
+    | "title"
+    | "wizard"
+    | "settings"
+    | "game"
+    | "log"
+    | "reader"
+    | "howto"
+    | "catalog"
+    | "lobby";
   locale: string;
   /** chaos tokens are revealed by clicking a circle above the bag (otherwise automatically) */
   drawByHand: boolean;
@@ -155,6 +166,8 @@ export interface UiState {
   upgradeDeck(investigator: InvId, cards: Record<string, number>): UpgradeResult;
   /** begin the scenario the campaign's flow has reached (answering its Begin prompt); nothing when the flow is somewhere else */
   startScenario(seed?: number): void;
+  /** open the story reader on what the flow reads before the scenario (the campaign screen's door); nothing when the flow is elsewhere */
+  openReader(): void;
   /** answer what the campaign's flow is asking (a choice, a number, an investigator, cards, "continue"); a refused answer is reported */
   answerFlow(value: FlowValue): void;
   choose(optionId: string): void;
@@ -189,7 +202,8 @@ export interface UiState {
    * Make a move the room has numbered, whatever is playing here (no input gate, no proposal). The result is the reason
    * it was refused, null when made. `room` is saved with the state in the same write.
    */
-  applyMove(move: Move, room?: RoomSave): Promise<string | null>;
+  /** `by`: the name of the player whose move this is, when it is another's (the story reader shows what they did) */
+  applyMove(move: Move, room?: RoomSave, by?: string): Promise<string | null>;
 }
 
 /** where a room's proposals go */
@@ -448,7 +462,8 @@ export function createGameStore(
       ];
       return whenReady(opts.campaignId, codes, () => {
         const campaign = startCampaign(db, opts);
-        // a campaign that opens with a prologue or a choice starts on the campaign screen; one that goes straight to its first scenario starts it
+        // a new campaign opens the story reader: its prologue, its first steps and the first scenario (campaign-story-reader);
+        // Begin sets the scenario up, with the seed the new-game screen chose
         set({
           campaign,
           setup: null,
@@ -458,12 +473,23 @@ export function createGameStore(
           notice: null,
           screen: "log",
         });
+        showReader();
         persist();
-        if (campaign.flow.waiting?.step.kind === "play" && !campaign.flow.shown.length)
-          runStart(opts.seed);
       });
     };
-    const runStart = (seed?: number) => {
+    /** the story reader on what the flow reads now, when the flow is the reader's to show; else the campaign screen */
+    const showReader = () => {
+      const c = get().campaign;
+      if (!c || !inReaderTerritory(c)) return set({ screen: "log" });
+      useView.setState({ reader: openReaderState(db, c, get().locale) });
+      set({ screen: "reader" });
+    };
+    /** what another player did, for the story reader to show as theirs ("Agnes chose…", "Agnes began the scenario") */
+    const noteMover = (key: string, name: string) => {
+      const r = useView.getState().reader;
+      if (r) useView.setState({ reader: { ...r, movers: { ...r.movers, [key]: name } } });
+    };
+    const runStart = (seed?: number, by?: string) => {
       let c = get().campaign;
       if (!c) return;
       // the Begin prompt is answered here; a restarted scenario (the rules changed) has had it answered already
@@ -476,6 +502,8 @@ export function createGameStore(
         tapDecks: true,
       };
       const r = createGame(db, setup);
+      // another player's Begin sets the game up under a reader still open here: it stays, and says who began
+      const reading = !!by && get().screen === "reader";
       set({
         campaign: c,
         setup,
@@ -483,11 +511,12 @@ export function createGameStore(
         undoFloor: 0,
         logMarks: [r.state.log.length],
         game: r.state,
-        screen: "game",
+        screen: reading ? "reader" : "game",
         queue: [],
         current: null,
         error: null,
       });
+      if (reading) noteMover("start", by!);
       settleDraws();
       persist();
     };
@@ -671,6 +700,10 @@ export function createGameStore(
         runStart(seed);
       },
 
+      openReader() {
+        showReader();
+      },
+
       answerFlow(value) {
         const net = get().net;
         if (net) return net.propose({ t: "flow", value });
@@ -743,7 +776,7 @@ export function createGameStore(
         return true;
       },
 
-      async applyMove(move, room) {
+      async applyMove(move, room, by) {
         const before = get().room;
         if (room) set({ room });
         set({ error: null });
@@ -756,15 +789,19 @@ export function createGameStore(
               await restoreSave(move.save);
               return get().error;
             case "start":
-              runStart(move.seed);
+              runStart(move.seed, by);
               return get().error;
             case "choose":
               if (get().game?.pending?.inv !== move.inv) return "net.refused.notDeciding";
               if (!answer(move.option)) return get().error ?? "net.refused.notDeciding";
               persist();
               return null;
-            case "flow":
-              return runFlow(move.value);
+            case "flow": {
+              const step = get().campaign?.flow.waiting?.id;
+              const err = runFlow(move.value);
+              if (!err && by && step) noteMover(step, by);
+              return err;
+            }
             case "upgrade": {
               const r = runUpgrade(move.inv, move.cards);
               return r.ok ? null : r.reason.key;

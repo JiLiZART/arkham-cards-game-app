@@ -282,3 +282,15 @@ describe("moments", () => {
     expect(momentClip("button", null, null, m)).toBe(m.moments.button);
   });
 });
+
+describe("the story reader's sound (campaign-story-reader 3.5)", () => {
+  it("a page opening plays the tome effect; the tension track is in the manifest", () => {
+    expect(momentClip("readerPage", null, null, db.sounds)).toBe("tome");
+    expect(db.sounds.music.tension).toBeDefined();
+  });
+
+  it("muted, nothing is heard", () => {
+    expect(gainOf({ musicVolume: 50, sfxVolume: 80, muted: true }, "effects", 1)).toBe(0);
+    expect(gainOf({ musicVolume: 50, sfxVolume: 80, muted: true }, "music", 1)).toBe(0);
+  });
+});

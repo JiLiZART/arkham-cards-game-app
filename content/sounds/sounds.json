@@ -880,6 +880,7 @@
     "open": "pop",
     "close": "click",
     "screen": "none",
+  "readerPage": "tome",
     "turn": "none",
     "victory": "sting-end",
     "resource": "clink",

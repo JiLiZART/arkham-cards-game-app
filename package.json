@@ -24,6 +24,7 @@
     "import:ru-cards": "tsx scripts/import-ru-cards.ts",
     "import:campaigns": "tsx scripts/import-campaigns.ts",
     "import:art": "tsx scripts/import-art.ts",
+    "import:story-art": "tsx scripts/import-story-art.ts",
     "sound-credits": "tsx scripts/sound-credits.ts",
     "skills:link": "node scripts/link-claude-skills.mjs",
     "net:dev": "node -e \"require('fs').mkdirSync('dist',{recursive:true})\" && wrangler dev --ip 127.0.0.1 --port 8787",

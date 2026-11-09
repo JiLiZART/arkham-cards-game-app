@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { db } from "../../kits/testkit";
 import { startCampaign } from "../campaign";
-import { advance, openChoices } from "../flow";
+import { advance, openChoices, startResolution } from "../flow";
 
 const NOTZ = "night-of-the-zealot";
 const saved = db.flows[NOTZ];
@@ -94,5 +94,48 @@ describe("a choice none of whose answers qualifies", () => {
       "b",
     ]);
     expect(() => advance(db, c, "b")).not.toThrow();
+  });
+});
+
+describe("the door before a scenario (campaign-story-reader 1.1)", () => {
+  const facts = (id: string) => ({
+    id,
+    resolution: "R1",
+    victory: 0,
+    victoryCodes: [],
+    cultistsVictory: [],
+    cultistsRemaining: [],
+    notResigned: ["01001"],
+  });
+  const withResolution = (steps: string[]) => {
+    db.flows[NOTZ] = {
+      ...saved,
+      resolutions: { "the-gathering": { R1: steps } },
+      before: { "the-midnight-masks": ["zzBefore"] },
+      steps: {
+        ...saved.steps,
+        zzRecord: { kind: "effects", effects: [{ do: "record", key: "zzRead", value: true }] },
+        zzBefore: { kind: "effects", effects: [{ do: "addChaosToken", token: "-4" }] },
+      },
+    };
+  };
+  const afterGathering = () => startResolution(db, start(), facts("the-gathering"));
+
+  it("a resolution that only records stops at continue before the next scenario's own steps", () => {
+    withResolution(["zzRecord"]);
+    const bagBefore = start().chaosBag.length;
+    const c = afterGathering();
+    expect(c.flow.waiting?.step).toEqual({ kind: "continue" });
+    expect(c.flow.shown).toEqual([{ recorded: { id: "zzRead", section: "campaign_notes" } }]);
+    expect(c.chaosBag).toHaveLength(bagBefore);
+    const next = advance(db, c, "continue");
+    expect(next.flow.waiting?.step).toMatchObject({ kind: "play", scenario: "the-midnight-masks" });
+    expect(next.chaosBag).toHaveLength(bagBefore + 1);
+  });
+
+  it("a resolution that shows nothing goes on as before", () => {
+    withResolution([]);
+    const c = afterGathering();
+    expect(c.flow.waiting?.step).toMatchObject({ kind: "play", scenario: "the-midnight-masks" });
   });
 });

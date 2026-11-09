@@ -43,6 +43,9 @@ export function playMusic(id: string | null) {
 /** the menu theme's take for this page load */
 const menuTrack = menuMusic(db.sounds, Math.random());
 
+/** the menu theme again (the story reader hands the music back to the menus when it closes on one) */
+export const playMenuMusic = () => playMusic(menuTrack);
+
 /** every screen but the table plays the menu theme; the table's SoundLayer takes over there */
 export function useMenuMusic(atTable: boolean) {
   useEffect(() => {

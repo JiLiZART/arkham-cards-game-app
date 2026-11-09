@@ -27,6 +27,7 @@ export const MOMENTS = [
   "open",
   "close",
   "screen",
+  "readerPage",
   "turn",
   "victory",
   "resource",

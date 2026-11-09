@@ -10,7 +10,8 @@ import type {
 import type { InvId } from "../world/types";
 import type { CampaignLog } from "./log";
 
-export type QueueItem = string | CampaignStep;
+/** a step id, a step made on the spot, or one made from the step `of` (a supply point asked of each investigator in turn) */
+export type QueueItem = string | CampaignStep | { of: string; step: CampaignStep };
 
 /** what the players are asked: a step of the flow, or one the interpreter makes (reading on, the next scenario, who) */
 export type WaitingStep =

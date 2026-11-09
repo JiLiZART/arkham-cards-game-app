@@ -30,7 +30,6 @@
   pointer-events: none;
 }
 .intro-overlay.flying .intro-title,
-.intro-overlay.flying .intro-text,
 .intro-overlay.flying .intro-buttons {
   opacity: 0;
   transition: opacity 0.2s;
@@ -87,26 +86,6 @@
   transform: translate(-50%, -50%) rotate(90deg);
   object-fit: cover;
 }
-.intro-text.intro-story {
-  max-width: 680px;
-}
-/* the text takes what is left of the screen and scrolls; a fade at its bottom edge says there is more */
-.intro-text {
-  margin: 0;
-  max-width: 460px;
-  max-height: calc(100dvh - 200px);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  font: 24px/1.45 var(--f-body);
-  font-style: italic;
-  color: #e0dcd2;
-  text-shadow: 0 1px 4px #000;
-  padding-right: 8px;
-}
-.intro-text.more {
-  -webkit-mask-image: linear-gradient(#000 calc(100% - 56px), transparent);
-  mask-image: linear-gradient(#000 calc(100% - 56px), transparent);
-}
 @media (max-height: 500px) {
   .intro-card {
     width: min(34vw, calc(48dvh * 88 / 63));
@@ -116,10 +95,6 @@
   }
   .intro-box {
     gap: 8px;
-  }
-  .intro-text {
-    font-size: 16px;
-    max-height: calc(100dvh - 120px);
   }
 }
 .intro-buttons {
@@ -135,16 +110,6 @@
   text-decoration: underline;
   cursor: pointer;
   font-size: 15px;
-}
-@media (max-width: 900px) and (min-height: 501px) {
-  .intro-text {
-    max-height: 36dvh;
-  }
-}
-@media (max-height: 500px) {
-  .intro-text {
-    max-width: min(460px, 56vw);
-  }
 }
 @keyframes intro-in {
   from {
